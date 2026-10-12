@@ -827,7 +827,7 @@
     [
      "YELLOW",
      "Lightning Damage",
-     ""
+     "if a creature in the spells target area fails the saving throw they become Dazed until the start if their next turn."
     ],
     [
      "GREEN",
@@ -842,7 +842,7 @@
     [
      "INDIGO",
      "Thunder Damage",
-     ""
+     "if a small or medium sized creature in the spells target area fails the saving throw, they are pushed 5ft back in a straight line."
     ],
     [
      "VIOLET",
