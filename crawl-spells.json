@@ -800,7 +800,8 @@
    "cls": "Wizard, Sorcerer,",
    "cost": "3 MP",
    "time": "Instantaneous",
-   "type": "Ranged Spell Attack"
+   "type": "Ranged Spell Attack",
+   "desc": "You conjure an array of colorful lights with the help of a Prism,"
   },
   "ct": [
    "Chromatic",
