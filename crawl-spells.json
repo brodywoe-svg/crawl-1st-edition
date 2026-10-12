@@ -265,9 +265,14 @@
   "f": {
    "mat": "A piece of wrought iron",
    "cat": "Abjuration",
-   "time": "1 reaction, which you take when you are hit by a Melee Attack with a weapon.",
    "range": "Self (Single Target)",
-   "desc": "You create an defensive arcane bubble of magical force that appears and protects you from Physical attacks and weapons. Until the start of your next turn, you have a +3 bonus to AC vs All Non-magical Physical attacks, including against the triggering attack.\n\nAt Higher Levels: You are able to cast this spell with Any Spell slot of 1st level or higher, no other benefits are gained from a higher level cast."
+   "desc": "You create an defensive arcane bubble of magical force that appears and protects you from Physical attacks and weapons. Until the start of your next turn, you have a +3 bonus to AC vs All Non-magical Physical attacks, including against the triggering attack.",
+   "pre": "+2 ARCANE",
+   "cls": "Wizard, Sorcerer, Warlock",
+   "dmg": "N/A",
+   "type": "Reaction",
+   "time": "Instantaneous ",
+   "cost": "2 MP"
   }
  },
  {
