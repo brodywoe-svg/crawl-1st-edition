@@ -16,7 +16,49 @@
    "time": "10 Minutes",
    "dmg": "N/A",
    "cost": "N/A"
-  }
+  },
+  "tiers": [
+   [
+    "—",
+    ""
+   ],
+   [
+    "—",
+    ""
+   ],
+   [
+    "Lay to Rest",
+    "When you cast this spell and targets the corpse of an Undead creature such as a Zombie, Skeleton, or a Ghoul, their Corpses dissolve into Ash and become Invalid Targets for Reanimation."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ]
+  ]
  },
  {
   "n": "Acid Spray",
