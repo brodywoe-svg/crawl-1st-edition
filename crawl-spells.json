@@ -453,7 +453,7 @@
   },
   "tiers": [
    [
-    "—",
+    "",
     ""
    ],
    [
@@ -470,7 +470,7 @@
    ],
    [
     "Writhing",
-    "For as long as a target remains cursed by this spell, whenever that target rolls to subtract from another roll, they take psychic damage equal to the result."
+    "For as long as a target remains cursed by this spell, Whenever a Cursed creature rolls the curse's penalty die, it also takes Psychic damage equal to the number rolled."
    ],
    [
     "",
@@ -490,7 +490,7 @@
    ],
    [
     "Shared Suffering",
-    "Whenever you deal damage to a creature cursed by this spell, each other creature that is cursed takes half the damage of the original target."
+    "Whenever you deal damage with another spell to a creature cursed by this spell, each other creature that is cursed takes half the damage of the original target."
    ]
   ]
  },
