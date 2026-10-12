@@ -74,6 +74,7 @@ button{cursor:pointer;font-weight:700;font-size:.85rem}
 .tabs{display:flex;flex-wrap:wrap;gap:4px}
 .tab{border:2px solid var(--ink);background:var(--paper);padding:5px 12px;border-radius:999px}
 .tab[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+#tagf{max-width:12rem}
 .bar input,.bar select{font-size:.88rem;font-weight:600;background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:6px 10px}
 #q{flex:1 1 170px;min-width:0}
 .btn{border:2px solid var(--ink);background:var(--paper);padding:6px 14px;border-radius:8px}
@@ -95,6 +96,8 @@ button{cursor:pointer;font-weight:700;font-size:.85rem}
 .sname .cat{font-size:.78rem;color:var(--muted);font-weight:500}
 .spell[open] .sname .cat{color:var(--hair)}
 .tags{display:flex;flex-wrap:wrap;gap:4px}
+button.tag{font-family:var(--font);background:transparent;color:inherit;cursor:pointer}
+button.tag:hover{background:var(--ink);color:var(--paper)}
 .tag{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;border:1.5px solid currentColor;border-radius:999px;padding:1px 7px}
 .seal{position:relative;display:grid;place-items:center;flex:none}
 .seal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -132,6 +135,17 @@ button{cursor:pointer;font-weight:700;font-size:.85rem}
 .pv-line b{font-weight:700}
 .pv-line.pre{font-style:italic}
 .pv-line.desc span{white-space:pre-wrap}
+.pv-tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px;font-size:1rem}
+.pv-tags b{font-weight:700}
+.pv-tags .tag{font-size:.7rem;padding:2px 9px}
+.ctfld{flex:1 1 100%}
+.ctedit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:2px solid var(--ink);border-radius:8px;padding:5px 6px;background:var(--paper)}
+.ctedit .tags{display:contents}
+.ctchip{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;padding:2px 4px 2px 9px}
+.ctx{border:0;background:none;color:inherit;font-size:.95rem;line-height:1;padding:0 3px;cursor:pointer}
+.ctin{flex:1 1 160px;min-width:0;border:0!important;padding:4px!important;font:600 .9rem var(--font);background:transparent;color:var(--ink)}
+.ctin:focus{outline:none}
+.ctadd{border:2px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:6px;padding:3px 10px;font-size:.75rem}
 .pv-empty{margin:0;color:var(--muted);font-weight:500}
 .pv-rail .tier{align-items:start;min-height:34px}
 .pv-tier{margin:0;font-size:1rem;font-weight:600;line-height:1.4;padding-block:4px}
@@ -233,6 +247,7 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 <div class="bar">
   <input id="q" type="search" placeholder="Search spells" aria-label="Search spells">
   <select id="lvl" aria-label="Level"><option value="">All levels</option></select>
+  <select id="tagf" aria-label="Tag"><option value="">All tags</option></select>
   <select id="sort" aria-label="Sort"><option value="name">Sort A–Z</option><option value="level">Sort by level</option></select>
   <button class="btn solid" id="addBtn">Add spell</button>
   <button class="btn" id="importBtn" title="Load a spell list file saved from the app or the website">Import data</button>
@@ -303,6 +318,7 @@ for(let i=1;i<=20;i++){const o=document.createElement("option");o.value=i;o.text
 {const o=document.createElement("option");o.value="none";o.textContent="No level set";$("lvl").appendChild(o)}
 
 function renderCounts(){
+  buildTagFilter();
   $("counts").innerHTML=`<button type="button" class="count total" data-v="All" aria-pressed="${view==="All"&&!cls}"><b>${SPELLS.length}</b><span>All spells</span></button>`+
     TRADS.map(t=>`<button type="button" class="count" data-v="${t}" aria-pressed="${view===t&&!cls}"><b>${SPELLS.filter(s=>s.tags.includes(t)).length}</b><span>${t}</span></button>`).join("");
   $("classbar").innerHTML=`<span class="lab">Class</span>`+CLASSES.map(([c,tr])=>`<button type="button" class="cbtn" data-c="${c}" aria-pressed="${cls===c}">${c}</button>`).join("");
@@ -311,36 +327,68 @@ const SEAL='<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50.00 0.00 L
 const SEAL_TEN=SEAL.replace('<path','<path fill="#fff" stroke="#000" stroke-width="6" stroke-linejoin="miter"');
 const badge=s=>`<span class="seal badge${s.lv?"":" none"}" title="${s.lv?"Level "+s.lv:"No level set"}">${SEAL}<span>${s.lv||"–"}</span></span>`;
 function summaryHTML(s){
-  return badge(s)+`<span class="sname"><b>${esc(s.n)||"Untitled spell"}</b><span class="tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>${s.f.cat?`<span class="cat">${esc(s.f.cat)}</span>`:""}</span><span class="sacts">
+  return badge(s)+`<span class="sname"><b>${esc(s.n)||"Untitled spell"}</b>${s.f.cat?`<span class="cat">${esc(s.f.cat)}</span>`:""}</span><span class="sacts">
     <span class="actmsg" role="status"></span>
     ${STATIC&&!ADMIN?"":`<button type="button" class="act editbtn" aria-pressed="${editSet.has(s._id)}">${editSet.has(s._id)?"Done editing":"Edit"}</button>`}
     <span class="expwrap"><span class="expopts" hidden><button type="button" class="act fmt" data-fmt="png">PNG</button><button type="button" class="act fmt" data-fmt="jpeg">JPEG</button></span><button type="button" class="act expbtn">Export</button></span>
     ${editSet.has(s._id)?'<button type="button" class="del">Delete spell</button>':""}
   </span>`;
 }
+function buildTagFilter(){
+  const sel=$("tagf"), cur=sel.value, seen=new Map();
+  for(const s of SPELLS)for(const x of (s.ct||[])){const k=x.toLowerCase();if(!seen.has(k))seen.set(k,x)}
+  const custom=[...seen.values()].sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
+  sel.innerHTML=`<option value="">All tags</option><optgroup label="Magic source">${TRADS.map(t=>`<option value="${t}">${t}</option>`).join("")}</optgroup>`+
+    (custom.length?`<optgroup label="Custom tags">${custom.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</optgroup>`:"");
+  sel.value=[...sel.options].some(o=>o.value===cur)?cur:"";
+}
+function setTagFilter(x){
+  buildTagFilter();
+  const sel=$("tagf"), o=[...sel.options].find(o=>o.value.toLowerCase()===String(x).toLowerCase());
+  sel.value=o?o.value:"";render();
+  $("tagf").scrollIntoView({block:"nearest"});
+}
+const hasTag=(s,x)=>{x=x.toLowerCase();return allTags(s).some(y=>y.toLowerCase()===x)};
 function filtered(){
-  const q=$("q").value.trim().toLowerCase(), L=$("lvl").value;
-  let list=SPELLS.filter(s=>(cls?canLearn(s,cls):(view==="All"||s.tags.includes(view)))&&(!q||s.n.toLowerCase().includes(q))&&(L===""||(L==="none"?!s.lv:s.lv===+L)));
+  const q=$("q").value.trim().toLowerCase(), L=$("lvl").value, TG=$("tagf").value;
+  let list=SPELLS.filter(s=>(cls?canLearn(s,cls):(view==="All"||s.tags.includes(view)))&&(!q||s.n.toLowerCase().includes(q)||(s.ct||[]).some(x=>x.toLowerCase().includes(q)))&&(L===""||(L==="none"?!s.lv:s.lv===+L))&&(!TG||hasTag(s,TG)));
   if($("sort").value==="level") list=list.slice().sort((a,b)=>(a.lv||99)-(b.lv||99)||cmp(a,b)); else list=list.slice().sort(cmp);
   return list;
 }
 function render(){
   const list=filtered(), out=$("out");
-  $("status").textContent=`${list.length} spell${list.length===1?"":"s"}${cls?" a "+cls+" can learn":view==="All"?"":" on the "+view+" list"} · open a spell to ${STATIC&&!ADMIN?"read":"fill in"} its card`;
-  if(!list.length){out.innerHTML='<p class="empty">No spells match. Clear the search or pick another level.</p>';return}
+  $("status").textContent=`${list.length} spell${list.length===1?"":"s"}${cls?" a "+cls+" can learn":view==="All"?"":" on the "+view+" list"}${$("tagf").value?" tagged "+$("tagf").value:""} · open a spell to ${STATIC&&!ADMIN?"read":"fill in"} its card`;
+  if(!list.length){out.innerHTML='<p class="empty">No spells match. Clear the search or pick another level or tag.</p>';return}
   out.innerHTML=list.map(s=>`<details class="spell" data-id="${s._id}"${openSet.has(s._id)?" open":""}><summary>${summaryHTML(s)}</summary></details>`).join("");
   out.querySelectorAll("details[open]").forEach(fillCard);
 }
 const byId=id=>SPELLS.find(s=>s._id===+id);
 
+const allTags=s=>[...s.tags,...(s.ct||[])];
+function tagsLine(s){
+  const tg=allTags(s); if(!tg.length)return "";
+  return `<div class="pv-tags"><b>Tags:</b><span class="tags">${tg.map(x=>`<button type="button" class="tag ptag" data-ftag="${esc(x)}" title="Show spells tagged ${esc(x)}">${esc(x)}</button>`).join("")}</span></div>`;
+}
 function previewHTML(s){
   const f=s.f||{}, rows=FIELDS.filter(([k])=>f[k]&&String(f[k]).trim());
   const tiers=(s.tiers||[]).map((t,i)=>[t,i]).filter(([t])=>(t[0]||"").trim()||(t[1]||"").trim());
-  if(!rows.length&&!tiers.length) return `<p class="pv-empty">This card hasn't been filled in yet.</p>`;
-  return `<div class="pv">${rows.map(([k,lab])=>`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`).join("")}</div>`+
+  if(!rows.length&&!tiers.length) return tagsLine(s)+`<p class="pv-empty">This card hasn't been filled in yet.</p>`;
+  return `<div class="pv">${rows.map(([k,lab])=>`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`).join("")}${tagsLine(s)}</div>`+
     (tiers.length?`<div class="rail pv-rail">${tiers.map(([t,i])=>`<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL_TEN:""}<span>+${i+1}</span></span><p class="pv-tier">${(t[0]||"").trim()?`<b class="tname">${esc(t[0])}</b>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"");
 }
 const editSet=new Set();
+const ctChips=s=>(s.ct||[]).map(x=>`<span class="tag ctchip">${esc(x)}<button type="button" class="ctx" data-ct="${esc(x)}" aria-label="Remove tag ${esc(x)}">×</button></span>`).join("");
+function addTag(d,s){
+  const inp=d.querySelector(".ctin"); if(!inp)return;
+  const parts=inp.value.split(",").map(x=>x.trim().replace(/\s+/g," ")).filter(Boolean);
+  if(!parts.length)return;
+  s.ct=s.ct||[];
+  for(const x of parts){
+    if(TRADS.some(t=>t.toLowerCase()===x.toLowerCase()))continue;
+    if(!s.ct.some(y=>y.toLowerCase()===x.toLowerCase()))s.ct.push(x.slice(0,32));
+  }
+  inp.value="";d.querySelector(".ctlist").innerHTML=ctChips(s);touch();buildTagFilter();
+}
 function fillCard(d,force){
   const old=d.querySelector(".card"); if(old&&!force)return; if(old)old.remove();
   const s=byId(d.dataset.id); if(!s)return;
@@ -351,7 +399,8 @@ function fillCard(d,force){
   <div class="setup">
     <div class="fld grow"><label class="small" for="nm-${s._id}">Spell name</label><input type="text" id="nm-${s._id}" data-k="n" value="${esc(s.n)}"></div>
     <div class="fld"><label class="small" for="lv-${s._id}">Level</label><select id="lv-${s._id}" data-k="lv"><option value="">–</option>${Array.from({length:20},(_,i)=>`<option value="${i+1}"${s.lv===i+1?" selected":""}>${i+1}</option>`).join("")}</select></div>
-    <div class="fld"><span class="small">Tags</span><div class="togs">${TRADS.map(t=>`<button type="button" class="tog" data-tag="${t}" aria-pressed="${s.tags.includes(t)}">${t}</button>`).join("")}</div></div>
+    <div class="fld"><span class="small">Magic source</span><div class="togs">${TRADS.map(t=>`<button type="button" class="tog" data-tag="${t}" aria-pressed="${s.tags.includes(t)}">${t}</button>`).join("")}</div></div>
+    <div class="fld ctfld"><label class="small" for="ct-${s._id}">Custom tags</label><div class="ctedit"><span class="tags ctlist">${ctChips(s)}</span><input type="text" id="ct-${s._id}" class="ctin" placeholder="Add a tag, then press Enter" maxlength="32" autocomplete="off"><button type="button" class="ctadd">Add</button></div></div>
   </div>
   <div class="fields">${FIELDS.map(([k,lab,ph])=>`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`).join("")}</div>
   <div class="rail">${Array.from({length:10},(_,i)=>{const t=tiers[i]||["",""];return `<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL:""}<span>+${i+1}</span></span><div class="tbody"><textarea class="v tn" rows="1" data-ti="${i}" data-tp="0" aria-label="+${i+1} name" placeholder="Name">${esc(t[0])}</textarea><textarea class="v tt" rows="1" data-ti="${i}" data-tp="1" aria-label="+${i+1} effect" placeholder="Effect at +${i+1}">${esc(t[1])}</textarea></div></div>`}).join("")}</div>`:previewHTML(s));
@@ -387,10 +436,16 @@ out.addEventListener("input",e=>{
   else return;
   touch();
 });
+out.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.classList&&e.target.classList.contains("ctin")){e.preventDefault();const d=e.target.closest("details.spell");addTag(d,byId(d.dataset.id))}
+});
 out.addEventListener("click",e=>{
   const tg=e.target.closest(".tog"), del=e.target.closest(".del");
   const d=e.target.closest("details.spell"); if(!d)return; const s=byId(d.dataset.id);
   if(e.target.closest(".sacts"))e.preventDefault();
+  const ptag=e.target.closest(".ptag"); if(ptag){setTagFilter(ptag.dataset.ftag);return}
+  if(e.target.closest(".ctadd")){addTag(d,s);d.querySelector(".ctin").focus();return}
+  const cx=e.target.closest(".ctx"); if(cx){s.ct=(s.ct||[]).filter(y=>y!==cx.dataset.ct);if(!s.ct.length)delete s.ct;d.querySelector(".ctlist").innerHTML=ctChips(s);touch();buildTagFilter();return}
   if(e.target.closest(".editbtn")){if(editSet.has(s._id))editSet.delete(s._id);else editSet.add(s._id);fillCard(d,true);refreshSummary(d,s);if(editSet.has(s._id)){const n=d.querySelector('[data-k="n"]');if(n)n.focus()}return}
   if(e.target.closest(".expbtn")){const o=d.querySelector(".expopts");o.hidden=!o.hidden;return}
   const fb=e.target.closest(".fmt"); if(fb){exportSpell(s,fb.dataset.fmt,d);return}
@@ -473,6 +528,7 @@ function normalize(arr){
     if(!x||typeof x.n!=="string")return null;
     const s={n:x.n,tags:Array.isArray(x.tags)?TRADS.filter(t=>x.tags.includes(t)):[],lv:Number.isInteger(x.lv)&&x.lv>=1&&x.lv<=20?x.lv:null,f:{}};
     if(x.f&&typeof x.f==="object")for(const [k] of FIELDS)if(typeof x.f[k]==="string"&&x.f[k])s.f[k]=x.f[k];
+    if(Array.isArray(x.ct)){const seen=new Set();s.ct=x.ct.map(y=>String(y).trim().slice(0,32)).filter(y=>y&&!seen.has(y.toLowerCase())&&seen.add(y.toLowerCase()));if(!s.ct.length)delete s.ct}
     if(Array.isArray(x.tiers))s.tiers=Array.from({length:10},(_,i)=>{const t=x.tiers[i]||[];return [String(t[0]||""),String(t[1]||"")]});
     out.push(s);
   }
@@ -629,7 +685,7 @@ async function saveToGitHub(){
 const HEAD='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>';
 const j=v=>JSON.stringify(v).replace(/</g,"\\u003c");
 function clean(){
-  return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
+  return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.ct&&s.ct.length)o.ct=s.ct;if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
 }
 function buildPage(){const D="/*@"+"DATA@*/",T="/*@"+"TPL@*/";return HEAD+TPL.replace(D,()=>j(clean())).replace(T,()=>j(TPL))+"</body></html>"}
 $("saveBtn").addEventListener("click",async()=>{
@@ -650,7 +706,7 @@ window.addEventListener("beforeunload",e=>{if(dirty&&!APP){e.preventDefault();e.
 
 $("counts").addEventListener("click",e=>{const b=e.target.closest(".count");if(!b)return;const v=b.dataset.v;setFilter(view===v&&!cls?"All":v,"")});
 $("classbar").addEventListener("click",e=>{const b=e.target.closest(".cbtn");if(!b)return;const c=b.dataset.c;setFilter("All",cls===c?"":c)});
-["q","lvl","sort"].forEach(id=>$(id).addEventListener("input",render));
+["q","lvl","sort","tagf"].forEach(id=>$(id).addEventListener("input",render));
 if(APP){
   dl={save:async({filename,data})=>{const buf=data instanceof Blob?await data.arrayBuffer():new TextEncoder().encode(String(data)).buffer;const r=await APP.saveFile(filename,buf);if(!r)throw {code:"declined"};return {status:"saved"}}};
   APP.load().then(text=>{let arr=null;try{arr=text&&normalize(JSON.parse(text))}catch(e){}if(arr){SPELLS=arr;SPELLS.forEach(s=>s._id=++uid);original=JSON.stringify(arr)}renderCounts();render()}).catch(()=>{renderCounts();render()});
