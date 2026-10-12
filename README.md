@@ -5,6 +5,7 @@ source (Arcane, Divine, Primal, Occult), open any spell to read its card and its
 +1 to +10 advancements, and export a card as a PNG or JPEG.
 
 - **Website:** https://brodywoe-svg.github.io/crawl-spell-compendium/
+- **Conditions (Glossary):** https://brodywoe-svg.github.io/crawl-spell-compendium/conditions.html
 - **Windows app (works offline):** [Download the installer](downloads/Crawl-Spell-Compendium-Installer.zip)
 
 ## Installing the Windows app
@@ -63,6 +64,8 @@ The spell list lives in [`crawl-spells.json`](crawl-spells.json).
 | `index.html` | The GitHub Pages website (read-only, loads `crawl-spells.json`) |
 | `crawl-spells.json` | The spell list |
 | `src/page.html` | The page template shared by the website and the app |
+| `content/conditions.md` | The conditions text; `tools/build.py` turns it into `conditions.html` |
+| `tools/sitekit.py` | The top navigation bar and the Conditions page layout |
 | `app/` | The Windows app (Electron) |
 | `installer/` | Install and uninstall scripts for Windows |
 | `downloads/` | The ready-to-download installer zip |
