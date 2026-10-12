@@ -204,9 +204,9 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .x-line{margin:0;font-size:18px;line-height:1.22;white-space:pre-wrap}
 .x-pre{font-style:italic}
 .x-fields{display:grid}
-.x-rail{display:grid;gap:7px;margin-top:2px}
-.x-tier{position:relative;display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:6px;align-items:start}
-.x-tier::before{content:"";position:absolute;left:12px;width:12px;top:11px;height:calc(100% + 7px);background:#000}
+.x-rail{display:grid;gap:9px;margin-top:4px}
+.x-tier{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:7px;align-items:start}
+.x-tier::before{content:"";position:absolute;left:14px;width:12px;top:11px;height:calc(100% + 9px);background:#000}
 .x-tier.x-last::before{display:none}
 .x-tier p{margin:0;font-size:18px;line-height:1.22}
 .x-tblwrap{margin:6px 0;border:2.5px solid #000;border-radius:10px;overflow:hidden;background:#000}
@@ -217,12 +217,13 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .x-tbl .ctl{border-top-left-radius:8px}.x-tbl .ctr{border-top-right-radius:8px}.x-tbl .cbl{border-bottom-left-radius:8px}.x-tbl .cbr{border-bottom-right-radius:8px}
 .x-tbl th{background:#000;color:#fff;font-weight:700}
 .x-name{color:#8E171C}
-.x-mark{position:relative;z-index:1;width:36px;height:36px;margin-top:-7px;display:grid;place-items:center}
+.x-mark{position:relative;z-index:1;width:40px;height:40px;margin-top:-9px;display:grid;place-items:center}
 .x-mark::before{content:"";position:absolute;inset:6px;background:#fff;border:3px solid #000;transform:rotate(45deg);background-clip:padding-box}
-.x-mark span{position:relative;font-size:13px;font-weight:700;letter-spacing:-.04em}
+.x-mark span{position:relative;top:-.5px;font-size:14px;font-weight:700;letter-spacing:-.04em}
 .x-mark.x-ten::before{display:none}
-.x-mark.x-ten svg{position:absolute;inset:0;width:36px;height:36px;overflow:visible}
-.x-mark.x-ten span{font-size:10.5px}
+.x-mark.x-ten{width:48px;height:48px;margin:-13px -4px 0}
+.x-mark.x-ten svg{position:absolute;left:0;top:0;width:48px;height:48px}
+.x-mark.x-ten span{font-size:11.5px}
 .setup{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;padding-bottom:12px;border-bottom:2px solid var(--ink)}
 .setup .fld{display:grid;gap:3px}
 .setup .fld.grow{flex:1 1 200px;min-width:0}
@@ -563,7 +564,7 @@ function exportHTML(s){
   let xt=false;const xchart=()=>{if(xt)return "";xt=true;return chartHTML(s.tbl,"x-tbl")};
   const xl=rows.map(([k,lab])=>{let h=(k==="dmg"?xchart():"")+`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`+(k==="desc"?xchart():"");if(k==="time"){h+=xconc;xc=true}return h}).join("")+(xc?"":xconc)+xchart();
   const body=`<div class="x-fields">${xl||`<p class="x-line">&nbsp;</p>`}</div>`;
-  const rail=tiers.length?`<div class="x-rail">${tiers.map(([t,i],n)=>`<div class="x-tier${n===tiers.length-1?" x-last":""}"><span class="x-mark${i===9?" x-ten":""}">${i===9?star("#fff","#000","9"):""}<span>+${i+1}</span></span><p>${(t[0]||"").trim()?`<span class="x-name">${esc(t[0])}</span>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"";
+  const rail=tiers.length?`<div class="x-rail">${tiers.map(([t,i],n)=>`<div class="x-tier${n===tiers.length-1?" x-last":""}"><span class="x-mark${i===9?" x-ten":""}">${i===9?star("#fff","#000","7.5").replace('viewBox="0 0 100 100"','viewBox="-10 -10 120 120" width="48" height="48"'):""}<span>+${i+1}</span></span><p>${(t[0]||"").trim()?`<span class="x-name">${esc(t[0])}</span>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"";
   return `<div class="x-card"><div class="x-bar x-top">${lvl}<span class="x-title">${esc((s.n||"").trim()||"Untitled spell")}</span></div><div class="x-body">${body}${rail}</div><div class="x-bar x-bot"></div></div>`;
 }
 async function exportSpell(s,fmt,d){
