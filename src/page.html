@@ -137,11 +137,18 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .pv-line.desc span{white-space:pre-wrap}
 .pv-tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px;font-size:1rem}
 .pv-tags b{font-weight:700}
-.cbox{display:inline-grid;place-items:center;width:1.05em;height:1.05em;border:2px solid var(--ink);border-radius:3px;vertical-align:-.15em;font-size:.95em;line-height:1;font-weight:800}
-.cbox.on{background:var(--ink);color:var(--paper)}
+.cbox{display:inline-grid;place-items:center;width:1.05em;height:1.05em;border:2px solid var(--ink);border-radius:2px;vertical-align:-.16em;color:var(--ink);background:var(--paper)}
+.cbox svg{width:100%;height:100%;visibility:hidden}
+.cbox.on svg{visibility:visible}
 .concline{align-items:center!important;padding-block:2px}
-.ccheck{width:20px;height:20px;accent-color:var(--ink);margin:0;cursor:pointer}
-.x-cbox{display:inline-block;width:17px;height:17px;border:2.5px solid #000;border-radius:3px;text-align:center;line-height:13px;font-size:14px;font-weight:800;vertical-align:-2px}
+.cwrap{position:relative;display:inline-flex;cursor:pointer;font-size:1.05rem;align-self:center}
+.line>label.cwrap::after{content:none}
+.cwrap .cbox{vertical-align:0}
+.ccheck{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.ccheck:checked+.cbox svg{visibility:visible}
+.ccheck:focus-visible+.cbox{outline:3px solid var(--ink);outline-offset:2px}
+.x-cbox{display:inline-block;width:18px;height:18px;border:2.5px solid #000;border-radius:2px;vertical-align:-3px;box-sizing:border-box}
+.x-cbox svg{display:block;width:100%;height:100%}
 .pv-tags .tag{font-size:.7rem;padding:2px 9px}
 .ctfld{flex:1 1 100%}
 .ctedit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:2px solid var(--ink);border-radius:8px;padding:5px 6px;background:var(--paper)}
@@ -376,13 +383,14 @@ function previewHTML(s){
   const f=s.f||{}, rows=FIELDS.filter(([k])=>f[k]&&String(f[k]).trim());
   const tiers=(s.tiers||[]).map((t,i)=>[t,i]).filter(([t])=>(t[0]||"").trim()||(t[1]||"").trim());
   if(!rows.length&&!tiers.length) return tagsLine(s)+`<p class="pv-empty">This card hasn't been filled in yet.</p>`;
-  const concLine=`<p class="pv-line"><b>Concentration:</b> <span class="cbox${s.conc?" on":""}" role="img" aria-label="${s.conc?"Yes":"No"}">${s.conc?"✓":""}</span></p>`;
+  const concLine=`<p class="pv-line"><b>Concentration:</b> <span class="cbox${s.conc?" on":""}" role="img" aria-label="${s.conc?"Yes":"No"}">${CHECK}</span></p>`;
   let concDone=false;
-  const lines=FIELDS.map(([k,lab])=>{let h="";if(f[k]&&String(f[k]).trim())h=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`;if(k==="range"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
+  const lines=FIELDS.map(([k,lab])=>{let h="";if(f[k]&&String(f[k]).trim())h=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`;if(k==="time"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
   return `<div class="pv">${lines}${tagsLine(s)}</div>`+
     (tiers.length?`<div class="rail pv-rail">${tiers.map(([t,i])=>`<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL_TEN:""}<span>+${i+1}</span></span><p class="pv-tier">${(t[0]||"").trim()?`<b class="tname">${esc(t[0])}</b>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"");
 }
 const editSet=new Set();
+const CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.4 6.6 11.6 12.9 4.4" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="square" stroke-linejoin="miter"/></svg>';
 const ctChips=s=>(s.ct||[]).map(x=>`<span class="tag ctchip">${esc(x)}<button type="button" class="ctx" data-ct="${esc(x)}" aria-label="Remove tag ${esc(x)}">×</button></span>`).join("");
 function addTag(d,s){
   const inp=d.querySelector(".ctin"); if(!inp)return;
@@ -408,7 +416,7 @@ function fillCard(d,force){
     <div class="fld"><span class="small">Magic source</span><div class="togs">${TRADS.map(t=>`<button type="button" class="tog" data-tag="${t}" aria-pressed="${s.tags.includes(t)}">${t}</button>`).join("")}</div></div>
     <div class="fld ctfld"><label class="small" for="ct-${s._id}">Custom tags</label><div class="ctedit"><span class="tags ctlist">${ctChips(s)}</span><input type="text" id="ct-${s._id}" class="ctin" placeholder="Add a tag, then press Enter" maxlength="32" autocomplete="off"><button type="button" class="ctadd">Add</button></div></div>
   </div>
-  <div class="fields">${FIELDS.map(([k,lab,ph])=>`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`+(k==="range"?`<div class="line concline"><label for="cc-${s._id}">Concentration</label><input type="checkbox" class="ccheck" id="cc-${s._id}" data-k="conc"${s.conc?" checked":""}></div>`:"")).join("")}</div>
+  <div class="fields">${FIELDS.map(([k,lab,ph])=>`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`+(k==="time"?`<div class="line concline"><label for="cc-${s._id}">Concentration</label><label class="cwrap"><input type="checkbox" class="ccheck" id="cc-${s._id}" data-k="conc"${s.conc?" checked":""}><span class="cbox" aria-hidden="true">${CHECK}</span></label></div>`:"")).join("")}</div>
   <div class="rail">${Array.from({length:10},(_,i)=>{const t=tiers[i]||["",""];return `<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL:""}<span>+${i+1}</span></span><div class="tbody"><textarea class="v tn" rows="1" data-ti="${i}" data-tp="0" aria-label="+${i+1} name" placeholder="Name">${esc(t[0])}</textarea><textarea class="v tt" rows="1" data-ti="${i}" data-tp="1" aria-label="+${i+1} effect" placeholder="Effect at +${i+1}">${esc(t[1])}</textarea></div></div>`}).join("")}</div>`:previewHTML(s));
   d.appendChild(c);
   c.querySelectorAll("textarea").forEach(grow);
@@ -483,9 +491,9 @@ function exportHTML(s){
   const tiers=(s.tiers||[]).map((t,i)=>[t,i]).filter(([t])=>(t[0]||"").trim()||(t[1]||"").trim());
   const star=(fill,stroke,sw)=>SEAL.replace('<path','<path fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+sw+'" stroke-linejoin="miter" stroke-miterlimit="10"');
   const lvl=s.lv?`<span class="x-badge">${star("#fff","#fff","0")}<span>${s.lv}</span></span>`:"";
-  const xconc=s.conc?`<p class="x-line">Concentration: <span class="x-cbox">✓</span></p>`:"";
+  const xconc=s.conc?`<p class="x-line">Concentration: <span class="x-cbox">${CHECK.replace('stroke="currentColor"','stroke="#000"')}</span></p>`:"";
   let xc=false;
-  const xl=rows.map(([k,lab])=>{let h=`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`;if(k==="range"){h+=xconc;xc=true}return h}).join("")+(xc?"":xconc);
+  const xl=rows.map(([k,lab])=>{let h=`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`;if(k==="time"){h+=xconc;xc=true}return h}).join("")+(xc?"":xconc);
   const body=`<div class="x-fields">${xl||`<p class="x-line">&nbsp;</p>`}</div>`;
   const rail=tiers.length?`<div class="x-rail">${tiers.map(([t,i],n)=>`<div class="x-tier${n===tiers.length-1?" x-last":""}"><span class="x-mark${i===9?" x-ten":""}">${i===9?star("#fff","#000","9"):""}<span>+${i+1}</span></span><p>${(t[0]||"").trim()?`<span class="x-name">${esc(t[0])}</span>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"";
   return `<div class="x-card"><div class="x-bar x-top">${lvl}<span class="x-title">${esc((s.n||"").trim()||"Untitled spell")}</span></div><div class="x-body">${body}${rail}</div><div class="x-bar x-bot"></div></div>`;
