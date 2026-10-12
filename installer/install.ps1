@@ -36,6 +36,16 @@ Copy-Item $appSrc (Join-Path $dest 'resources\app') -Recurse
 
 $exe = Join-Path $dest "$name.exe"
 $ico = Join-Path $dest 'resources\app\icon.ico'
+# Give the program file the Crawl icon (rcedit by the Electron team, MIT license)
+$rcedit = Join-Path $PSScriptRoot 'tools\rcedit-x64.exe'
+if (Test-Path $rcedit) {
+  try {
+    & $rcedit $exe --set-icon $ico --set-version-string 'ProductName' $name --set-version-string 'FileDescription' $name | Out-Null
+  } catch {
+    Write-Host "Couldn't change the program's icon. The shortcuts still use the Crawl logo."
+  }
+}
+
 $shell = New-Object -ComObject WScript.Shell
 $places = @([Environment]::GetFolderPath('Desktop'), (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'))
 foreach ($dir in $places) {

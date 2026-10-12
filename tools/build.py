@@ -51,7 +51,7 @@ def build_site(body):
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
         '<meta name="description" content="Every spell in Crawl 1st Edition, filterable by class and magic source.">'
-        '<link rel="icon" href="app/icon.png">'
+        '<link rel="icon" type="image/png" href="favicon.png"><link rel="icon" href="favicon.ico" sizes="any"><link rel="apple-touch-icon" href="apple-touch-icon.png">'
         f"<style>{RESET}</style>"
         "<script>window.CRAWL_STATIC=true;window.CRAWL_REPO={owner:\"brodywoe-svg\",repo:\"crawl-spell-compendium\",branch:\"main\"}</script></head><body>"
     )
@@ -80,8 +80,9 @@ def build_installer():
     out = ROOT / "downloads" / "Crawl-Spell-Compendium-Installer.zip"
     out.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        for f in sorted((ROOT / "installer").iterdir()):
-            z.write(f, f"{INSTALLER_NAME}/{f.name}")
+        for f in sorted((ROOT / "installer").rglob("*")):
+            if f.is_file():
+                z.write(f, f"{INSTALLER_NAME}/{f.relative_to(ROOT / 'installer').as_posix()}")
         for f in sorted((ROOT / "app").rglob("*")):
             if f.is_file():
                 z.write(f, f"{INSTALLER_NAME}/app/{f.relative_to(ROOT / 'app').as_posix()}")
