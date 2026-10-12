@@ -6,13 +6,13 @@
 /* Layout: black-and-white spell cards — a filter bar over a list of collapsible spell rows; an open row becomes a fillable card with a black header bar and a +1…+10 advancement rail */
 :root{
   --ink:#000000; --paper:#ffffff; --page:#f4f4f4; --muted:#5c5c5c; --soft:#ececec; --hair:#c9c9c9;
-  --barhover:#2a2a2a; --placeholder:#a3a3a3;
+  --barhover:#2a2a2a; --placeholder:#a3a3a3; --red:#a3141b;
   --font:"Montserrat","Helvetica Neue",Arial,sans-serif;
   color-scheme:light;
 }
 :root[data-mode="dark"]{
   --ink:#f2f2f2; --paper:#121212; --page:#000000; --muted:#a6a6a6; --soft:#242424; --hair:#4a4a4a;
-  --barhover:#d6d6d6; --placeholder:#6b6b6b;
+  --barhover:#d6d6d6; --placeholder:#6b6b6b; --red:#ff6b6b;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -286,6 +286,18 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .savebar .btn.solid{background:var(--paper);color:var(--ink)}
 .savebar .btn[disabled]{opacity:.5;cursor:default}
 @media (prefers-reduced-motion:no-preference){.spell>summary{transition:background .12s}}
+/* glossary terms in spell text: red underline, rounded popup on hover or tap */
+.gl{text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px;cursor:help;border-radius:3px}
+.gl:hover,.gl.on{background:var(--soft)}
+.gl:focus-visible{outline:2px solid var(--red);outline-offset:1px}
+.gtip{position:fixed;z-index:40;width:min(360px,calc(100vw - 24px));background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none;font-family:var(--font)}
+.gtip .gth{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;color:var(--paper);font-weight:800;font-size:1rem}
+.gtip .gtag{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.gtip .gtb{background:var(--paper);color:var(--ink);border-radius:0 0 12px 12px;padding:10px 14px 12px;display:grid;gap:6px;font-size:.88rem;font-weight:600;line-height:1.4}
+.gtip p{margin:0}
+.gtip ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.gtip li{position:relative;padding-left:17px}
+.gtip li::before{content:"";position:absolute;left:2px;top:.5em;width:6px;height:6px;background:var(--ink);transform:rotate(45deg)}
 /*@NAVCSS@*/
 </style>
 
@@ -361,6 +373,7 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 <script>
 let SPELLS = /*@DATA@*/;
 const TPL = /*@TPL@*/;
+let GLOSSARY = /*@GLOSSARY@*/null;
 const TRADS=["Arcane","Divine","Primal","Occult"];
 const FIELDS=[["pre","Prerequisites","e.g. +1 ARC or +1 NAT"],["cls","Class Requirements","e.g. Wizard, Sorcerer"],["mat","Material Cost","e.g. Sulfuric Powder"],["cat","Category","e.g. Evocation"],["cost","Casting Cost","e.g. 2MP"],["time","Casting Time","e.g. Instantaneous"],["type","Type","e.g. Ranged Spell Attack"],["range","Range","e.g. 30ft (Straight Line)"],["desc","Description","What the spell does"],["dmg","Damage","e.g. On hit, target takes 1d6 fire damage."]];
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -437,9 +450,9 @@ function previewHTML(s){
   if(!rows.length&&!tiers.length) return tagsLine(s)+`<p class="pv-empty">This card hasn't been filled in yet.</p>`;
   const concLine=`<p class="pv-line"><b>Concentration:</b> <span class="cbox${s.conc?" on":""}" role="img" aria-label="${s.conc?"Yes":"No"}">${CHECK}</span></p>`;
   let concDone=false;
-  const lines=FIELDS.map(([k,lab])=>{let h="";if(k==="mat")h+=`<p class="pv-line"><b>Components:</b> <span class="comps">${compView(s)}</span></p>`;if(k==="dmg")h+=chartHTML(s.tbl,"pv-tbl");if(f[k]&&String(f[k]).trim())h+=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`;if(k==="time"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
+  const lines=FIELDS.map(([k,lab])=>{let h="";if(k==="mat")h+=`<p class="pv-line"><b>Components:</b> <span class="comps">${compView(s)}</span></p>`;if(k==="dmg")h+=chartHTML(s.tbl,"pv-tbl");if(f[k]&&String(f[k]).trim())h+=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${gl(f[k])}</span></p>`;if(k==="time"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
   return `<div class="pv">${lines}${tagsLine(s)}</div>`+
-    (tiers.length?`<div class="rail pv-rail">${tiers.map(([t,i])=>`<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL_TEN:""}<span>+${i+1}</span></span><p class="pv-tier">${(t[0]||"").trim()?`<b class="tname">${esc(t[0])}</b>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"");
+    (tiers.length?`<div class="rail pv-rail">${tiers.map(([t,i])=>`<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL_TEN:""}<span>+${i+1}</span></span><p class="pv-tier">${(t[0]||"").trim()?`<b class="tname">${esc(t[0])}</b>: `:""}${gl(t[1]||"")}</p></div>`).join("")}</div>`:"");
 }
 const editSet=new Set();
 const compView=s=>COMPS.map(([k,L,name])=>`<span class="compi" title="${name}"><span class="cbox${s.comp&&s.comp[k]?" on":""}" role="img" aria-label="${name}: ${s.comp&&s.comp[k]?"yes":"no"}">${CHECK}</span>${L}</span>`).join("");
@@ -503,7 +516,6 @@ function grow(t){if(CSS.supports&&CSS.supports("field-sizing","content"))return;
 function refreshSummary(d,s){d.querySelector("summary").innerHTML=summaryHTML(s)}
 const APP=window.crawlApp||null;
 const STATIC=!APP&&!!window.CRAWL_STATIC;
-let ADMIN=false, GH_KEY=null;
 let autoT=null;
 function touch(){
   if(APP){
@@ -616,6 +628,57 @@ async function exportSpell(s,fmt,d){
   }finally{box.remove()}
 }
 
+/*@GLCORE@*/
+/* glossary data (crawl-glossary.json): {v:1, entries:[{n, sec, lead, fx:[effects], notes:[{l,t}], aka:[other words to match]}]} */
+function normGlossary(j){
+  const a=j&&Array.isArray(j.entries)?j.entries:null; if(!a)return null;
+  const list=x=>Array.isArray(x)?x:[];
+  return a.filter(e=>e&&typeof e.n==="string"&&e.n.trim()).map(e=>({
+    n:e.n.trim(), sec:String(e.sec||"Conditions").trim()||"Conditions", lead:String(e.lead||"").trim(),
+    fx:list(e.fx).map(x=>String(x).trim()).filter(Boolean),
+    notes:list(e.notes).filter(n=>n&&String(n.t||"").trim()).map(n=>({l:String(n.l||"Note").trim()||"Note",t:String(n.t).trim()})),
+    aka:list(e.aka).map(x=>String(x).trim()).filter(Boolean)}));
+}
+const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
+/*@GLCORE-END@*/
+/* glossary terms in spell text: red underline, with the entry in a popup on hover, focus or tap */
+let GL_RE=null, GL_MAP=new Map();
+function setGlossary(j){
+  const a=normGlossary(j); if(!a)return false;
+  GLOSSARY={v:1,entries:a}; GL_MAP=new Map();
+  a.forEach(e=>[e.n,...e.aka].forEach(t=>{const k=t.toLowerCase();if(!GL_MAP.has(k))GL_MAP.set(k,e)}));
+  const terms=[...GL_MAP.keys()].sort((x,y)=>y.length-x.length).map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+  GL_RE=terms.length?new RegExp("\\b("+terms.join("|")+")\\b","gi"):null;
+  return true;
+}
+setGlossary(GLOSSARY);
+function gl(text){const h=esc(text);return GL_RE?h.replace(GL_RE,m=>`<span class="gl" tabindex="0" data-g="${m.toLowerCase()}">${m}</span>`):h}
+function rerenderOpen(){openSet.forEach(id=>{if(editSet.has(id))return;const d=out.querySelector(`details[data-id="${id}"]`);if(d)fillCard(d,true)})}
+const gtip=document.createElement("div");gtip.className="gtip";gtip.id="gtip";gtip.setAttribute("role","tooltip");gtip.hidden=true;document.body.appendChild(gtip);
+let gCur=null, gAt=0;
+function showTip(el){
+  const e=GL_MAP.get(el.dataset.g); if(!e)return;
+  if(gCur&&gCur!==el){gCur.classList.remove("on");gCur.removeAttribute("aria-describedby")}
+  if(gCur!==el)gAt=Date.now();
+  gCur=el;el.classList.add("on");el.setAttribute("aria-describedby","gtip");
+  gtip.innerHTML=`<div class="gth"><span>${esc(e.n)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${e.lead?`<p>${esc(e.lead)}</p>`:""}${e.fx.length?`<ul>${e.fx.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}</div>`;
+  gtip.hidden=false;
+  const r=el.getBoundingClientRect(),w=gtip.offsetWidth,h=gtip.offsetHeight,vw=document.documentElement.clientWidth,vh=window.innerHeight;
+  const x=Math.min(Math.max(12,r.left+r.width/2-w/2),vw-w-12);
+  let y=r.bottom+8; if(y+h>vh-12&&r.top-h-8>12)y=r.top-h-8;
+  gtip.style.left=x+"px";gtip.style.top=Math.max(12,y)+"px";
+}
+function hideTip(){if(gCur){gCur.classList.remove("on");gCur.removeAttribute("aria-describedby")}gCur=null;gtip.hidden=true}
+const glAt=t=>t&&t.closest?t.closest(".gl"):null;
+document.addEventListener("pointerover",ev=>{if(ev.pointerType==="mouse"){const el=glAt(ev.target);if(el)showTip(el)}});
+document.addEventListener("pointerout",ev=>{if(ev.pointerType==="mouse"){const el=glAt(ev.target);if(el&&!el.contains(ev.relatedTarget)&&document.activeElement!==el)hideTip()}});
+document.addEventListener("focusin",ev=>{const el=glAt(ev.target);if(el)showTip(el)});
+document.addEventListener("focusout",ev=>{if(ev.target===gCur)hideTip()});
+document.addEventListener("click",ev=>{const el=glAt(ev.target);if(!el){hideTip();return}if(gCur===el&&Date.now()-gAt>400&&!matchMedia("(hover:hover)").matches){el.blur();hideTip()}else showTip(el)});
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&gCur)hideTip()});
+window.addEventListener("scroll",()=>{if(gCur)hideTip()},{passive:true,capture:true});
+window.addEventListener("resize",()=>{if(gCur)hideTip()});
+
 /* light / dark mode */
 const MOON="M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z";
 const SUN="M8 4.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zM7.2 0h1.6v2.4H7.2zM7.2 13.6h1.6V16H7.2zM0 7.2h2.4v1.6H0zM13.6 7.2H16v1.6h-2.4zM2.2 3.3l1.1-1.1 1.7 1.7-1.1 1.1zM11 12.1l1.1-1.1 1.7 1.7-1.1 1.1zM2.2 12.7l1.7-1.7 1.1 1.1-1.7 1.7zM11 3.9l1.7-1.7 1.1 1.1-1.7 1.7z";
@@ -672,6 +735,25 @@ $("exportBtn").addEventListener("click",async()=>{
 });
 
 /* admin (GitHub Pages site): a password unlocks a GitHub key stored encrypted in admin.json */
+function applyAdminUI(){
+  if(!STATIC)return;
+  $("addBtn").hidden=!ADMIN;$("importBtn").hidden=!ADMIN;$("exportBtn").hidden=!ADMIN;
+  showAdminBtn();
+}
+async function refreshFromGitHub(){
+  try{
+    const r=await gh(`/contents/crawl-spells.json?ref=${REPO.branch||"main"}`,{headers:{"Accept":"application/vnd.github.raw+json"}});
+    if(!r.ok)return;
+    const arr=normalize(await r.json());
+    if(arr&&!dirty){SPELLS=arr;SPELLS.forEach(s=>s._id=++uid);original=JSON.stringify(arr);renderCounts();render()}
+  }catch(e){}
+}
+/*@ADMIN@*/
+/* admin sign-in, shared by every page of the GitHub Pages site. The unlocked key is kept
+   in sessionStorage, so the sign-in lasts while this browser tab is open, across pages. */
+let ADMIN=false, GH_KEY=null;
+const AdminHooks={canSignOut:()=>true,signedIn:()=>{},signedOut:()=>{}};
+const ADMIN_SS="crawl-admin-key";
 const REPO=window.CRAWL_REPO||{};
 const KDF_ITER=600000;
 const b64=u8=>{let s="";for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
@@ -707,12 +789,11 @@ async function putFile(path,text,message,key=GH_KEY){
   if(!r.ok)throw {code:"http",status:r.status};
   return r.json();
 }
-function applyAdminUI(){
-  if(!STATIC)return;
-  $("addBtn").hidden=!ADMIN;$("importBtn").hidden=!ADMIN;$("exportBtn").hidden=!ADMIN;
-  $("adminBtn").classList.toggle("on",ADMIN);
-  $("adminLabel").textContent=ADMIN?"Admin · Sign out":"Admin";
-}
+function showAdminBtn(){$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?"Admin · Sign out":"Admin"}
+function becomeAdmin(key,quiet){GH_KEY=key;ADMIN=true;try{sessionStorage.setItem(ADMIN_SS,key)}catch(e){}closeAdmin();showAdminBtn();AdminHooks.signedIn(quiet)}
+function signOut(){if(!AdminHooks.canSignOut())return;ADMIN=false;GH_KEY=null;try{sessionStorage.removeItem(ADMIN_SS)}catch(e){}showAdminBtn();AdminHooks.signedOut()}
+function restoreAdmin(){if(!STATIC)return;let k=null;try{k=sessionStorage.getItem(ADMIN_SS)}catch(e){}if(k)becomeAdmin(k,true)}
+$("adminBtn").addEventListener("click",()=>{if(ADMIN)signOut();else openAdmin()});
 let adminMode="login";
 function setAdminMode(m){
   adminMode=m;
@@ -733,22 +814,6 @@ async function openAdmin(){
   (adminMode==="login"?$("adminPass"):$("setupKey")).focus();
 }
 function closeAdmin(){$("adminModal").hidden=true;$("adminForm").reset();$("adminErr").textContent=""}
-async function refreshFromGitHub(){
-  try{
-    const r=await gh(`/contents/crawl-spells.json?ref=${REPO.branch||"main"}`,{headers:{"Accept":"application/vnd.github.raw+json"}});
-    if(!r.ok)return;
-    const arr=normalize(await r.json());
-    if(arr&&!dirty){SPELLS=arr;SPELLS.forEach(s=>s._id=++uid);original=JSON.stringify(arr);renderCounts();render()}
-  }catch(e){}
-}
-function becomeAdmin(key){GH_KEY=key;ADMIN=true;closeAdmin();applyAdminUI();render();dmsg("Signed in as admin. Open a spell and click Edit.");refreshFromGitHub()}
-$("adminBtn").addEventListener("click",()=>{
-  if(ADMIN){
-    if(dirty){dmsg("Save or discard your changes before signing out.");return}
-    ADMIN=false;GH_KEY=null;editSet.clear();openSet.forEach(id=>{const d=out.querySelector(`details[data-id="${id}"]`);if(d)fillCard(d,true)});applyAdminUI();render();dmsg("Signed out.");return;
-  }
-  openAdmin();
-});
 $("adminSwitch").addEventListener("click",()=>{setAdminMode(adminMode==="login"?"setup":"login");(adminMode==="login"?$("adminPass"):$("setupKey")).focus()});
 $("adminCancel").addEventListener("click",closeAdmin);
 $("adminModal").addEventListener("click",e=>{if(e.target===$("adminModal"))closeAdmin()});
@@ -782,6 +847,10 @@ $("adminForm").addEventListener("submit",async e=>{
     }finally{go.disabled=false}
   }
 });
+/*@ADMIN-END@*/
+AdminHooks.canSignOut=()=>{if(dirty){dmsg("Save or discard your changes before signing out.");return false}return true};
+AdminHooks.signedIn=quiet=>{applyAdminUI();render();if(!quiet)dmsg("Signed in as admin. Open a spell and click Edit.");refreshFromGitHub()};
+AdminHooks.signedOut=()=>{editSet.clear();openSet.forEach(id=>{const d=out.querySelector(`details[data-id="${id}"]`);if(d)fillCard(d,true)});applyAdminUI();render();dmsg("Signed out.")};
 async function saveToGitHub(){
   if(!ADMIN||!GH_KEY){$("saveMsg").textContent="Sign in as admin to save.";return}
   $("saveBtn").disabled=true;$("discardBtn").disabled=true;$("saveMsg").textContent="Saving to the site…";
@@ -803,7 +872,7 @@ const j=v=>JSON.stringify(v).replace(/</g,"\\u003c");
 function clean(){
   return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.conc)o.conc=true;if(s.comp)o.comp=s.comp;if(s.tbl)o.tbl=s.tbl;if(s.ct&&s.ct.length)o.ct=s.ct;if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
 }
-function buildPage(){const D="/*@"+"DATA@*/",T="/*@"+"TPL@*/";return HEAD+TPL.replace(D,()=>j(clean())).replace(T,()=>j(TPL))+"</body></html>"}
+function buildPage(){const D="/*@"+"DATA@*/",T="/*@"+"TPL@*/",G="/*@"+"GLOSSARY@*/null";return HEAD+TPL.replace(D,()=>j(clean())).replace(G,()=>j(GLOSSARY)).replace(T,()=>j(TPL))+"</body></html>"}
 $("saveBtn").addEventListener("click",async()=>{
   if(STATIC){saveToGitHub();return}
   if(!art){$("saveMsg").textContent="Saving isn't available in this view. Open the page on claude.ai, signed in as its owner.";return}
@@ -829,7 +898,8 @@ if(APP){
 }else if(STATIC){
   $("adminBtn").hidden=false;applyAdminUI();
   dl={save:async({filename,data})=>{const blob=data instanceof Blob?data:new Blob([data],{type:"application/json"});const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return {status:"saved"}}};
-  fetch("crawl-spells.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{const arr=normalize(j);if(arr){SPELLS=arr;SPELLS.forEach(s=>s._id=++uid);original=JSON.stringify(arr)}}).catch(()=>{}).finally(()=>{renderCounts();render()});
+  fetch("crawl-spells.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{const arr=normalize(j);if(arr){SPELLS=arr;SPELLS.forEach(s=>s._id=++uid);original=JSON.stringify(arr)}}).catch(()=>{}).finally(()=>{renderCounts();render();restoreAdmin()});
+  fetch("crawl-glossary.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{if(setGlossary(j))rerenderOpen()}).catch(()=>{});
 }else{renderCounts();render()}
 if(!APP&&!STATIC)(function hook(n){if(window.claude&&window.claude.use){window.claude.use("artifact").then(a=>{art=a}).catch(()=>{});window.claude.use("downloads").then(x=>{dl=x}).catch(()=>{})}else if(n<20)setTimeout(()=>hook(n+1),250)})(0);
 </script>

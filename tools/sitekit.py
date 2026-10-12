@@ -1,7 +1,7 @@
 """Shared site pieces: the top navigation bar and the Conditions page.
 
 Used by tools/build.py. The navigation bar is injected into every page, and the
-Conditions page is generated from content/conditions.md.
+Glossary and Conditions pages draw their entries from crawl-glossary.json.
 """
 import html
 import re
@@ -100,105 +100,50 @@ NAV_JS = """(function(){
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.activeElement&&document.activeElement.closest('.navdrop'))document.activeElement.blur()});
 })();"""
 
-# ---------------------------------------------------------------- conditions
+# ---------------------------------------------------------------- glossary pages
+# The Glossary and Conditions pages draw their entries in the browser from
+# crawl-glossary.json (src/glossary.js), so admin edits show without a rebuild.
+
+PAGES = {
+    "glossary": ("Glossary", "Every term in the Crawl rules, in one place. Search by name or by anything in its description.",
+                 "Search the glossary", "Nothing matches. Try a different word, or clear the search."),
+    "conditions": ("Conditions", "Conditions change what a creature can do, and how others can affect it. A creature can have more than one condition at a time. Each lasts until something ends it, such as a saving throw, a spell or the end of its duration. These match the Conditions list on page 1 of the character sheet.",
+                   "Find a condition", "No conditions match. Clear the search to see them all."),
+}
+
+EXHAUSTION_NOTE = (
+    '<aside class="cremoved"><h3>No Exhaustion condition</h3>'
+    "<p>Exhaustion (the old 7-level condition). Exhaustion Points (EP) in the Action Pool replace it.</p></aside>"
+)
 
 
-def slug(name):
-    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
-
-
-def parse_conditions(md):
-    """Returns (intro_notes, [ {name, lead, bullets, notes:[(label,text)]} ])."""
-    conds, intro = [], []
-    cur = None
-    for raw in md.splitlines():
-        line = raw.strip()
-        if not line or line == "---" or line.startswith("# "):
-            continue
-        if line.startswith("## "):
-            cur = {"name": line[3:].strip(), "lead": "", "bullets": [], "notes": []}
-            conds.append(cur)
-            continue
-        if cur is None:
-            if line.lower().startswith("removed from the game:"):
-                intro.append(line.split(":", 1)[1].strip())
-            continue  # skip internal status lines
-        if line.startswith("- "):
-            cur["bullets"].append(line[2:].strip())
-        elif re.match(r"^(Design note|Note):", line):
-            label, text = line.split(":", 1)
-            cur["notes"].append(("Designer's note" if label == "Design note" else "Note", text.strip()))
-        elif not cur["bullets"]:
-            cur["lead"] = (cur["lead"] + " " + line).strip()
-        else:
-            cur["notes"].append(("Note", line))
-    return intro, conds
-
-
-def plain(text):
-    return html.escape(text, quote=False)
-
-
-def condition_card(c, category=None):
-    """One condition as a card. Plain text only: nothing on the card is a link."""
-    n = c["name"]
-    bullets = "".join(f"<li>{plain(b)}</li>" for b in c["bullets"])
-    notes = "".join(f'<p class="cnote"><b>{lab}:</b> {plain(txt)}</p>' for lab, txt in c["notes"])
-    search = html.escape(" ".join([n, c["lead"], *c["bullets"], *(t for _, t in c["notes"])]).lower())
-    tag = f'<span class="ctag">{category}</span>' if category else ""
-    return (
-        f'<section class="cond" id="{slug(n)}" data-search="{search}">'
-        f'<h2 class="chead"><span>{plain(n)}</span>{tag}</h2>'
-        f'<div class="cbody"><p class="clead">{plain(c["lead"])}</p><ul class="cul">{bullets}</ul>{notes}</div></section>'
-    )
-
-
-def search_bar(placeholder, count_text):
-    return f"""<div class="cbar">
+def glossary_shell(page, logo_svg, admin_modal):
+    title, intro, placeholder, empty = PAGES[page]
+    return f"""
+<div class="wrap condwrap">
+<header class="intro">
+  {logo_svg}
+  <h1>{title}</h1>
+  <p>{intro}</p>
+</header>
+<div class="cbar">
   <input id="cq" type="search" placeholder="{placeholder}" aria-label="{placeholder}" autocomplete="off">
-  <span class="ccount" id="ccount">{count_text}</span>
-</div>"""
-
-
-def conditions_body(md, logo_svg):
-    intro_notes, conds = parse_conditions(md)
-    removed = "".join(f"<p>{plain(t)}</p>" for t in intro_notes)
-    return f"""
-<div class="wrap condwrap">
-<header class="intro">
-  {logo_svg}
-  <h1>Conditions</h1>
-  <p>Conditions change what a creature can do, and how others can affect it. A creature can have more than one condition at a time. Each lasts until something ends it, such as a saving throw, a spell or the end of its duration. These match the Conditions list on page 1 of the character sheet.</p>
-</header>
-{search_bar("Find a condition", f"{len(conds)} conditions")}
-<main class="clist" id="clist" data-noun="condition">{"".join(condition_card(c) for c in conds)}</main>
-<p class="cempty" id="cempty" hidden>No conditions match. Clear the search to see them all.</p>
-<aside class="cremoved"><h3>No Exhaustion condition</h3>{removed}</aside>
+  <span class="ccount" id="ccount"></span>
+  <button type="button" class="btn solid" id="gAdd" hidden>Add entry</button>
 </div>
-"""
-
-
-def glossary_body(md, logo_svg):
-    """Every entry from every Glossary page, in one searchable list, grouped by page."""
-    _, conds = parse_conditions(md)
-    groups = [("Conditions", "conditions.html", conds)]
-    total = sum(len(g[2]) for g in groups)
-    sections = "".join(
-        f'<section class="gsec" data-group><div class="ghead"><h2>{name}</h2>'
-        f'<a class="glink" href="{href}">Open the {name} page</a></div>'
-        f'<div class="clist">{"".join(condition_card(c, name[:-1]) for c in items)}</div></section>'
-        for name, href, items in groups
-    )
-    return f"""
-<div class="wrap condwrap">
-<header class="intro">
-  {logo_svg}
-  <h1>Glossary</h1>
-  <p>Every term in the Crawl rules, in one place. Search by name or by anything in its description.</p>
-</header>
-{search_bar("Search the glossary", f"{total} entries")}
-<main id="clist" data-noun="entry">{sections}</main>
-<p class="cempty" id="cempty" hidden>Nothing matches. Try a different word, or clear the search.</p>
+<p class="gmsg" id="gmsg" role="status"></p>
+<main id="clist"></main>
+<p class="cempty" id="cempty" hidden>{empty}</p>
+{EXHAUSTION_NOTE if page == "conditions" else ""}
+</div>
+<datalist id="gsecs"></datalist>
+{admin_modal}
+<div class="savebar" id="savebar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">You have unsaved glossary changes.</span>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn solid" id="saveBtn">Save changes</button>
+  </div>
 </div>
 """
 
@@ -206,10 +151,11 @@ def glossary_body(md, logo_svg):
 CONDITIONS_CSS = """
 .condwrap{padding-block:28px 60px}
 .cbar{position:sticky;top:var(--navh,0px);z-index:5;background:var(--page);padding-block:12px;margin-top:12px!important}
-.cbar{display:flex;gap:10px;align-items:center;margin-top:24px}
-.cbar input{flex:1 1 auto;min-width:0;font:600 1rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 12px;background:var(--paper);color:var(--ink)}
+.cbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:24px}
+.cbar input{flex:1 1 240px;min-width:0;font:600 1rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 12px;background:var(--paper);color:var(--ink)}
 .ccount{font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
-.cbar+.clist,.cbar+main{margin-top:22px}
+.gmsg{margin:6px 0 0;min-height:1.2em;font-size:.85rem;font-weight:600;color:var(--muted)}
+#clist{margin-top:14px}
 .clist{display:grid;gap:12px}
 /* the card is filled with ink so no light pixels show through at the rounded corners or the top edge */
 .cond{background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;scroll-margin-top:calc(var(--navh,0px) + 16px)}
@@ -230,15 +176,19 @@ CONDITIONS_CSS = """
 .cremoved h3{margin:0 0 4px;font-size:.95rem;font-weight:800}
 .cremoved p{margin:0;font-weight:600;color:var(--muted)}
 .cempty{margin:20px 0;color:var(--muted);font-weight:600}
+.chr{display:flex;align-items:center;gap:8px}
+.gedit{font:700 .72rem var(--font);color:var(--paper);background:transparent;border:2px solid var(--paper);border-radius:999px;padding:3px 12px;cursor:pointer}
+.gedit:hover{background:var(--paper);color:var(--ink)}
+.gedit:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.gform{gap:12px}
+.gform label{display:grid;gap:5px;font-size:.85rem;font-weight:800}
+.gform small{font-weight:600;color:var(--muted)}
+.gform input,.gform textarea{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
+.gform textarea{resize:vertical;line-height:1.4;field-sizing:content;min-height:3.2em}
+.gerr{margin:0;color:var(--red);font-weight:700;font-size:.88rem}
+.gerr:empty{display:none}
+.gbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gbtns .sp{flex:1}
+.gdel{color:var(--red)!important;border-color:var(--red)!important}
+@media (max-width:600px){.gform input,.gform textarea,.cbar input{font-size:16px}}
 """
-
-CONDITIONS_JS = """(function(){
-  var q=document.getElementById('cq'),list=document.getElementById('clist'),noun=list.dataset.noun,
-      cards=[].slice.call(document.querySelectorAll('.cond')),groups=[].slice.call(document.querySelectorAll('[data-group]')),
-      count=document.getElementById('ccount'),empty=document.getElementById('cempty');
-  function plural(n){return n===1?noun:(noun==='entry'?'entries':noun+'s')}
-  function run(){var v=q.value.trim().toLowerCase(),n=0;cards.forEach(function(c){var ok=!v||c.dataset.search.indexOf(v)>-1;c.hidden=!ok;if(ok)n++});
-    groups.forEach(function(g){g.hidden=!g.querySelector('.cond:not([hidden])')});
-    count.textContent=n+' '+plural(n);empty.hidden=n>0}
-  q.addEventListener('input',run);
-})();"""

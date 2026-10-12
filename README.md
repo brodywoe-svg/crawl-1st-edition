@@ -48,6 +48,22 @@ Because `admin.json` is public, the password is what keeps the key safe: use a
 long one. Repeat the setup any time to change the password or replace an
 expired key.
 
+## Editing the glossary
+
+Signed in as admin, open **Glossary** or **Conditions**. Every entry gets an
+**Edit** button, and **Add entry** adds a new one. Put an entry in the
+**Conditions** section to show it on the Conditions page too; any other section
+name (for example *Keywords*) makes a new section on the Glossary page. Click
+**Save changes** to write `crawl-glossary.json`.
+
+Glossary names are underlined in red in spell text (when a spell isn't being
+edited). Hover over one, or tap it on a phone, to see its entry. To underline
+other forms of a word too, list them under **Also underline these words in spells**
+(for example *grapple, grappling*).
+
+Signing in as admin lasts for the browser tab, across all pages, until you
+click **Admin · Sign out** or close the tab.
+
 ## Keeping everything in sync
 
 The spell list lives in [`crawl-spells.json`](crawl-spells.json).
@@ -65,7 +81,8 @@ The spell list lives in [`crawl-spells.json`](crawl-spells.json).
 | `index.html` | The GitHub Pages website (read-only, loads `crawl-spells.json`) |
 | `crawl-spells.json` | The spell list |
 | `src/page.html` | The page template shared by the website and the app |
-| `content/conditions.md` | The conditions text; `tools/build.py` turns it into `conditions.html` and `glossary.html` |
+| `crawl-glossary.json` | The glossary entries (all the conditions, plus any keywords you add) |
+| `src/glossary.js` | The Glossary and Conditions pages: search, and admin editing |
 | `tools/sitekit.py` | The top navigation bar and the Glossary and Conditions page layouts |
 | `app/` | The Windows app (Electron) |
 | `installer/` | Install and uninstall scripts for Windows |

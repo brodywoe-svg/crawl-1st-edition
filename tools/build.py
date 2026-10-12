@@ -5,7 +5,7 @@ Run from the repo root:  python tools/build.py
 Reads   src/page.html          the page template (shared by every version)
         crawl-spells.json      the spell list
 Writes  index.html             the GitHub Pages site (read-only)
-        conditions.html, glossary.html   the Glossary pages (from content/conditions.md)
+        conditions.html, glossary.html   the Glossary pages (entries from crawl-glossary.json)
         app/index.html         the Windows app's page (offline, saves on the computer)
         downloads/Crawl-Spell-Compendium-Installer.zip   the Windows installer
 
@@ -24,7 +24,7 @@ import sitekit as crawlsite  # noqa: E402  (tools/sitekit.py: navigation bar + C
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "src" / "page.html"
-CONDITIONS = ROOT / "content" / "conditions.md"
+GLOSSARY = ROOT / "crawl-glossary.json"
 SPELLS = ROOT / "crawl-spells.json"
 REPO_URL = "https://github.com/brodywoe-svg/crawl-spell-compendium"
 INSTALLER_NAME = "Crawl Spell Compendium Installer"
@@ -48,44 +48,62 @@ def as_js(value):
     return json.dumps(value, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
 
 
+def read_glossary():
+    return json.loads(GLOSSARY.read_text(encoding="utf-8"))
+
+
 def page_body(template, spells):
-    body = template.replace("/*@DATA@*/", as_js(spells), 1).replace("/*@TPL@*/", as_js(template), 1)
+    # the glossary goes in first: the TPL copy of the template also contains its placeholder
+    body = template.replace("/*@GLOSSARY@*/null", as_js(read_glossary()), 1)
+    body = body.replace("/*@DATA@*/", as_js(spells), 1).replace("/*@TPL@*/", as_js(template), 1)
     body = body.replace("<!--@NAV@-->", crawlsite.nav_html("spells"), 1)
     return body.replace("/*@NAVCSS@*/", crawlsite.NAV_CSS, 1)
 
 
 GLOSSARY_PAGES = {
-    # file name: (nav section, <title>, meta description, body builder)
-    "conditions.html": ("conditions", "Crawl Conditions",
-                        "The conditions of Crawl 1st Edition: what each one does and how it ends.",
-                        crawlsite.conditions_body),
+    # file name: (page key, <title>, meta description)
     "glossary.html": ("glossary", "Crawl Glossary",
-                      "The Crawl 1st Edition glossary: every rules term in one searchable list.",
-                      crawlsite.glossary_body),
+                      "The Crawl 1st Edition glossary: every rules term in one searchable list."),
+    "conditions.html": ("conditions", "Crawl Conditions",
+                        "The conditions of Crawl 1st Edition: what each one does and how it ends."),
 }
 
 
-def glossary_page(template, name):
-    """A standalone Glossary page that shares the spell page's look and navigation."""
-    active, title, _, builder = GLOSSARY_PAGES[name]
+def between(text, start, end):
+    i = text.index(start)
+    return text[i + len(start):text.index(end, i)]
+
+
+def glossary_page(template, glossary, name):
+    """A Glossary page that shares the spell page's look, navigation and admin sign-in."""
+    page, title, _ = GLOSSARY_PAGES[name]
     style = re.search(r"<style>(.*?)</style>", template, re.S).group(1).replace("/*@NAVCSS@*/", "")
     links = "".join(re.findall(r'<link rel="(?:preconnect|stylesheet)"[^>]*>', template)[:2])
     mode_init = re.search(r"<script>try\{if\(localStorage[^<]*</script>", template).group(0)
     logo = re.search(r'<svg class="logo".*?</svg>', template, re.S).group(0)
+    admin_btn = re.search(r'<button type="button" class="adminbtn".*?</button>', template, re.S).group(0)
     mode_btn = re.search(r'<button type="button" class="modebtn".*?</button>', template, re.S).group(0)
+    modal = re.search(r'<div class="modal" id="adminModal".*?\n</div>\n', template, re.S).group(0)
     mode_js = (
         "(function(){var b=document.getElementById('modeBtn'),r=document.documentElement;"
         "var M='M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z',S='M8 4.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zM7.2 0h1.6v2.4H7.2zM7.2 13.6h1.6V16H7.2zM0 7.2h2.4v1.6H0zM13.6 7.2H16v1.6h-2.4zM2.2 3.3l1.1-1.1 1.7 1.7-1.1 1.1zM11 12.1l1.1-1.1 1.7 1.7-1.1 1.1zM2.2 12.7l1.7-1.7 1.1 1.1-1.7 1.7zM11 3.9l1.7-1.7 1.1 1.1-1.7 1.7z';"
         "function show(){var d=r.getAttribute('data-mode')==='dark';b.setAttribute('aria-pressed',d);document.getElementById('modeLabel').textContent=d?'Light mode':'Dark mode';document.getElementById('modeIcon').setAttribute('d',d?S:M)}"
         "b.addEventListener('click',function(){var d=r.getAttribute('data-mode')!=='dark';if(d)r.setAttribute('data-mode','dark');else r.removeAttribute('data-mode');try{localStorage.setItem('crawl-mode',d?'dark':'light')}catch(e){}show()});show()})();"
     )
-    md = CONDITIONS.read_text(encoding="utf-8")
+    prelude = (
+        "const APP=window.crawlApp||null;const STATIC=!APP&&!!window.CRAWL_STATIC;"
+        "const $=id=>document.getElementById(id);"
+        "const esc=s=>String(s??\"\").replace(/[&<>\"]/g,c=>({\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\"}[c]));"
+        f"const GLOSSARY={as_js(glossary)};window.GL_PAGE={json.dumps(page)};\n"
+    )
+    shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")
+    script = (ROOT / "src" / "glossary.js").read_text(encoding="utf-8")
     return (
         f"<title>{title}</title>" + links + mode_init
         + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}</style>"
-        + crawlsite.nav_html(active, controls=mode_btn)
-        + builder(md, logo)
-        + f"<script>{mode_js}{crawlsite.CONDITIONS_JS}</script>"
+        + crawlsite.nav_html(page, controls=admin_btn + mode_btn)
+        + crawlsite.glossary_shell(page, logo, modal)
+        + f"<script>{mode_js}</script><script>{prelude}{shared}{script}</script>"
     )
 
 
@@ -99,10 +117,10 @@ def build_site(body):
         "<script>window.CRAWL_STATIC=true;window.CRAWL_REPO={owner:\"brodywoe-svg\",repo:\"crawl-spell-compendium\",branch:\"main\"}</script></head><body>"
     )
     (ROOT / "index.html").write_text(head + body + FOOTER + "</body></html>", encoding="utf-8")
-    template = TEMPLATE.read_text(encoding="utf-8")
-    for name, (_, _, desc, _) in GLOSSARY_PAGES.items():
+    template, glossary = TEMPLATE.read_text(encoding="utf-8"), read_glossary()
+    for name, (_, _, desc) in GLOSSARY_PAGES.items():
         ghead = head.replace("Every spell in Crawl 1st Edition, filterable by class and magic source.", desc)
-        (ROOT / name).write_text(ghead + glossary_page(template, name) + FOOTER + "</body></html>", encoding="utf-8")
+        (ROOT / name).write_text(ghead + glossary_page(template, glossary, name) + FOOTER + "</body></html>", encoding="utf-8")
 
 
 def build_app(body):
@@ -121,9 +139,9 @@ def build_app(body):
     body = re.sub(r'<link rel="preconnect" href="https://fonts.googleapis.com">\n?', "", body, count=1)
     body = re.sub(r'<link rel="stylesheet" href="https://fonts.googleapis.com/css2[^"]*">\n?', "", body, count=1)
     (ROOT / "app" / "index.html").write_text(head + body + "</body></html>", encoding="utf-8")
-    template = TEMPLATE.read_text(encoding="utf-8")
+    template, glossary = TEMPLATE.read_text(encoding="utf-8"), read_glossary()
     for name in GLOSSARY_PAGES:
-        page = glossary_page(template, name)
+        page = glossary_page(template, glossary, name)
         page = re.sub(r'<link rel="preconnect"[^>]*>|<link rel="stylesheet" href="https://fonts.googleapis.com[^>]*>', "", page)
         (ROOT / "app" / name).write_text(head + page + "</body></html>", encoding="utf-8")
 

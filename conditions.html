@@ -2,13 +2,13 @@
 /* Layout: black-and-white spell cards — a filter bar over a list of collapsible spell rows; an open row becomes a fillable card with a black header bar and a +1…+10 advancement rail */
 :root{
   --ink:#000000; --paper:#ffffff; --page:#f4f4f4; --muted:#5c5c5c; --soft:#ececec; --hair:#c9c9c9;
-  --barhover:#2a2a2a; --placeholder:#a3a3a3;
+  --barhover:#2a2a2a; --placeholder:#a3a3a3; --red:#a3141b;
   --font:"Montserrat","Helvetica Neue",Arial,sans-serif;
   color-scheme:light;
 }
 :root[data-mode="dark"]{
   --ink:#f2f2f2; --paper:#121212; --page:#000000; --muted:#a6a6a6; --soft:#242424; --hair:#4a4a4a;
-  --barhover:#d6d6d6; --placeholder:#6b6b6b;
+  --barhover:#d6d6d6; --placeholder:#6b6b6b; --red:#ff6b6b;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -282,6 +282,18 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .savebar .btn.solid{background:var(--paper);color:var(--ink)}
 .savebar .btn[disabled]{opacity:.5;cursor:default}
 @media (prefers-reduced-motion:no-preference){.spell>summary{transition:background .12s}}
+/* glossary terms in spell text: red underline, rounded popup on hover or tap */
+.gl{text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px;cursor:help;border-radius:3px}
+.gl:hover,.gl.on{background:var(--soft)}
+.gl:focus-visible{outline:2px solid var(--red);outline-offset:1px}
+.gtip{position:fixed;z-index:40;width:min(360px,calc(100vw - 24px));background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none;font-family:var(--font)}
+.gtip .gth{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;color:var(--paper);font-weight:800;font-size:1rem}
+.gtip .gtag{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.gtip .gtb{background:var(--paper);color:var(--ink);border-radius:0 0 12px 12px;padding:10px 14px 12px;display:grid;gap:6px;font-size:.88rem;font-weight:600;line-height:1.4}
+.gtip p{margin:0}
+.gtip ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.gtip li{position:relative;padding-left:17px}
+.gtip li::before{content:"";position:absolute;left:2px;top:.5em;width:6px;height:6px;background:var(--ink);transform:rotate(45deg)}
 
 
 .sitenav{position:sticky;top:0;z-index:25;background:var(--ink);color:var(--paper);padding-top:env(safe-area-inset-top,0px)}
@@ -327,10 +339,11 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 
 .condwrap{padding-block:28px 60px}
 .cbar{position:sticky;top:var(--navh,0px);z-index:5;background:var(--page);padding-block:12px;margin-top:12px!important}
-.cbar{display:flex;gap:10px;align-items:center;margin-top:24px}
-.cbar input{flex:1 1 auto;min-width:0;font:600 1rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 12px;background:var(--paper);color:var(--ink)}
+.cbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:24px}
+.cbar input{flex:1 1 240px;min-width:0;font:600 1rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 12px;background:var(--paper);color:var(--ink)}
 .ccount{font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
-.cbar+.clist,.cbar+main{margin-top:22px}
+.gmsg{margin:6px 0 0;min-height:1.2em;font-size:.85rem;font-weight:600;color:var(--muted)}
+#clist{margin-top:14px}
 .clist{display:grid;gap:12px}
 /* the card is filled with ink so no light pixels show through at the rounded corners or the top edge */
 .cond{background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;scroll-margin-top:calc(var(--navh,0px) + 16px)}
@@ -351,7 +364,22 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .cremoved h3{margin:0 0 4px;font-size:.95rem;font-weight:800}
 .cremoved p{margin:0;font-weight:600;color:var(--muted)}
 .cempty{margin:20px 0;color:var(--muted);font-weight:600}
-</style><nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks"><a class="navitem navhome" href="index.html">Spells</a><span class="navitem soon" aria-disabled="true" title="Coming soon">Character Creator<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Classes<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Crafting<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Rules<small>Soon</small></span><div class="navdrop"><a class="navitem" href="glossary.html" data-current="1" aria-haspopup="true">Glossary<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu"><a href="conditions.html" aria-current="page">Conditions</a></div></div><span class="navitem soon" aria-disabled="true" title="Coming soon">About<small>Soon</small></span></div><div class="navctl" id="navctl"><button type="button" class="modebtn" id="modeBtn" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="modeIcon" d="M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z" fill="currentColor"/></svg><span id="modeLabel">Dark mode</span></button></div></div></nav><script>(function(){
+.chr{display:flex;align-items:center;gap:8px}
+.gedit{font:700 .72rem var(--font);color:var(--paper);background:transparent;border:2px solid var(--paper);border-radius:999px;padding:3px 12px;cursor:pointer}
+.gedit:hover{background:var(--paper);color:var(--ink)}
+.gedit:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.gform{gap:12px}
+.gform label{display:grid;gap:5px;font-size:.85rem;font-weight:800}
+.gform small{font-weight:600;color:var(--muted)}
+.gform input,.gform textarea{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
+.gform textarea{resize:vertical;line-height:1.4;field-sizing:content;min-height:3.2em}
+.gerr{margin:0;color:var(--red);font-weight:700;font-size:.88rem}
+.gerr:empty{display:none}
+.gbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gbtns .sp{flex:1}
+.gdel{color:var(--red)!important;border-color:var(--red)!important}
+@media (max-width:600px){.gform input,.gform textarea,.cbar input{font-size:16px}}
+</style><nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks"><a class="navitem navhome" href="index.html">Spells</a><span class="navitem soon" aria-disabled="true" title="Coming soon">Character Creator<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Classes<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Crafting<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Rules<small>Soon</small></span><div class="navdrop"><a class="navitem" href="glossary.html" data-current="1" aria-haspopup="true">Glossary<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu"><a href="conditions.html" aria-current="page">Conditions</a></div></div><span class="navitem soon" aria-disabled="true" title="Coming soon">About<small>Soon</small></span></div><div class="navctl" id="navctl"><button type="button" class="adminbtn" id="adminBtn" hidden aria-haspopup="dialog"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="2.5" y="7" width="11" height="8" rx="1.5" fill="currentColor"/></svg><span id="adminLabel">Admin</span></button><button type="button" class="modebtn" id="modeBtn" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="modeIcon" d="M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z" fill="currentColor"/></svg><span id="modeLabel">Dark mode</span></button></div></div></nav><script>(function(){
   var nav=document.querySelector('.sitenav');
   function h(){document.documentElement.style.setProperty('--navh',(nav?nav.offsetHeight:0)+'px')}
   h();window.addEventListener('resize',h);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(h);
@@ -365,22 +393,333 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 </header>
 <div class="cbar">
   <input id="cq" type="search" placeholder="Find a condition" aria-label="Find a condition" autocomplete="off">
-  <span class="ccount" id="ccount">20 conditions</span>
+  <span class="ccount" id="ccount"></span>
+  <button type="button" class="btn solid" id="gAdd" hidden>Add entry</button>
 </div>
-<main class="clist" id="clist" data-noun="condition"><section class="cond" id="blinded" data-search="blinded certain creatures and spells can impair a creature&#x27;s sight, leaving it blinded. while blinded: the creature can&#x27;t see, and it automatically fails any check that requires sight. the creature has disadvantage on attack rolls that require sight. attack rolls against the creature have advantage."><h2 class="chead"><span>Blinded</span></h2><div class="cbody"><p class="clead">Certain creatures and spells can impair a creature's sight, leaving it Blinded. While Blinded:</p><ul class="cul"><li>The creature can't see, and it automatically fails any check that requires sight.</li><li>The creature has Disadvantage on attack rolls that require sight.</li><li>Attack rolls against the creature have Advantage.</li></ul></div></section><section class="cond" id="bleeding" data-search="bleeding some attacks wound a creature deeply enough to make it bleed. while bleeding: the creature takes 2 bleeding damage at the start of each of its turns, and 2 bleeding damage for every 5 feet it moves on its turn. a creature that&#x27;s bleeding can spend 2 ap to hold its wound closed, taking no bleeding damage from movement until the end of its turn. any healing from a spell ends the condition. creatures without blood, such as constructs and undead, are immune to this condition. creatures that regenerate each turn, such as trolls, are immune to this condition."><h2 class="chead"><span>Bleeding</span></h2><div class="cbody"><p class="clead">Some attacks wound a creature deeply enough to make it bleed. While Bleeding:</p><ul class="cul"><li>The creature takes 2 Bleeding damage at the start of each of its turns, and 2 Bleeding damage for every 5 feet it moves on its turn.</li><li>A creature that's Bleeding can spend 2 AP to hold its wound closed, taking no Bleeding damage from movement until the end of its turn.</li><li>Any healing from a spell ends the condition.</li><li>Creatures without blood, such as Constructs and Undead, are immune to this condition.</li><li>Creatures that regenerate each turn, such as Trolls, are immune to this condition.</li></ul></div></section><section class="cond" id="charmed" data-search="charmed a creature that fails to resist a magical enchantment can become charmed. while charmed: the creature can&#x27;t attack the charmer or target it with harmful abilities or magical effects. the charmer has advantage on any check to interact socially with the creature."><h2 class="chead"><span>Charmed</span></h2><div class="cbody"><p class="clead">A creature that fails to resist a magical enchantment can become Charmed. While Charmed:</p><ul class="cul"><li>The creature can't attack the charmer or target it with harmful abilities or magical effects.</li><li>The charmer has Advantage on any check to interact socially with the creature.</li></ul></div></section><section class="cond" id="dazed" data-search="dazed a creature hit hard enough, or caught in the right circumstances, can become dazed. while dazed: the creature has disadvantage on opportunity attacks. the creature has disadvantage on dexterity saving throws. whenever the creature fails a dexterity saving throw, it falls prone."><h2 class="chead"><span>Dazed</span></h2><div class="cbody"><p class="clead">A creature hit hard enough, or caught in the right circumstances, can become Dazed. While Dazed:</p><ul class="cul"><li>The creature has Disadvantage on Opportunity Attacks.</li><li>The creature has Disadvantage on Dexterity saving throws.</li><li>Whenever the creature fails a Dexterity saving throw, it falls Prone.</li></ul></div></section><section class="cond" id="deafened" data-search="deafened certain creatures and spells can impair a creature&#x27;s hearing, leaving it deafened. while deafened: the creature can&#x27;t hear, and it automatically fails any check that requires hearing. any spell that requires the target to hear a word, command or spoken phrase, such as the command spell or any of the power word spells, has no effect on a deafened creature."><h2 class="chead"><span>Deafened</span></h2><div class="cbody"><p class="clead">Certain creatures and spells can impair a creature's hearing, leaving it Deafened. While Deafened:</p><ul class="cul"><li>The creature can't hear, and it automatically fails any check that requires hearing.</li><li>Any spell that requires the target to hear a word, command or spoken phrase, such as the Command spell or any of the Power Word spells, has no effect on a Deafened creature.</li></ul></div></section><section class="cond" id="drenched" data-search="drenched a creature that has been submerged in water, or is soaked thoroughly with a liquid, becomes drenched. while drenched: the creature has disadvantage on saving throws against spells that deal lightning damage. if the spell uses an attack roll instead, the attacker has advantage. a creature soaked in water has resistance to fire damage. if it takes fire damage from a spell that targets an area, it still resists that damage, but the water evaporates and the condition ends. if the creature is soaked in a flammable liquid, such as oil or liquor, any fire or lightning damage it takes ignites it, ending this condition and making it enflamed. the condition ends after 1 minute."><h2 class="chead"><span>Drenched</span></h2><div class="cbody"><p class="clead">A creature that has been submerged in water, or is soaked thoroughly with a liquid, becomes Drenched. While Drenched:</p><ul class="cul"><li>The creature has Disadvantage on saving throws against spells that deal Lightning damage. If the spell uses an attack roll instead, the attacker has Advantage.</li><li>A creature soaked in water has Resistance to Fire damage. If it takes Fire damage from a spell that targets an area, it still resists that damage, but the water evaporates and the condition ends.</li><li>If the creature is soaked in a flammable liquid, such as oil or liquor, any Fire or Lightning damage it takes ignites it, ending this condition and making it Enflamed.</li><li>The condition ends after 1 minute.</li></ul></div></section><section class="cond" id="enflamed" data-search="enflamed a creature that is set on fire, engulfed in flame or set ablaze becomes enflamed. while enflamed: the creature takes 1d6 fire damage at the start of each of its turns. the creature can spend 2 ap on its turn to put out the flames, ending the condition. becoming drenched in water ends the condition. creatures immune to fire damage are immune to this condition."><h2 class="chead"><span>Enflamed</span></h2><div class="cbody"><p class="clead">A creature that is set on fire, engulfed in flame or set ablaze becomes Enflamed. While Enflamed:</p><ul class="cul"><li>The creature takes 1d6 Fire damage at the start of each of its turns.</li><li>The creature can spend 2 AP on its turn to put out the flames, ending the condition.</li><li>Becoming Drenched in water ends the condition.</li><li>Creatures immune to Fire damage are immune to this condition.</li></ul></div></section><section class="cond" id="frightened" data-search="frightened a creature whose safety is put at risk can become frightened. while frightened: the creature has disadvantage on ability checks and attack rolls while the source of its fear is within its line of sight. the creature can&#x27;t willingly move closer to the source of its fear."><h2 class="chead"><span>Frightened</span></h2><div class="cbody"><p class="clead">A creature whose safety is put at risk can become Frightened. While Frightened:</p><ul class="cul"><li>The creature has Disadvantage on ability checks and attack rolls while the source of its fear is within its line of sight.</li><li>The creature can't willingly move closer to the source of its fear.</li></ul></div></section><section class="cond" id="grappled" data-search="grappled a grapple is an attack that deals no damage but holds a target in place. while grappled: the creature&#x27;s speed becomes 0, and it can&#x27;t benefit from any bonus to its speed. if a creature is grappled by another creature, it can spend 1 ap on its turn to try to escape, making either a strength (athletics) check or a dexterity (acrobatics) check contested by the grappler&#x27;s strength (athletics) check. on a success, the condition ends. the condition ends if the grappler becomes incapacitated. the condition ends if an effect moves the grappled creature out of the grappler&#x27;s reach, such as being thrown or pushed away."><h2 class="chead"><span>Grappled</span></h2><div class="cbody"><p class="clead">A grapple is an attack that deals no damage but holds a target in place. While Grappled:</p><ul class="cul"><li>The creature's speed becomes 0, and it can't benefit from any bonus to its speed.</li><li>If a creature is Grappled by another creature, it can spend 1 AP on its turn to try to escape, making either a Strength (Athletics) check or a Dexterity (Acrobatics) check contested by the grappler's Strength (Athletics) check. On a success, the condition ends.</li><li>The condition ends if the grappler becomes Incapacitated.</li><li>The condition ends if an effect moves the Grappled creature out of the grappler's reach, such as being thrown or pushed away.</li></ul></div></section><section class="cond" id="incapacitated" data-search="incapacitated a creature that is impaired and unable to use certain limbs or act clearly becomes incapacitated. while incapacitated: the creature can&#x27;t spend ap or mp, and it can&#x27;t take reactions. at the start of its turn, the creature can&#x27;t roll its action die. the creature can&#x27;t gain action points (ap) or magic points (mp)."><h2 class="chead"><span>Incapacitated</span></h2><div class="cbody"><p class="clead">A creature that is impaired and unable to use certain limbs or act clearly becomes Incapacitated. While Incapacitated:</p><ul class="cul"><li>The creature can't spend AP or MP, and it can't take reactions.</li><li>At the start of its turn, the creature can't roll its Action Die.</li><li>The creature can't gain Action Points (AP) or Magic Points (MP).</li></ul></div></section><section class="cond" id="invisible" data-search="invisible an invisible creature can&#x27;t be seen by normal means, without the aid of magic or a special sense. its location can still be detected by any noise it makes or tracks it leaves. while invisible: attack rolls against the creature have disadvantage. the creature&#x27;s attack rolls have advantage. for the purpose of hiding, the creature is heavily obscured. when a creature tries to locate a nearby invisible creature, the invisible creature makes a dexterity (stealth) check against the searcher&#x27;s passive perception. on a failure, its location is revealed."><h2 class="chead"><span>Invisible</span></h2><div class="cbody"><p class="clead">An Invisible creature can't be seen by normal means, without the aid of magic or a special sense. Its location can still be detected by any noise it makes or tracks it leaves. While Invisible:</p><ul class="cul"><li>Attack rolls against the creature have Disadvantage.</li><li>The creature's attack rolls have Advantage.</li><li>For the purpose of hiding, the creature is heavily obscured.</li><li>When a creature tries to locate a nearby Invisible creature, the Invisible creature makes a Dexterity (Stealth) check against the searcher's Passive Perception. On a failure, its location is revealed.</li></ul></div></section><section class="cond" id="muted" data-search="muted a creature can be muted by many things, from magical spells to having its tongue cut out. while muted: the creature can&#x27;t speak, and it can&#x27;t communicate through spoken language. the creature can&#x27;t cast spells that require a verbal component. spell cards in the spell compendium now list components, so muted blocks any spell marked verbal."><h2 class="chead"><span>Muted</span></h2><div class="cbody"><p class="clead">A creature can be Muted by many things, from magical spells to having its tongue cut out. While Muted:</p><ul class="cul"><li>The creature can't speak, and it can't communicate through spoken language.</li><li>The creature can't cast spells that require a Verbal Component.</li></ul><p class="cnote"><b>Note:</b> spell cards in the Spell Compendium now list Components, so Muted blocks any spell marked Verbal.</p></div></section><section class="cond" id="paralyzed" data-search="paralyzed paralysis can be caused by many things, from a creature&#x27;s toxic venom to a wizard&#x27;s spell. while paralyzed: the creature is incapacitated (see the condition), and it can&#x27;t move or speak. the creature automatically fails strength and dexterity saving throws. attack rolls against the creature have advantage. any attack that hits the creature is a critical hit if the attacker is within 5 feet of it. effects that cause paralyzed define their own duration or a saving throw that repeats without an ap cost, since an incapacitated creature can&#x27;t spend ap."><h2 class="chead"><span>Paralyzed</span></h2><div class="cbody"><p class="clead">Paralysis can be caused by many things, from a creature's toxic venom to a wizard's spell. While Paralyzed:</p><ul class="cul"><li>The creature is Incapacitated (see the condition), and it can't move or speak.</li><li>The creature automatically fails Strength and Dexterity saving throws.</li><li>Attack rolls against the creature have Advantage.</li><li>Any attack that hits the creature is a critical hit if the attacker is within 5 feet of it.</li></ul><p class="cnote"><b>Designer's note:</b> effects that cause Paralyzed define their own duration or a saving throw that repeats without an AP cost, since an Incapacitated creature can't spend AP.</p></div></section><section class="cond" id="petrified" data-search="petrified a petrified creature has been turned to stone or another solid material. while petrified: the creature, along with any nonmagical object it&#x27;s wearing or carrying, is transformed into a solid, inanimate substance (usually stone). its weight increases tenfold. the creature is incapacitated (see the condition), can&#x27;t gain exhaustion points (ep), can&#x27;t move or speak, can&#x27;t age, and is unaware of its surroundings. attack rolls against the creature have advantage. the creature automatically fails strength and dexterity saving throws. the creature has resistance to all damage. the creature is immune to poison and disease, although any poison or disease already in its system is suspended, not cured."><h2 class="chead"><span>Petrified</span></h2><div class="cbody"><p class="clead">A Petrified creature has been turned to stone or another solid material. While Petrified:</p><ul class="cul"><li>The creature, along with any nonmagical object it's wearing or carrying, is transformed into a solid, inanimate substance (usually stone). Its weight increases tenfold.</li><li>The creature is Incapacitated (see the condition), can't gain Exhaustion Points (EP), can't move or speak, can't age, and is unaware of its surroundings.</li><li>Attack rolls against the creature have Advantage.</li><li>The creature automatically fails Strength and Dexterity saving throws.</li><li>The creature has Resistance to all damage.</li><li>The creature is immune to poison and disease, although any poison or disease already in its system is suspended, not cured.</li></ul></div></section><section class="cond" id="poisoned" data-search="poisoned a creature that has been exposed to a toxin can become poisoned. while poisoned: the creature has disadvantage on attack rolls and ability checks. poisoned covers toxins, venoms and poisons. sickened covers disease and nausea."><h2 class="chead"><span>Poisoned</span></h2><div class="cbody"><p class="clead">A creature that has been exposed to a toxin can become Poisoned. While Poisoned:</p><ul class="cul"><li>The creature has Disadvantage on attack rolls and ability checks.</li></ul><p class="cnote"><b>Designer's note:</b> Poisoned covers toxins, venoms and poisons. Sickened covers disease and nausea.</p></div></section><section class="cond" id="prone" data-search="prone a prone creature has been knocked down and is lying on the ground. while prone: the creature&#x27;s only movement option is to crawl, unless it stands up, which ends the condition. standing up costs half the creature&#x27;s speed for that turn. the creature has disadvantage on attack rolls. an attack roll against the creature has advantage if the attacker is within 5 feet of it. otherwise, the attack roll has disadvantage."><h2 class="chead"><span>Prone</span></h2><div class="cbody"><p class="clead">A Prone creature has been knocked down and is lying on the ground. While Prone:</p><ul class="cul"><li>The creature's only movement option is to crawl, unless it stands up, which ends the condition. Standing up costs half the creature's speed for that turn.</li><li>The creature has Disadvantage on attack rolls.</li><li>An attack roll against the creature has Advantage if the attacker is within 5 feet of it. Otherwise, the attack roll has Disadvantage.</li></ul></div></section><section class="cond" id="restrained" data-search="restrained a creature can be restrained by many things, from entangling spells to the webs of giant spiders. while restrained: the creature&#x27;s speed becomes 0, and it can&#x27;t benefit from any bonus to its speed. attack rolls against the creature have advantage, and the creature&#x27;s attack rolls have disadvantage. the creature has disadvantage on dexterity saving throws. no default escape rule. each effect that restrains defines how it ends."><h2 class="chead"><span>Restrained</span></h2><div class="cbody"><p class="clead">A creature can be Restrained by many things, from entangling spells to the webs of giant spiders. While Restrained:</p><ul class="cul"><li>The creature's speed becomes 0, and it can't benefit from any bonus to its speed.</li><li>Attack rolls against the creature have Advantage, and the creature's attack rolls have Disadvantage.</li><li>The creature has Disadvantage on Dexterity saving throws.</li></ul><p class="cnote"><b>Designer's note:</b> no default escape rule. Each effect that Restrains defines how it ends.</p></div></section><section class="cond" id="sickened" data-search="sickened a creature afflicted by a disease or overwhelming nausea becomes sickened. while sickened: the creature has disadvantage on constitution saving throws. whenever a sickened creature fails a constitution saving throw, it loses 1 action point (ap) from its action pool while convulsing or vomiting. the creature has disadvantage on all skill checks. a deliberately nasty debuff aimed at martial characters, who rely on ap. a creature with 0 ap loses nothing."><h2 class="chead"><span>Sickened</span></h2><div class="cbody"><p class="clead">A creature afflicted by a disease or overwhelming nausea becomes Sickened. While Sickened:</p><ul class="cul"><li>The creature has Disadvantage on Constitution saving throws. Whenever a Sickened creature fails a Constitution saving throw, it loses 1 Action Point (AP) from its Action Pool while convulsing or vomiting.</li><li>The creature has Disadvantage on all skill checks.</li></ul><p class="cnote"><b>Designer's note:</b> a deliberately nasty debuff aimed at martial characters, who rely on AP. A creature with 0 AP loses nothing.</p></div></section><section class="cond" id="stunned" data-search="stunned a creature can be stunned by certain martial and magical abilities. while stunned: the creature can&#x27;t use action points (ap) or magic points (mp), can&#x27;t move, and can speak only falteringly. the creature automatically fails strength and dexterity saving throws. attack rolls against the creature have advantage. unlike incapacitated, a stunned creature still rolls its action die and gains points. it just can&#x27;t spend them until the stun ends (capped by max pool). a stun delays a turn rather than deleting it."><h2 class="chead"><span>Stunned</span></h2><div class="cbody"><p class="clead">A creature can be Stunned by certain martial and magical abilities. While Stunned:</p><ul class="cul"><li>The creature can't use Action Points (AP) or Magic Points (MP), can't move, and can speak only falteringly.</li><li>The creature automatically fails Strength and Dexterity saving throws.</li><li>Attack rolls against the creature have Advantage.</li></ul><p class="cnote"><b>Designer's note:</b> unlike Incapacitated, a Stunned creature still rolls its Action Die and gains points. It just can't spend them until the stun ends (capped by Max Pool). A stun delays a turn rather than deleting it.</p></div></section><section class="cond" id="unconscious" data-search="unconscious a creature that is asleep, knocked out or held in a fugue state is unconscious. while unconscious: the creature is incapacitated (see the condition), can&#x27;t move or speak, and is unaware of its surroundings. when a creature becomes unconscious, it loses all action points (ap) and magic points (mp) currently in its action pool. the creature drops whatever it&#x27;s holding and falls prone. the creature automatically fails strength and dexterity saving throws. attack rolls against the creature have advantage. any attack that hits the creature is a critical hit if the attacker is within 5 feet of it. exhaustion points stay in the pool through unconsciousness."><h2 class="chead"><span>Unconscious</span></h2><div class="cbody"><p class="clead">A creature that is asleep, knocked out or held in a fugue state is Unconscious. While Unconscious:</p><ul class="cul"><li>The creature is Incapacitated (see the condition), can't move or speak, and is unaware of its surroundings.</li><li>When a creature becomes Unconscious, it loses all Action Points (AP) and Magic Points (MP) currently in its Action Pool.</li><li>The creature drops whatever it's holding and falls Prone.</li><li>The creature automatically fails Strength and Dexterity saving throws.</li><li>Attack rolls against the creature have Advantage.</li><li>Any attack that hits the creature is a critical hit if the attacker is within 5 feet of it.</li></ul><p class="cnote"><b>Designer's note:</b> Exhaustion Points stay in the pool through unconsciousness.</p></div></section></main>
+<p class="gmsg" id="gmsg" role="status"></p>
+<main id="clist"></main>
 <p class="cempty" id="cempty" hidden>No conditions match. Clear the search to see them all.</p>
 <aside class="cremoved"><h3>No Exhaustion condition</h3><p>Exhaustion (the old 7-level condition). Exhaustion Points (EP) in the Action Pool replace it.</p></aside>
 </div>
-<script>(function(){var b=document.getElementById('modeBtn'),r=document.documentElement;var M='M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z',S='M8 4.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zM7.2 0h1.6v2.4H7.2zM7.2 13.6h1.6V16H7.2zM0 7.2h2.4v1.6H0zM13.6 7.2H16v1.6h-2.4zM2.2 3.3l1.1-1.1 1.7 1.7-1.1 1.1zM11 12.1l1.1-1.1 1.7 1.7-1.1 1.1zM2.2 12.7l1.7-1.7 1.1 1.1-1.7 1.7zM11 3.9l1.7-1.7 1.1 1.1-1.7 1.7z';function show(){var d=r.getAttribute('data-mode')==='dark';b.setAttribute('aria-pressed',d);document.getElementById('modeLabel').textContent=d?'Light mode':'Dark mode';document.getElementById('modeIcon').setAttribute('d',d?S:M)}b.addEventListener('click',function(){var d=r.getAttribute('data-mode')!=='dark';if(d)r.setAttribute('data-mode','dark');else r.removeAttribute('data-mode');try{localStorage.setItem('crawl-mode',d?'dark':'light')}catch(e){}show()});show()})();(function(){
-  var q=document.getElementById('cq'),list=document.getElementById('clist'),noun=list.dataset.noun,
-      cards=[].slice.call(document.querySelectorAll('.cond')),groups=[].slice.call(document.querySelectorAll('[data-group]')),
-      count=document.getElementById('ccount'),empty=document.getElementById('cempty');
-  function plural(n){return n===1?noun:(noun==='entry'?'entries':noun+'s')}
-  function run(){var v=q.value.trim().toLowerCase(),n=0;cards.forEach(function(c){var ok=!v||c.dataset.search.indexOf(v)>-1;c.hidden=!ok;if(ok)n++});
-    groups.forEach(function(g){g.hidden=!g.querySelector('.cond:not([hidden])')});
-    count.textContent=n+' '+plural(n);empty.hidden=n>0}
-  q.addEventListener('input',run);
-})();</script>
+<datalist id="gsecs"></datalist>
+<div class="modal" id="adminModal" hidden>
+  <form class="mbox" id="adminForm" novalidate role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <div class="mhead"><h2 id="adminTitle">Admin sign-in</h2></div>
+    <div class="mbody">
+      <div id="loginPane">
+        <label class="mlabel" for="adminPass">Admin password</label>
+        <input type="password" id="adminPass" autocomplete="current-password">
+      </div>
+      <div id="setupPane" hidden>
+        <p class="mnote">One-time setup. Paste a GitHub access key that can change this repo, then choose your admin password. The key is locked with your password before it's stored, so only someone with the password can use it.</p>
+        <label class="mlabel" for="setupKey">GitHub access key</label>
+        <input type="password" id="setupKey" autocomplete="off" spellcheck="false">
+        <p class="mhelp"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Make a key on GitHub</a>: choose only this repository, and set <b>Contents</b> to <b>Read and write</b>.</p>
+        <label class="mlabel" for="setupPass">New admin password</label>
+        <input type="password" id="setupPass" autocomplete="new-password">
+        <label class="mlabel" for="setupPass2">Type the password again</label>
+        <input type="password" id="setupPass2" autocomplete="new-password">
+        <p class="mhelp">Use at least 12 characters. A few random words with a number works well.</p>
+      </div>
+      <p class="merr" id="adminErr" role="alert"></p>
+    </div>
+    <div class="mfoot">
+      <button type="button" class="mlink" id="adminSwitch">First time? Set up admin access</button>
+      <span class="mbtns"><button type="button" class="btn" id="adminCancel">Cancel</button><button type="submit" class="btn solid" id="adminGo">Unlock</button></span>
+    </div>
+  </form>
+</div>
+
+<div class="savebar" id="savebar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">You have unsaved glossary changes.</span>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn solid" id="saveBtn">Save changes</button>
+  </div>
+</div>
+<script>(function(){var b=document.getElementById('modeBtn'),r=document.documentElement;var M='M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z',S='M8 4.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zM7.2 0h1.6v2.4H7.2zM7.2 13.6h1.6V16H7.2zM0 7.2h2.4v1.6H0zM13.6 7.2H16v1.6h-2.4zM2.2 3.3l1.1-1.1 1.7 1.7-1.1 1.1zM11 12.1l1.1-1.1 1.7 1.7-1.1 1.1zM2.2 12.7l1.7-1.7 1.1 1.1-1.7 1.7zM11 3.9l1.7-1.7 1.1 1.1-1.7 1.7z';function show(){var d=r.getAttribute('data-mode')==='dark';b.setAttribute('aria-pressed',d);document.getElementById('modeLabel').textContent=d?'Light mode':'Dark mode';document.getElementById('modeIcon').setAttribute('d',d?S:M)}b.addEventListener('click',function(){var d=r.getAttribute('data-mode')!=='dark';if(d)r.setAttribute('data-mode','dark');else r.removeAttribute('data-mode');try{localStorage.setItem('crawl-mode',d?'dark':'light')}catch(e){}show()});show()})();</script><script>const APP=window.crawlApp||null;const STATIC=!APP&&!!window.CRAWL_STATIC;const $=id=>document.getElementById(id);const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));const GLOSSARY={"v":1,"entries":[{"n":"Blinded","sec":"Conditions","lead":"Certain creatures and spells can impair a creature's sight, leaving it Blinded. While Blinded:","fx":["The creature can't see, and it automatically fails any check that requires sight.","The creature has Disadvantage on attack rolls that require sight.","Attack rolls against the creature have Advantage."],"notes":[],"aka":[]},{"n":"Bleeding","sec":"Conditions","lead":"Some attacks wound a creature deeply enough to make it bleed. While Bleeding:","fx":["The creature takes 2 Bleeding damage at the start of each of its turns, and 2 Bleeding damage for every 5 feet it moves on its turn.","A creature that's Bleeding can spend 2 AP to hold its wound closed, taking no Bleeding damage from movement until the end of its turn.","Any healing from a spell ends the condition.","Creatures without blood, such as Constructs and Undead, are immune to this condition.","Creatures that regenerate each turn, such as Trolls, are immune to this condition."],"notes":[],"aka":[]},{"n":"Charmed","sec":"Conditions","lead":"A creature that fails to resist a magical enchantment can become Charmed. While Charmed:","fx":["The creature can't attack the charmer or target it with harmful abilities or magical effects.","The charmer has Advantage on any check to interact socially with the creature."],"notes":[],"aka":[]},{"n":"Dazed","sec":"Conditions","lead":"A creature hit hard enough, or caught in the right circumstances, can become Dazed. While Dazed:","fx":["The creature has Disadvantage on Opportunity Attacks.","The creature has Disadvantage on Dexterity saving throws.","Whenever the creature fails a Dexterity saving throw, it falls Prone."],"notes":[],"aka":[]},{"n":"Deafened","sec":"Conditions","lead":"Certain creatures and spells can impair a creature's hearing, leaving it Deafened. While Deafened:","fx":["The creature can't hear, and it automatically fails any check that requires hearing.","Any spell that requires the target to hear a word, command or spoken phrase, such as the Command spell or any of the Power Word spells, has no effect on a Deafened creature."],"notes":[],"aka":[]},{"n":"Drenched","sec":"Conditions","lead":"A creature that has been submerged in water, or is soaked thoroughly with a liquid, becomes Drenched. While Drenched:","fx":["The creature has Disadvantage on saving throws against spells that deal Lightning damage. If the spell uses an attack roll instead, the attacker has Advantage.","A creature soaked in water has Resistance to Fire damage. If it takes Fire damage from a spell that targets an area, it still resists that damage, but the water evaporates and the condition ends.","If the creature is soaked in a flammable liquid, such as oil or liquor, any Fire or Lightning damage it takes ignites it, ending this condition and making it Enflamed.","The condition ends after 1 minute."],"notes":[],"aka":[]},{"n":"Enflamed","sec":"Conditions","lead":"A creature that is set on fire, engulfed in flame or set ablaze becomes Enflamed. While Enflamed:","fx":["The creature takes 1d6 Fire damage at the start of each of its turns.","The creature can spend 2 AP on its turn to put out the flames, ending the condition.","Becoming Drenched in water ends the condition.","Creatures immune to Fire damage are immune to this condition."],"notes":[],"aka":[]},{"n":"Frightened","sec":"Conditions","lead":"A creature whose safety is put at risk can become Frightened. While Frightened:","fx":["The creature has Disadvantage on ability checks and attack rolls while the source of its fear is within its line of sight.","The creature can't willingly move closer to the source of its fear."],"notes":[],"aka":[]},{"n":"Grappled","sec":"Conditions","lead":"A grapple is an attack that deals no damage but holds a target in place. While Grappled:","fx":["The creature's speed becomes 0, and it can't benefit from any bonus to its speed.","If a creature is Grappled by another creature, it can spend 1 AP on its turn to try to escape, making either a Strength (Athletics) check or a Dexterity (Acrobatics) check contested by the grappler's Strength (Athletics) check. On a success, the condition ends.","The condition ends if the grappler becomes Incapacitated.","The condition ends if an effect moves the Grappled creature out of the grappler's reach, such as being thrown or pushed away."],"notes":[],"aka":[]},{"n":"Incapacitated","sec":"Conditions","lead":"A creature that is impaired and unable to use certain limbs or act clearly becomes Incapacitated. While Incapacitated:","fx":["The creature can't spend AP or MP, and it can't take reactions.","At the start of its turn, the creature can't roll its Action Die.","The creature can't gain Action Points (AP) or Magic Points (MP)."],"notes":[],"aka":[]},{"n":"Invisible","sec":"Conditions","lead":"An Invisible creature can't be seen by normal means, without the aid of magic or a special sense. Its location can still be detected by any noise it makes or tracks it leaves. While Invisible:","fx":["Attack rolls against the creature have Disadvantage.","The creature's attack rolls have Advantage.","For the purpose of hiding, the creature is heavily obscured.","When a creature tries to locate a nearby Invisible creature, the Invisible creature makes a Dexterity (Stealth) check against the searcher's Passive Perception. On a failure, its location is revealed."],"notes":[],"aka":[]},{"n":"Muted","sec":"Conditions","lead":"A creature can be Muted by many things, from magical spells to having its tongue cut out. While Muted:","fx":["The creature can't speak, and it can't communicate through spoken language.","The creature can't cast spells that require a Verbal Component."],"notes":[{"l":"Note","t":"spell cards in the Spell Compendium now list Components, so Muted blocks any spell marked Verbal."}],"aka":[]},{"n":"Paralyzed","sec":"Conditions","lead":"Paralysis can be caused by many things, from a creature's toxic venom to a wizard's spell. While Paralyzed:","fx":["The creature is Incapacitated (see the condition), and it can't move or speak.","The creature automatically fails Strength and Dexterity saving throws.","Attack rolls against the creature have Advantage.","Any attack that hits the creature is a critical hit if the attacker is within 5 feet of it."],"notes":[{"l":"Designer's note","t":"effects that cause Paralyzed define their own duration or a saving throw that repeats without an AP cost, since an Incapacitated creature can't spend AP."}],"aka":[]},{"n":"Petrified","sec":"Conditions","lead":"A Petrified creature has been turned to stone or another solid material. While Petrified:","fx":["The creature, along with any nonmagical object it's wearing or carrying, is transformed into a solid, inanimate substance (usually stone). Its weight increases tenfold.","The creature is Incapacitated (see the condition), can't gain Exhaustion Points (EP), can't move or speak, can't age, and is unaware of its surroundings.","Attack rolls against the creature have Advantage.","The creature automatically fails Strength and Dexterity saving throws.","The creature has Resistance to all damage.","The creature is immune to poison and disease, although any poison or disease already in its system is suspended, not cured."],"notes":[],"aka":[]},{"n":"Poisoned","sec":"Conditions","lead":"A creature that has been exposed to a toxin can become Poisoned. While Poisoned:","fx":["The creature has Disadvantage on attack rolls and ability checks."],"notes":[{"l":"Designer's note","t":"Poisoned covers toxins, venoms and poisons. Sickened covers disease and nausea."}],"aka":[]},{"n":"Prone","sec":"Conditions","lead":"A Prone creature has been knocked down and is lying on the ground. While Prone:","fx":["The creature's only movement option is to crawl, unless it stands up, which ends the condition. Standing up costs half the creature's speed for that turn.","The creature has Disadvantage on attack rolls.","An attack roll against the creature has Advantage if the attacker is within 5 feet of it. Otherwise, the attack roll has Disadvantage."],"notes":[],"aka":[]},{"n":"Restrained","sec":"Conditions","lead":"A creature can be Restrained by many things, from entangling spells to the webs of giant spiders. While Restrained:","fx":["The creature's speed becomes 0, and it can't benefit from any bonus to its speed.","Attack rolls against the creature have Advantage, and the creature's attack rolls have Disadvantage.","The creature has Disadvantage on Dexterity saving throws."],"notes":[{"l":"Designer's note","t":"no default escape rule. Each effect that Restrains defines how it ends."}],"aka":[]},{"n":"Sickened","sec":"Conditions","lead":"A creature afflicted by a disease or overwhelming nausea becomes Sickened. While Sickened:","fx":["The creature has Disadvantage on Constitution saving throws. Whenever a Sickened creature fails a Constitution saving throw, it loses 1 Action Point (AP) from its Action Pool while convulsing or vomiting.","The creature has Disadvantage on all skill checks."],"notes":[{"l":"Designer's note","t":"a deliberately nasty debuff aimed at martial characters, who rely on AP. A creature with 0 AP loses nothing."}],"aka":[]},{"n":"Stunned","sec":"Conditions","lead":"A creature can be Stunned by certain martial and magical abilities. While Stunned:","fx":["The creature can't use Action Points (AP) or Magic Points (MP), can't move, and can speak only falteringly.","The creature automatically fails Strength and Dexterity saving throws.","Attack rolls against the creature have Advantage."],"notes":[{"l":"Designer's note","t":"unlike Incapacitated, a Stunned creature still rolls its Action Die and gains points. It just can't spend them until the stun ends (capped by Max Pool). A stun delays a turn rather than deleting it."}],"aka":[]},{"n":"Unconscious","sec":"Conditions","lead":"A creature that is asleep, knocked out or held in a fugue state is Unconscious. While Unconscious:","fx":["The creature is Incapacitated (see the condition), can't move or speak, and is unaware of its surroundings.","When a creature becomes Unconscious, it loses all Action Points (AP) and Magic Points (MP) currently in its Action Pool.","The creature drops whatever it's holding and falls Prone.","The creature automatically fails Strength and Dexterity saving throws.","Attack rolls against the creature have Advantage.","Any attack that hits the creature is a critical hit if the attacker is within 5 feet of it."],"notes":[{"l":"Designer's note","t":"Exhaustion Points stay in the pool through unconsciousness."}],"aka":[]}]};window.GL_PAGE="conditions";
+
+/* glossary data (crawl-glossary.json): {v:1, entries:[{n, sec, lead, fx:[effects], notes:[{l,t}], aka:[other words to match]}]} */
+function normGlossary(j){
+  const a=j&&Array.isArray(j.entries)?j.entries:null; if(!a)return null;
+  const list=x=>Array.isArray(x)?x:[];
+  return a.filter(e=>e&&typeof e.n==="string"&&e.n.trim()).map(e=>({
+    n:e.n.trim(), sec:String(e.sec||"Conditions").trim()||"Conditions", lead:String(e.lead||"").trim(),
+    fx:list(e.fx).map(x=>String(x).trim()).filter(Boolean),
+    notes:list(e.notes).filter(n=>n&&String(n.t||"").trim()).map(n=>({l:String(n.l||"Note").trim()||"Note",t:String(n.t).trim()})),
+    aka:list(e.aka).map(x=>String(x).trim()).filter(Boolean)}));
+}
+const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
+
+/* admin sign-in, shared by every page of the GitHub Pages site. The unlocked key is kept
+   in sessionStorage, so the sign-in lasts while this browser tab is open, across pages. */
+let ADMIN=false, GH_KEY=null;
+const AdminHooks={canSignOut:()=>true,signedIn:()=>{},signedOut:()=>{}};
+const ADMIN_SS="crawl-admin-key";
+const REPO=window.CRAWL_REPO||{};
+const KDF_ITER=600000;
+const b64=u8=>{let s="";for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function passKey(pass,salt,iter){
+  const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pass),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+async function lockKey(secret,pass){
+  const salt=crypto.getRandomValues(new Uint8Array(16)), iv=crypto.getRandomValues(new Uint8Array(12));
+  const k=await passKey(pass,salt,KDF_ITER);
+  const data=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},k,new TextEncoder().encode(secret)));
+  return {v:1,cipher:"AES-256-GCM",kdf:"PBKDF2-SHA256",iterations:KDF_ITER,salt:b64(salt),iv:b64(iv),data:b64(data)};
+}
+async function unlockKey(box,pass){
+  const k=await passKey(pass,unb64(box.salt),box.iterations||KDF_ITER);
+  const out=await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(box.iv)},k,unb64(box.data));
+  return new TextDecoder().decode(out);
+}
+function gh(path,opts={},key=GH_KEY){
+  return fetch(`https://api.github.com/repos/${REPO.owner}/${REPO.repo}${path}`,{...opts,cache:"no-store",headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+key,"X-GitHub-Api-Version":"2022-11-28",...(opts.headers||{})}});
+}
+async function putFile(path,text,message,key=GH_KEY){
+  const branch=REPO.branch||"main";
+  const cur=await gh(`/contents/${encodeURIComponent(path)}?ref=${branch}`,{},key);
+  if(cur.status===401)throw {code:"bad_key"};
+  let sha; if(cur.ok)sha=(await cur.json()).sha; else if(cur.status!==404)throw {code:"http",status:cur.status};
+  const body={message,branch,content:b64(new TextEncoder().encode(text))}; if(sha)body.sha=sha;
+  const r=await gh(`/contents/${encodeURIComponent(path)}`,{method:"PUT",body:JSON.stringify(body),headers:{"Content-Type":"application/json"}},key);
+  if(r.status===401)throw {code:"bad_key"};
+  if(r.status===403||r.status===404)throw {code:"no_access"};
+  if(r.status===409)throw {code:"conflict"};
+  if(!r.ok)throw {code:"http",status:r.status};
+  return r.json();
+}
+function showAdminBtn(){$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?"Admin · Sign out":"Admin"}
+function becomeAdmin(key,quiet){GH_KEY=key;ADMIN=true;try{sessionStorage.setItem(ADMIN_SS,key)}catch(e){}closeAdmin();showAdminBtn();AdminHooks.signedIn(quiet)}
+function signOut(){if(!AdminHooks.canSignOut())return;ADMIN=false;GH_KEY=null;try{sessionStorage.removeItem(ADMIN_SS)}catch(e){}showAdminBtn();AdminHooks.signedOut()}
+function restoreAdmin(){if(!STATIC)return;let k=null;try{k=sessionStorage.getItem(ADMIN_SS)}catch(e){}if(k)becomeAdmin(k,true)}
+$("adminBtn").addEventListener("click",()=>{if(ADMIN)signOut();else openAdmin()});
+let adminMode="login";
+function setAdminMode(m){
+  adminMode=m;
+  $("loginPane").hidden=m!=="login";$("setupPane").hidden=m!=="setup";
+  $("adminTitle").textContent=m==="login"?"Admin sign-in":"Set up admin access";
+  $("adminGo").textContent=m==="login"?"Unlock":"Save and unlock";
+  $("adminSwitch").textContent=m==="login"?"First time? Set up admin access":"Back to sign-in";
+  $("adminErr").textContent="";
+}
+async function fetchAdminBox(){
+  try{const r=await fetch("admin.json",{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&j.data&&j.salt&&j.iv)return j}}catch(e){}
+  return null;
+}
+async function openAdmin(){
+  $("adminForm").reset();
+  setAdminMode((await fetchAdminBox())?"login":"setup");
+  $("adminModal").hidden=false;
+  (adminMode==="login"?$("adminPass"):$("setupKey")).focus();
+}
+function closeAdmin(){$("adminModal").hidden=true;$("adminForm").reset();$("adminErr").textContent=""}
+$("adminSwitch").addEventListener("click",()=>{setAdminMode(adminMode==="login"?"setup":"login");(adminMode==="login"?$("adminPass"):$("setupKey")).focus()});
+$("adminCancel").addEventListener("click",closeAdmin);
+$("adminModal").addEventListener("click",e=>{if(e.target===$("adminModal"))closeAdmin()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("adminModal").hidden)closeAdmin()});
+$("adminForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const err=m=>{$("adminErr").textContent=m};
+  const go=$("adminGo");
+  if(!window.crypto||!crypto.subtle){err("This browser can't do the secure unlock. Open the site over https in a current browser.");return}
+  if(adminMode==="login"){
+    const pass=$("adminPass").value; if(!pass){err("Type your admin password.");return}
+    go.disabled=true;err("Checking…");
+    try{
+      const box=await fetchAdminBox(); if(!box){setAdminMode("setup");err("Admin access isn't set up yet.");return}
+      let key; try{key=await unlockKey(box,pass)}catch(x){err("That password isn't right.");return}
+      becomeAdmin(key);
+    }finally{go.disabled=false}
+  }else{
+    const key=$("setupKey").value.trim(), p1=$("setupPass").value, p2=$("setupPass2").value;
+    if(!key){err("Paste your GitHub access key.");return}
+    if(p1.length<12){err("Use at least 12 characters for the password.");return}
+    if(p1!==p2){err("The two passwords don't match.");return}
+    go.disabled=true;err("Locking the key and saving…");
+    try{
+      const box=await lockKey(key,p1);
+      await putFile("admin.json",JSON.stringify(box,null,1)+"\n","Set up admin access",key);
+      becomeAdmin(key);
+    }catch(x){
+      const c=x&&x.code;
+      err(c==="bad_key"?"GitHub didn't accept that key. Check you copied all of it.":c==="no_access"?"That key can't change this repo. Give it access to this repository with Contents set to Read and write.":"Couldn't reach GitHub. Try again in a moment.");
+    }finally{go.disabled=false}
+  }
+});
+/* Glossary and Conditions pages: draw the entries from crawl-glossary.json, search them,
+   and (signed in as admin on the website) edit, add and delete entries, then save to GitHub.
+   Runs after the shared admin code from src/page.html, so ADMIN, GH_KEY, AdminHooks,
+   putFile, gh, REPO, showAdminBtn and restoreAdmin are already defined. */
+const PAGE = window.GL_PAGE || "glossary";
+const FIRST = "Conditions";
+let entries = [], uid = 0, original = "", dirty = false;
+const editing = new Set(), drafts = new Map();
+
+function load(j) {
+  const a = normGlossary(j); if (!a) return false;
+  entries = a.map(e => ({ ...e, _id: ++uid })); original = JSON.stringify(clean());
+  return true;
+}
+const byName = (a, b) => a.n.toLowerCase().localeCompare(b.n.toLowerCase());
+function clean() {
+  return { v: 1, entries: entries.filter(e => !e._new).map(({ _id, _new, ...e }) => e).sort(byName) };
+}
+function sections() {
+  return [...new Set(entries.filter(e => !e._new || editing.has(e._id)).map(e => e.sec))]
+    .sort((a, b) => a === FIRST ? -1 : b === FIRST ? 1 : a.localeCompare(b));
+}
+function visible() {
+  let list = entries.filter(e => !e._new || editing.has(e._id));
+  if (PAGE === "conditions") list = list.filter(e => e.sec === FIRST || editing.has(e._id));
+  const q = $("cq").value.trim().toLowerCase();
+  if (q) list = list.filter(e => editing.has(e._id) ||
+    [e.n, e.lead, ...e.fx, ...e.notes.map(n => n.t), ...e.aka].join(" ").toLowerCase().includes(q));
+  return list.sort((a, b) => (a._new ? -1 : 0) - (b._new ? -1 : 0) || byName(a, b));
+}
+
+const noteText = e => e.notes.map(n => `${n.l}: ${n.t}`).join("\n");
+function card(e, tag) {
+  if (editing.has(e._id)) return form(e);
+  const notes = e.notes.map(n => `<p class="cnote"><b>${esc(n.l)}:</b> ${esc(n.t)}</p>`).join("");
+  return `<section class="cond" data-id="${e._id}"><h2 class="chead"><span>${esc(e.n)}</span><span class="chr">` +
+    (tag ? `<span class="ctag">${esc(singular(e.sec))}</span>` : "") +
+    (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(e.n)}">Edit</button>` : "") +
+    `</span></h2><div class="cbody">${e.lead ? `<p class="clead">${esc(e.lead)}</p>` : ""}` +
+    (e.fx.length ? `<ul class="cul">${e.fx.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "") +
+    `${notes}${!e.lead && !e.fx.length && !notes ? `<p class="clead">No description yet.</p>` : ""}</div></section>`;
+}
+function form(e) {
+  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka.join(", ") };
+  const id = k => `g${k}-${e._id}`;
+  return `<section class="cond gediting" data-id="${e._id}"><div class="chead"><span>${e._new ? "New entry" : "Editing " + esc(e.n)}</span></div>
+<div class="cbody gform">
+<label for="${id("n")}">Name<input type="text" id="${id("n")}" data-k="n" value="${esc(d.n)}" autocomplete="off"></label>
+<label for="${id("sec")}">Section <small>Entries in "Conditions" also show on the Conditions page.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
+<label for="${id("lead")}">Description<textarea id="${id("lead")}" data-k="lead" rows="3">${esc(d.lead)}</textarea></label>
+<label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="5">${esc(d.fx)}</textarea></label>
+<label for="${id("notes")}">Notes <small>One per line. Start a line with "Designer's note:" to label it as one.</small><textarea id="${id("notes")}" data-k="notes" rows="2">${esc(d.notes)}</textarea></label>
+<label for="${id("aka")}">Also underline these words in spells <small>The name is always underlined. Separate extra words with commas, e.g. grapple, grappling.</small><input type="text" id="${id("aka")}" data-k="aka" value="${esc(d.aka)}" autocomplete="off"></label>
+<p class="gerr" role="alert"></p>
+<div class="gbtns"><button type="button" class="btn gdel">${e._new ? "Remove" : "Delete entry"}</button><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>
+</div></section>`;
+}
+function saveDrafts() {
+  document.querySelectorAll(".gediting").forEach(f => {
+    const d = {}; f.querySelectorAll("[data-k]").forEach(el => { d[el.dataset.k] = el.value }); drafts.set(+f.dataset.id, d);
+  });
+}
+
+function render() {
+  saveDrafts();
+  const list = visible(), noun = PAGE === "conditions" ? ["condition", "conditions"] : ["entry", "entries"];
+  const n = list.filter(e => !e._new).length;
+  $("ccount").textContent = `${n} ${n === 1 ? noun[0] : noun[1]}`;
+  let h;
+  if (PAGE === "conditions") h = `<div class="clist">${list.map(e => card(e, false)).join("")}</div>`;
+  else h = sections().map(sec => {
+    const items = list.filter(e => e.sec === sec); if (!items.length) return "";
+    return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2>${sec === FIRST ? `<a class="glink" href="conditions.html">Open the Conditions page</a>` : ""}</div><div class="clist">${items.map(e => card(e, true)).join("")}</div></section>`;
+  }).join("");
+  $("clist").innerHTML = h;
+  $("cempty").hidden = list.length > 0;
+  $("gsecs").innerHTML = sections().map(s => `<option value="${esc(s)}">`).join("");
+  $("gAdd").hidden = !ADMIN;
+}
+
+const say = m => { $("gmsg").textContent = m };
+function markDirty() {
+  dirty = JSON.stringify(clean()) !== original;
+  $("savebar").hidden = !dirty;
+  if (dirty) { $("saveMsg").textContent = "You have unsaved glossary changes."; $("saveBtn").disabled = false; $("discardBtn").disabled = false }
+}
+const entryOf = el => { const c = el.closest(".cond"); return c ? entries.find(e => e._id === +c.dataset.id) : null };
+function closeForm(e) { editing.delete(e._id); drafts.delete(e._id); if (e._new) entries = entries.filter(x => x !== e) }
+
+$("clist").addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  const e = entryOf(b); if (!e) return;
+  if (b.classList.contains("gedit")) {
+    editing.add(e._id); render();
+    const f = document.querySelector(`.gediting[data-id="${e._id}"] [data-k="n"]`); if (f) f.focus();
+  } else if (b.classList.contains("gcancel")) {
+    closeForm(e); render();
+  } else if (b.classList.contains("gdel")) {
+    if (!e._new && !b.dataset.sure) { b.dataset.sure = "1"; b.textContent = "Click again to delete"; return }
+    const wasNew = e._new; closeForm(e); if (!wasNew) entries = entries.filter(x => x !== e);
+    render(); markDirty(); if (!wasNew) say(`Deleted ${e.n}. Click Save changes to keep it deleted.`);
+  } else if (b.classList.contains("gdone")) {
+    const f = b.closest(".gediting"), v = k => f.querySelector(`[data-k="${k}"]`).value, err = m => { f.querySelector(".gerr").textContent = m };
+    const name = v("n").trim().replace(/\s+/g, " ");
+    if (!name) { err("Give the entry a name."); return }
+    if (entries.some(x => x !== e && !x._new && x.n.toLowerCase() === name.toLowerCase())) { err(`There's already an entry called ${name}.`); return }
+    e.n = name;
+    e.sec = v("sec").trim().replace(/\s+/g, " ") || FIRST;
+    e.lead = v("lead").trim();
+    e.fx = v("fx").split("\n").map(x => x.replace(/^\s*[-•*]\s*/, "").trim()).filter(Boolean);
+    e.notes = v("notes").split("\n").map(x => x.trim()).filter(Boolean).map(x => {
+      const m = x.match(/^(designer'?s note|design note|note)\s*:\s*(.*)$/i);
+      return m ? { l: /design/i.test(m[1]) ? "Designer's note" : "Note", t: m[2].trim() } : { l: "Note", t: x };
+    }).filter(n => n.t);
+    e.aka = v("aka").split(",").map(x => x.trim()).filter(Boolean);
+    delete e._new; editing.delete(e._id); drafts.delete(e._id);
+    render(); markDirty();
+    say(PAGE === "conditions" && e.sec !== FIRST ? `${e.n} is in the ${e.sec} section, so it now shows on the Glossary page instead.` : "");
+  }
+});
+$("gAdd").addEventListener("click", () => {
+  const e = { n: "", sec: PAGE === "conditions" ? FIRST : (sections()[0] || FIRST), lead: "", fx: [], notes: [], aka: [], _id: ++uid, _new: true };
+  entries.push(e); editing.add(e._id); $("cq").value = ""; render();
+  const f = document.querySelector(`.gediting[data-id="${e._id}"]`);
+  if (f) { f.scrollIntoView({ block: "center" }); f.querySelector('[data-k="n"]').focus() }
+});
+$("cq").addEventListener("input", render);
+
+$("saveBtn").addEventListener("click", async () => {
+  if (editing.size) { $("saveMsg").textContent = "Click Done (or Cancel) on the entries you're editing first."; return }
+  if (!ADMIN || !GH_KEY) { $("saveMsg").textContent = "Sign in as admin to save."; return }
+  $("saveBtn").disabled = true; $("discardBtn").disabled = true; $("saveMsg").textContent = "Saving to the site…";
+  try {
+    const data = clean();
+    await putFile("crawl-glossary.json", JSON.stringify(data, null, 1) + "\n", "Update glossary from the admin page");
+    original = JSON.stringify(data); dirty = false;
+    $("saveMsg").textContent = "Saved. Everyone sees the changes in about a minute.";
+    setTimeout(() => { if (!dirty) $("savebar").hidden = true }, 4000);
+  } catch (x) {
+    const c = x && x.code;
+    $("saveMsg").textContent = c === "bad_key" ? "GitHub no longer accepts your access key. It may have expired; set up admin access again." : c === "no_access" ? "Your access key can't change this repo anymore." : c === "conflict" ? "The glossary changed on GitHub while you were editing. Reload the page and make your changes again." : "Saving failed. Check your connection and try again.";
+    $("saveBtn").disabled = false; $("discardBtn").disabled = false;
+  }
+});
+$("discardBtn").addEventListener("click", () => {
+  load(JSON.parse(original)); editing.clear(); drafts.clear(); dirty = false; $("savebar").hidden = true; say(""); render();
+});
+window.addEventListener("beforeunload", ev => { if (dirty || editing.size) { ev.preventDefault(); ev.returnValue = "" } });
+
+async function refreshFromGitHub() {
+  try {
+    const r = await gh(`/contents/crawl-glossary.json?ref=${REPO.branch || "main"}`, { headers: { "Accept": "application/vnd.github.raw+json" } });
+    if (r.ok && !dirty && !editing.size && load(await r.json())) render();
+  } catch (x) { }
+}
+AdminHooks.canSignOut = () => {
+  if (dirty || editing.size) { say("Save or discard your glossary changes before signing out."); return false }
+  return true;
+};
+AdminHooks.signedIn = quiet => { render(); if (!quiet) say("Signed in as admin. Click Edit on any entry, or Add entry."); refreshFromGitHub() };
+AdminHooks.signedOut = () => { editing.clear(); drafts.clear(); entries = entries.filter(e => !e._new); render(); say("Signed out.") };
+
+load(GLOSSARY);
+if (STATIC) {
+  $("adminBtn").hidden = false; showAdminBtn();
+  fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null)
+    .then(j => { if (j && !dirty) load(j) }).catch(() => { })
+    .finally(() => { render(); restoreAdmin() });
+}
+render();
+</script>
 <footer style="max-width:900px;margin:0 auto;padding:0 16px 120px;font-family:Montserrat,Arial,sans-serif;font-size:13px;line-height:1.5;color:#5c5c5c;text-align:center">
   <p style="margin:0 0 8px"><a href="downloads/Crawl-Spell-Compendium-Installer.zip" style="color:#000;font-weight:700">Download the offline Windows app</a> &middot; <a href="https://github.com/brodywoe-svg/crawl-spell-compendium" style="color:#000;font-weight:700">View on GitHub</a></p>
   <p style="margin:0">Spell content, card designs and the Crawl logo &copy; 2026 Brody Woelke. All rights reserved.<br>
