@@ -6,16 +6,16 @@
   ],
   "lv": 1,
   "f": {
-   "mat": "15 (S) worth of Salt and Incense",
-   "cat": "Necromancy ",
-   "range": "5ft (Touch) (Single Target)",
-   "desc": "You perform a ritual of Absolution over a corpse, or number of corpses equal to your spellcasting ability Modifier, forgiving them for the sins they committed in life, for the next 2 months the corpse(s) cannot be affected by spells like the Animated dead, Raise Dead, or Resurrection.",
    "pre": "+1 RELIGION  ",
    "cls": "Cleric, Paladin",
-   "type": "Ritual",
+   "mat": "15 (S) worth of Salt and Incense",
+   "cat": "Necromancy ",
+   "cost": "N/A",
    "time": "10 Minutes",
-   "dmg": "N/A",
-   "cost": "N/A"
+   "type": "Ritual",
+   "range": "5ft (Touch) (Single Target)",
+   "desc": "You perform a ritual of Absolution over a corpse, or number of corpses equal to your spellcasting ability Modifier, forgiving them for the sins they committed in life, for the next 2 months the corpse(s) cannot be affected by spells like the Animated dead, Raise Dead, or Resurrection.",
+   "dmg": "N/A"
   },
   "tiers": [
    [
@@ -636,7 +636,7 @@
   "tiers": [
    [
     "",
-    "--"
+    ""
    ],
    [
     "",
