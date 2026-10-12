@@ -166,6 +166,12 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .cbox{display:inline-grid;place-items:center;width:1.05em;height:1.05em;border:2px solid var(--ink);border-radius:2px;vertical-align:-.16em;color:var(--ink);background:var(--paper)}
 .cbox svg{width:100%;height:100%;visibility:hidden}
 .cbox.on svg{visibility:visible}
+.comps{display:inline-flex;flex-wrap:wrap;gap:4px 14px;vertical-align:-.15em}
+.compi{display:inline-flex;align-items:center;gap:5px;font-weight:700}
+.compi .cbox{vertical-align:0}
+.compw{gap:6px;align-items:center}
+.compl{font-weight:700;font-size:.95rem}
+.compline .comps{vertical-align:0}
 .concline{align-items:center!important;padding-block:2px}
 .cwrap{position:relative;display:inline-flex;cursor:pointer;font-size:1.05rem;align-self:center}
 .line>label.cwrap::after{content:none}
@@ -175,6 +181,8 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .ccheck:focus-visible+.cbox{outline:3px solid var(--ink);outline-offset:2px}
 .x-cbox{display:inline-block;width:18px;height:18px;border:2.5px solid #000;border-radius:2px;vertical-align:-3px;box-sizing:border-box}
 .x-cbox svg{display:block;width:100%;height:100%}
+.x-comp{display:inline;margin-right:16px;white-space:nowrap}
+.x-comp .x-cbox{margin-right:5px}
 .pv-tags .tag{font-size:.7rem;padding:2px 9px}
 .ctfld{flex:1 1 100%}
 .ctedit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:2px solid var(--ink);border-radius:8px;padding:5px 6px;background:var(--paper)}
@@ -426,11 +434,13 @@ function previewHTML(s){
   if(!rows.length&&!tiers.length) return tagsLine(s)+`<p class="pv-empty">This card hasn't been filled in yet.</p>`;
   const concLine=`<p class="pv-line"><b>Concentration:</b> <span class="cbox${s.conc?" on":""}" role="img" aria-label="${s.conc?"Yes":"No"}">${CHECK}</span></p>`;
   let concDone=false;
-  const lines=FIELDS.map(([k,lab])=>{let h="";if(k==="dmg")h+=chartHTML(s.tbl,"pv-tbl");if(f[k]&&String(f[k]).trim())h+=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`;if(k==="time"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
+  const lines=FIELDS.map(([k,lab])=>{let h="";if(k==="mat")h+=`<p class="pv-line"><b>Components:</b> <span class="comps">${compView(s)}</span></p>`;if(k==="dmg")h+=chartHTML(s.tbl,"pv-tbl");if(f[k]&&String(f[k]).trim())h+=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`;if(k==="time"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
   return `<div class="pv">${lines}${tagsLine(s)}</div>`+
     (tiers.length?`<div class="rail pv-rail">${tiers.map(([t,i])=>`<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL_TEN:""}<span>+${i+1}</span></span><p class="pv-tier">${(t[0]||"").trim()?`<b class="tname">${esc(t[0])}</b>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"");
 }
 const editSet=new Set();
+const compView=s=>COMPS.map(([k,L,name])=>`<span class="compi" title="${name}"><span class="cbox${s.comp&&s.comp[k]?" on":""}" role="img" aria-label="${name}: ${s.comp&&s.comp[k]?"yes":"no"}">${CHECK}</span>${L}</span>`).join("");
+const compEdit=s=>`<div class="line concline compline"><label>Components</label><span class="comps">${COMPS.map(([k,L,name])=>`<label class="cwrap compw" title="${name}"><input type="checkbox" class="ccheck" data-comp="${k}"${s.comp&&s.comp[k]?" checked":""} aria-label="${name}"><span class="cbox" aria-hidden="true">${CHECK}</span><span class="compl">${L}</span></label>`).join("")}</span></div>`;
 /* charts: s.tbl = {r, c, h (first row is a header), cells: [[...]]} */
 const TMAX_R=30, TMAX_C=8;
 const clampN=(v,lo,hi,def)=>{v=parseInt(v,10);return Number.isFinite(v)?Math.min(hi,Math.max(lo,v)):def};
@@ -454,6 +464,7 @@ function tblEditorInner(s){
   return `<div class="tblctl"><span class="tbllab">Rows</span><input type="number" class="tbln" data-tk="r" min="1" max="${TMAX_R}" value="${tb.r}" aria-label="Rows"><span class="tbllab">Columns</span><input type="number" class="tbln" data-tk="c" min="1" max="${TMAX_C}" value="${tb.c}" aria-label="Columns"><label class="tblh"><input type="checkbox" data-tk="h"${tb.h?" checked":""}> First row is a header</label><button type="button" class="tbldel">Remove chart</button></div>`+
     `<div class="tblgridwrap"><table class="tblgrid${tb.h?" hashead":""}">${tb.cells.map((row,i)=>`<tr>${row.map((x,j)=>`<td><input type="text" data-cell="${i},${j}" value="${esc(x)}" aria-label="Row ${i+1}, column ${j+1}" placeholder="${tb.h&&i===0?"Heading":""}"></td>`).join("")}</tr>`).join("")}</table></div>`;
 }
+const COMPS=[["v","V","Verbal"],["s","S","Somatic"],["m","M","Material"]];
 const CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.4 6.6 11.6 12.9 4.4" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="square" stroke-linejoin="miter"/></svg>';
 const ctChips=s=>(s.ct||[]).map(x=>`<span class="tag ctchip">${esc(x)}<button type="button" class="ctx" data-ct="${esc(x)}" aria-label="Remove tag ${esc(x)}">×</button></span>`).join("");
 function addTag(d,s){
@@ -480,7 +491,7 @@ function fillCard(d,force){
     <div class="fld"><span class="small">Magic source</span><div class="togs">${TRADS.map(t=>`<button type="button" class="tog" data-tag="${t}" aria-pressed="${s.tags.includes(t)}">${t}</button>`).join("")}</div></div>
     <div class="fld ctfld"><label class="small" for="ct-${s._id}">Custom tags</label><div class="ctedit"><span class="tags ctlist">${ctChips(s)}</span><input type="text" id="ct-${s._id}" class="ctin" placeholder="Add a tag, then press Enter" maxlength="32" autocomplete="off"><button type="button" class="ctadd">Add</button></div></div>
   </div>
-  <div class="fields">${FIELDS.map(([k,lab,ph])=>`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`+(k==="desc"?`<div class="line block tblline"><label>Chart</label><div class="tbled">${tblEditorInner(s)}</div></div>`:"")+(k==="time"?`<div class="line concline"><label for="cc-${s._id}">Concentration</label><label class="cwrap"><input type="checkbox" class="ccheck" id="cc-${s._id}" data-k="conc"${s.conc?" checked":""}><span class="cbox" aria-hidden="true">${CHECK}</span></label></div>`:"")).join("")}</div>
+  <div class="fields">${FIELDS.map(([k,lab,ph])=>(k==="mat"?compEdit(s):"")+`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`+(k==="desc"?`<div class="line block tblline"><label>Chart</label><div class="tbled">${tblEditorInner(s)}</div></div>`:"")+(k==="time"?`<div class="line concline"><label for="cc-${s._id}">Concentration</label><label class="cwrap"><input type="checkbox" class="ccheck" id="cc-${s._id}" data-k="conc"${s.conc?" checked":""}><span class="cbox" aria-hidden="true">${CHECK}</span></label></div>`:"")).join("")}</div>
   <div class="rail">${Array.from({length:10},(_,i)=>{const t=tiers[i]||["",""];return `<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL:""}<span>+${i+1}</span></span><div class="tbody"><textarea class="v tn" rows="1" data-ti="${i}" data-tp="0" aria-label="+${i+1} name" placeholder="Name">${esc(t[0])}</textarea><textarea class="v tt" rows="1" data-ti="${i}" data-tp="1" aria-label="+${i+1} effect" placeholder="Effect at +${i+1}">${esc(t[1])}</textarea></div></div>`}).join("")}</div>`:previewHTML(s));
   d.appendChild(c);
   c.querySelectorAll("textarea").forEach(grow);
@@ -519,6 +530,7 @@ out.addEventListener("input",e=>{
     s.tbl=sizeTable(s.tbl,r,c);const box=d.querySelector(".tbled");box.innerHTML=tblEditorInner(s);const again=box.querySelector(`[data-tk="${el.dataset.tk}"]`);if(again){again.focus();again.select&&again.select()}
   }
   else if(el.dataset.new)return;
+  else if(el.dataset.comp){s.comp=Object.assign({},s.comp);if(el.checked)s.comp[el.dataset.comp]=true;else delete s.comp[el.dataset.comp];if(!Object.keys(s.comp).length)delete s.comp}
   else if(el.dataset.k==="conc"){if(el.checked)s.conc=true;else delete s.conc}
   else if(el.dataset.k==="lv"){s.lv=el.value?+el.value:null;refreshSummary(d,s)}
   else return;
@@ -569,7 +581,8 @@ function exportHTML(s){
   const xconc=`<p class="x-line">Concentration: <span class="x-cbox">${s.conc?CHECK.replace('stroke="currentColor"','stroke="#000"'):""}</span></p>`;
   let xc=false;
   let xt=false;const xchart=()=>{if(xt)return "";xt=true;return chartHTML(s.tbl,"x-tbl")};
-  const xl=rows.map(([k,lab])=>{let h=(k==="dmg"?xchart():"")+`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`+(k==="desc"?xchart():"");if(k==="time"){h+=xconc;xc=true}return h}).join("")+(xc?"":xconc)+xchart();
+  const xcomp=`<p class="x-line">Components: ${COMPS.map(([k,L])=>`<span class="x-comp"><span class="x-cbox">${s.comp&&s.comp[k]?CHECK.replace('stroke="currentColor"','stroke="#000"'):""}</span>${L}</span>`).join("")}</p>`;
+  const xl=FIELDS.map(([k,lab])=>{let h="";if(k==="mat")h+=xcomp;if(k==="dmg")h+=xchart();if(f[k]&&String(f[k]).trim())h+=`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`;if(k==="desc")h+=xchart();if(k==="time")h+=xconc;return h}).join("")+xchart();
   const body=`<div class="x-fields">${xl||`<p class="x-line">&nbsp;</p>`}</div>`;
   const rail=tiers.length?`<div class="x-rail">${tiers.map(([t,i],n)=>`<div class="x-tier${n===tiers.length-1?" x-last":""}"><span class="x-mark${i===9?" x-ten":""}">${i===9?star("#fff","#000","6").replace('viewBox="0 0 100 100"','viewBox="-10 -10 120 120" width="48.60" height="48.60"'):""}<span>+${i+1}</span></span><p>${(t[0]||"").trim()?`<span class="x-name">${esc(t[0])}</span>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"";
   const xb=(lab,list)=>list&&list.length?`<p class="x-line x-tagline">${lab}: ${list.map(x=>`<span class="x-tag">${esc(x)}</span>`).join("")}</p>`:"";
@@ -626,6 +639,7 @@ function normalize(arr){
     const s={n:x.n,tags:Array.isArray(x.tags)?TRADS.filter(t=>x.tags.includes(t)):[],lv:Number.isInteger(x.lv)&&x.lv>=1&&x.lv<=20?x.lv:null,f:{}};
     if(x.f&&typeof x.f==="object")for(const [k] of FIELDS)if(typeof x.f[k]==="string"&&x.f[k])s.f[k]=x.f[k];
     if(x.conc===true)s.conc=true;
+    if(x.comp&&typeof x.comp==="object"){const c={};for(const [k] of COMPS)if(x.comp[k]===true)c[k]=true;if(Object.keys(c).length)s.comp=c}
     if(x.tbl&&Array.isArray(x.tbl.cells)){const r=clampN(x.tbl.r,1,TMAX_R,x.tbl.cells.length||1),c=clampN(x.tbl.c,1,TMAX_C,(x.tbl.cells[0]||[]).length||1);s.tbl=sizeTable({h:x.tbl.h!==false,cells:x.tbl.cells.map(row=>Array.isArray(row)?row.map(v=>String(v==null?"":v)):[])},r,c)}
     if(Array.isArray(x.ct)){const seen=new Set();s.ct=x.ct.map(y=>String(y).trim().slice(0,32)).filter(y=>y&&!seen.has(y.toLowerCase())&&seen.add(y.toLowerCase()));if(!s.ct.length)delete s.ct}
     if(Array.isArray(x.tiers))s.tiers=Array.from({length:10},(_,i)=>{const t=x.tiers[i]||[];return [String(t[0]||""),String(t[1]||"")]});
@@ -784,7 +798,7 @@ async function saveToGitHub(){
 const HEAD='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>';
 const j=v=>JSON.stringify(v).replace(/</g,"\\u003c");
 function clean(){
-  return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.conc)o.conc=true;if(s.tbl)o.tbl=s.tbl;if(s.ct&&s.ct.length)o.ct=s.ct;if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
+  return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.conc)o.conc=true;if(s.comp)o.comp=s.comp;if(s.tbl)o.tbl=s.tbl;if(s.ct&&s.ct.length)o.ct=s.ct;if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
 }
 function buildPage(){const D="/*@"+"DATA@*/",T="/*@"+"TPL@*/";return HEAD+TPL.replace(D,()=>j(clean())).replace(T,()=>j(TPL))+"</body></html>"}
 $("saveBtn").addEventListener("click",async()=>{

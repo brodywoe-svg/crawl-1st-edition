@@ -58,7 +58,11 @@
     "",
     ""
    ]
-  ]
+  ],
+  "comp": {
+   "v": true,
+   "s": true
+  }
  },
  {
   "n": "Acid Spray",
@@ -116,7 +120,12 @@
     "",
     ""
    ]
-  ]
+  ],
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
+  }
  },
  {
   "n": "Aid",
@@ -284,7 +293,12 @@
     "Absorption",
     "When you cast this spell, If a spell attack misses you, or you succeed on a saving throw against a spell targeting you, you gain MP equal to half that spell’s casting cost."
    ]
-  ]
+  ],
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
+  }
  },
  {
   "n": "Arcane Gate",
@@ -320,6 +334,11 @@
    "range": "Self (Single Target)",
    "desc": "You create an defensive arcane bubble of magical force that appears and protects you from Physical attacks and weapons. Until the start of your next turn, you have a +3 bonus to AC vs All Non-magical Physical attacks, including against the triggering attack.",
    "dmg": "N/A"
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -561,6 +580,11 @@
    "time": "1 Bonus Action",
    "range": "5ft (Area of Effect)",
    "desc": "You speak an incantation over a sword that is used in the casting of this spell. For the duration of this spell, while you are wielding the sword you gain an additional 10ft of movement and your next attack made with the sword deals and additional 1d10 thunder damage."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -767,6 +791,10 @@
    "time": "1 Action",
    "range": "10ft (Single Target)",
    "desc": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -870,6 +898,11 @@
    "time": "1 Action",
    "range": "30ft (Single Target / Area of Effect)",
    "desc": "You create a condensed ball of fiery energy and fling it at one creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. Hit or miss, the ball then explodes in a blast of fiery cinders. The target and each creature within 5 feet of the point where the ball exploded must succeed on a Dexterity saving throw or take 2d6 fire damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the fire damage created by the explosion increases by 1d6 for each slot level above 1st."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -1011,6 +1044,11 @@
    "time": "1 Hour",
    "range": "5ft (Touch) a Magical Item or Object that weighs less than 10lb.",
    "desc": "For an hour you can perform an arcane ritual on a Magical Item or Object that weighs less than 10lbs and hide it’s magical nature from those who are able to use magic detection spells such as Detect magic. Upon completion of the ritual, the Item becomes Undetectable by magical detection spells for the Next month. Casting this spell on the same item every once a month for a year makes the Magical Item or Object Permanently Undetectable by magic detection spells until the dispel magic spell is cast on it.\n\nIf a spellcaster, other than the item's original Spellcaster, attempts to identify the item, whilst the item is under the effects of this spell, they must roll a d100 and roll above 50 + Original Spellcaster level. Failure to roll high enough results in the Spellcaster being unable to sense any magical presence from the item. On a success, the Item is successfully Identified."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -1335,6 +1373,10 @@
    "time": "1 Action",
    "range": "5ft (Touch) (Single Target)",
    "desc": "You touch a creature within range. The creature regains a number of hit-points equal to 1d8 + your Spellcasting Ability Modifier. This spell has no effect on Undead or Construct Creatures.\n\nAt Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the Healing increases by 1d8 for each slot level above 1st."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -1350,6 +1392,11 @@
    "time": "1 Action",
    "range": "40ft (Single Target)",
    "desc": "You seize the air and compress it as you whip up the air around you creating an invisible blade of wind. Make a ranged spell attack against a single target. On a hit, the target takes 1d10 slashing damage and the target and two other creatures Adjacent within 5 feet of the target must roll Dexterity saving throw or be knocked prone.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the slashing damage created by blade of wind increases by 1d10 for each slot level above 1st."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -1412,6 +1459,11 @@
    "time": "1 action",
    "range": "60ft (Area of Effect)",
    "desc": "You create a 20-foot-cube of Black vaporous fog centered on a point you choose within range. The fog spreads around corners. It lasts for the Duration, ending the spell. Its area is heavily obscured. When a creature enters the spell’s area for the first time on a turn or starts its turn there, that creature must make a Constitution saving throw. On a Success the creature takes 10d10 necrotic damage. On a failure the creature drops to 0-hit points and is knocked Unconscious and must start making death saves at the beginning of their next turn. Creatures are affected even if they hold their breath or don’t need to breathe. The fog is static and cannot be moved from the space it was created but does coast alongside the surfaces of the ground and walls. The vapors, being heavier than air, sink to the lowest level of the land, even pouring down openings."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -1479,6 +1531,10 @@
    "time": "1 Action",
    "range": "Self (Single Target)",
    "desc": "For the duration, you gain the ability to sense the presence of magic within 20 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any.\n\nThe spell can penetrate most barriers, but is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -1518,6 +1574,10 @@
    "time": "1 Action",
    "range": "Self (Single Target)",
    "desc": "You make yourself – including your clothing, armor, weapons, and other belongings on your person – look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can’t change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you.\n\nThe changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing or would feel your head and hair. If you use this spell to appear thinner than you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair. To discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -1560,6 +1620,11 @@
    "time": "1 Action",
    "range": "30ft (Area of Effect)",
    "desc": "Choose a 20ft by 20ft cube within range that you can see. Any spell from the Illusion school of 3rd level or lower within that area ends. For each Illusion of 4th level or higher, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.\n\nAt Higher Levels. When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -1694,6 +1759,11 @@
    "time": "1 Action",
    "range": "5ft (Area of Effect)",
    "desc": "You touch the ground and speak an incantation that creates a 10ft by 5ft wall that has a height of 5ft, and thickness of 3ft and lasts for the spell's duration. While you or an ally are using the wall as cover you have ¾ Cover. The Wall itself has an AC of 15 and has 20 hit-points, the wall crumbles if it’s hit-points are reduced to 0, you lose concentration on the spell, drop your concentration on the spells, or the spell's duration ends."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -1718,6 +1788,11 @@
    "time": "1 Action",
    "range": "20ft (Area of Effect)",
    "desc": "You hold out your fingers and select a point within range, a spike made of stone erupts from the chosen point. Each creature with 5ft of the erupting spike must make Dexterity Saving throw or take 2d10 Bludgeoning damage, half as much on a successful save. If there is a target directly above the erupting spike, and they fail the Save, they are launched 10ft up in the air taking Falling damage and falling prone upon meeting the ground. If there's a Ceiling above the Launched target, they instead take falling damage for the maximum height of the current room. Immediately after casting the spell and creating the spike, the spike immediately retreats back into the ground.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the bludgeoning damage dealt by the earth spike increases by 1d10 for each slot level above 1st."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -1974,6 +2049,11 @@
    "time": "1 Hour",
    "range": "10ft (Area of effect)",
    "desc": "You gain the service of a familiar, a spirit that takes an animal form you choose: Bat, Bird, Cat, Crab, Dog, Frog (Toad), Hawk, Lizard, Octopus, Owl, Snake, Fish, Rat, Raven, Spider, or Weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of a beast.\n\nYour familiar acts independently of you, but it always obeys your commands. In combat, your familiar takes their turn immediately after yours. A familiar can’t attack, but it can take other actions as normal.\n\nWhen the familiar drops to 0 hit points, it disappears, leaving behind no physical form. It reappears after you cast this spell again. As an action, you can temporarily dismiss your familiar to a pocket dimension. Alternatively, you can dismiss it forever. As an action while it is temporarily dismissed, you can cause it to reappear in any unoccupied space within 30 feet of you. Whenever the familiar drops to 0 hit points or disappears into the pocket dimension, it leaves behind in its space anything it was wearing or carrying.\n\nWhile your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through your familiar’s eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses that the familiar has. During this time, you are deaf and blind with regard to your own senses.\n\nYou can’t have more than one familiar at a time. If you cast this spell while you already have a familiar, you instead cause it to adopt a new form. Choose one of the forms from the above list. Your familiar transforms into the chosen creature."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -2099,6 +2179,10 @@
    "time": "1 Action",
    "range": "30ft (Single Target)",
    "desc": "You extend a hand in the direction of a target you choose that’s within range, and project a bolt of magic flame towards them. Make a spell attack towards the target within range, On a Hit the target takes 1d8 fire damage. The magical flame created by this spell doesn’t not set organic material on fire."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -2277,6 +2361,10 @@
    "time": "1 Action",
    "range": "5ft (Touch) (Single Target)",
    "desc": "You extend a hand and touch of a target within 5ft sending a necrotic shiver up your targets spine. Make a melee spell attack towards the target within 5ft of you, On a Hit the target takes 1d8 Necrotic damage."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -2326,6 +2414,10 @@
    "time": "1 Action",
    "range": "5 feet (Touch) One willing creature (Single Target)",
    "desc": "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice. It can roll the die before or after making the ability check. The spell then ends."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -2348,6 +2440,10 @@
    "time": "1 Action",
    "range": "30ft (Single Target)",
    "desc": "You extend a hand project fourth a blasting gust of wind towards target within the spells range. Make a range spell attack, on a hit the target takes 1d4 bludgeoning damage and if the target is medium sized or smaller, they must roll a Strength Saving throw or be pushed backwards 5ft. if the target is small or even tiny sized, they have disadvantage on the Strength save.\n\nIf the target of the spell is an object of Small or Tiny size, it automatically failed the save and takes no damage."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -2449,6 +2545,10 @@
    "time": "1 Action",
    "range": "30ft (Single Target)",
    "desc": "You swipe the air, gather moisture and project forth a arrow-like barrage of icy needles towards a target within range that you can see. Make a Spell attack roll towards a target, on a hit, the target takes 2d4 cold damage."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -2475,6 +2575,11 @@
    "time": "1 Minute",
    "range": "5ft (Touch) (See Description)",
    "desc": "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it. If you instead touch a creature throughout the casting, you learn what spells, if any, are currently affecting it."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -2490,6 +2595,10 @@
    "time": "1 Action",
    "range": "30ft (Single Target)",
    "desc": "You extend a hand and create a hovering globule of light that you can control, you can manipulate the globule of light and can use a bonus action on your turn to reposition the globule of light anywhere within the spells range. Alternatively, you can set the Globule of light to occupy the same space as you and follow your current position. The Globule of light provides a 10ft-radius of light. At will, you can manipulate if the light is Dim or Bright."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -2658,6 +2767,11 @@
    "time": "1 Action",
    "range": "30ft (Single Target)",
    "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be targeted only once by each casting of this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the Initial lightning damage dealt to the first Target increases by 1d6 for each slot level above 1st."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -2756,6 +2870,11 @@
    "time": "1 Action",
    "range": "5ft (Touch) A wooden, metal or stone wall or surface",
    "desc": "As an action on your turn you can Touch a wooden, metal, or Stone surface or wall within range and temporarily make the surface transparent as glass for the duration. The surface wall or floor cannot be thicker than 12 inches of solid material, otherwise the spell fails. While viewing through the transparent surface you can make it so that the receiving end cannot or can view you from the other side of the glass and create what is essentially a magical one way window."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -3129,6 +3248,11 @@
    "time": "1 Action",
    "range": "60ft (Area of effect)",
    "desc": "You project forth a phantasmal image of an object, a creature, or some other visible phenomenon that is no larger than a 15-foot cube. The image appears at a spot within range and lasts for the duration. The image is purely visual; it isn’t accompanied by sound, smell, or other sensory effects.\n\nPhysical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -3691,6 +3815,11 @@
    "time": "1 Action",
    "range": "30ft (Area of effect)",
    "desc": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\n\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -3733,6 +3862,10 @@
    "time": "1 Action",
    "range": "30ft (Single target)",
    "desc": "You sing a Single Sonorous note and imbue the note with arcane magic that can send a target into a deep but brief slumber. Choose a Single target within range that can hear you. The target must roll a Intelligence Saving throw or fall unconscious for the next 1d4 turns. If the Target succeeds the Intelligence saving throw, they become immune to this spell and its effects for the next 24 hours.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -4127,6 +4260,11 @@
    "time": "1 Action",
    "range": "30ft (Single Target)",
    "desc": "You create vines of constricting bramble beneath the feet of an unexpecting enemy, in an attempt to thwart them from moving. Choose a single target within the spells range, the target must roll a Dexterity Saving throw, On a failure the target takes 1d4 piercing damage and is Restrained until the start of your next turn. If fire damage is dealt to the target while restrained by the vines, the target is freed and is no longer restrained."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   }
  },
  {
@@ -4328,6 +4466,10 @@
    "time": "1 Action",
    "range": "5ft (Touch) (Single Target)",
    "desc": "A creature you touch becomes invisible until the end of the duration. Anything the target is wearing or carrying is invisible as long as it is on the target’s person. The spell ends for a target that attacks or casts a spell.\n\nAt Higher Levels: You are able to cast this spell with Any Spell slot of 1st level or higher, no other benefits are gained from a higher-level cast."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
@@ -4427,6 +4569,10 @@
    "time": "1 Action",
    "range": "15ft (Single Target)",
    "desc": "You conjure a Tentacle made of water either from your hand or nearby to your target that whips them and tears into their skin. Make a Spell attack towards a single target within range, On a hit, your target takes 1d6 slashing damage."
+  },
+  "comp": {
+   "v": true,
+   "s": true
   }
  },
  {
