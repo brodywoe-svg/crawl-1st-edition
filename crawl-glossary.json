@@ -2,18 +2,6 @@
  "v": 1,
  "entries": [
   {
-   "n": "Blinded",
-   "sec": "Conditions",
-   "lead": "Certain creatures and spells can impair a creature's sight, leaving it Blinded. While Blinded:",
-   "fx": [
-    "The creature can't see, and it automatically fails any check that requires sight.",
-    "The creature has Disadvantage on attack rolls that require sight.",
-    "Attack rolls against the creature have Advantage."
-   ],
-   "notes": [],
-   "aka": []
-  },
-  {
    "n": "Bleeding",
    "sec": "Conditions",
    "lead": "Some attacks wound a creature deeply enough to make it bleed. While Bleeding:",
@@ -23,6 +11,20 @@
     "Any healing from a spell ends the condition.",
     "Creatures without blood, such as Constructs and Undead, are immune to this condition.",
     "Creatures that regenerate each turn, such as Trolls, are immune to this condition."
+   ],
+   "notes": [],
+   "aka": [
+    "Bleeding"
+   ]
+  },
+  {
+   "n": "Blinded",
+   "sec": "Conditions",
+   "lead": "Certain creatures and spells can impair a creature's sight, leaving it Blinded. While Blinded:",
+   "fx": [
+    "The creature can't see, and it automatically fails any check that requires sight.",
+    "The creature has Disadvantage on attack rolls that require sight.",
+    "Attack rolls against the creature have Advantage."
    ],
    "notes": [],
    "aka": []
@@ -261,6 +263,17 @@
     }
    ],
    "aka": []
+  },
+  {
+   "n": "Target",
+   "sec": "Targeting",
+   "lead": "",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    "Target",
+    "Target Area"
+   ]
   },
   {
    "n": "Unconscious",
