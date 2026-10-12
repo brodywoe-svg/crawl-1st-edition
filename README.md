@@ -1,0 +1,1 @@
+# crawl-spell-compendium
