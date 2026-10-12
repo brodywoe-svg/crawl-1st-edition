@@ -821,12 +821,12 @@
     ],
     [
      "ORANGE",
-     "N/A",
+     "Acid Damage",
      "if a humanoid wearing Metallic armor in the spells target area fails the saving throw, there are rusts and their AC is reduced by 1 until the start of your next turn."
     ],
     [
      "YELLOW",
-     "",
+     "Lightning Damage",
      ""
     ],
     [
@@ -841,12 +841,12 @@
     ],
     [
      "INDIGO",
-     "",
+     "Thunder Damage",
      ""
     ],
     [
      "VIOLET",
-     "",
+     "Force Damage",
      ""
     ]
    ]
