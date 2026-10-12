@@ -770,19 +770,6 @@
   }
  },
  {
-  "n": "Chromatic Orb",
-  "tags": [
-   "Arcane"
-  ],
-  "lv": 1,
-  "f": {
-   "mat": "A Diamond worth 50(G)",
-   "cat": "Evocation",
-   "time": "1 Action",
-   "range": "30ft (Single Target)"
-  }
- },
- {
   "n": "Chromatic Ray",
   "tags": [
    "Arcane"
@@ -797,6 +784,28 @@
   ],
   "lv": 7,
   "f": {}
+ },
+ {
+  "n": "Chromatic Wave",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {
+   "mat": "1 Glass Prism worth 50(G)",
+   "cat": "Evocation",
+   "range": "Self (20ft cone)",
+   "pre": "+3 ARCANE",
+   "cls": "Wizard, Sorcerer,",
+   "cost": "3 MP",
+   "time": "Instantaneous",
+   "type": "Ranged Spell Attack"
+  },
+  "ct": [
+   "Chromatic",
+   "Elemental Damage"
+  ]
  },
  {
   "n": "Cinderblast",
