@@ -1,0 +1,4255 @@
+[
+ {
+  "n": "Absolution",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Necromancy (Ritual)",
+   "time": "1 Action",
+   "range": "5ft (Touch) (Single Target)",
+   "mat": "25(G) worth of Salt and Incense",
+   "desc": "You perform a ritual of Absolution over a corpse, or number of corpses equal to your spellcasting ability Modifier, forgiving them for the sins they committed in life, for the next 2 months the corpse(s) cannot be affected by spells like the Animated dead, Raise Dead, or Resurrection."
+  }
+ },
+ {
+  "n": "Acid Spray",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "range": "15ft (Single Target)",
+   "mat": "A Vial of Citrus Extract",
+   "desc": "You extend your hand toward a creature you can see within range and project a Stream of acidic wash from your palm. The creature must succeed on a Dexterity saving throw or take 2d12 Acid damage and if your target is wearing metallic armor their AC is reduced by 1 until the start of your next turn, if the target is a Construct their AC is instead Reduced by 3. On Successful save the targets AC is not reduced and the target only takes half damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d12 for each slot level above 1st.",
+   "cost": "2 MP",
+   "time": "Instantaneous"
+  },
+  "tiers": [
+   [
+    "Splash Damage",
+    "whenever you deal damage you deal an extra 1d4 acid damage"
+   ],
+   [
+    "Test",
+    "Test"
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ]
+  ]
+ },
+ {
+  "n": "Aid",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Alter Alignment",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Alter Climate",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Alter Emotion",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Alter Memory",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Animate Dead",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Animate Objects",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Animate Plants",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Animated Death Fog",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Anti-Magic Field",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Appraisal",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Arcane Barrier",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Abjuration",
+   "time": "1 reaction, which you take when you are hit by a Spell Attack or rolling Saving throw against a spell.",
+   "range": "Self (Single Target)",
+   "mat": "A stone with arcane symbols carved into it",
+   "desc": "You create a protective arcane barrier of magical arcane energy that appears and protects you from Spells. Until the start of your next turn, you have a +3 bonus to AC vs Spell attacks, if the spell being cast upon you requires a saving throw you can forgo the AC bonus and instead add the bonus to the Saving Throw against an Oncoming Spell, including against the triggering spell attack or spell save.\n\nAt Higher Levels: You are able to cast this spell with Any Spell slot of 1st level or higher, no other benefits are gained from a higher level cast."
+  }
+ },
+ {
+  "n": "Arcane Gate",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Arcane Hand",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Arcane Shield",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Abjuration",
+   "time": "1 reaction, which you take when you are hit by a Melee Attack with a weapon.",
+   "range": "Self (Single Target)",
+   "mat": "A piece of wrought iron",
+   "desc": "You create an defensive arcane bubble of magical force that appears and protects you from Physical attacks and weapons. Until the start of your next turn, you have a +3 bonus to AC vs All Non-magical Physical attacks, including against the triggering attack.\n\nAt Higher Levels: You are able to cast this spell with Any Spell slot of 1st level or higher, no other benefits are gained from a higher level cast."
+  }
+ },
+ {
+  "n": "Armor of Frost",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Ascension",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Astral Projection",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Aura of Alacrity",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Aura of Death",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Aura of Life Siphoning",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Aura of Purity",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Aura of Radiance",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Aura of Unholy Radiance",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Aura of Vigor",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Aura of Willpower",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Awaken",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Bane",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Banishing Smite",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Banishment",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Barkskin",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Bend Time",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Bind the Unholy",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Blade Barrier",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Blade Burst",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Transmutation",
+   "time": "1 Bonus Action",
+   "range": "5ft (Area of Effect)",
+   "mat": "A sword of any kind that you also proficient in",
+   "desc": "You speak an incantation over a sword that is used in the casting of this spell. For the duration of this spell, while you are wielding the sword you gain an additional 10ft of movement and your next attack made with the sword deals and additional 1d10 thunder damage."
+  }
+ },
+ {
+  "n": "Bleed Fire",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Bless",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Blight",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Blink",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Blizzard",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Blur",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Branding Smite",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Breath Bubble",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Burning Hands",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "time": "1 Action",
+   "range": "15ft cone (Area of Effect)",
+   "desc": "You hold out your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 2d6 fire damage on a failed save, or half as much damage on a successful one.\n\nThe fire ignites any flammable objects in the area that aren’t being worn or carried.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
+  }
+ },
+ {
+  "n": "Burning Smite",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Call Lightning",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Calm Emotions",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Caustic Claws",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Ceremony",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Chain Lightning",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Charm Monster",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Charm Person",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Enchantment",
+   "time": "1 Action",
+   "range": "10ft (Single Target)",
+   "desc": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
+  }
+ },
+ {
+  "n": "Chromatic Orb",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "time": "1 Action",
+   "range": "30ft (Single Target)",
+   "mat": "A Diamond worth 50(G)"
+  }
+ },
+ {
+  "n": "Chromatic Ray",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Chromatic Storm",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Cinderblast",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "time": "1 Action",
+   "range": "30ft (Single Target / Area of Effect)",
+   "mat": "A burnt piece of paper",
+   "desc": "You create a condensed ball of fiery energy and fling it at one creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. Hit or miss, the ball then explodes in a blast of fiery cinders. The target and each creature within 5 feet of the point where the ball exploded must succeed on a Dexterity saving throw or take 2d6 fire damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the fire damage created by the explosion increases by 1d6 for each slot level above 1st."
+  }
+ },
+ {
+  "n": "Circle of Death",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Circle of Warding",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Cleansing Aura",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Clone",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Cold Touch",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Cold Wave",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Command",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Command Beasts",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Command Monster",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Commune with Deity",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Commune with Nature",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Commune with Spirits",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Communion",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Compel Duel",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Conceal Magic",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {
+   "cat": "Illusion (Ritual)",
+   "time": "1 Hour",
+   "range": "5ft (Touch) a Magical Item or Object that weighs less than 10lb.",
+   "mat": "250G worth of magical Incense that is consumed upon performing the ritual",
+   "desc": "For an hour you can perform an arcane ritual on a Magical Item or Object that weighs less than 10lbs and hide it’s magical nature from those who are able to use magic detection spells such as Detect magic. Upon completion of the ritual, the Item becomes Undetectable by magical detection spells for the Next month. Casting this spell on the same item every once a month for a year makes the Magical Item or Object Permanently Undetectable by magic detection spells until the dispel magic spell is cast on it.\n\nIf a spellcaster, other than the item's original Spellcaster, attempts to identify the item, whilst the item is under the effects of this spell, they must roll a d100 and roll above 50 + Original Spellcaster level. Failure to roll high enough results in the Spellcaster being unable to sense any magical presence from the item. On a success, the Item is successfully Identified."
+  }
+ },
+ {
+  "n": "Confusion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Conjure Animals",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Conjure Celestial",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Conjure Fortress",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Conjure Lesser Elemental (Air)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Conjure Lesser Elemental (Earth)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Conjure Lesser Elemental (Fire)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Conjure Lesser Elemental (Water)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Consecrate Sanctum",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Consecrate Weapon",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Consuming Darkness",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Contagion",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Control Beast",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Control Flames",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Control Weather",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Control Wind",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Corpse Explosion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Counterspell",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Create Arcane Catalyst",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Create Arcane Servant",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Create Artifact",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Create Cityscape",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Create Flying Spellbook",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Create Flying Stronghold",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Create Living Illusion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Create Phylactery",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Create Planar Medium",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Create Simulacrum",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Create Spellgem",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Create Undead",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Create Volcano",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Creation",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Crown of Stars",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Cryoclasm",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Cure Wounds",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "time": "1 Action",
+   "range": "5ft (Touch) (Single Target)",
+   "desc": "You touch a creature within range. The creature regains a number of hit-points equal to 1d8 + your Spellcasting Ability Modifier. This spell has no effect on Undead or Construct Creatures.\n\nAt Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the Healing increases by 1d8 for each slot level above 1st."
+  }
+ },
+ {
+  "n": "Cutting Wind",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Transmutation",
+   "time": "1 Action",
+   "range": "40ft (Single Target)",
+   "mat": "A paper fan or feather",
+   "desc": "You seize the air and compress it as you whip up the air around you creating an invisible blade of wind. Make a ranged spell attack against a single target. On a hit, the target takes 1d10 slashing damage and the target and two other creatures Adjacent within 5 feet of the target must roll Dexterity saving throw or be knocked prone.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the slashing damage created by blade of wind increases by 1d10 for each slot level above 1st."
+  }
+ },
+ {
+  "n": "Cyclone",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Damnation",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Dark Calling",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Darkplane",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Daylight",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Death Fog",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {
+   "cat": "Necromancy",
+   "time": "1 action",
+   "range": "60ft (Area of Effect)",
+   "mat": "A Vial of Ankheg Blood",
+   "desc": "You create a 20-foot-cube of Black vaporous fog centered on a point you choose within range. The fog spreads around corners. It lasts for the Duration, ending the spell. Its area is heavily obscured. When a creature enters the spell’s area for the first time on a turn or starts its turn there, that creature must make a Constitution saving throw. On a Success the creature takes 10d10 necrotic damage. On a failure the creature drops to 0-hit points and is knocked Unconscious and must start making death saves at the beginning of their next turn. Creatures are affected even if they hold their breath or don’t need to breathe. The fog is static and cannot be moved from the space it was created but does coast alongside the surfaces of the ground and walls. The vapors, being heavier than air, sink to the lowest level of the land, even pouring down openings."
+  }
+ },
+ {
+  "n": "Death Ward",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Demiplane",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Desecrate Sanctuary",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Desolation",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Detect Good & Evil",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Detect Holy/Unholy Presence",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Detect Magic",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Divination (Ritual)",
+   "time": "1 Action",
+   "range": "Self (Single Target)",
+   "desc": "For the duration, you gain the ability to sense the presence of magic within 20 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any.\n\nThe spell can penetrate most barriers, but is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt."
+  }
+ },
+ {
+  "n": "Detect Poison",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Detect Traps",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Dimension Door",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Disguise Self",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Illusion",
+   "time": "1 Action",
+   "range": "Self (Single Target)",
+   "desc": "You make yourself – including your clothing, armor, weapons, and other belongings on your person – look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can’t change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you.\n\nThe changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing or would feel your head and hair. If you use this spell to appear thinner than you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair. To discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC."
+  }
+ },
+ {
+  "n": "Disheartening Cry",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Disintegrate",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Dispel Fear",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Dispel Illusion",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {
+   "cat": "Abjuration",
+   "time": "1 Action",
+   "range": "30ft (Area of Effect)",
+   "mat": "A Monocle or small glass lens",
+   "desc": "Choose a 20ft by 20ft cube within range that you can see. Any spell from the Illusion school of 3rd level or lower within that area ends. For each Illusion of 4th level or higher, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.\n\nAt Higher Levels. When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
+  }
+ },
+ {
+  "n": "Dispel Magic (Arcane)",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Dispel Magic (Divine)",
+  "tags": [
+   "Arcane",
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Dispel Magic (Occult)",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Dispel Magic (Primal)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Disrupt Spell",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Divine Favor",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Divine Shield",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Dominate Humanoid",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Dominate Mind",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Doom",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Doppelgänger",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Duplicate",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Dust Devil",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Earth Barricade",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Transmutation",
+   "time": "1 Action",
+   "range": "5ft (Area of Effect)",
+   "mat": "A square-shaped pebble",
+   "desc": "You touch the ground and speak an incantation that creates a 10ft by 5ft wall that has a height of 5ft, and thickness of 3ft and lasts for the spell's duration. While you or an ally are using the wall as cover you have ¾ Cover. The Wall itself has an AC of 15 and has 20 hit-points, the wall crumbles if it’s hit-points are reduced to 0, you lose concentration on the spell, drop your concentration on the spells, or the spell's duration ends."
+  }
+ },
+ {
+  "n": "Earth Pillars",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Earth Spike",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Transmutation",
+   "time": "1 Action",
+   "range": "20ft (Area of Effect)",
+   "mat": "A quartz crystal",
+   "desc": "You hold out your fingers and select a point within range, a spike made of stone erupts from the chosen point. Each creature with 5ft of the erupting spike must make Dexterity Saving throw or take 2d10 Bludgeoning damage, half as much on a successful save. If there is a target directly above the erupting spike, and they fail the Save, they are launched 10ft up in the air taking Falling damage and falling prone upon meeting the ground. If there's a Ceiling above the Launched target, they instead take falling damage for the maximum height of the current room. Immediately after casting the spell and creating the spike, the spike immediately retreats back into the ground.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the bludgeoning damage dealt by the earth spike increases by 1d10 for each slot level above 1st."
+  }
+ },
+ {
+  "n": "Earth Tremor",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Earthbind",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Earthquake",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Eldritch Blast",
+  "tags": [
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Eldritch Calling",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Elemental Wave (Acid)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Elemental Wave (Cold)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Elemental Wave (Fire)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Elemental Wave (Lightning)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Elemental Wave (Thunder)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Enlarge/Reduce",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Enslave",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Entangle",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Erupting Earth",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Eternal Flame",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Etherealness",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Eyebite",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Fabricate Corpse",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Fabricate Object",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Fairy Fire",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Far Step",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Favor the Faithful",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Fear",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Feather Fall",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Feeblemind",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Feign Death",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Find Familiar",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Conjuration (Ritual)",
+   "time": "1 Hour",
+   "range": "10ft (Area of effect)",
+   "mat": "10 gp worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier",
+   "desc": "You gain the service of a familiar, a spirit that takes an animal form you choose: Bat, Bird, Cat, Crab, Dog, Frog (Toad), Hawk, Lizard, Octopus, Owl, Snake, Fish, Rat, Raven, Spider, or Weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of a beast.\n\nYour familiar acts independently of you, but it always obeys your commands. In combat, your familiar takes their turn immediately after yours. A familiar can’t attack, but it can take other actions as normal.\n\nWhen the familiar drops to 0 hit points, it disappears, leaving behind no physical form. It reappears after you cast this spell again. As an action, you can temporarily dismiss your familiar to a pocket dimension. Alternatively, you can dismiss it forever. As an action while it is temporarily dismissed, you can cause it to reappear in any unoccupied space within 30 feet of you. Whenever the familiar drops to 0 hit points or disappears into the pocket dimension, it leaves behind in its space anything it was wearing or carrying.\n\nWhile your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through your familiar’s eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses that the familiar has. During this time, you are deaf and blind with regard to your own senses.\n\nYou can’t have more than one familiar at a time. If you cast this spell while you already have a familiar, you instead cause it to adopt a new form. Choose one of the forms from the above list. Your familiar transforms into the chosen creature."
+  }
+ },
+ {
+  "n": "Find Greater Steed",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Find Steed",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Finger of Death",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Fire Storm",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Fireball",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Firebolt",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "pre": "+1 ARC or +1 NAT",
+   "cls": "Wizard, Sorcerer, Druid, or Warlock",
+   "mat": "Sulfuric Powder or Coal Dust",
+   "cat": "Evocation",
+   "cost": "2MP",
+   "time": "Instantaneous",
+   "type": "Ranged Spell Attack",
+   "range": "30ft (Straight Line)",
+   "desc": "You clap a pinch of flammable powder between your hands and sweep your fingers toward a target, speaking the spell’s command phrase. The powder ignites into a bolt of fire that hurls instantly toward your target.",
+   "dmg": "On hit, target takes 1d6 fire damage."
+  },
+  "tiers": [
+   [
+    "",
+    "You can cast this spell using any flamible component rather than using Sulfuric Powder or Coal Dust."
+   ],
+   [
+    "",
+    "This Spell’s range increases to 45ft."
+   ],
+   [
+    "",
+    "This spell’s deals 1d8 fire damage instead of 1d6 fire damage."
+   ],
+   [
+    "Kindling",
+    "The bolt ignites flammable objects it hits that aren’t being worn or carried, such as torches, kindling, or oil."
+   ],
+   [
+    "",
+    "You no longer need a material component to cast this spell."
+   ],
+   [
+    "",
+    "This spell’s deals 1d10 fire damage instead of 1d8 fire damage."
+   ],
+   [
+    "",
+    "This Spell’s range increases to 60 ft."
+   ],
+   [
+    "",
+    "On a critical hit, the target becomes Enflamed."
+   ],
+   [
+    "Arcing Bolt",
+    "The bolt no longer travels in a straight line and can curve and arc around obstacles to reach a target you can see."
+   ],
+   [
+    "Explosive Bolt",
+    "On a Hit, the bolt detonates, each creature within 5ft of the original target must roll a Dexterity Saving throw or take fire damage equal to half the damage dealt to the original target"
+   ]
+  ]
+ },
+ {
+  "n": "Flame Bolt",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "time": "1 Action",
+   "range": "30ft (Single Target)",
+   "desc": "You extend a hand in the direction of a target you choose that’s within range, and project a bolt of magic flame towards them. Make a spell attack towards the target within range, On a Hit the target takes 1d8 fire damage. The magical flame created by this spell doesn’t not set organic material on fire."
+  }
+ },
+ {
+  "n": "Flame of Absolution",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Flaming Sphere",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Fling",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Fly",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Fog Cloud",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Forbiddance",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Foresight",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Freeze/Unfreeze Liquids",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Frost Fingers",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Frost Ray",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Gate",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Geas",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Gemstone Vault",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Gentle Repose",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Goodberry",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Grasping Vine",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Grave Touch",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Necromancy",
+   "time": "1 Action",
+   "range": "5ft (Touch) (Single Target)",
+   "desc": "You extend a hand and touch of a target within 5ft sending a necrotic shiver up your targets spine. Make a melee spell attack towards the target within 5ft of you, On a Hit the target takes 1d8 Necrotic damage."
+  }
+ },
+ {
+  "n": "Greater Arcane Barrier",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Greater Arcane Shield",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Greater Invisibility",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Greater Restoration",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Guidance",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Divination",
+   "time": "1 Action",
+   "range": "5 feet (Touch) One willing creature (Single Target)",
+   "desc": "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice. It can roll the die before or after making the ability check. The spell then ends."
+  }
+ },
+ {
+  "n": "Guiding Bolt",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Gust",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Transmutation",
+   "time": "1 Action",
+   "range": "30ft (Single Target)",
+   "desc": "You extend a hand project fourth a blasting gust of wind towards target within the spells range. Make a range spell attack, on a hit the target takes 1d4 bludgeoning damage and if the target is medium sized or smaller, they must roll a Strength Saving throw or be pushed backwards 5ft. if the target is small or even tiny sized, they have disadvantage on the Strength save.\n\nIf the target of the spell is an object of Small or Tiny size, it automatically failed the save and takes no damage."
+  }
+ },
+ {
+  "n": "Harm",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Haste",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Heal",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Healing Word",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Hero’s Feast",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Heroism",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Holy Aura",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Holy Light",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Holy Weapon",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Ice Knife",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Ice Needles",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Transmutation",
+   "time": "1 Action",
+   "range": "30ft (Single Target)",
+   "desc": "You swipe the air, gather moisture and project forth a arrow-like barrage of icy needles towards a target within range that you can see. Make a Spell attack roll towards a target, on a hit, the target takes 2d4 cold damage."
+  }
+ },
+ {
+  "n": "Ice Prison",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Identify",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Divination (Ritual)",
+   "time": "1 Minute",
+   "range": "5ft (Touch) (See Description)",
+   "mat": "A pearl worth at least 100 gp",
+   "desc": "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it. If you instead touch a creature throughout the casting, you learn what spells, if any, are currently affecting it."
+  }
+ },
+ {
+  "n": "Illumination",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "time": "1 Action",
+   "range": "30ft (Single Target)",
+   "desc": "You extend a hand and create a hovering globule of light that you can control, you can manipulate the globule of light and can use a bonus action on your turn to reposition the globule of light anywhere within the spells range. Alternatively, you can set the Globule of light to occupy the same space as you and follow your current position. The Globule of light provides a 10ft-radius of light. At will, you can manipulate if the light is Dim or Bright."
+  }
+ },
+ {
+  "n": "Illusionary Dragon",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Illusionary Giant",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Illusionary Terrain",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Impenetrable Sphere",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Imprisonment",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Incendiary Cloud",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Incite Hysteria",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Infestation",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Inflict Wounds",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Insect Plague",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Investiture of Air",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Investiture of Flame",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Investiture of Ice",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Investiture of Stone",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Invigorate",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Invisibility",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Invulnerability",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Jump Jolt",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "time": "1 Action",
+   "range": "30ft (Single Target)",
+   "mat": "A Coil of copper wire",
+   "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be targeted only once by each casting of this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the Initial lightning damage dealt to the first Target increases by 1d6 for each slot level above 1st."
+  }
+ },
+ {
+  "n": "Kinetic Explosion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Knock",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Lance of Lethargy",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Lash of Agony",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Lesser Restoration",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Lightning Bolt",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Lightning Lash",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Locate Creature",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Locate Object",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Looking Glass",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {
+   "cat": "Transmutation",
+   "time": "1 Action",
+   "range": "5ft (Touch) A wooden, metal or stone wall or surface",
+   "mat": "A Shard of Glass",
+   "desc": "As an action on your turn you can Touch a wooden, metal, or Stone surface or wall within range and temporarily make the surface transparent as glass for the duration. The surface wall or floor cannot be thicker than 12 inches of solid material, otherwise the spell fails. While viewing through the transparent surface you can make it so that the receiving end cannot or can view you from the other side of the glass and create what is essentially a magical one way window."
+  }
+ },
+ {
+  "n": "Loophole",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Madman’s Dance",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Maelstrom",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Mage Armor",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Mage Hand",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Magic Missile",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Manipulate Water",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Mass Cure Wounds",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Mass Harm",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Mass Heal",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Mass Healing Word",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Mass Polymorph",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Mass Suggestion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Maze",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Meld into Stone",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Mending",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Mental Prison",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Meteor",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Meteor Swarm",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Mind Crush",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Mind Shield",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Mind Wall",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Mindblank",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Minor Illusion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Mirror Image",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Misdirection",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Misty Step",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Modify Memory",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Moonbeam",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Mosquito Swarm",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Nightmare",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Obliterate",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Omen",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Pestilence",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Petrify",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Phantasm",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Phantasmal Servant",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Phantasmal Terror",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Phantom Force",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Phantom Image",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Illusion",
+   "time": "1 Action",
+   "range": "60ft (Area of effect)",
+   "mat": "A small hand mirror",
+   "desc": "You project forth a phantasmal image of an object, a creature, or some other visible phenomenon that is no larger than a 15-foot cube. The image appears at a spot within range and lasts for the duration. The image is purely visual; it isn’t accompanied by sound, smell, or other sensory effects.\n\nPhysical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image."
+  }
+ },
+ {
+  "n": "Phantom Mind",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Planar Binding",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Planar Guardian",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Planar Passage",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Planar Pocket",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Planar Seal",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Plane Shift",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Plant Growth",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Poison Spray",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Polymorph (Other)",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Polymorph (Self)",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Power Word: Consume",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Power Word: Harm",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Power Word: Heal",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Power Word: Recall",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Prayer",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Prayer of Healing",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Prestidigitation",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Prismatic Ray",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Prismatic Wall",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Programmed Illusion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Projected Image",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Protection from Good & Evil",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Protection from Poison & Sickness",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Psionic Wave",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Psychic Scream",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Pulse Blast",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Punishing Smite",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Puppet Corpse",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Purify Food and Drink",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Purify Weapon",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Pyroclasm",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Radiant Weapon",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Rain Holy Fire",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Raise Dead",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Ravenous Void",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Ray of Radiance",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Regenerate",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Reincarnate",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Remove Curse",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Remove Petrification",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Repentance",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Restore Mind",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Reverse Gravity",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Reverse Time",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Revivify",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Sacred Flame",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Sanctity",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Sap",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Scorching Ray",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Scrying",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Seal of Eternity",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "See Invisibility",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Sending",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Sequester",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Shadow Sieve",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Shatter Storm",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Shocking Grasp",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Sickening Aura",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Sigil",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Singularity",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Sleep",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Enchantment",
+   "time": "1 Action",
+   "range": "30ft (Area of effect)",
+   "mat": "A dried cricket",
+   "desc": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\n\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
+  }
+ },
+ {
+  "n": "Sleet Surf",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Slipstream",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Slow",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Slumber",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {
+   "cat": "Enchantment",
+   "time": "1 Action",
+   "range": "30ft (Single target)",
+   "desc": "You sing a Single Sonorous note and imbue the note with arcane magic that can send a target into a deep but brief slumber. Choose a Single target within range that can hear you. The target must roll a Intelligence Saving throw or fall unconscious for the next 1d4 turns. If the Target succeeds the Intelligence saving throw, they become immune to this spell and its effects for the next 24 hours.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
+  }
+ },
+ {
+  "n": "Snake Spit",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Sonic Scream",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Soul Cage",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Soul Scry",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Soul Shatter",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Soul Tether",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Soulbinding",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Soulbinding Aura",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Spare the Dying",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Spatial Impact",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Spatial Rend",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Speak with Dead",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Spell Reflection",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Sphere of Disintegration",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Spiderclimb",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Spirit Guardians",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Spirit Guise",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Spirit Shroud",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Spiritual Weapon",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Staggering Smite",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Starsail",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Still-Life",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Storm Sphere",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Suggestion",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Summon Aberration",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Summon Bestial Spirit",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Summon Celestial",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Summon Deity",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Summon Demon",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Summon Dragon",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Summon Elemental (Air)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Summon Elemental (Earth)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Summon Elemental (Fire)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Summon Elemental (Water)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Summon Greater Demon",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Summon Greater Elemental (Air)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Summon Greater Elemental (Earth)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Summon Greater Elemental (Fire)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Summon Greater Elemental (Water)",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "Summon Icon",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Summon Lesser Demon",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Summon Primordial",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Tangle",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Conjuration",
+   "time": "1 Action",
+   "range": "30ft (Single Target)",
+   "mat": "A Rose seed",
+   "desc": "You create vines of constricting bramble beneath the feet of an unexpecting enemy, in an attempt to thwart them from moving. Choose a single target within the spells range, the target must roll a Dexterity Saving throw, On a failure the target takes 1d4 piercing damage and is Restrained until the start of your next turn. If fire damage is dealt to the target while restrained by the vines, the target is freed and is no longer restrained."
+  }
+ },
+ {
+  "n": "Telekinesis",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Telepathy",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Teleport",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Teleportation Circle",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Teleportation Storm",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Temple of the Gods",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 7,
+  "f": {}
+ },
+ {
+  "n": "Thaumaturgy",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Thunderbolt",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Thundering Blade",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Thunderwave",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Time Jump",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Time Stop",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Tongues",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Tornado",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "True Polymorph",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "True Resurrection",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "True Seeing",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 6,
+  "f": {}
+ },
+ {
+  "n": "True Strike",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Undead Servant",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Unwavering Blade",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Vanish",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Illusion",
+   "time": "1 Action",
+   "range": "5ft (Touch) (Single Target)",
+   "desc": "A creature you touch becomes invisible until the end of the duration. Anything the target is wearing or carrying is invisible as long as it is on the target’s person. The spell ends for a target that attacks or casts a spell.\n\nAt Higher Levels: You are able to cast this spell with Any Spell slot of 1st level or higher, no other benefits are gained from a higher-level cast."
+  }
+ },
+ {
+  "n": "Ventriloquist",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "Wall of Fire",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Wall of Fog",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Wall of Force",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Wall of Light",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Wall of Stone",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Warp Spell",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Water Tendrils",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Water Walk",
+  "tags": [
+   "Divine",
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Water Whip",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Conjuration",
+   "time": "1 Action",
+   "range": "15ft (Single Target)",
+   "desc": "You conjure a Tentacle made of water either from your hand or nearby to your target that whips them and tears into their skin. Make a Spell attack towards a single target within range, On a hit, your target takes 1d6 slashing damage."
+  }
+ },
+ {
+  "n": "Watery Sphere",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 4,
+  "f": {}
+ },
+ {
+  "n": "Web",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Weird",
+  "tags": [
+   "Arcane",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Whelm",
+  "tags": [
+   "Arcane"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Wind Blast",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 5,
+  "f": {}
+ },
+ {
+  "n": "Wind Wall",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 3,
+  "f": {}
+ },
+ {
+  "n": "Wish",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 9,
+  "f": {}
+ },
+ {
+  "n": "Wither and Bloom",
+  "tags": [
+   "Primal"
+  ],
+  "lv": 2,
+  "f": {}
+ },
+ {
+  "n": "Withering Touch",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 8,
+  "f": {}
+ },
+ {
+  "n": "World Breach",
+  "tags": [
+   "Arcane",
+   "Divine",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 10,
+  "f": {}
+ },
+ {
+  "n": "Wrathful Smite",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 1,
+  "f": {}
+ },
+ {
+  "n": "Zone of Truth",
+  "tags": [
+   "Divine"
+  ],
+  "lv": 2,
+  "f": {}
+ }
+]

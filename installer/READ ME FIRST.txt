@@ -1,0 +1,13 @@
+CRAWL SPELL COMPENDIUM - WINDOWS APP
+
+1. Right-click this zip and choose "Extract All".
+2. Open the extracted folder and double-click "Install Crawl Spell Compendium.bat".
+   If Windows shows "Windows protected your PC", click "More info" then "Run anyway".
+3. The first install downloads the app engine (about 110 MB) from GitHub, so you need internet once.
+   After that the app works fully offline.
+
+The app opens by itself when it finishes, and you get Desktop and Start menu shortcuts.
+Your spells save automatically on this computer.
+
+To update the app later, run the installer from a newer copy. Your spells are kept.
+To remove it, double-click Uninstall.bat.

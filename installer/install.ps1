@@ -1,0 +1,53 @@
+# Installs (or updates) Crawl Spell Compendium for the current Windows user.
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+$version  = '33.2.1'
+$sha256   = 'C325A6D905C67107E166267813EA2151AE7FD316C0A88DE0081DB0B9851A9946'
+$name     = 'Crawl Spell Compendium'
+$dest     = Join-Path $env:LOCALAPPDATA "Programs\$name"
+$appSrc   = Join-Path $PSScriptRoot 'app'
+$zip      = Join-Path $env:TEMP "electron-v$version-win32-x64.zip"
+$url      = "https://github.com/electron/electron/releases/download/v$version/electron-v$version-win32-x64.zip"
+
+Write-Host ""
+Write-Host "Installing $name..." -ForegroundColor White
+
+$haveZip = (Test-Path $zip) -and ((Get-FileHash $zip -Algorithm SHA256).Hash -eq $sha256)
+if (-not $haveZip) {
+  Write-Host "Downloading the app engine (about 110 MB, one time only)..."
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+  Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
+  if ((Get-FileHash $zip -Algorithm SHA256).Hash -ne $sha256) {
+    Remove-Item $zip -Force
+    throw "The download didn't match the expected file, so nothing was installed. Run the installer again."
+  }
+}
+
+Get-Process -Name $name -ErrorAction SilentlyContinue | Stop-Process -Force
+Start-Sleep -Milliseconds 500
+if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
+New-Item -ItemType Directory -Path $dest | Out-Null
+
+Write-Host "Unpacking..."
+Expand-Archive -Path $zip -DestinationPath $dest -Force
+Rename-Item (Join-Path $dest 'electron.exe') "$name.exe"
+Remove-Item (Join-Path $dest 'resources\default_app.asar') -ErrorAction SilentlyContinue
+Copy-Item $appSrc (Join-Path $dest 'resources\app') -Recurse
+
+$exe = Join-Path $dest "$name.exe"
+$ico = Join-Path $dest 'resources\app\icon.ico'
+$shell = New-Object -ComObject WScript.Shell
+$places = @([Environment]::GetFolderPath('Desktop'), (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'))
+foreach ($dir in $places) {
+  $lnk = $shell.CreateShortcut((Join-Path $dir "$name.lnk"))
+  $lnk.TargetPath = $exe
+  $lnk.WorkingDirectory = $dest
+  $lnk.IconLocation = $ico
+  $lnk.Description = 'Crawl 1st Edition spell compendium'
+  $lnk.Save()
+}
+
+Write-Host ""
+Write-Host "Done! Open $name from your Desktop or Start menu." -ForegroundColor Green
+Write-Host "Your spells are saved in: $env:APPDATA\$name\spells.json"
+Start-Process $exe

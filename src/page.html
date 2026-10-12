@@ -1,0 +1,452 @@
+<title>Crawl Spell Compendium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap">
+<style>
+/* Layout: black-and-white spell cards — a filter bar over a list of collapsible spell rows; an open row becomes a fillable card with a black header bar and a +1…+10 advancement rail */
+:root{
+  --ink:#000000; --paper:#ffffff; --page:#f4f4f4; --muted:#5c5c5c; --soft:#ececec; --hair:#c9c9c9;
+  --font:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--page);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45;font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:28px 120px}
+header .logo{display:block;width:min(400px,88%);height:auto;color:var(--ink);margin:0 auto 18px}
+.intro{text-align:center}
+.intro p{margin-inline:auto}
+header h1{font-weight:800;text-align:center;font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.05;margin:0;letter-spacing:-.01em;text-wrap:balance}
+header p{margin:.5rem 0 0;color:var(--muted);max-width:62ch;font-weight:500}
+.counts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.count{background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:10px;padding:8px 12px;text-align:left;font-family:var(--font);cursor:pointer}
+.count:hover{background:var(--soft)}
+.count[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.count[aria-pressed="true"] span{color:var(--hair)}
+.hint{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin:22px 0 6px}
+.classbar{background:var(--ink);color:var(--paper);border-radius:22px;padding:6px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.classbar .lab{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;padding:0 8px 0 12px}
+.cbtn{border:2px solid var(--paper);background:transparent;color:var(--paper);border-radius:999px;padding:5px 14px;font-size:.88rem;display:grid;line-height:1.15;text-align:center}
+.cbtn small{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;opacity:.75}
+.cbtn:hover{background:#2a2a2a}
+.cbtn[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+.classbar :focus-visible{outline-color:var(--paper)}
+.count b{display:block;font-size:1.35rem;font-weight:800;font-variant-numeric:tabular-nums}
+.count span{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+@media (max-width:620px){.counts{grid-template-columns:repeat(2,minmax(0,1fr))}.count.total{grid-column:1/-1}}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--page);padding-block:14px 12px;margin-top:18px;border-bottom:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,select,input,textarea{font-family:var(--font);color:var(--ink)}
+button{cursor:pointer;font-weight:700;font-size:.85rem}
+.tabs{display:flex;flex-wrap:wrap;gap:4px}
+.tab{border:2px solid var(--ink);background:var(--paper);padding:5px 12px;border-radius:999px}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.bar input,.bar select{font-size:.88rem;font-weight:600;background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:6px 10px}
+#q{flex:1 1 170px;min-width:0}
+.btn{border:2px solid var(--ink);background:var(--paper);padding:6px 14px;border-radius:8px}
+.btn.solid{background:var(--ink);color:var(--paper)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+#dataMsg{color:var(--ink);font-weight:700}
+.status{font-size:.8rem;color:var(--muted);margin:10px 2px 0;font-weight:500}
+
+.list{display:grid;gap:8px;margin-top:10px}
+.spell{background:var(--paper);border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.spell>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:8px 10px 8px 10px}
+.spell>summary::-webkit-details-marker{display:none}
+.spell>summary:hover{background:var(--soft)}
+.spell[open]{background:var(--ink)}
+.spell[open]>summary{background:var(--ink);color:var(--paper)}
+.spell[open]>.card{background:var(--paper);border-radius:0 0 12px 12px}
+.sname{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-width:0}
+.sname b{font-weight:800;font-size:1.02rem;overflow-wrap:anywhere}
+.sname .cat{font-size:.78rem;color:var(--muted);font-weight:500}
+.spell[open] .sname .cat{color:var(--hair)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;border:1.5px solid currentColor;border-radius:999px;padding:1px 7px}
+.seal{position:relative;display:grid;place-items:center;flex:none}
+.seal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.seal span{position:relative;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.badge{width:42px;height:42px;color:var(--paper)}
+.badge path{fill:var(--ink);stroke:var(--ink);stroke-width:2;stroke-linejoin:miter}
+.badge span{font-size:1rem}
+.badge.none path{fill:var(--paper);stroke-dasharray:6 5}
+.badge.none span{color:var(--muted)}
+.spell[open] .badge{color:var(--ink)}
+.spell[open] .badge path{fill:var(--paper);stroke:var(--paper)}
+.spell[open] .badge.none path{fill:var(--ink);stroke:var(--paper)}
+.spell[open] .badge.none span{color:var(--hair)}
+.chev{display:none}
+
+.card{padding:12px 18px 18px;display:grid;gap:14px}
+.sacts{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;cursor:default}
+.spell:not([open]) .sacts{display:none}
+.sacts .act,.sacts .del{background:transparent;color:var(--paper);border:2px solid var(--paper);border-radius:8px;padding:4px 12px;font-size:.8rem}
+.sacts .act:hover,.sacts .del:hover{background:#2a2a2a}
+.sacts .editbtn[aria-pressed="true"],.sacts .del.armed{background:var(--paper);color:var(--ink)}
+.sacts .actmsg{color:var(--hair);text-align:right}
+@media (max-width:600px){.sacts{grid-column:1/-1}}
+.actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end}
+.act{border:2px solid var(--ink);background:var(--paper);border-radius:8px;padding:5px 12px;font-size:.8rem}
+.act:hover{background:var(--soft)}
+.editbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.expwrap{display:inline-flex;gap:6px;align-items:center}
+.expopts{display:inline-flex;gap:4px}
+.fmt{padding:5px 10px;border-style:dashed}
+.actmsg{font-size:.78rem;color:var(--muted);font-weight:500;flex:1 1 auto;min-width:0}
+.card.editing .setup{border-bottom:2px solid var(--ink)}
+.pv{display:grid;gap:3px}
+.pv-line{margin:0;font-size:1rem;font-weight:600;line-height:1.4}
+.pv-line b{font-weight:700}
+.pv-line.pre{font-style:italic}
+.pv-line.desc span{white-space:pre-wrap}
+.pv-empty{margin:0;color:var(--muted);font-weight:500}
+.pv-rail .tier{align-items:start;min-height:34px}
+.pv-tier{margin:0;font-size:1rem;font-weight:600;line-height:1.4;padding-block:4px}
+.pv-tier .tname{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.xwrap{position:fixed;left:-10000px;top:0;width:560px;background:#fff;padding:10px 22px}
+.x-card{background:#fff;color:#000;font-family:"Montserrat",Arial,sans-serif;font-weight:600}
+.x-bar{position:relative;background:#000;color:#fff}
+.x-bar::before,.x-bar::after{content:"";position:absolute;top:0;bottom:0;width:17px;background:#000}
+.x-bar::before{left:-16px;border-radius:17px 0 0 17px}
+.x-bar::after{right:-16px;border-radius:0 17px 17px 0}
+.x-top{height:36px;display:flex;align-items:center;gap:7px;padding:0 10px 0 4px}
+.x-bot{height:40px}
+.x-badge{position:relative;width:30px;height:30px;display:grid;place-items:center;flex:none}
+.x-badge svg{position:absolute;inset:0;width:100%;height:100%}
+.x-badge span{position:relative;color:#000;font-weight:800;font-size:15px;line-height:1}
+.x-title{font-size:20px;font-weight:600;letter-spacing:.005em}
+.x-body{border-left:3px solid #000;border-right:3px solid #000;padding:8px 14px 14px;display:grid;gap:12px}
+.x-line{margin:0;font-size:18px;line-height:1.22;white-space:pre-wrap}
+.x-pre{font-style:italic}
+.x-fields{display:grid}
+.x-rail{display:grid;gap:7px;margin-top:2px}
+.x-tier{position:relative;display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:6px;align-items:start}
+.x-tier::before{content:"";position:absolute;left:12px;width:12px;top:11px;height:calc(100% + 7px);background:#000}
+.x-tier.x-last::before{display:none}
+.x-tier p{margin:0;font-size:18px;line-height:1.22}
+.x-name{color:#8E171C}
+.x-mark{position:relative;z-index:1;width:36px;height:36px;margin-top:-7px;display:grid;place-items:center}
+.x-mark::before{content:"";position:absolute;inset:6px;background:#fff;border:3px solid #000;transform:rotate(45deg)}
+.x-mark span{position:relative;font-size:13px;font-weight:700;letter-spacing:-.04em}
+.x-mark.x-ten::before{display:none}
+.x-mark.x-ten svg{position:absolute;inset:0;width:36px;height:36px;overflow:visible}
+.x-mark.x-ten span{font-size:10.5px}
+.setup{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.setup .fld{display:grid;gap:3px}
+.setup .fld.grow{flex:1 1 200px;min-width:0}
+.setup label.small,.setup .small{font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.setup input[type=text],.setup select{font-size:.95rem;font-weight:700;border:2px solid var(--ink);border-radius:8px;padding:6px 10px;background:var(--paper);width:100%}
+.togs{display:flex;flex-wrap:wrap;gap:4px}
+.tog{border:2px solid var(--ink);background:var(--paper);border-radius:999px;padding:4px 10px;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.tog[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.del{border:2px solid var(--ink);background:var(--paper);border-radius:8px;padding:6px 12px;font-size:.8rem}
+.del.armed{background:var(--ink);color:var(--paper)}
+
+.fields{display:grid;gap:2px}
+.line{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px}
+.line>label{font-weight:700;white-space:nowrap}
+.line>label::after{content:":"}
+.line.pre>label,.line.pre textarea{font-style:italic}
+.line textarea{flex:1 1 220px;min-width:0}
+textarea.v{font-size:1rem;font-weight:600;line-height:1.4;border:0;border-bottom:1.5px dashed var(--hair);background:transparent;padding:1px 2px;resize:none;overflow:hidden;field-sizing:content;min-height:1.6em;width:100%}
+textarea.v:hover{border-bottom-color:var(--muted)}
+textarea.v:focus{outline:none;border-bottom:1.5px solid var(--ink);background:var(--soft)}
+textarea.v::placeholder{color:#a3a3a3;font-weight:500;font-style:normal}
+.line.block{display:grid;gap:0}
+
+.rail{display:grid;gap:6px;margin-top:4px}
+.tier:not(:last-child)::before{content:"";position:absolute;left:17px;width:6px;top:17px;height:calc(100% + 6px);background:var(--ink)}
+.tier{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;align-items:start}
+.dia{position:relative;z-index:1;width:30px;height:30px;margin:2px 5px 0;display:grid;place-items:center}
+.dia.ten{width:36px;height:36px;margin:-1px 2px 0}
+.dia.ten::before{display:none}
+.dia.ten svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dia.ten path{fill:var(--paper);stroke:var(--ink);stroke-width:6;stroke-linejoin:miter;stroke-miterlimit:8}
+.dia::before{content:"";position:absolute;inset:4px;background:var(--paper);border:2px solid var(--ink);transform:rotate(45deg)}
+.dia span{position:relative;font-size:.68rem;font-weight:800}
+.tbody{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;min-width:0}
+.tbody .tn{flex:0 1 auto;width:auto;min-width:7ch;max-width:100%;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.tbody .tn:placeholder-shown{text-decoration:none}
+.tbody .tt{flex:1 1 220px}
+.empty{padding:28px 8px;color:var(--muted);font-weight:500}
+
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--ink);color:var(--paper);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center}
+.savebar .in{max-width:900px;width:100%;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.savebar .msg{flex:1 1 220px;min-width:0;font-size:.88rem}
+.savebar .btn{border-color:var(--paper)}
+.savebar .btn.ghost{background:transparent;color:var(--paper)}
+.savebar .btn.solid{background:var(--paper);color:var(--ink)}
+.savebar .btn[disabled]{opacity:.5;cursor:default}
+@media (prefers-reduced-motion:no-preference){.spell>summary{transition:background .12s}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="intro">
+  <svg class="logo" viewBox="0 0 531 214" role="img" aria-label="Crawl 1st Edition" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor"><path d="M134.36,117.12v35.56L97.79,189.25,60.5,152v-.43A256.19,256.19,0,0,0,89.21,146l8.14,8.14Z"/><path d="M134.36,36.57V72.11L119.65,57.42l-22.3-22.3L85.63,46.85v80.46a230.28,230.28,0,0,1-25.13,5v-15.7l.09-.08-.09-.09V72.85l.09-.09-.09-.08V37.29L97.79,0Z"/><path d="M219.23,100.94v6.55h-20.9C205.24,105.13,212.19,102.91,219.23,100.94Z"/><path d="M219.23,132.56V164L194.14,189.1V143l-24-24v70.24l-25.09-25.1v-36.6l13-5,8.38-3.23c9.37-3.62,19-7.29,28.82-10.71Z"/><path d="M207.13,25.49l-6.94-6.9L182.5.87,170.14,13.22l-25.09,25v68.85c2.38-.93,4.74-1.84,7.09-2.77,8.33-3.26,16.91-6.63,25.34-9.75,15.54-5.76,29.13-10.17,41.75-13.51V37.63Zm-13,56.91h-24V48.7L182.5,36.37,194.14,48Z"/><path d="M413.14.62V94c8.28,2.3,16.66,4.49,25.1,6.24V25.71Zm-98.1,25V72.4c3.09.22,6.19.52,9.26.87,5,.58,10.24,1.35,15.78,2.3V58h.05V.54Z"/><path d="M438.24,119.91v32L400.9,189.25h-.22l-11.51-11.56L383,171.61l-6.76-6.77-24.41,24.41h-.22l-11.51-11.56L334,171.61l-19-19v-61c.74,0,1.48.11,2.22.17,7.64.68,15.26,1.8,22.82,3.2v21.73h.05v25.5l11.65,11.64,12.3-12.3V.49H389.2V142.27l11.61,11.58,12.33-12.32V113.88C421.91,116.27,430.18,118.3,438.24,119.91Z"/><path d="M488.37,164.39H474.13V123.85c-.8,0-1.59,0-2.39,0a178.52,178.52,0,0,1-22.71-2v42.6h0v24.85h64.18Z"/><path d="M474.13,12.57v92.05c-2,.06-3.7,0-5-.05A177.16,177.16,0,0,1,449,102.35V12.49l12-12h1l9.2,9.21Z"/><path d="M304.22,37.15v127l-25.1,25.07V107.28h-24v82L230,164.16V98.1c2.3-.57,4.6-1.09,6.9-1.58,6-1.29,12.08-2.36,18.22-3.21q4.23-.61,8.47-1.07l.85-.08c1.53-.16,3.06-.33,4.6-.44,1.31-.14,2.63-.25,3.94-.33l1.18-.08c1.4-.11,2.8-.19,4.22-.25.27,0,.55,0,.82,0v-.85c0-4.55,0-9.1-.05-13.64V71.89c0-8.11,0-16.25-.06-24.36L267.48,35.89,255.15,48.22V74c-2.93.36-5.83.8-8.77,1.26-5.37.85-10.79,1.89-16.35,3.18V37.81L267.34.49h.28l11.5,11.56,6.08,6.09Z"/><polygon points="60.59 72.76 60.5 72.84 60.5 72.68 60.59 72.76"/><path d="M388.1,212.43V193.12l2.12,2.11h-6.34v-3.92H393v21.12Z"/><path d="M401.81,212.67a11.7,11.7,0,0,1-3.25-.45,7.56,7.56,0,0,1-2.5-1.18l1.11-2.45a7.43,7.43,0,0,0,2.13,1,7.82,7.82,0,0,0,2.51.42,5.1,5.1,0,0,0,1.56-.2,2,2,0,0,0,.88-.54,1.2,1.2,0,0,0,.28-.77,1.06,1.06,0,0,0-.45-.9,3.54,3.54,0,0,0-1.17-.54c-.49-.14-1-.28-1.6-.4s-1.16-.28-1.74-.47a7.11,7.11,0,0,1-1.61-.72,3.42,3.42,0,0,1-1.17-1.19,3.55,3.55,0,0,1-.43-1.84,3.89,3.89,0,0,1,.65-2.2,4.27,4.27,0,0,1,2-1.59,8.14,8.14,0,0,1,3.31-.59,10.56,10.56,0,0,1,2.62.32,7.7,7.7,0,0,1,2.26.92l-1,2.46a8.25,8.25,0,0,0-1.95-.82,7.55,7.55,0,0,0-1.94-.27,4.64,4.64,0,0,0-1.54.21,1.75,1.75,0,0,0-.86.58,1.31,1.31,0,0,0-.27.8,1.07,1.07,0,0,0,.44.9,3.34,3.34,0,0,0,1.17.54c.48.13,1,.25,1.61.38s1.17.29,1.75.47a7.94,7.94,0,0,1,1.59.72,3.42,3.42,0,0,1,1.17,1.16,3.36,3.36,0,0,1,.46,1.83,3.82,3.82,0,0,1-.66,2.17,4.46,4.46,0,0,1-2,1.59A8,8,0,0,1,401.81,212.67Z"/><path d="M412.72,212.43V201h-4.51v-2.65h12.27V201H416v11.43Z"/><path d="M431.16,209.82h7.67v2.61H427.92V198.35h10.64V201h-7.4Zm-.24-5.82h6.78v2.56h-6.78Z"/><path d="M441.42,212.43V198.35h6.4a9,9,0,0,1,4,.87,6.74,6.74,0,0,1,2.74,2.46,7.51,7.51,0,0,1,0,7.42,6.65,6.65,0,0,1-2.74,2.45,8.83,8.83,0,0,1-4,.88Zm3.28-2.66h3a5.2,5.2,0,0,0,2.44-.53,3.77,3.77,0,0,0,1.61-1.53,5,5,0,0,0,0-4.66,3.85,3.85,0,0,0-1.61-1.51,5.2,5.2,0,0,0-2.44-.54h-3Z"/><path d="M458,212.43V198.35h3.28v14.08Z"/><path d="M467.55,212.43V201h-4.5v-2.65h12.27V201h-4.51v11.43Z"/><path d="M477.07,212.43V198.35h3.28v14.08Z"/><path d="M490.5,212.67a8.5,8.5,0,0,1-3.07-.54A7.4,7.4,0,0,1,485,210.6a7,7,0,0,1-2.19-5.21,7.26,7.26,0,0,1,.57-2.91,7.16,7.16,0,0,1,1.62-2.3,7.46,7.46,0,0,1,2.45-1.53,9,9,0,0,1,6.13,0,7.33,7.33,0,0,1,2.45,1.52,7.05,7.05,0,0,1,1.62,2.31,7.74,7.74,0,0,1,0,5.83,7,7,0,0,1-1.62,2.32,7.33,7.33,0,0,1-2.45,1.52A8.61,8.61,0,0,1,490.5,212.67Zm0-2.76a4.48,4.48,0,0,0,1.73-.33,4.16,4.16,0,0,0,1.4-.94,4.44,4.44,0,0,0,.94-1.43,5.18,5.18,0,0,0,0-3.64,4.36,4.36,0,0,0-2.34-2.38,4.75,4.75,0,0,0-3.48,0,4.14,4.14,0,0,0-1.4.95,4.31,4.31,0,0,0-.93,1.43,5.18,5.18,0,0,0,0,3.64,4.42,4.42,0,0,0,.93,1.43,4,4,0,0,0,1.4.94A4.51,4.51,0,0,0,490.49,209.91Z"/><path d="M500.64,212.43V198.35h2.7l8.31,10.14h-1.31V198.35h3.22v14.08h-2.7l-8.31-10.14h1.31v10.14Z"/><path d="M279.18,74.59c0,4.55.05,9.1.05,13.65a265.07,265.07,0,0,0-42.85,5.56C230.6,95,224.91,96.45,219.23,98c-8,2.25-15.91,4.8-23.77,7.54-.33.08-.66.22-1,.33-9.75,3.39-19.42,7-29,10.76-9.87,3.83-12.15,4.74-20.38,7.92l-8.38,3.23q-.4-7.12-.83-14.25L110,136.91c-3.58,1.27-8.37,2.88-14.11,4.5-.72.21-3.53,1-7.37,2a260.41,260.41,0,0,1-28,5.34l-.6.08c-8.82,1.15-17.92,2-26.87,1.51l-11.87,12-.27-13.78C11.63,145.93,3.3,139.82.78,130.07c-2.66-10.33,1.75-21.4,8.9-29L6.84,91.88l12.49,1.7c7.45-4.41,15.94-7.18,23.94-10.33C49.16,80.92,55.82,77.74,60.5,73V90A116.22,116.22,0,0,1,42,98.35c-9.12,3.42-19.81,7.06-25.23,15.78-4,6.43-4.74,14.9,2.6,19.12,8.08,4.65,18.82,3.67,27.72,3.09,4.5-.27,9-.74,13.37-1.34a231.9,231.9,0,0,0,25.13-4.93c7.28-1.84,14.49-3.95,21.67-6.27l2.13-14.06,9.92,10c8.63-3.07,17.18-6.36,25.7-9.67,11.17-4.36,22.3-8.8,33.39-12.91,13.43-5,27-9.56,40.79-13.2a274.16,274.16,0,0,1,27.59-6A293.77,293.77,0,0,1,279.18,74.59Z"/><path d="M357,81.74c2.38.55,4.74,1.1,7.1,1.67V97.47A297.37,297.37,0,0,0,317.53,89c-4.44-.41-8.88-.68-13.31-.85V74.46c6.6.24,13.2.76,19.78,1.5,7.06.8,14,1.92,20.95,3.26q4.28-5.46,8.52-10.93C354.65,72.78,355.8,77.25,357,81.74Z"/><path d="M525.22,88.7c-2.6,11.29-9.48,19.15-18.3,24.3l2,10.69-11.51-6.33a75.49,75.49,0,0,1-25.59,3.7c-21.89-.5-43.5-5.78-64.6-11.65l-6.57,6.08-2-8.52c-1.21-.32-2.41-.68-3.62-1-1.94-.54-3.89-1.09-5.83-1.67V90c3,.83,5.89,1.68,8.85,2.52,23.12,6.61,46.82,13.54,71,14.69,17.09.82,40.65-3.37,43.31-23.89a15.29,15.29,0,0,0-4.13-13l-9.87,3.26V64.51a47.22,47.22,0,0,0-24.21-1.64V48.92a65,65,0,0,1,7.89-.63c12.24-.24,25.88,3,35.14,11.48C525.25,67.11,527.6,78.32,525.22,88.7Z"/></g></svg>
+  <h1>Spell Compendium</h1>
+  <p>Welcome, adventurer. This is your guide to every spell in Crawl 1st Edition, from a spark at your fingertips to magic that can break the world. Pick your class to see the spells you can learn, or choose a source of magic. Then open any spell to read its card and the +1 to +10 steps it gains as you master it.</p>
+  </div>
+  <p class="hint">Filter by Magic Source</p>
+  <div class="counts" id="counts" role="group" aria-label="Filter by magic source"></div>
+  <p class="hint">Filter by class</p>
+  <div class="classbar" id="classbar" role="group" aria-label="Filter by class"></div>
+</header>
+
+<div class="bar">
+  <input id="q" type="search" placeholder="Search spells" aria-label="Search spells">
+  <select id="lvl" aria-label="Level"><option value="">All levels</option></select>
+  <select id="sort" aria-label="Sort"><option value="name">Sort A–Z</option><option value="level">Sort by level</option></select>
+  <button class="btn solid" id="addBtn">Add spell</button>
+  <button class="btn" id="importBtn" title="Load a spell list file saved from the app or the website">Import data</button>
+  <button class="btn" id="exportBtn" title="Save the whole spell list as a file">Export data</button>
+  <input type="file" id="importFile" accept=".json,application/json" hidden>
+</div>
+<p class="status"><span id="status"></span> <span id="dataMsg" role="status"></span></p>
+<main class="list" id="out"></main>
+</div>
+
+<div class="savebar" id="savebar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">You have unsaved changes.</span>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn solid" id="saveBtn">Save changes</button>
+  </div>
+</div>
+
+<script>
+let SPELLS = /*@DATA@*/;
+const TPL = /*@TPL@*/;
+const TRADS=["Arcane","Divine","Primal","Occult"];
+const FIELDS=[["pre","Prerequisites","e.g. +1 ARC or +1 NAT"],["cls","Class Requirements","e.g. Wizard, Sorcerer"],["mat","Material Cost","e.g. Sulfuric Powder"],["cat","Category","e.g. Evocation"],["cost","Casting Cost","e.g. 2MP"],["time","Casting Time","e.g. Instantaneous"],["type","Type","e.g. Ranged Spell Attack"],["range","Range","e.g. 30ft (Straight Line)"],["desc","Description","What the spell does"],["dmg","Damage","e.g. On hit, target takes 1d6 fire damage."]];
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=id=>document.getElementById(id);
+const cmp=(a,b)=>a.n.toLowerCase().localeCompare(b.n.toLowerCase());
+let view="All", cls="", original=JSON.stringify(SPELLS), dirty=false, art=null, openSet=new Set(), uid=0;
+SPELLS.forEach(s=>s._id=++uid);
+const CLASSES=[["Wizard","Arcane"],["Sorcerer","Arcane"],["Cleric","Divine"],["Paladin","Divine"],["Druid","Primal"],["Warlock","Occult"]];
+try{const v=localStorage.getItem("crawl-view");if(v&&(v==="All"||TRADS.includes(v)))view=v;const c=localStorage.getItem("crawl-class");if(c&&CLASSES.some(x=>x[0]===c)){cls=c;view="All"}}catch(e){}
+function canLearn(s,c){
+  const req=(s.f.cls||"").trim();
+  if(req) return new RegExp("\\b"+c+"s?\\b","i").test(req);
+  const tr=CLASSES.find(x=>x[0]===c)[1]; return s.tags.includes(tr);
+}
+function setFilter(v,c){view=v;cls=c;try{localStorage.setItem("crawl-view",view);localStorage.setItem("crawl-class",cls)}catch(e){}renderCounts();render()}
+try{const o=JSON.parse(sessionStorage.getItem("crawl-open")||"[]");o.forEach(n=>{const s=SPELLS.find(x=>x.n===n);if(s)openSet.add(s._id)})}catch(e){}
+
+for(let i=1;i<=20;i++){const o=document.createElement("option");o.value=i;o.textContent="Level "+i;$("lvl").appendChild(o)}
+{const o=document.createElement("option");o.value="none";o.textContent="No level set";$("lvl").appendChild(o)}
+
+function renderCounts(){
+  $("counts").innerHTML=`<button type="button" class="count total" data-v="All" aria-pressed="${view==="All"&&!cls}"><b>${SPELLS.length}</b><span>All spells</span></button>`+
+    TRADS.map(t=>`<button type="button" class="count" data-v="${t}" aria-pressed="${view===t&&!cls}"><b>${SPELLS.filter(s=>s.tags.includes(t)).length}</b><span>${t}</span></button>`).join("");
+  $("classbar").innerHTML=`<span class="lab">Class</span>`+CLASSES.map(([c,tr])=>`<button type="button" class="cbtn" data-c="${c}" aria-pressed="${cls===c}">${c}</button>`).join("");
+}
+const SEAL='<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50.00 0.00 L64.64 14.64 L85.36 14.64 L85.36 35.36 L100.00 50.00 L85.36 64.64 L85.36 85.36 L64.64 85.36 L50.00 100.00 L35.36 85.36 L14.64 85.36 L14.64 64.64 L0.00 50.00 L14.64 35.36 L14.64 14.64 L35.36 14.64Z"/></svg>';
+const SEAL_TEN=SEAL.replace('<path','<path fill="#fff" stroke="#000" stroke-width="6" stroke-linejoin="miter"');
+const badge=s=>`<span class="seal badge${s.lv?"":" none"}" title="${s.lv?"Level "+s.lv:"No level set"}">${SEAL}<span>${s.lv||"–"}</span></span>`;
+function summaryHTML(s){
+  return badge(s)+`<span class="sname"><b>${esc(s.n)||"Untitled spell"}</b><span class="tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</span>${s.f.cat?`<span class="cat">${esc(s.f.cat)}</span>`:""}</span><span class="sacts">
+    <span class="actmsg" role="status"></span>
+    ${STATIC?"":`<button type="button" class="act editbtn" aria-pressed="${editSet.has(s._id)}">${editSet.has(s._id)?"Done editing":"Edit"}</button>`}
+    <span class="expwrap"><span class="expopts" hidden><button type="button" class="act fmt" data-fmt="png">PNG</button><button type="button" class="act fmt" data-fmt="jpeg">JPEG</button></span><button type="button" class="act expbtn">Export</button></span>
+    ${editSet.has(s._id)?'<button type="button" class="del">Delete spell</button>':""}
+  </span>`;
+}
+function filtered(){
+  const q=$("q").value.trim().toLowerCase(), L=$("lvl").value;
+  let list=SPELLS.filter(s=>(cls?canLearn(s,cls):(view==="All"||s.tags.includes(view)))&&(!q||s.n.toLowerCase().includes(q))&&(L===""||(L==="none"?!s.lv:s.lv===+L)));
+  if($("sort").value==="level") list=list.slice().sort((a,b)=>(a.lv||99)-(b.lv||99)||cmp(a,b)); else list=list.slice().sort(cmp);
+  return list;
+}
+function render(){
+  const list=filtered(), out=$("out");
+  $("status").textContent=`${list.length} spell${list.length===1?"":"s"}${cls?" a "+cls+" can learn":view==="All"?"":" on the "+view+" list"} · open a spell to ${STATIC?"read":"fill in"} its card`;
+  if(!list.length){out.innerHTML='<p class="empty">No spells match. Clear the search or pick another level.</p>';return}
+  out.innerHTML=list.map(s=>`<details class="spell" data-id="${s._id}"${openSet.has(s._id)?" open":""}><summary>${summaryHTML(s)}</summary></details>`).join("");
+  out.querySelectorAll("details[open]").forEach(fillCard);
+}
+const byId=id=>SPELLS.find(s=>s._id===+id);
+
+function previewHTML(s){
+  const f=s.f||{}, rows=FIELDS.filter(([k])=>f[k]&&String(f[k]).trim());
+  const tiers=(s.tiers||[]).map((t,i)=>[t,i]).filter(([t])=>(t[0]||"").trim()||(t[1]||"").trim());
+  if(!rows.length&&!tiers.length) return `<p class="pv-empty">This card hasn't been filled in yet.</p>`;
+  return `<div class="pv">${rows.map(([k,lab])=>`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`).join("")}</div>`+
+    (tiers.length?`<div class="rail pv-rail">${tiers.map(([t,i])=>`<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL_TEN:""}<span>+${i+1}</span></span><p class="pv-tier">${(t[0]||"").trim()?`<b class="tname">${esc(t[0])}</b>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"");
+}
+const editSet=new Set();
+function fillCard(d,force){
+  const old=d.querySelector(".card"); if(old&&!force)return; if(old)old.remove();
+  const s=byId(d.dataset.id); if(!s)return;
+  const tiers=s.tiers||[];
+  const editing=editSet.has(s._id);
+  const c=document.createElement("div");c.className="card"+(editing?" editing":" locked");
+  c.innerHTML=(editing?`
+  <div class="setup">
+    <div class="fld grow"><label class="small" for="nm-${s._id}">Spell name</label><input type="text" id="nm-${s._id}" data-k="n" value="${esc(s.n)}"></div>
+    <div class="fld"><label class="small" for="lv-${s._id}">Level</label><select id="lv-${s._id}" data-k="lv"><option value="">–</option>${Array.from({length:20},(_,i)=>`<option value="${i+1}"${s.lv===i+1?" selected":""}>${i+1}</option>`).join("")}</select></div>
+    <div class="fld"><span class="small">Tags</span><div class="togs">${TRADS.map(t=>`<button type="button" class="tog" data-tag="${t}" aria-pressed="${s.tags.includes(t)}">${t}</button>`).join("")}</div></div>
+  </div>
+  <div class="fields">${FIELDS.map(([k,lab,ph])=>`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`).join("")}</div>
+  <div class="rail">${Array.from({length:10},(_,i)=>{const t=tiers[i]||["",""];return `<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL:""}<span>+${i+1}</span></span><div class="tbody"><textarea class="v tn" rows="1" data-ti="${i}" data-tp="0" aria-label="+${i+1} name" placeholder="Name">${esc(t[0])}</textarea><textarea class="v tt" rows="1" data-ti="${i}" data-tp="1" aria-label="+${i+1} effect" placeholder="Effect at +${i+1}">${esc(t[1])}</textarea></div></div>`}).join("")}</div>`:previewHTML(s));
+  d.appendChild(c);
+  c.querySelectorAll("textarea").forEach(grow);
+}
+function grow(t){if(CSS.supports&&CSS.supports("field-sizing","content"))return;t.style.height="auto";t.style.height=t.scrollHeight+"px"}
+function refreshSummary(d,s){d.querySelector("summary").innerHTML=summaryHTML(s)}
+const APP=window.crawlApp||null;
+const STATIC=!APP&&!!window.CRAWL_STATIC;
+let autoT=null;
+function touch(){
+  if(APP){
+    clearTimeout(autoT);$("savebar").hidden=false;$("saveMsg").textContent="Saving…";$("saveBtn").hidden=true;$("discardBtn").hidden=true;
+    autoT=setTimeout(async()=>{try{await APP.save(JSON.stringify(clean()));$("saveMsg").textContent="All changes saved on this computer.";setTimeout(()=>{$("savebar").hidden=true},1600)}catch(e){$("saveMsg").textContent="Couldn't save to this computer. Try again."}},600);
+    return;
+  }
+  dirty=true;$("savebar").hidden=false;$("saveMsg").textContent="You have unsaved changes.";$("saveBtn").disabled=false;$("discardBtn").disabled=false}
+
+const out=$("out");
+out.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.spell"))return;const id=+d.dataset.id;if(d.open){openSet.add(id);fillCard(d)}else openSet.delete(id)},true);
+out.addEventListener("input",e=>{
+  const el=e.target, d=el.closest("details.spell"); if(!d)return; const s=byId(d.dataset.id); if(!s)return;
+  if(el.dataset.f){const v=el.value;if(v)s.f[el.dataset.f]=v;else delete s.f[el.dataset.f];grow(el);if(el.dataset.f==="cat")refreshSummary(d,s)}
+  else if(el.dataset.ti!==undefined){
+    s.tiers=s.tiers||Array.from({length:10},()=>["",""]);while(s.tiers.length<10)s.tiers.push(["",""]);
+    s.tiers[+el.dataset.ti][+el.dataset.tp]=el.value;grow(el);
+    if(s.tiers.every(t=>!t[0]&&!t[1]))delete s.tiers;
+  }
+  else if(el.dataset.k==="n"){s.n=el.value;refreshSummary(d,s)}
+  else if(el.dataset.k==="lv"){s.lv=el.value?+el.value:null;refreshSummary(d,s)}
+  else return;
+  touch();
+});
+out.addEventListener("click",e=>{
+  const tg=e.target.closest(".tog"), del=e.target.closest(".del");
+  const d=e.target.closest("details.spell"); if(!d)return; const s=byId(d.dataset.id);
+  if(e.target.closest(".sacts"))e.preventDefault();
+  if(e.target.closest(".editbtn")){if(editSet.has(s._id))editSet.delete(s._id);else editSet.add(s._id);fillCard(d,true);refreshSummary(d,s);if(editSet.has(s._id)){const n=d.querySelector('[data-k="n"]');if(n)n.focus()}return}
+  if(e.target.closest(".expbtn")){const o=d.querySelector(".expopts");o.hidden=!o.hidden;return}
+  const fb=e.target.closest(".fmt"); if(fb){exportSpell(s,fb.dataset.fmt,d);return}
+  if(tg){const t=tg.dataset.tag;s.tags=s.tags.includes(t)?s.tags.filter(x=>x!==t):TRADS.filter(x=>x===t||s.tags.includes(x));tg.setAttribute("aria-pressed",s.tags.includes(t));refreshSummary(d,s);renderCounts();touch()}
+  if(del){
+    if(!del.classList.contains("armed")){del.classList.add("armed");del.textContent="Click again to delete";return}
+    SPELLS=SPELLS.filter(x=>x!==s);openSet.delete(s._id);touch();renderCounts();render();
+  }
+});
+$("addBtn").addEventListener("click",()=>{
+  const s={n:"New spell",tags:cls?[CLASSES.find(x=>x[0]===cls)[1]]:view==="All"?[]:[view],lv:null,f:{},_id:++uid};
+  SPELLS.unshift(s);openSet.add(s._id);editSet.add(s._id);$("q").value="";$("lvl").value="";
+  touch();renderCounts();
+  render();
+  const d=out.querySelector(`details[data-id="${s._id}"]`);
+  if(d){out.prepend(d);d.scrollIntoView({block:"center"});const n=d.querySelector('[data-k="n"]');n.focus();n.select()}
+});
+
+/* export: draw the spell as a card image */
+let h2c=null, dl=null;
+function loadH2C(){
+  if(window.html2canvas) return Promise.resolve(window.html2canvas);
+  if(!h2c) h2c=new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";sc.onload=()=>res(window.html2canvas);sc.onerror=()=>{h2c=null;rej(new Error("load"))};document.head.appendChild(sc)});
+  return h2c;
+}
+function exportHTML(s){
+  const f=s.f||{}, rows=FIELDS.filter(([k])=>f[k]&&String(f[k]).trim());
+  const tiers=(s.tiers||[]).map((t,i)=>[t,i]).filter(([t])=>(t[0]||"").trim()||(t[1]||"").trim());
+  const star=(fill,stroke,sw)=>SEAL.replace('<path','<path fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+sw+'" stroke-linejoin="miter" stroke-miterlimit="10"');
+  const lvl=s.lv?`<span class="x-badge">${star("#fff","#fff","0")}<span>${s.lv}</span></span>`:"";
+  const body=`<div class="x-fields">${rows.map(([k,lab])=>`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`).join("")||`<p class="x-line">&nbsp;</p>`}</div>`;
+  const rail=tiers.length?`<div class="x-rail">${tiers.map(([t,i],n)=>`<div class="x-tier${n===tiers.length-1?" x-last":""}"><span class="x-mark${i===9?" x-ten":""}">${i===9?star("#fff","#000","9"):""}<span>+${i+1}</span></span><p>${(t[0]||"").trim()?`<span class="x-name">${esc(t[0])}</span>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"";
+  return `<div class="x-card"><div class="x-bar x-top">${lvl}<span class="x-title">${esc((s.n||"").trim()||"Untitled spell")}</span></div><div class="x-body">${body}${rail}</div><div class="x-bar x-bot"></div></div>`;
+}
+async function exportSpell(s,fmt,d){
+  const msg=d.querySelector(".actmsg"), say=m=>{if(msg)msg.textContent=m};
+  if(!dl){say("Exporting isn't available in this view. Open the page on claude.ai.");return}
+  say("Preparing image…");
+  const box=document.createElement("div");box.className="xwrap";
+  box.innerHTML=exportHTML(s);
+  document.body.appendChild(box);
+  try{
+    const h=await loadH2C();
+    if(document.fonts&&document.fonts.ready) await document.fonts.ready;
+    const canvas=await h(box,{scale:2,backgroundColor:"#ffffff",logging:false});
+    const type=fmt==="jpeg"?"image/jpeg":"image/png";
+    const blob=await new Promise(r=>canvas.toBlob(r,type,0.95));
+    const name=((s.n||"spell").trim().replace(/[\\/:*?"<>|]+/g,"").replace(/\s+/g," ")||"spell")+(fmt==="jpeg"?".jpg":".png");
+    say("");
+    await dl.save({filename:name,data:blob});
+    say("Saved "+name);
+  }catch(e){
+    const c=e&&e.code;
+    say(c==="declined"?"":c==="rate_limited"?"A save prompt is already open.":e&&e.message==="load"?"Couldn't load the image tool. Check your connection and try again.":"Export failed. Try again.");
+  }finally{box.remove()}
+}
+
+/* spell data files: move the list between the app and the website */
+function normalize(arr){
+  if(!Array.isArray(arr))return null;
+  const out=[];
+  for(const x of arr){
+    if(!x||typeof x.n!=="string")return null;
+    const s={n:x.n,tags:Array.isArray(x.tags)?TRADS.filter(t=>x.tags.includes(t)):[],lv:Number.isInteger(x.lv)&&x.lv>=1&&x.lv<=20?x.lv:null,f:{}};
+    if(x.f&&typeof x.f==="object")for(const [k] of FIELDS)if(typeof x.f[k]==="string"&&x.f[k])s.f[k]=x.f[k];
+    if(Array.isArray(x.tiers))s.tiers=Array.from({length:10},(_,i)=>{const t=x.tiers[i]||[];return [String(t[0]||""),String(t[1]||"")]});
+    out.push(s);
+  }
+  return out;
+}
+const dmsg=m=>{$("dataMsg").textContent=m};
+function applyImport(text){
+  let arr=null;try{arr=normalize(JSON.parse(text))}catch(e){}
+  if(!arr){dmsg("That file isn't a spell list. Choose a file made with Export data.");return}
+  SPELLS=arr;SPELLS.forEach(s=>s._id=++uid);openSet.clear();editSet.clear();
+  touch();renderCounts();render();
+  dmsg(APP?`Imported ${arr.length} spells.`:`Imported ${arr.length} spells. Click Save changes to keep them on the website.`);
+}
+$("importBtn").addEventListener("click",async()=>{
+  dmsg("");
+  if(APP){const text=await APP.openJson();if(text)applyImport(text);return}
+  $("importFile").value="";$("importFile").click();
+});
+$("importFile").addEventListener("change",async()=>{const f=$("importFile").files[0];if(f)applyImport(await f.text())});
+$("exportBtn").addEventListener("click",async()=>{
+  dmsg("");
+  if(!dl){dmsg("Exporting isn't available in this view. Open the page on claude.ai.");return}
+  try{await dl.save({filename:"crawl-spells.json",data:JSON.stringify(clean(),null,1)});dmsg("Spell list exported.")}
+  catch(e){if(!(e&&e.code==="declined"))dmsg("Export failed. Try again.")}
+});
+
+/* save: republish this page with the edited spells */
+const HEAD='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>';
+const j=v=>JSON.stringify(v).replace(/</g,"\\u003c");
+function clean(){
+  return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
+}
+function buildPage(){const D="/*@"+"DATA@*/",T="/*@"+"TPL@*/";return HEAD+TPL.replace(D,()=>j(clean())).replace(T,()=>j(TPL))+"</body></html>"}
+$("saveBtn").addEventListener("click",async()=>{
+  if(!art){$("saveMsg").textContent="Saving isn't available in this view. Open the page on claude.ai, signed in as its owner.";return}
+  $("saveBtn").disabled=true;$("discardBtn").disabled=true;$("saveMsg").textContent="Saving…";
+  try{sessionStorage.setItem("crawl-open",JSON.stringify(SPELLS.filter(s=>openSet.has(s._id)).map(s=>(s.n||"").trim())))}catch(e){}
+  try{await art.publish(buildPage());dirty=false;$("saveMsg").textContent="Saved. Reloading with your changes…"}
+  catch(e){
+    const c=e&&e.code;
+    if(c==="conflict"){dirty=false;$("saveMsg").textContent="A newer version was saved elsewhere, so the page is reloading to it. Edits made here were not kept."}
+    else if(["not_writer","not_granted","consent_required","capability_disabled","not_declared"].includes(c))$("saveMsg").textContent="This copy is read-only for you, so edits can't be saved.";
+    else{$("saveMsg").textContent=c==="rate_limited"?"Saved too often in a short time. Wait a minute, then save again.":"Saving failed. Try again in a moment.";$("saveBtn").disabled=false;$("discardBtn").disabled=false}
+  }
+});
+$("discardBtn").addEventListener("click",()=>{SPELLS=JSON.parse(original);SPELLS.forEach(s=>s._id=++uid);openSet.clear();dirty=false;$("savebar").hidden=true;renderCounts();render()});
+window.addEventListener("beforeunload",e=>{if(dirty&&!APP){e.preventDefault();e.returnValue=""}});
+
+$("counts").addEventListener("click",e=>{const b=e.target.closest(".count");if(!b)return;const v=b.dataset.v;setFilter(view===v&&!cls?"All":v,"")});
+$("classbar").addEventListener("click",e=>{const b=e.target.closest(".cbtn");if(!b)return;const c=b.dataset.c;setFilter("All",cls===c?"":c)});
+["q","lvl","sort"].forEach(id=>$(id).addEventListener("input",render));
+if(APP){
+  dl={save:async({filename,data})=>{const buf=data instanceof Blob?await data.arrayBuffer():new TextEncoder().encode(String(data)).buffer;const r=await APP.saveFile(filename,buf);if(!r)throw {code:"declined"};return {status:"saved"}}};
+  APP.load().then(text=>{let arr=null;try{arr=text&&normalize(JSON.parse(text))}catch(e){}if(arr){SPELLS=arr;SPELLS.forEach(s=>s._id=++uid);original=JSON.stringify(arr)}renderCounts();render()}).catch(()=>{renderCounts();render()});
+}else if(STATIC){
+  $("addBtn").hidden=true;$("importBtn").hidden=true;
+  dl={save:async({filename,data})=>{const blob=data instanceof Blob?data:new Blob([data],{type:"application/json"});const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return {status:"saved"}}};
+  fetch("crawl-spells.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{const arr=normalize(j);if(arr){SPELLS=arr;SPELLS.forEach(s=>s._id=++uid)}}).catch(()=>{}).finally(()=>{renderCounts();render()});
+}else{renderCounts();render()}
+if(!APP&&!STATIC)(function hook(n){if(window.claude&&window.claude.use){window.claude.use("artifact").then(a=>{art=a}).catch(()=>{});window.claude.use("downloads").then(x=>{dl=x}).catch(()=>{})}else if(n<20)setTimeout(()=>hook(n+1),250)})(0);
+</script>
