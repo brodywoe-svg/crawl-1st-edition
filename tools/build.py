@@ -53,7 +53,7 @@ def build_site(body):
         '<meta name="description" content="Every spell in Crawl 1st Edition, filterable by class and magic source.">'
         '<link rel="icon" href="app/icon.png">'
         f"<style>{RESET}</style>"
-        "<script>window.CRAWL_STATIC=true</script></head><body>"
+        "<script>window.CRAWL_STATIC=true;window.CRAWL_REPO={owner:\"brodywoe-svg\",repo:\"crawl-spell-compendium\",branch:\"main\"}</script></head><body>"
     )
     (ROOT / "index.html").write_text(head + body + FOOTER + "</body></html>", encoding="utf-8")
 

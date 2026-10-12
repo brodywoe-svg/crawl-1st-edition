@@ -20,6 +20,32 @@ In the app you can edit spells, add new ones and export cards; changes save
 automatically to `%APPDATA%\Crawl Spell Compendium\spells.json`.
 Run `Uninstall.bat` to remove the app; your saved spells are kept.
 
+## Admin editing on the website
+
+Click **Admin** (top right of the site) and enter the admin password to unlock
+**Edit** on every spell, plus **Add spell**, **Import data** and **Export data**.
+**Save changes** writes `crawl-spells.json` to this repo, and the public site
+updates for everyone in about a minute. Visitors without the password see a
+read-only site.
+
+How it works: the site has no server, so the password protects a GitHub access
+key instead. `admin.json` holds that key encrypted with AES-256-GCM, using a key
+derived from the password with PBKDF2-SHA256 (600,000 rounds). Typing the right
+password decrypts the GitHub key in your browser for that tab only.
+
+**First-time setup / changing the password**
+
+1. On GitHub, make a fine-grained access key at
+   <https://github.com/settings/personal-access-tokens/new>: under
+   **Repository access** choose **Only select repositories** → this repo, and under
+   **Permissions → Repository permissions** set **Contents** to **Read and write**.
+2. On the site, click **Admin → First time? Set up admin access**, paste the key,
+   and choose a password of at least 12 characters (a few random words works well).
+
+Because `admin.json` is public, the password is what keeps the key safe: use a
+long one. Repeat the setup any time to change the password or replace an
+expired key.
+
 ## Keeping everything in sync
 
 The spell list lives in [`crawl-spells.json`](crawl-spells.json).
