@@ -187,7 +187,7 @@
   "f": {
    "cat": "Abjuration",
    "range": "Self (Single Target)",
-   "desc": "You create a protective barrier of magical arcane energy that appears and protects you from Spells. Until the start of your next turn, you have a +3 bonus to AC vs Spell attacks, if the spell attack targeting you requires you to roll a dexterity saving throw you can forgo the AC bonus and instead add a +3 bonus to the Saving Throw. At the start of your next turn you gain 1 Exhaustion Point (EP).",
+   "desc": "You create a protective barrier of magical arcane energy that appears and protects you from Spells. Until the start of your next turn, you gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
    "pre": "+2 ARC",
    "cls": "Wizard, Sorcerer",
    "mat": "1 Moonstone",
