@@ -515,6 +515,67 @@
   "f": {}
  },
  {
+  "n": "Bramblesnatch",
+  "tags": [
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "pre": "+2 NATURE",
+   "cls": "Druid, Warlock",
+   "mat": "1 Rose Thorn or Thorned Seed",
+   "cat": "Conjuration",
+   "cost": "3MP",
+   "time": "Instantaneous",
+   "type": "Spell Attack (Dexterity Save)",
+   "desc": "You slam your palm to the ground, and a line of thorned vines bursts from the earth in a 15-foot line, 5 feet wide, starting from you. Each creature in the Target Area must make a Dexterity saving throw against your spell save DC. On a failure, a creature takes 1d6 Piercing damage and is Grappled by the vines. A Grappled creature’s speed is 0. On a success, it takes no damage and isn’t Grappled.\n\nA Grappled creature can spend 1 AP on its turn to make a Strength (Athletics) check against your spell save DC, freeing itself on a success. The vines wither after 1 minute, whenever you cast this spell again, and whenever no creatures remain in its target area.",
+   "range": "Self"
+  },
+  "tiers": [
+   [
+    "",
+    "--"
+   ],
+   [
+    "",
+    "This Spell's damage increases to 1d8 Piercing damage."
+   ],
+   [
+    "Thornbed",
+    "The Target Area of this spell becomes difficult terrain until the vines wither."
+   ],
+   [
+    "",
+    "This Spell's damage increases to 1d10 Piercing damage."
+   ],
+   [
+    "",
+    "The Target area of this spell becomes a 30-foot line, 5 feet wide."
+   ],
+   [
+    "Snatch",
+    "On your turn, you can spend 1 AP to drag one creature Grappled by this spell up to 15 feet along the line."
+   ],
+   [
+    "",
+    "The Target area of this spell becomes a 45-foot line, 10 feet wide."
+   ],
+   [
+    "Overgrown",
+    "This Spell's damage increases to 3d10 Piercing damage."
+   ],
+   [
+    "",
+    "The Target area of this spell becomes a 60-foot line, 10 feet wide."
+   ],
+   [
+    "Stranglehold",
+    "Small and Medium sized creatures that are grappled by this spell are also Restrained."
+   ]
+  ]
+ },
+ {
   "n": "Branding Smite",
   "tags": [
    "Divine"
