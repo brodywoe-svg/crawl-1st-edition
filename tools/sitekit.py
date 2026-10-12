@@ -52,9 +52,9 @@ def nav_html(active, controls=""):
 
 NAV_CSS = """
 .sitenav{position:sticky;top:0;z-index:25;background:var(--ink);color:var(--paper);padding-top:env(safe-area-inset-top,0px)}
-.navin{position:relative;max-width:1240px;margin:0 auto;padding-inline:16px;display:flex;align-items:center;gap:8px}
-.navlinks{flex:1 1 auto;min-width:0;display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;gap:0 2px}
-.navctl{flex:none;display:flex;align-items:center;gap:6px}
+.navin{position:relative;padding-inline:20px;display:flex;align-items:center;gap:12px}
+.navlinks{flex:1 1 auto;min-width:0;display:flex;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;gap:0 2px}
+.navctl{flex:none;margin-left:auto;display:flex;align-items:center;gap:6px}
 .navctl .adminbtn,.navctl .modebtn{background:transparent;color:var(--paper);border:2px solid var(--paper);border-radius:999px;padding:4px 11px 4px 9px;font:700 .74rem var(--font);display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
 .navctl .adminbtn:hover,.navctl .modebtn:hover{background:var(--barhover)}
 .navctl .adminbtn.on{background:var(--paper);color:var(--ink)}
@@ -74,19 +74,18 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .navmenu a{display:block;padding:10px 12px;border-radius:8px;font:700 .92rem var(--font);color:var(--ink);text-decoration:none}
 .navmenu a:hover,.navmenu a:focus-visible{background:var(--soft);outline:none}
 .navmenu a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
-@media (max-width:1180px){
-  .navitem{padding:15px 8px;letter-spacing:.05em}
-  .navitem.soon small{display:none}
-}
-@media (max-width:900px){
-  .navctl .adminbtn span,.navctl .modebtn span{display:none}
-  .navctl .adminbtn,.navctl .modebtn{padding:6px}
-}
-@media (max-width:900px){
-  .navitem.soon small{display:none}
-}
+/* NAV_JS steps through these until the links fit on one row beside the buttons */
+.nav-c1 .navitem{padding-inline:9px;letter-spacing:.06em}
+.nav-c2 .navitem.soon small{display:none}
+.nav-c3 .navctl .adminbtn span,.nav-c3 .navctl .modebtn span{display:none}
+.nav-c3 .navctl .adminbtn,.nav-c3 .navctl .modebtn{padding:6px}
+.nav-c4 .navitem{padding-inline:7px;font-size:.72rem;letter-spacing:.04em}
+.nav-c5 .navlinks{flex-wrap:wrap}
 @media (max-width:700px){
   .navin{gap:4px;padding-inline:6px}
+  .navlinks{flex-wrap:wrap;justify-content:center}
+  .navitem.soon small,.navctl .adminbtn span,.navctl .modebtn span{display:none}
+  .navctl .adminbtn,.navctl .modebtn{padding:6px}
   .navitem{padding:10px 7px;font-size:.66rem;letter-spacing:.04em}
   .navdrop{position:static}
   .navmenu{left:12px;right:12px;transform:none;min-width:0}
@@ -94,9 +93,18 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 """
 
 NAV_JS = """(function(){
-  var nav=document.querySelector('.sitenav');
-  function h(){document.documentElement.style.setProperty('--navh',(nav?nav.offsetHeight:0)+'px')}
-  h();window.addEventListener('resize',h);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(h);
+  var nav=document.querySelector('.sitenav'),links=nav&&nav.querySelector('.navlinks'),busy=false;
+  var STEPS=['nav-c1','nav-c2','nav-c3','nav-c4','nav-c5'];
+  function fit(){
+    if(!nav||busy)return;busy=true;
+    STEPS.forEach(function(c){nav.classList.remove(c)});
+    if(window.innerWidth>700){for(var i=0;i<STEPS.length&&links.scrollWidth>links.clientWidth+1;i++)nav.classList.add(STEPS[i])}
+    document.documentElement.style.setProperty('--navh',nav.offsetHeight+'px');busy=false;
+  }
+  window.crawlNavFit=fit;fit();window.addEventListener('resize',fit);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+  window.addEventListener('load',fit);
+  if(window.MutationObserver&&nav){new MutationObserver(function(){requestAnimationFrame(fit)}).observe(nav.querySelector('.navctl'),{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']})}
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.activeElement&&document.activeElement.closest('.navdrop'))document.activeElement.blur()});
 })();"""
 
