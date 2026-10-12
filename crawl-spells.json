@@ -1982,6 +1982,9 @@
    "desc": "You clap a pinch of flammable powder between your hands and sweep your fingers toward a target, speaking the spell’s command phrase. The powder ignites into a bolt of fire that hurls instantly toward your target.",
    "dmg": "On hit, target takes 1d6 fire damage."
   },
+  "ct": [
+   "Fire Damage"
+  ],
   "tiers": [
    [
     "",
