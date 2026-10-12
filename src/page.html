@@ -135,6 +135,29 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .pv-line b{font-weight:700}
 .pv-line.pre{font-style:italic}
 .pv-line.desc span{white-space:pre-wrap}
+.pv-tblwrap{overflow-x:auto;margin:6px 0 4px}
+.pv-tbl{border-collapse:collapse;min-width:50%;font-size:.95rem}
+.pv-tbl th,.pv-tbl td{border:2px solid var(--ink);padding:5px 10px;text-align:left;vertical-align:top}
+.pv-tbl th{background:var(--ink);color:var(--paper);font-weight:700}
+.tblline>label::after{content:":"}
+.tbled{display:grid;gap:8px;margin-top:4px}
+.tblctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.tbllab{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.tbln{width:4.2em;font:700 .95rem var(--font);border:2px solid var(--ink);border-radius:8px;padding:4px 6px;background:var(--paper);color:var(--ink)}
+.tblh{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;margin-left:4px}
+.tblh input{accent-color:var(--ink);width:16px;height:16px}
+.tbladd,.tbldel{border:2px solid var(--ink);border-radius:8px;padding:4px 12px;font-size:.8rem;background:var(--paper)}
+.tbladd{background:var(--ink);color:var(--paper)}
+.tbldel{margin-left:auto}
+.tbldel.armed{background:var(--ink);color:var(--paper)}
+.tblgridwrap{overflow-x:auto}
+.tblgrid{border-collapse:collapse;width:100%}
+.tblgrid td{border:2px solid var(--ink);padding:0;min-width:7em}
+.tblgrid input{width:100%;border:0;background:transparent;padding:6px 8px;font:600 .95rem var(--font);color:var(--ink)}
+.tblgrid input:focus{outline:none;background:var(--soft)}
+.tblgrid.hashead tr:first-child td{background:var(--ink)}
+.tblgrid.hashead tr:first-child input{color:var(--paper);font-weight:700}
+.tblgrid.hashead tr:first-child input::placeholder{color:var(--hair)}
 .pv-tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px;font-size:1rem}
 .pv-tags b{font-weight:700}
 .cbox{display:inline-grid;place-items:center;width:1.05em;height:1.05em;border:2px solid var(--ink);border-radius:2px;vertical-align:-.16em;color:var(--ink);background:var(--paper)}
@@ -183,6 +206,10 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .x-tier::before{content:"";position:absolute;left:12px;width:12px;top:11px;height:calc(100% + 7px);background:#000}
 .x-tier.x-last::before{display:none}
 .x-tier p{margin:0;font-size:18px;line-height:1.22}
+.x-tblwrap{margin:6px 0}
+.x-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:16px;line-height:1.25;border-top:2.5px solid #000;border-left:2.5px solid #000}
+.x-tbl th,.x-tbl td{border:0;border-right:2.5px solid #000;border-bottom:2.5px solid #000;padding:5px 9px;text-align:left;vertical-align:top}
+.x-tbl th{background:#000;color:#fff;font-weight:700}
 .x-name{color:#8E171C}
 .x-mark{position:relative;z-index:1;width:36px;height:36px;margin-top:-7px;display:grid;place-items:center}
 .x-mark::before{content:"";position:absolute;inset:6px;background:#fff;border:3px solid #000;transform:rotate(45deg)}
@@ -385,11 +412,32 @@ function previewHTML(s){
   if(!rows.length&&!tiers.length) return tagsLine(s)+`<p class="pv-empty">This card hasn't been filled in yet.</p>`;
   const concLine=`<p class="pv-line"><b>Concentration:</b> <span class="cbox${s.conc?" on":""}" role="img" aria-label="${s.conc?"Yes":"No"}">${CHECK}</span></p>`;
   let concDone=false;
-  const lines=FIELDS.map(([k,lab])=>{let h="";if(f[k]&&String(f[k]).trim())h=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`;if(k==="time"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
+  const lines=FIELDS.map(([k,lab])=>{let h="";if(k==="dmg")h+=chartHTML(s.tbl,"pv-tbl");if(f[k]&&String(f[k]).trim())h+=`<p class="pv-line${k==="pre"?" pre":""}${k==="desc"?" desc":""}"><b>${lab}:</b> <span>${esc(f[k])}</span></p>`;if(k==="time"){h+=concLine;concDone=true}return h}).join("")+(concDone?"":concLine);
   return `<div class="pv">${lines}${tagsLine(s)}</div>`+
     (tiers.length?`<div class="rail pv-rail">${tiers.map(([t,i])=>`<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL_TEN:""}<span>+${i+1}</span></span><p class="pv-tier">${(t[0]||"").trim()?`<b class="tname">${esc(t[0])}</b>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"");
 }
 const editSet=new Set();
+/* charts: s.tbl = {r, c, h (first row is a header), cells: [[...]]} */
+const TMAX_R=30, TMAX_C=8;
+const clampN=(v,lo,hi,def)=>{v=parseInt(v,10);return Number.isFinite(v)?Math.min(hi,Math.max(lo,v)):def};
+function sizeTable(tb,r,c){
+  const cells=Array.from({length:r},(_,i)=>Array.from({length:c},(_,j)=>((tb&&tb.cells&&tb.cells[i])||[])[j]||""));
+  return {r,c,h:tb?tb.h!==false:true,cells};
+}
+const tblHasText=tb=>tb&&tb.cells.some(row=>row.some(x=>String(x).trim()));
+function chartHTML(tb,cls){
+  if(!tblHasText(tb))return "";
+  const head=tb.h?tb.cells[0]:null, body=tb.h?tb.cells.slice(1):tb.cells;
+  return `<div class="${cls}wrap"><table class="${cls}">`+
+    (head?`<thead><tr>${head.map(x=>`<th>${esc(x)}</th>`).join("")}</tr></thead>`:"")+
+    `<tbody>${body.map(row=>`<tr>${row.map(x=>`<td>${esc(x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+function tblEditorInner(s){
+  const tb=s.tbl;
+  if(!tb) return `<div class="tblctl"><span class="tbllab">Rows</span><input type="number" class="tbln" data-new="r" min="1" max="${TMAX_R}" value="3" aria-label="Rows"><span class="tbllab">Columns</span><input type="number" class="tbln" data-new="c" min="1" max="${TMAX_C}" value="2" aria-label="Columns"><button type="button" class="tbladd">Add chart</button></div>`;
+  return `<div class="tblctl"><span class="tbllab">Rows</span><input type="number" class="tbln" data-tk="r" min="1" max="${TMAX_R}" value="${tb.r}" aria-label="Rows"><span class="tbllab">Columns</span><input type="number" class="tbln" data-tk="c" min="1" max="${TMAX_C}" value="${tb.c}" aria-label="Columns"><label class="tblh"><input type="checkbox" data-tk="h"${tb.h?" checked":""}> First row is a header</label><button type="button" class="tbldel">Remove chart</button></div>`+
+    `<div class="tblgridwrap"><table class="tblgrid${tb.h?" hashead":""}">${tb.cells.map((row,i)=>`<tr>${row.map((x,j)=>`<td><input type="text" data-cell="${i},${j}" value="${esc(x)}" aria-label="Row ${i+1}, column ${j+1}" placeholder="${tb.h&&i===0?"Heading":""}"></td>`).join("")}</tr>`).join("")}</table></div>`;
+}
 const CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.4 6.6 11.6 12.9 4.4" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="square" stroke-linejoin="miter"/></svg>';
 const ctChips=s=>(s.ct||[]).map(x=>`<span class="tag ctchip">${esc(x)}<button type="button" class="ctx" data-ct="${esc(x)}" aria-label="Remove tag ${esc(x)}">×</button></span>`).join("");
 function addTag(d,s){
@@ -416,7 +464,7 @@ function fillCard(d,force){
     <div class="fld"><span class="small">Magic source</span><div class="togs">${TRADS.map(t=>`<button type="button" class="tog" data-tag="${t}" aria-pressed="${s.tags.includes(t)}">${t}</button>`).join("")}</div></div>
     <div class="fld ctfld"><label class="small" for="ct-${s._id}">Custom tags</label><div class="ctedit"><span class="tags ctlist">${ctChips(s)}</span><input type="text" id="ct-${s._id}" class="ctin" placeholder="Add a tag, then press Enter" maxlength="32" autocomplete="off"><button type="button" class="ctadd">Add</button></div></div>
   </div>
-  <div class="fields">${FIELDS.map(([k,lab,ph])=>`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`+(k==="time"?`<div class="line concline"><label for="cc-${s._id}">Concentration</label><label class="cwrap"><input type="checkbox" class="ccheck" id="cc-${s._id}" data-k="conc"${s.conc?" checked":""}><span class="cbox" aria-hidden="true">${CHECK}</span></label></div>`:"")).join("")}</div>
+  <div class="fields">${FIELDS.map(([k,lab,ph])=>`<div class="line${k==="pre"?" pre":""}${k==="desc"?" block":""}"><label for="f-${k}-${s._id}">${lab}</label><textarea class="v" rows="1" id="f-${k}-${s._id}" data-f="${k}" placeholder="${esc(ph)}">${esc(s.f[k]||"")}</textarea></div>`+(k==="desc"?`<div class="line block tblline"><label>Chart</label><div class="tbled">${tblEditorInner(s)}</div></div>`:"")+(k==="time"?`<div class="line concline"><label for="cc-${s._id}">Concentration</label><label class="cwrap"><input type="checkbox" class="ccheck" id="cc-${s._id}" data-k="conc"${s.conc?" checked":""}><span class="cbox" aria-hidden="true">${CHECK}</span></label></div>`:"")).join("")}</div>
   <div class="rail">${Array.from({length:10},(_,i)=>{const t=tiers[i]||["",""];return `<div class="tier"><span class="dia${i===9?" ten":""}" aria-hidden="true">${i===9?SEAL:""}<span>+${i+1}</span></span><div class="tbody"><textarea class="v tn" rows="1" data-ti="${i}" data-tp="0" aria-label="+${i+1} name" placeholder="Name">${esc(t[0])}</textarea><textarea class="v tt" rows="1" data-ti="${i}" data-tp="1" aria-label="+${i+1} effect" placeholder="Effect at +${i+1}">${esc(t[1])}</textarea></div></div>`}).join("")}</div>`:previewHTML(s));
   d.appendChild(c);
   c.querySelectorAll("textarea").forEach(grow);
@@ -446,6 +494,15 @@ out.addEventListener("input",e=>{
     if(s.tiers.every(t=>!t[0]&&!t[1]))delete s.tiers;
   }
   else if(el.dataset.k==="n"){s.n=el.value;refreshSummary(d,s)}
+  else if(el.dataset.cell){const [i,j]=el.dataset.cell.split(",").map(Number);if(s.tbl&&s.tbl.cells[i])s.tbl.cells[i][j]=el.value}
+  else if(el.dataset.tk==="h"){if(s.tbl){s.tbl.h=el.checked;d.querySelector(".tbled").innerHTML=tblEditorInner(s)}}
+  else if(el.dataset.tk==="r"||el.dataset.tk==="c"){
+    if(!s.tbl||el.value==="")return;
+    const r=el.dataset.tk==="r"?clampN(el.value,1,TMAX_R,s.tbl.r):s.tbl.r, c=el.dataset.tk==="c"?clampN(el.value,1,TMAX_C,s.tbl.c):s.tbl.c;
+    if(r===s.tbl.r&&c===s.tbl.c)return;
+    s.tbl=sizeTable(s.tbl,r,c);const box=d.querySelector(".tbled");box.innerHTML=tblEditorInner(s);const again=box.querySelector(`[data-tk="${el.dataset.tk}"]`);if(again){again.focus();again.select&&again.select()}
+  }
+  else if(el.dataset.new)return;
   else if(el.dataset.k==="conc"){if(el.checked)s.conc=true;else delete s.conc}
   else if(el.dataset.k==="lv"){s.lv=el.value?+el.value:null;refreshSummary(d,s)}
   else return;
@@ -458,6 +515,8 @@ out.addEventListener("click",e=>{
   const tg=e.target.closest(".tog"), del=e.target.closest(".del");
   const d=e.target.closest("details.spell"); if(!d)return; const s=byId(d.dataset.id);
   if(e.target.closest(".sacts"))e.preventDefault();
+  if(e.target.closest(".tbladd")){const box=d.querySelector(".tbled");const r=clampN(box.querySelector('[data-new="r"]').value,1,TMAX_R,3),c=clampN(box.querySelector('[data-new="c"]').value,1,TMAX_C,2);s.tbl=sizeTable(null,r,c);box.innerHTML=tblEditorInner(s);const f0=box.querySelector("[data-cell]");if(f0)f0.focus();touch();return}
+  const tdel=e.target.closest(".tbldel"); if(tdel){if(!tdel.classList.contains("armed")){tdel.classList.add("armed");tdel.textContent="Click again to remove";return}delete s.tbl;d.querySelector(".tbled").innerHTML=tblEditorInner(s);touch();return}
   const ptag=e.target.closest(".ptag"); if(ptag){setTagFilter(ptag.dataset.ftag);return}
   if(e.target.closest(".ctadd")){addTag(d,s);d.querySelector(".ctin").focus();return}
   const cx=e.target.closest(".ctx"); if(cx){s.ct=(s.ct||[]).filter(y=>y!==cx.dataset.ct);if(!s.ct.length)delete s.ct;d.querySelector(".ctlist").innerHTML=ctChips(s);touch();buildTagFilter();return}
@@ -493,7 +552,8 @@ function exportHTML(s){
   const lvl=s.lv?`<span class="x-badge">${star("#fff","#fff","0")}<span>${s.lv}</span></span>`:"";
   const xconc=s.conc?`<p class="x-line">Concentration: <span class="x-cbox">${CHECK.replace('stroke="currentColor"','stroke="#000"')}</span></p>`:"";
   let xc=false;
-  const xl=rows.map(([k,lab])=>{let h=`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`;if(k==="time"){h+=xconc;xc=true}return h}).join("")+(xc?"":xconc);
+  let xt=false;const xchart=()=>{if(xt)return "";xt=true;return chartHTML(s.tbl,"x-tbl")};
+  const xl=rows.map(([k,lab])=>{let h=(k==="dmg"?xchart():"")+`<p class="x-line${k==="pre"?" x-pre":""}">${lab}: ${esc(f[k])}</p>`+(k==="desc"?xchart():"");if(k==="time"){h+=xconc;xc=true}return h}).join("")+(xc?"":xconc)+xchart();
   const body=`<div class="x-fields">${xl||`<p class="x-line">&nbsp;</p>`}</div>`;
   const rail=tiers.length?`<div class="x-rail">${tiers.map(([t,i],n)=>`<div class="x-tier${n===tiers.length-1?" x-last":""}"><span class="x-mark${i===9?" x-ten":""}">${i===9?star("#fff","#000","9"):""}<span>+${i+1}</span></span><p>${(t[0]||"").trim()?`<span class="x-name">${esc(t[0])}</span>: `:""}${esc(t[1]||"")}</p></div>`).join("")}</div>`:"";
   return `<div class="x-card"><div class="x-bar x-top">${lvl}<span class="x-title">${esc((s.n||"").trim()||"Untitled spell")}</span></div><div class="x-body">${body}${rail}</div><div class="x-bar x-bot"></div></div>`;
@@ -547,6 +607,7 @@ function normalize(arr){
     const s={n:x.n,tags:Array.isArray(x.tags)?TRADS.filter(t=>x.tags.includes(t)):[],lv:Number.isInteger(x.lv)&&x.lv>=1&&x.lv<=20?x.lv:null,f:{}};
     if(x.f&&typeof x.f==="object")for(const [k] of FIELDS)if(typeof x.f[k]==="string"&&x.f[k])s.f[k]=x.f[k];
     if(x.conc===true)s.conc=true;
+    if(x.tbl&&Array.isArray(x.tbl.cells)){const r=clampN(x.tbl.r,1,TMAX_R,x.tbl.cells.length||1),c=clampN(x.tbl.c,1,TMAX_C,(x.tbl.cells[0]||[]).length||1);s.tbl=sizeTable({h:x.tbl.h!==false,cells:x.tbl.cells.map(row=>Array.isArray(row)?row.map(v=>String(v==null?"":v)):[])},r,c)}
     if(Array.isArray(x.ct)){const seen=new Set();s.ct=x.ct.map(y=>String(y).trim().slice(0,32)).filter(y=>y&&!seen.has(y.toLowerCase())&&seen.add(y.toLowerCase()));if(!s.ct.length)delete s.ct}
     if(Array.isArray(x.tiers))s.tiers=Array.from({length:10},(_,i)=>{const t=x.tiers[i]||[];return [String(t[0]||""),String(t[1]||"")]});
     out.push(s);
@@ -704,7 +765,7 @@ async function saveToGitHub(){
 const HEAD='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>';
 const j=v=>JSON.stringify(v).replace(/</g,"\\u003c");
 function clean(){
-  return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.conc)o.conc=true;if(s.ct&&s.ct.length)o.ct=s.ct;if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
+  return SPELLS.map(s=>{const o={n:(s.n||"").trim()||"Untitled spell",tags:s.tags,lv:s.lv||null,f:s.f};if(s.conc)o.conc=true;if(s.tbl)o.tbl=s.tbl;if(s.ct&&s.ct.length)o.ct=s.ct;if(s.tiers)o.tiers=s.tiers;return o}).sort(cmp);
 }
 function buildPage(){const D="/*@"+"DATA@*/",T="/*@"+"TPL@*/";return HEAD+TPL.replace(D,()=>j(clean())).replace(T,()=>j(TPL))+"</body></html>"}
 $("saveBtn").addEventListener("click",async()=>{
