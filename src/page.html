@@ -104,7 +104,7 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .seal span{position:relative;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
 .badge{width:42px;height:42px;color:var(--paper)}
 .badge path{fill:var(--ink);stroke:var(--ink);stroke-width:2;stroke-linejoin:miter}
-.badge span{font-size:1rem}
+.badge span{font-size:1rem;position:relative;top:.05em}
 .badge.none path{fill:var(--paper);stroke-dasharray:6 5}
 .badge.none span{color:var(--muted)}
 .spell[open] .badge{color:var(--ink)}
@@ -135,9 +135,10 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .pv-line b{font-weight:700}
 .pv-line.pre{font-style:italic}
 .pv-line.desc span{white-space:pre-wrap}
-.pv-tblwrap{display:inline-block;max-width:100%;min-width:50%;overflow-x:auto;margin:6px 0 4px;border:2px solid var(--ink);border-radius:10px;vertical-align:top}
+.pv-tblwrap{display:inline-block;max-width:100%;min-width:50%;overflow-x:auto;margin:6px 0 4px;border:2px solid var(--ink);border-radius:10px;vertical-align:top;background:var(--ink)}
 .pv-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:.95rem}
-.pv-tbl th,.pv-tbl td{border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:5px 10px;text-align:left;vertical-align:top}
+.pv-tbl th,.pv-tbl td{border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:5px 10px;text-align:left;vertical-align:top;background:var(--paper);background-clip:padding-box}
+.pv-tbl .cbl{border-bottom-left-radius:8px}.pv-tbl .cbr{border-bottom-right-radius:8px}
 .pv-tbl .clast{border-right:0}.pv-tbl .rlast{border-bottom:0}
 .pv-tbl th{background:var(--ink);color:var(--paper);font-weight:700}
 .tblline>label::after{content:":"}
@@ -197,7 +198,7 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .x-bot{height:40px}
 .x-badge{position:relative;width:30px;height:30px;display:grid;place-items:center;flex:none}
 .x-badge svg{position:absolute;inset:0;width:100%;height:100%}
-.x-badge span{position:relative;color:#000;font-weight:800;font-size:15px;line-height:1}
+.x-badge span{position:relative;top:-1.25px;color:#000;font-weight:800;font-size:15px;line-height:1}
 .x-title{font-size:20px;font-weight:600;letter-spacing:.005em}
 .x-body{border-left:3px solid #000;border-right:3px solid #000;padding:8px 14px 14px;display:grid;gap:12px}
 .x-line{margin:0;font-size:18px;line-height:1.22;white-space:pre-wrap}
@@ -208,15 +209,16 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .x-tier::before{content:"";position:absolute;left:12px;width:12px;top:11px;height:calc(100% + 7px);background:#000}
 .x-tier.x-last::before{display:none}
 .x-tier p{margin:0;font-size:18px;line-height:1.22}
-.x-tblwrap{margin:6px 0;border:2.5px solid #000;border-radius:10px;overflow:hidden}
+.x-tblwrap{margin:6px 0;border:2.5px solid #000;border-radius:10px;overflow:hidden;background:#000}
 .x-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:16px;line-height:1.25}
-.x-tbl th,.x-tbl td{border:0;border-right:2.5px solid #000;border-bottom:2.5px solid #000;padding:5px 9px;text-align:left;vertical-align:top}
+.x-tbl th,.x-tbl td{border:0;border-right:2.5px solid #000;border-bottom:2.5px solid #000;padding:5px 9px;text-align:left;vertical-align:top;background:#fff;background-clip:padding-box}
 .x-tbl .clast{border-right:0}.x-tbl .rlast{border-bottom:0}
-.x-tbl .ctl{border-top-left-radius:7.5px}.x-tbl .ctr{border-top-right-radius:7.5px}.x-tbl .cbl{border-bottom-left-radius:7.5px}.x-tbl .cbr{border-bottom-right-radius:7.5px}
+.x-tbl th{background:#000}
+.x-tbl .ctl{border-top-left-radius:8px}.x-tbl .ctr{border-top-right-radius:8px}.x-tbl .cbl{border-bottom-left-radius:8px}.x-tbl .cbr{border-bottom-right-radius:8px}
 .x-tbl th{background:#000;color:#fff;font-weight:700}
 .x-name{color:#8E171C}
 .x-mark{position:relative;z-index:1;width:36px;height:36px;margin-top:-7px;display:grid;place-items:center}
-.x-mark::before{content:"";position:absolute;inset:6px;background:#fff;border:3px solid #000;transform:rotate(45deg)}
+.x-mark::before{content:"";position:absolute;inset:6px;background:#fff;border:3px solid #000;transform:rotate(45deg);background-clip:padding-box}
 .x-mark span{position:relative;font-size:13px;font-weight:700;letter-spacing:-.04em}
 .x-mark.x-ten::before{display:none}
 .x-mark.x-ten svg{position:absolute;inset:0;width:36px;height:36px;overflow:visible}
@@ -252,7 +254,7 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .dia.ten::before{display:none}
 .dia.ten svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .dia.ten path{fill:var(--paper);stroke:var(--ink);stroke-width:6;stroke-linejoin:miter;stroke-miterlimit:8}
-.dia::before{content:"";position:absolute;inset:4px;background:var(--paper);border:2px solid var(--ink);transform:rotate(45deg)}
+.dia::before{content:"";position:absolute;inset:4px;background:var(--paper);border:2px solid var(--ink);transform:rotate(45deg);background-clip:padding-box}
 .dia span{position:relative;font-size:.68rem;font-weight:800}
 .tbody{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;min-width:0}
 .tbody .tn{flex:0 1 auto;width:auto;min-width:7ch;max-width:100%;font-weight:800;text-decoration:underline;text-underline-offset:3px}
