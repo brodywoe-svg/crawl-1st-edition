@@ -801,7 +801,8 @@
    "cost": "3 MP",
    "time": "Instantaneous",
    "type": "Ranged Spell Attack",
-   "desc": "You conjure an array of colorful lights with the help of a Prism,"
+   "desc": "You conjure a concentration of magical light in your palm and force it through your prism, where it splits into a roaring wave of color that fans out in a 20-foot cone from you. Choose one color from the Spectrum table. Each creature in the Target Area must make a Dexterity saving throw against your spell save DC, taking 2d6 damage of that color’s type on a failure, or half as much on a success.\n\nRED:\nORANGE:\nYELLOW:\nGREEN:\nBLUE:\nINDIGO:\nVIOLET:\n",
+   "dmg": "(See Description)"
   },
   "ct": [
    "Chromatic",
