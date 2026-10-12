@@ -793,16 +793,63 @@
   ],
   "lv": 2,
   "f": {
-   "mat": "1 Glass Prism worth 50(G)",
-   "cat": "Evocation",
-   "range": "Self (20ft cone)",
    "pre": "+3 ARCANE",
    "cls": "Wizard, Sorcerer,",
+   "mat": "1 Glass Prism worth 50(G)",
+   "cat": "Evocation",
    "cost": "3 MP",
    "time": "Instantaneous",
    "type": "Ranged Spell Attack",
-   "desc": "You conjure a concentration of magical light in your palm and force it through a prism splitting it into a roaring wave of color that fans out in a 20-foot cone from you. Choose two color from the Spectrum table. Each creature in the Target Area must make a Dexterity saving throw against your spell save DC, taking 1d8 damage of that color’s type on a failure, or half as much on a success. When you finish casting this spell you gain 1 Exhaustion Point (EP).\n\nRED: Fire Damage, if a creature in the spells target area fails the saving throw they become Enflamed.\nORANGE: if a humanoid wearing Metallic armor in the spells target area fails the saving throw, there are rusts and their AC is reduced by 1 until the start of your next turn.\nYELLOW:\nGREEN: Poison Damage, if a creature in the spells target area fails the saving throw they become Sickened.\nBLUE: Cold Damage, if a creature in the spells target area fails the saving throw they're movement Speed is reduced by 5ft until the start of your next turn.\nINDIGO:\nVIOLET:\n",
+   "range": "Self (20ft cone)",
+   "desc": "You conjure a concentration of magical light in your palm and force it through a prism splitting it into a roaring wave of color that fans out in a 20-foot cone from you. Choose two color from the Spectrum table. Each creature in the Target Area must make a Dexterity saving throw against your spell save DC, taking 1d8 damage of that color’s type on a failure, or half as much on a success. When you finish casting this spell you gain 1 Exhaustion Point (EP).\n",
    "dmg": "(See Description)"
+  },
+  "tbl": {
+   "r": 8,
+   "c": 3,
+   "h": true,
+   "cells": [
+    [
+     "Color",
+     "Damage Type",
+     "Effect"
+    ],
+    [
+     "RED",
+     "Fire Damage",
+     "if a creature in the spells target area fails the saving throw they become Enflamed."
+    ],
+    [
+     "ORANGE",
+     "N/A",
+     "if a humanoid wearing Metallic armor in the spells target area fails the saving throw, there are rusts and their AC is reduced by 1 until the start of your next turn."
+    ],
+    [
+     "YELLOW",
+     "",
+     ""
+    ],
+    [
+     "GREEN",
+     "Poison Damage",
+     "if a creature in the spells target area fails the saving throw they become Sickened."
+    ],
+    [
+     "BLUE",
+     "Cold Damage",
+     "if a creature in the spells target area fails the saving throw they're movement Speed is reduced by 5ft until the start of your next turn."
+    ],
+    [
+     "INDIGO",
+     "",
+     ""
+    ],
+    [
+     "VIOLET",
+     "",
+     ""
+    ]
+   ]
   },
   "ct": [
    "Chromatic",
