@@ -199,11 +199,7 @@
   "tiers": [
    [
     "",
-    ""
-   ],
-   [
-    "",
-    ""
+    "--"
    ],
    [
     "Convergence",
@@ -211,15 +207,19 @@
    ],
    [
     "",
-    ""
+    "--"
+   ],
+   [
+    "Wide Barrier",
+    "Whenever you cast this spell, you may choose to gain 1 addition Exhaustion Point (EP), if you do, choose two target allies within 5ft of you. Both allies gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells until next turn."
    ],
    [
     "",
-    ""
+    "--"
    ],
    [
-    "",
-    ""
+    "Shared Ward",
+    "You can also cast this spell when a creature you can see within 30 feet is targeted by a spell. The barrier protects them instead of you, but you still gain the Exhaustion Points from casting it."
    ],
    [
     "",
@@ -227,7 +227,7 @@
    ],
    [
     "",
-    "You no longer gain Exhaustion Points (EP) whenever you cast this spell"
+    ""
    ],
    [
     "",
