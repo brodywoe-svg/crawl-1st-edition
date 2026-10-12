@@ -451,6 +451,7 @@
    "desc": "You crush a wax effigy in your fist and speak a curse on upon one target creature you can see within range. Each target of this spell must make a Charisma saving throw against your spell save DC. On a failure, the creature is Cursed for 1 minute. Whenever a Cursed creature makes an attack roll or a saving throw, it subtracts 1d4 from the roll.\nA Cursed creature can spend 1 AP on its turn to repeat the saving throw, ending the curse on a success.",
    "dmg": "N/A"
   },
+  "conc": true,
   "tiers": [
    [
     "",
