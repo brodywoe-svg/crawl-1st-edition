@@ -527,20 +527,6 @@
   "f": {}
  },
  {
-  "n": "Burning Hands",
-  "tags": [
-   "Arcane",
-   "Primal"
-  ],
-  "lv": 1,
-  "f": {
-   "cat": "Evocation",
-   "time": "1 Action",
-   "range": "15ft cone (Area of Effect)",
-   "desc": "You hold out your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 2d6 fire damage on a failed save, or half as much damage on a successful one.\n\nThe fire ignites any flammable objects in the area that aren’t being worn or carried.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
-  }
- },
- {
   "n": "Burning Smite",
   "tags": [
    "Divine"
@@ -1890,6 +1876,27 @@
   ],
   "lv": 7,
   "f": {}
+ },
+ {
+  "n": "Flame Wave",
+  "tags": [
+   "Arcane",
+   "Primal",
+   "Occult"
+  ],
+  "lv": 1,
+  "f": {
+   "cat": "Evocation",
+   "range": "15ft cone (Area of Effect)",
+   "desc": "With both hands you conjure a warbling sheet of fire. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one.\n\nThe fire ignites any flammable objects in the area that aren’t being worn or carried.\n",
+   "cost": "3 MP",
+   "time": "Instantaneous ",
+   "type": "Self",
+   "mat": "1 Amber, Jasper or Ruby",
+   "cls": "Wizard, Sorcerer, Druid, Warlock",
+   "pre": "+1 ARCANE, OCCULT, OR NATURE",
+   "dmg": "On a failed save, creatures in target area takes 3d6 fire damage, half as much damage on a successful one."
+  }
  },
  {
   "n": "Flaming Sphere",
