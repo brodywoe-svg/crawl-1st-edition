@@ -186,8 +186,8 @@
   "lv": 1,
   "f": {
    "cat": "Abjuration",
-   "range": "Self (Single Target)",
-   "desc": "You create a protective barrier of magical arcane energy that appears and protects you from Spells. Until the start of your next turn, you gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
+   "range": "Self",
+   "desc": "When you are targeted by a spell, you can cast this spell to create a protective barrier of arcane energy around you. Until the start of your next turn, you gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
    "pre": "+2 ARC",
    "cls": "Wizard, Sorcerer",
    "mat": "1 Moonstone",
@@ -203,7 +203,7 @@
    ],
    [
     "Convergence",
-    "Casting this spell, no longer consumes it's material cost."
+    "Casting this spell no longer consumes its material cost."
    ],
    [
     "",
@@ -219,7 +219,7 @@
    ],
    [
     "Shared Ward",
-    "You can also cast this spell when a creature you can see within 30 feet is targeted by a spell. The barrier protects them instead of you, but you still gain the Exhaustion Points from casting it."
+    "You can also cast this spell when a creature you can see within 30 feet is targeted by a spell or is within the target area of a spell. The barrier protects them instead of you, but you still gain the Exhaustion Points from casting it."
    ],
    [
     "",
@@ -235,7 +235,7 @@
    ],
    [
     "Absorption",
-    "When you cast this spell, If a spell attack misses you, or you succeed on a saving throw against a spell, while Arcane Barrier is active, you gain MP equal to half that spell’s casting cost"
+    "When you cast this spell, If a spell attack misses you, or you succeed on a saving throw against a spell targeting you, you gain MP equal to half that spell’s casting cost."
    ]
   ]
  },
