@@ -135,9 +135,10 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .pv-line b{font-weight:700}
 .pv-line.pre{font-style:italic}
 .pv-line.desc span{white-space:pre-wrap}
-.pv-tblwrap{overflow-x:auto;margin:6px 0 4px}
-.pv-tbl{border-collapse:collapse;min-width:50%;font-size:.95rem}
-.pv-tbl th,.pv-tbl td{border:2px solid var(--ink);padding:5px 10px;text-align:left;vertical-align:top}
+.pv-tblwrap{display:inline-block;max-width:100%;min-width:50%;overflow-x:auto;margin:6px 0 4px;border:2px solid var(--ink);border-radius:10px;vertical-align:top}
+.pv-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:.95rem}
+.pv-tbl th,.pv-tbl td{border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:5px 10px;text-align:left;vertical-align:top}
+.pv-tbl .clast{border-right:0}.pv-tbl .rlast{border-bottom:0}
 .pv-tbl th{background:var(--ink);color:var(--paper);font-weight:700}
 .tblline>label::after{content:":"}
 .tbled{display:grid;gap:8px;margin-top:4px}
@@ -150,9 +151,10 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .tbladd{background:var(--ink);color:var(--paper)}
 .tbldel{margin-left:auto}
 .tbldel.armed{background:var(--ink);color:var(--paper)}
-.tblgridwrap{overflow-x:auto}
-.tblgrid{border-collapse:collapse;width:100%}
-.tblgrid td{border:2px solid var(--ink);padding:0;min-width:7em}
+.tblgridwrap{overflow-x:auto;border:2px solid var(--ink);border-radius:10px}
+.tblgrid{border-collapse:separate;border-spacing:0;width:100%}
+.tblgrid td{border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:0;min-width:7em}
+.tblgrid td:last-child{border-right:0}.tblgrid tr:last-child td{border-bottom:0}
 .tblgrid input{width:100%;border:0;background:transparent;padding:6px 8px;font:600 .95rem var(--font);color:var(--ink)}
 .tblgrid input:focus{outline:none;background:var(--soft)}
 .tblgrid.hashead tr:first-child td{background:var(--ink)}
@@ -206,9 +208,11 @@ button.tag:hover{background:var(--ink);color:var(--paper)}
 .x-tier::before{content:"";position:absolute;left:12px;width:12px;top:11px;height:calc(100% + 7px);background:#000}
 .x-tier.x-last::before{display:none}
 .x-tier p{margin:0;font-size:18px;line-height:1.22}
-.x-tblwrap{margin:6px 0}
-.x-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:16px;line-height:1.25;border-top:2.5px solid #000;border-left:2.5px solid #000}
+.x-tblwrap{margin:6px 0;border:2.5px solid #000;border-radius:10px;overflow:hidden}
+.x-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:16px;line-height:1.25}
 .x-tbl th,.x-tbl td{border:0;border-right:2.5px solid #000;border-bottom:2.5px solid #000;padding:5px 9px;text-align:left;vertical-align:top}
+.x-tbl .clast{border-right:0}.x-tbl .rlast{border-bottom:0}
+.x-tbl .ctl{border-top-left-radius:7.5px}.x-tbl .ctr{border-top-right-radius:7.5px}.x-tbl .cbl{border-bottom-left-radius:7.5px}.x-tbl .cbr{border-bottom-right-radius:7.5px}
 .x-tbl th{background:#000;color:#fff;font-weight:700}
 .x-name{color:#8E171C}
 .x-mark{position:relative;z-index:1;width:36px;height:36px;margin-top:-7px;display:grid;place-items:center}
@@ -427,10 +431,12 @@ function sizeTable(tb,r,c){
 const tblHasText=tb=>tb&&tb.cells.some(row=>row.some(x=>String(x).trim()));
 function chartHTML(tb,cls){
   if(!tblHasText(tb))return "";
-  const head=tb.h?tb.cells[0]:null, body=tb.h?tb.cells.slice(1):tb.cells;
+  const R=tb.cells.length, C=tb.c;
+  const cc=(i,j)=>{const k=[];if(i===0&&j===0)k.push("ctl");if(i===0&&j===C-1)k.push("ctr");if(i===R-1&&j===0)k.push("cbl");if(i===R-1&&j===C-1)k.push("cbr");if(j===C-1)k.push("clast");if(i===R-1)k.push("rlast");return k.length?` class="${k.join(" ")}"`:""};
+  const head=tb.h?tb.cells[0]:null, body=tb.h?tb.cells.slice(1):tb.cells, off=tb.h?1:0;
   return `<div class="${cls}wrap"><table class="${cls}">`+
-    (head?`<thead><tr>${head.map(x=>`<th>${esc(x)}</th>`).join("")}</tr></thead>`:"")+
-    `<tbody>${body.map(row=>`<tr>${row.map(x=>`<td>${esc(x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    (head?`<thead><tr>${head.map((x,j)=>`<th${cc(0,j)}>${esc(x)}</th>`).join("")}</tr></thead>`:"")+
+    `<tbody>${body.map((row,i)=>`<tr>${row.map((x,j)=>`<td${cc(i+off,j)}>${esc(x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 function tblEditorInner(s){
   const tb=s.tbl;
