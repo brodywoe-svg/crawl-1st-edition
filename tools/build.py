@@ -5,6 +5,7 @@ Run from the repo root:  python tools/build.py
 Reads   src/page.html          the page template (shared by every version)
         crawl-spells.json      the spell list
 Writes  index.html             the GitHub Pages site (read-only)
+        conditions.html, glossary.html   the Glossary pages (from content/conditions.md)
         app/index.html         the Windows app's page (offline, saves on the computer)
         downloads/Crawl-Spell-Compendium-Installer.zip   the Windows installer
 
@@ -53,8 +54,20 @@ def page_body(template, spells):
     return body.replace("/*@NAVCSS@*/", crawlsite.NAV_CSS, 1)
 
 
-def conditions_page(template):
-    """A standalone Conditions page that shares the spell page's look and navigation."""
+GLOSSARY_PAGES = {
+    # file name: (nav section, <title>, meta description, body builder)
+    "conditions.html": ("conditions", "Crawl Conditions",
+                        "The conditions of Crawl 1st Edition: what each one does and how it ends.",
+                        crawlsite.conditions_body),
+    "glossary.html": ("glossary", "Crawl Glossary",
+                      "The Crawl 1st Edition glossary: every rules term in one searchable list.",
+                      crawlsite.glossary_body),
+}
+
+
+def glossary_page(template, name):
+    """A standalone Glossary page that shares the spell page's look and navigation."""
+    active, title, _, builder = GLOSSARY_PAGES[name]
     style = re.search(r"<style>(.*?)</style>", template, re.S).group(1).replace("/*@NAVCSS@*/", "")
     links = "".join(re.findall(r'<link rel="(?:preconnect|stylesheet)"[^>]*>', template)[:2])
     mode_init = re.search(r"<script>try\{if\(localStorage[^<]*</script>", template).group(0)
@@ -68,10 +81,10 @@ def conditions_page(template):
     )
     md = CONDITIONS.read_text(encoding="utf-8")
     return (
-        "<title>Crawl Conditions</title>" + links + mode_init
+        f"<title>{title}</title>" + links + mode_init
         + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}</style>"
-        + crawlsite.nav_html("conditions")
-        + crawlsite.conditions_body(md, logo, mode_btn)
+        + crawlsite.nav_html(active, controls=mode_btn)
+        + builder(md, logo)
         + f"<script>{mode_js}{crawlsite.CONDITIONS_JS}</script>"
     )
 
@@ -86,8 +99,10 @@ def build_site(body):
         "<script>window.CRAWL_STATIC=true;window.CRAWL_REPO={owner:\"brodywoe-svg\",repo:\"crawl-spell-compendium\",branch:\"main\"}</script></head><body>"
     )
     (ROOT / "index.html").write_text(head + body + FOOTER + "</body></html>", encoding="utf-8")
-    chead = head.replace("Every spell in Crawl 1st Edition, filterable by class and magic source.", "The conditions of Crawl 1st Edition: what each one does and how it ends.")
-    (ROOT / "conditions.html").write_text(chead + conditions_page(TEMPLATE.read_text(encoding="utf-8")) + FOOTER + "</body></html>", encoding="utf-8")
+    template = TEMPLATE.read_text(encoding="utf-8")
+    for name, (_, _, desc, _) in GLOSSARY_PAGES.items():
+        ghead = head.replace("Every spell in Crawl 1st Edition, filterable by class and magic source.", desc)
+        (ROOT / name).write_text(ghead + glossary_page(template, name) + FOOTER + "</body></html>", encoding="utf-8")
 
 
 def build_app(body):
@@ -106,9 +121,11 @@ def build_app(body):
     body = re.sub(r'<link rel="preconnect" href="https://fonts.googleapis.com">\n?', "", body, count=1)
     body = re.sub(r'<link rel="stylesheet" href="https://fonts.googleapis.com/css2[^"]*">\n?', "", body, count=1)
     (ROOT / "app" / "index.html").write_text(head + body + "</body></html>", encoding="utf-8")
-    cond = conditions_page(TEMPLATE.read_text(encoding="utf-8"))
-    cond = re.sub(r'<link rel="preconnect"[^>]*>|<link rel="stylesheet" href="https://fonts.googleapis.com[^>]*>', "", cond)
-    (ROOT / "app" / "conditions.html").write_text(head + cond + "</body></html>", encoding="utf-8")
+    template = TEMPLATE.read_text(encoding="utf-8")
+    for name in GLOSSARY_PAGES:
+        page = glossary_page(template, name)
+        page = re.sub(r'<link rel="preconnect"[^>]*>|<link rel="stylesheet" href="https://fonts.googleapis.com[^>]*>', "", page)
+        (ROOT / "app" / name).write_text(head + page + "</body></html>", encoding="utf-8")
 
 
 def build_installer():
@@ -131,7 +148,7 @@ def main():
     build_site(body)
     build_app(body)
     out = build_installer()
-    print(f"Built index.html, conditions.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
+    print(f"Built index.html, conditions.html, glossary.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
 
 
 if __name__ == "__main__":
