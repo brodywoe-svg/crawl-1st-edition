@@ -35,7 +35,7 @@ Remove-Item (Join-Path $dest 'resources\default_app.asar') -ErrorAction Silently
 Copy-Item $appSrc (Join-Path $dest 'resources\app') -Recurse
 
 $exe = Join-Path $dest "$name.exe"
-$ico = Join-Path $dest 'resources\app\icon.ico'
+$ico = Join-Path $dest 'resources\app\crawl-logo.ico'
 # Give the program file the Crawl icon (rcedit by the Electron team, MIT license)
 $rcedit = Join-Path $PSScriptRoot 'tools\rcedit-x64.exe'
 if (Test-Path $rcedit) {
@@ -49,13 +49,18 @@ if (Test-Path $rcedit) {
 $shell = New-Object -ComObject WScript.Shell
 $places = @([Environment]::GetFolderPath('Desktop'), (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'))
 foreach ($dir in $places) {
-  $lnk = $shell.CreateShortcut((Join-Path $dir "$name.lnk"))
+  $lnkPath = Join-Path $dir "$name.lnk"
+  if (Test-Path $lnkPath) { Remove-Item $lnkPath -Force }
+  $lnk = $shell.CreateShortcut($lnkPath)
   $lnk.TargetPath = $exe
   $lnk.WorkingDirectory = $dest
   $lnk.IconLocation = $ico
   $lnk.Description = 'Crawl 1st Edition spell compendium'
   $lnk.Save()
 }
+
+# Ask Windows to refresh its icon cache so the new icons show right away
+try { Start-Process -FilePath "$env:SystemRoot\System32\ie4uinit.exe" -ArgumentList '-show' -WindowStyle Hidden } catch {}
 
 Write-Host ""
 Write-Host "Done! Open $name from your Desktop or Start menu." -ForegroundColor Green

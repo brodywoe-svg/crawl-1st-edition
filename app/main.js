@@ -11,7 +11,7 @@ function createWindow() {
     minWidth: 420,
     title: "Crawl Spell Compendium",
     backgroundColor: "#f4f4f4",
-    icon: path.join(__dirname, process.platform === "win32" ? "icon.ico" : "icon.png"),
+    icon: path.join(__dirname, process.platform === "win32" ? "crawl-logo.ico" : "icon.png"),
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
