@@ -6,10 +6,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "25(G) worth of Salt and Incense",
    "cat": "Necromancy (Ritual)",
    "time": "1 Action",
    "range": "5ft (Touch) (Single Target)",
-   "mat": "25(G) worth of Salt and Incense",
    "desc": "You perform a ritual of Absolution over a corpse, or number of corpses equal to your spellcasting ability Modifier, forgiving them for the sins they committed in life, for the next 2 months the corpse(s) cannot be affected by spells like the Animated dead, Raise Dead, or Resurrection."
   }
  },
@@ -21,12 +21,12 @@
   ],
   "lv": 1,
   "f": {
-   "cat": "Evocation",
-   "range": "15ft (Single Target)",
    "mat": "A Vial of Citrus Extract",
-   "desc": "You extend your hand toward a creature you can see within range and project a Stream of acidic wash from your palm. The creature must succeed on a Dexterity saving throw or take 2d12 Acid damage and if your target is wearing metallic armor their AC is reduced by 1 until the start of your next turn, if the target is a Construct their AC is instead Reduced by 3. On Successful save the targets AC is not reduced and the target only takes half damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d12 for each slot level above 1st.",
+   "cat": "Evocation",
    "cost": "2 MP",
-   "time": "Instantaneous"
+   "time": "Instantaneous",
+   "range": "15ft (Single Target)",
+   "desc": "You extend your hand toward a creature you can see within range and project a Stream of acidic wash from your palm. The creature must succeed on a Dexterity saving throw or take 2d12 Acid damage and if your target is wearing metallic armor their AC is reduced by 1 until the start of your next turn, if the target is a Construct their AC is instead Reduced by 3. On Successful save the targets AC is not reduced and the target only takes half damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d12 for each slot level above 1st."
   },
   "tiers": [
    [
@@ -186,11 +186,58 @@
   "lv": 1,
   "f": {
    "cat": "Abjuration",
-   "time": "1 reaction, which you take when you are hit by a Spell Attack or rolling Saving throw against a spell.",
    "range": "Self (Single Target)",
-   "mat": "A stone with arcane symbols carved into it",
-   "desc": "You create a protective arcane barrier of magical arcane energy that appears and protects you from Spells. Until the start of your next turn, you have a +3 bonus to AC vs Spell attacks, if the spell being cast upon you requires a saving throw you can forgo the AC bonus and instead add the bonus to the Saving Throw against an Oncoming Spell, including against the triggering spell attack or spell save.\n\nAt Higher Levels: You are able to cast this spell with Any Spell slot of 1st level or higher, no other benefits are gained from a higher level cast."
-  }
+   "desc": "You create a protective barrier of magical arcane energy that appears and protects you from Spells. Until the start of your next turn, you have a +3 bonus to AC vs Spell attacks, if the spell attack targeting you requires you to roll a dexterity saving throw you can forgo the AC bonus and instead add a +3 bonus to the Saving Throw. At the start of your next turn you gain 1 Exhaustion Point (EP).",
+   "pre": "+2 ARC",
+   "cls": "Wizard, Sorcerer",
+   "mat": "1 Moonstone",
+   "cost": "2 MP",
+   "time": "Instantaneous ",
+   "dmg": "N/A",
+   "type": "Reaction"
+  },
+  "tiers": [
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Convergence",
+    "Casting this spell, no longer consumes it's material cost."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "Whenever you cast this spell, you instead gain a+4 bonus to AC vs Spell attacks."
+   ],
+   [
+    "",
+    "You no longer gain Exhaustion Points (EP) whenever you cast this spell"
+   ],
+   [
+    "",
+    "Whenever you cast this spell, you instead gain a+5 bonus to AC vs Spell attacks."
+   ],
+   [
+    "Absorption",
+    "When you cast this spell, If a spell attack misses you, or you succeed on a saving throw against a spell, while Arcane Barrier is active, you gain MP equal to half that spell’s casting cost"
+   ]
+  ]
  },
  {
   "n": "Arcane Gate",
@@ -216,10 +263,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A piece of wrought iron",
    "cat": "Abjuration",
    "time": "1 reaction, which you take when you are hit by a Melee Attack with a weapon.",
    "range": "Self (Single Target)",
-   "mat": "A piece of wrought iron",
    "desc": "You create an defensive arcane bubble of magical force that appears and protects you from Physical attacks and weapons. Until the start of your next turn, you have a +3 bonus to AC vs All Non-magical Physical attacks, including against the triggering attack.\n\nAt Higher Levels: You are able to cast this spell with Any Spell slot of 1st level or higher, no other benefits are gained from a higher level cast."
   }
  },
@@ -402,10 +449,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A sword of any kind that you also proficient in",
    "cat": "Transmutation",
    "time": "1 Bonus Action",
    "range": "5ft (Area of Effect)",
-   "mat": "A sword of any kind that you also proficient in",
    "desc": "You speak an incantation over a sword that is used in the casting of this spell. For the duration of this spell, while you are wielding the sword you gain an additional 10ft of movement and your next attack made with the sword deals and additional 1d10 thunder damage."
   }
  },
@@ -572,10 +619,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A Diamond worth 50(G)",
    "cat": "Evocation",
    "time": "1 Action",
-   "range": "30ft (Single Target)",
-   "mat": "A Diamond worth 50(G)"
+   "range": "30ft (Single Target)"
   }
  },
  {
@@ -603,10 +650,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A burnt piece of paper",
    "cat": "Evocation",
    "time": "1 Action",
    "range": "30ft (Single Target / Area of Effect)",
-   "mat": "A burnt piece of paper",
    "desc": "You create a condensed ball of fiery energy and fling it at one creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. Hit or miss, the ball then explodes in a blast of fiery cinders. The target and each creature within 5 feet of the point where the ball exploded must succeed on a Dexterity saving throw or take 2d6 fire damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the fire damage created by the explosion increases by 1d6 for each slot level above 1st."
   }
  },
@@ -744,10 +791,10 @@
   ],
   "lv": 3,
   "f": {
+   "mat": "250G worth of magical Incense that is consumed upon performing the ritual",
    "cat": "Illusion (Ritual)",
    "time": "1 Hour",
    "range": "5ft (Touch) a Magical Item or Object that weighs less than 10lb.",
-   "mat": "250G worth of magical Incense that is consumed upon performing the ritual",
    "desc": "For an hour you can perform an arcane ritual on a Magical Item or Object that weighs less than 10lbs and hide it’s magical nature from those who are able to use magic detection spells such as Detect magic. Upon completion of the ritual, the Item becomes Undetectable by magical detection spells for the Next month. Casting this spell on the same item every once a month for a year makes the Magical Item or Object Permanently Undetectable by magic detection spells until the dispel magic spell is cast on it.\n\nIf a spellcaster, other than the item's original Spellcaster, attempts to identify the item, whilst the item is under the effects of this spell, they must roll a d100 and roll above 50 + Original Spellcaster level. Failure to roll high enough results in the Spellcaster being unable to sense any magical presence from the item. On a success, the Item is successfully Identified."
   }
  },
@@ -1083,10 +1130,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A paper fan or feather",
    "cat": "Transmutation",
    "time": "1 Action",
    "range": "40ft (Single Target)",
-   "mat": "A paper fan or feather",
    "desc": "You seize the air and compress it as you whip up the air around you creating an invisible blade of wind. Make a ranged spell attack against a single target. On a hit, the target takes 1d10 slashing damage and the target and two other creatures Adjacent within 5 feet of the target must roll Dexterity saving throw or be knocked prone.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the slashing damage created by blade of wind increases by 1d10 for each slot level above 1st."
   }
  },
@@ -1145,10 +1192,10 @@
   ],
   "lv": 7,
   "f": {
+   "mat": "A Vial of Ankheg Blood",
    "cat": "Necromancy",
    "time": "1 action",
    "range": "60ft (Area of Effect)",
-   "mat": "A Vial of Ankheg Blood",
    "desc": "You create a 20-foot-cube of Black vaporous fog centered on a point you choose within range. The fog spreads around corners. It lasts for the Duration, ending the spell. Its area is heavily obscured. When a creature enters the spell’s area for the first time on a turn or starts its turn there, that creature must make a Constitution saving throw. On a Success the creature takes 10d10 necrotic damage. On a failure the creature drops to 0-hit points and is knocked Unconscious and must start making death saves at the beginning of their next turn. Creatures are affected even if they hold their breath or don’t need to breathe. The fog is static and cannot be moved from the space it was created but does coast alongside the surfaces of the ground and walls. The vapors, being heavier than air, sink to the lowest level of the land, even pouring down openings."
   }
  },
@@ -1293,10 +1340,10 @@
   ],
   "lv": 2,
   "f": {
+   "mat": "A Monocle or small glass lens",
    "cat": "Abjuration",
    "time": "1 Action",
    "range": "30ft (Area of Effect)",
-   "mat": "A Monocle or small glass lens",
    "desc": "Choose a 20ft by 20ft cube within range that you can see. Any spell from the Illusion school of 3rd level or lower within that area ends. For each Illusion of 4th level or higher, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.\n\nAt Higher Levels. When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
   }
  },
@@ -1427,10 +1474,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A square-shaped pebble",
    "cat": "Transmutation",
    "time": "1 Action",
    "range": "5ft (Area of Effect)",
-   "mat": "A square-shaped pebble",
    "desc": "You touch the ground and speak an incantation that creates a 10ft by 5ft wall that has a height of 5ft, and thickness of 3ft and lasts for the spell's duration. While you or an ally are using the wall as cover you have ¾ Cover. The Wall itself has an AC of 15 and has 20 hit-points, the wall crumbles if it’s hit-points are reduced to 0, you lose concentration on the spell, drop your concentration on the spells, or the spell's duration ends."
   }
  },
@@ -1451,10 +1498,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A quartz crystal",
    "cat": "Transmutation",
    "time": "1 Action",
    "range": "20ft (Area of Effect)",
-   "mat": "A quartz crystal",
    "desc": "You hold out your fingers and select a point within range, a spike made of stone erupts from the chosen point. Each creature with 5ft of the erupting spike must make Dexterity Saving throw or take 2d10 Bludgeoning damage, half as much on a successful save. If there is a target directly above the erupting spike, and they fail the Save, they are launched 10ft up in the air taking Falling damage and falling prone upon meeting the ground. If there's a Ceiling above the Launched target, they instead take falling damage for the maximum height of the current room. Immediately after casting the spell and creating the spike, the spike immediately retreats back into the ground.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the bludgeoning damage dealt by the earth spike increases by 1d10 for each slot level above 1st."
   }
  },
@@ -1707,10 +1754,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "10 gp worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier",
    "cat": "Conjuration (Ritual)",
    "time": "1 Hour",
    "range": "10ft (Area of effect)",
-   "mat": "10 gp worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier",
    "desc": "You gain the service of a familiar, a spirit that takes an animal form you choose: Bat, Bird, Cat, Crab, Dog, Frog (Toad), Hawk, Lizard, Octopus, Owl, Snake, Fish, Rat, Raven, Spider, or Weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of a beast.\n\nYour familiar acts independently of you, but it always obeys your commands. In combat, your familiar takes their turn immediately after yours. A familiar can’t attack, but it can take other actions as normal.\n\nWhen the familiar drops to 0 hit points, it disappears, leaving behind no physical form. It reappears after you cast this spell again. As an action, you can temporarily dismiss your familiar to a pocket dimension. Alternatively, you can dismiss it forever. As an action while it is temporarily dismissed, you can cause it to reappear in any unoccupied space within 30 feet of you. Whenever the familiar drops to 0 hit points or disappears into the pocket dimension, it leaves behind in its space anything it was wearing or carrying.\n\nWhile your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through your familiar’s eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses that the familiar has. During this time, you are deaf and blind with regard to your own senses.\n\nYou can’t have more than one familiar at a time. If you cast this spell while you already have a familiar, you instead cause it to adopt a new form. Choose one of the forms from the above list. Your familiar transforms into the chosen creature."
   }
  },
@@ -2184,10 +2231,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A pearl worth at least 100 gp",
    "cat": "Divination (Ritual)",
    "time": "1 Minute",
    "range": "5ft (Touch) (See Description)",
-   "mat": "A pearl worth at least 100 gp",
    "desc": "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it. If you instead touch a creature throughout the casting, you learn what spells, if any, are currently affecting it."
   }
  },
@@ -2367,10 +2414,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A Coil of copper wire",
    "cat": "Evocation",
    "time": "1 Action",
    "range": "30ft (Single Target)",
-   "mat": "A Coil of copper wire",
    "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be targeted only once by each casting of this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the Initial lightning damage dealt to the first Target increases by 1d6 for each slot level above 1st."
   }
  },
@@ -2465,10 +2512,10 @@
   ],
   "lv": 2,
   "f": {
+   "mat": "A Shard of Glass",
    "cat": "Transmutation",
    "time": "1 Action",
    "range": "5ft (Touch) A wooden, metal or stone wall or surface",
-   "mat": "A Shard of Glass",
    "desc": "As an action on your turn you can Touch a wooden, metal, or Stone surface or wall within range and temporarily make the surface transparent as glass for the duration. The surface wall or floor cannot be thicker than 12 inches of solid material, otherwise the spell fails. While viewing through the transparent surface you can make it so that the receiving end cannot or can view you from the other side of the glass and create what is essentially a magical one way window."
   }
  },
@@ -2838,10 +2885,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A small hand mirror",
    "cat": "Illusion",
    "time": "1 Action",
    "range": "60ft (Area of effect)",
-   "mat": "A small hand mirror",
    "desc": "You project forth a phantasmal image of an object, a creature, or some other visible phenomenon that is no larger than a 15-foot cube. The image appears at a spot within range and lasts for the duration. The image is purely visual; it isn’t accompanied by sound, smell, or other sensory effects.\n\nPhysical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image."
   }
  },
@@ -3400,10 +3447,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A dried cricket",
    "cat": "Enchantment",
    "time": "1 Action",
    "range": "30ft (Area of effect)",
-   "mat": "A dried cricket",
    "desc": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\n\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
   }
  },
@@ -3836,10 +3883,10 @@
   ],
   "lv": 1,
   "f": {
+   "mat": "A Rose seed",
    "cat": "Conjuration",
    "time": "1 Action",
    "range": "30ft (Single Target)",
-   "mat": "A Rose seed",
    "desc": "You create vines of constricting bramble beneath the feet of an unexpecting enemy, in an attempt to thwart them from moving. Choose a single target within the spells range, the target must roll a Dexterity Saving throw, On a failure the target takes 1d4 piercing damage and is Restrained until the start of your next turn. If fire damage is dealt to the target while restrained by the vines, the target is freed and is no longer restrained."
   }
  },
