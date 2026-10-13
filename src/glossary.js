@@ -25,41 +25,68 @@ function visible() {
   if (PAGE === "conditions") list = list.filter(e => e.sec === FIRST || editing.has(e._id));
   const q = $("cq").value.trim().toLowerCase();
   if (q) list = list.filter(e => editing.has(e._id) ||
-    [e.n, e.lead, ...e.fx, ...e.notes.map(n => n.t), ...e.aka].join(" ").toLowerCase().includes(q));
+    plainText([e.n, e.lead, ...e.fx, ...e.notes.map(n => n.t), ...e.aka.map(x => x.w + " " + x.ref)].join(" ")).toLowerCase().includes(q));
   return list.sort((a, b) => (a._new ? -1 : 0) - (b._new ? -1 : 0) || byName(a, b));
 }
 
 const noteText = e => e.notes.map(n => `${n.l}: ${n.t}`).join("\n");
+function bodyHTML(e) {
+  const notes = e.notes.map(n => `<p class="cnote"><b>${esc(n.l)}:</b> ${richInline(n.t)}</p>`).join("");
+  const words = e.aka.filter(x => x.ref);
+  return (e.lead ? `<div class="clead">${paras(e.lead)}</div>` : "") +
+    (e.fx.length ? `<ul class="cul">${e.fx.map(x => `<li>${richInline(x)}</li>`).join("")}</ul>` : "") + notes +
+    (words.length ? `<div class="crefs">${words.map(x => `<div class="cref"><b>${esc(x.w)}</b>${paras(x.ref)}</div>`).join("")}</div>` : "") +
+    (!e.lead && !e.fx.length && !notes && !words.length ? `<p class="clead">No description yet.</p>` : "");
+}
 function card(e, tag) {
   if (editing.has(e._id)) return form(e);
-  const notes = e.notes.map(n => `<p class="cnote"><b>${esc(n.l)}:</b> ${esc(n.t)}</p>`).join("");
   return `<section class="cond" data-id="${e._id}"><h2 class="chead"><span>${esc(e.n)}</span><span class="chr">` +
     (tag ? `<span class="ctag">${esc(singular(e.sec))}</span>` : "") +
     (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(e.n)}">Edit</button>` : "") +
-    `</span></h2><div class="cbody">${e.lead ? `<p class="clead">${esc(e.lead)}</p>` : ""}` +
-    (e.fx.length ? `<ul class="cul">${e.fx.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "") +
-    `${notes}${!e.lead && !e.fx.length && !notes ? `<p class="clead">No description yet.</p>` : ""}</div></section>`;
+    `</span></h2><div class="cbody">${bodyHTML(e)}</div></section>`;
+}
+const SWATCHES = [["Crawl red", "#8e171c"], ["Blue", "#1f5fbf"], ["Green", "#2e7d32"], ["Purple", "#6a1b9a"], ["Gold", "#b7791f"]];
+function wordRow(x) {
+  return `<div class="gword"><input type="text" class="gw" value="${esc(x.w)}" placeholder="Word, e.g. Target Area" aria-label="Underlined word" autocomplete="off">` +
+    `<textarea class="gref" rows="2" placeholder="What the popup shows for this word. Leave empty to show the whole entry." aria-label="Popup text for this word">${esc(x.ref)}</textarea>` +
+    `<button type="button" class="btn gwdel">Remove</button></div>`;
 }
 function form(e) {
-  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka.join(", ") };
+  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka };
   const id = k => `g${k}-${e._id}`;
   return `<section class="cond gediting" data-id="${e._id}"><div class="chead"><span>${e._new ? "New entry" : "Editing " + esc(e.n)}</span></div>
 <div class="cbody gform">
 <label for="${id("n")}">Name<input type="text" id="${id("n")}" data-k="n" value="${esc(d.n)}" autocomplete="off"></label>
 <label for="${id("sec")}">Section <small>Entries in "Conditions" also show on the Conditions page.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
-<label for="${id("lead")}">Description<textarea id="${id("lead")}" data-k="lead" rows="3">${esc(d.lead)}</textarea></label>
-<label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="5">${esc(d.fx)}</textarea></label>
+<div class="gcolor" role="toolbar" aria-label="Text color"><span class="gcl">Text color</span>${SWATCHES.map(([n, c]) => `<button type="button" class="gsw" data-c="${c}" style="--c:${c}" title="${n}" aria-label="Color selected text ${n}"></button>`).join("")}<input type="color" class="gpick" value="#8e171c" aria-label="Pick any color" title="Pick any color"><button type="button" class="btn gapply">Color selected text</button><button type="button" class="btn gclear">Remove color</button><small class="ghelp">Select text in any box below, then pick a color.</small></div>
+<label for="${id("lead")}">Description <small>Leave a blank line between paragraphs.</small><textarea id="${id("lead")}" data-k="lead" rows="6">${esc(d.lead)}</textarea></label>
+<label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="4">${esc(d.fx)}</textarea></label>
 <label for="${id("notes")}">Notes <small>One per line. Start a line with "Designer's note:" to label it as one.</small><textarea id="${id("notes")}" data-k="notes" rows="2">${esc(d.notes)}</textarea></label>
-<label for="${id("aka")}">Also underline these words in spells <small>The name is always underlined. Separate extra words with commas, e.g. grapple, grappling.</small><input type="text" id="${id("aka")}" data-k="aka" value="${esc(d.aka)}" autocomplete="off"></label>
+<div class="gwords"><span class="glab">Underlined words in spells <small>The name is always underlined and shows the whole entry. Add other words here, each with its own popup text if you like.</small></span><div class="gwlist">${d.aka.map(wordRow).join("")}</div><button type="button" class="btn gwadd">Add a word</button></div>
+<div class="gprev"><span class="glab">Preview</span><div class="gprevbody"></div></div>
 <p class="gerr" role="alert"></p>
 <div class="gbtns"><button type="button" class="btn gdel">${e._new ? "Remove" : "Delete entry"}</button><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>
 </div></section>`;
 }
-function saveDrafts() {
-  document.querySelectorAll(".gediting").forEach(f => {
-    const d = {}; f.querySelectorAll("[data-k]").forEach(el => { d[el.dataset.k] = el.value }); drafts.set(+f.dataset.id, d);
-  });
+function readForm(f) {
+  const d = {}; f.querySelectorAll("[data-k]").forEach(el => { d[el.dataset.k] = el.value });
+  d.aka = [...f.querySelectorAll(".gword")].map(r => ({ w: r.querySelector(".gw").value, ref: r.querySelector(".gref").value }));
+  return d;
 }
+function parseNotes(t) {
+  return t.split("\n").map(x => x.trim()).filter(Boolean).map(x => {
+    const m = x.match(/^(designer'?s note|design note|note)\s*:\s*(.*)$/i);
+    return m ? { l: /design/i.test(m[1]) ? "Designer's note" : "Note", t: m[2].trim() } : { l: "Note", t: x };
+  }).filter(n => n.t);
+}
+function fromDraft(d) {
+  return {
+    lead: d.lead.trim(), fx: d.fx.split("\n").map(x => x.replace(/^\s*[-•*]\s*/, "").trim()).filter(Boolean),
+    notes: parseNotes(d.notes), aka: d.aka.map(x => ({ w: x.w.trim().replace(/\s+/g, " "), ref: x.ref.trim() })).filter(x => x.w)
+  };
+}
+function preview(f) { const b = f.querySelector(".gprevbody"); if (b) b.innerHTML = bodyHTML(fromDraft(readForm(f))) }
+function saveDrafts() { document.querySelectorAll(".gediting").forEach(f => drafts.set(+f.dataset.id, readForm(f))) }
 
 function render() {
   saveDrafts();
@@ -73,6 +100,7 @@ function render() {
     return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2>${sec === FIRST ? `<a class="glink" href="conditions.html">Open the Conditions page</a>` : ""}</div><div class="clist">${items.map(e => card(e, true)).join("")}</div></section>`;
   }).join("");
   $("clist").innerHTML = h;
+  document.querySelectorAll(".gediting").forEach(preview);
   $("cempty").hidden = list.length > 0;
   $("gsecs").innerHTML = sections().map(s => `<option value="${esc(s)}">`).join("");
   $("gAdd").hidden = !ADMIN;
@@ -100,24 +128,43 @@ $("clist").addEventListener("click", ev => {
     const wasNew = e._new; closeForm(e); if (!wasNew) entries = entries.filter(x => x !== e);
     render(); markDirty(); if (!wasNew) say(`Deleted ${e.n}. Click Save changes to keep it deleted.`);
   } else if (b.classList.contains("gdone")) {
-    const f = b.closest(".gediting"), v = k => f.querySelector(`[data-k="${k}"]`).value, err = m => { f.querySelector(".gerr").textContent = m };
-    const name = v("n").trim().replace(/\s+/g, " ");
+    const f = b.closest(".gediting"), d = readForm(f), err = m => { f.querySelector(".gerr").textContent = m };
+    const name = d.n.trim().replace(/\s+/g, " ");
     if (!name) { err("Give the entry a name."); return }
     if (entries.some(x => x !== e && !x._new && x.n.toLowerCase() === name.toLowerCase())) { err(`There's already an entry called ${name}.`); return }
-    e.n = name;
-    e.sec = v("sec").trim().replace(/\s+/g, " ") || FIRST;
-    e.lead = v("lead").trim();
-    e.fx = v("fx").split("\n").map(x => x.replace(/^\s*[-•*]\s*/, "").trim()).filter(Boolean);
-    e.notes = v("notes").split("\n").map(x => x.trim()).filter(Boolean).map(x => {
-      const m = x.match(/^(designer'?s note|design note|note)\s*:\s*(.*)$/i);
-      return m ? { l: /design/i.test(m[1]) ? "Designer's note" : "Note", t: m[2].trim() } : { l: "Note", t: x };
-    }).filter(n => n.t);
-    e.aka = v("aka").split(",").map(x => x.trim()).filter(Boolean);
+    const p = fromDraft(d), seen = new Set();
+    for (const x of p.aka) { const k = x.w.toLowerCase(); if (seen.has(k)) { err(`"${x.w}" is listed twice under Underlined words.`); return } seen.add(k) }
+    e.n = name; e.sec = d.sec.trim().replace(/\s+/g, " ") || FIRST;
+    e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka;
     delete e._new; editing.delete(e._id); drafts.delete(e._id);
     render(); markDirty();
     say(PAGE === "conditions" && e.sec !== FIRST ? `${e.n} is in the ${e.sec} section, so it now shows on the Glossary page instead.` : "");
   }
 });
+let lastBox = null;
+$("clist").addEventListener("focusin", ev => { if (ev.target.matches(".gediting textarea, .gediting input[type=text]")) lastBox = ev.target });
+$("clist").addEventListener("input", ev => { const f = ev.target.closest(".gediting"); if (f) preview(f) });
+$("clist").addEventListener("change", ev => { if (ev.target.matches(".gpick")) { const f = ev.target.closest(".gediting"); if (lastBox && f.contains(lastBox) && lastBox.selectionStart !== lastBox.selectionEnd) colorSel(f, ev.target.value) } });
+$("clist").addEventListener("mousedown", ev => { if (ev.target.closest(".gsw,.gapply,.gclear")) ev.preventDefault() });
+function colorSel(f, c) {
+  const t = lastBox && f.contains(lastBox) ? lastBox : null, err = m => { f.querySelector(".gerr").textContent = m };
+  if (!t || t.selectionStart === t.selectionEnd) { err("Select some text in one of the boxes first, then pick a color."); return }
+  err("");
+  const a = t.selectionStart, b = t.selectionEnd, v = t.value;
+  let mid = v.slice(a, b).replace(/\[\/?color[^\]]*\]/gi, "");
+  if (c) mid = `[color=${c}]${mid}[/color]`;
+  t.focus(); t.setSelectionRange(a, b);
+  if (!document.execCommand || !document.execCommand("insertText", false, mid)) t.setRangeText(mid, a, b, "select");
+  t.setSelectionRange(a, a + mid.length); preview(f);
+}
+$("clist").addEventListener("click", ev => {
+  const f = ev.target.closest(".gediting"); if (!f) return;
+  const sw = ev.target.closest(".gsw"); if (sw) { f.querySelector(".gpick").value = sw.dataset.c; colorSel(f, sw.dataset.c); return }
+  if (ev.target.closest(".gapply")) { colorSel(f, f.querySelector(".gpick").value); return }
+  if (ev.target.closest(".gclear")) { colorSel(f, ""); return }
+  if (ev.target.closest(".gwadd")) { f.querySelector(".gwlist").insertAdjacentHTML("beforeend", wordRow({ w: "", ref: "" })); f.querySelector(".gword:last-child .gw").focus(); return }
+  const del = ev.target.closest(".gwdel"); if (del) { del.closest(".gword").remove(); preview(f) }
+}, true);
 $("gAdd").addEventListener("click", () => {
   const e = { n: "", sec: PAGE === "conditions" ? FIRST : (sections()[0] || FIRST), lead: "", fx: [], notes: [], aka: [], _id: ++uid, _new: true };
   entries.push(e); editing.add(e._id); $("cq").value = ""; render();

@@ -290,11 +290,14 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .gl{color:var(--red);text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px;cursor:help;border-radius:3px}
 .gl:hover,.gl.on{background:var(--soft)}
 .gl:focus-visible{outline:2px solid var(--red);outline-offset:1px}
-.gtip{position:fixed;z-index:40;width:min(360px,calc(100vw - 24px));background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none;font-family:var(--font)}
+.gtip{position:fixed;z-index:40;width:min(380px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow-y:auto;background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none;font-family:var(--font)}
 .gtip .gth{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;color:var(--paper);font-weight:800;font-size:1rem}
 .gtip .gtag{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
 .gtip .gtb{background:var(--paper);color:var(--ink);border-radius:0 0 12px 12px;padding:10px 14px 12px;display:grid;gap:6px;font-size:.88rem;font-weight:600;line-height:1.4}
 .gtip p{margin:0}
+.gtip .gfrom{font-size:.75rem;color:var(--muted);font-weight:700}
+.tc{color:var(--c)}
+:root[data-mode="dark"] .tc{color:color-mix(in srgb,var(--c),#fff 40%)}
 .gtip ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
 .gtip li{position:relative;padding-left:17px}
 .gtip li::before{content:"";position:absolute;left:2px;top:.5em;width:6px;height:6px;background:var(--ink);transform:rotate(45deg)}
@@ -637,8 +640,13 @@ function normGlossary(j){
     n:e.n.trim(), sec:String(e.sec||"Conditions").trim()||"Conditions", lead:String(e.lead||"").trim(),
     fx:list(e.fx).map(x=>String(x).trim()).filter(Boolean),
     notes:list(e.notes).filter(n=>n&&String(n.t||"").trim()).map(n=>({l:String(n.l||"Note").trim()||"Note",t:String(n.t).trim()})),
-    aka:list(e.aka).map(x=>String(x).trim()).filter(Boolean)}));
+    aka:list(e.aka).map(x=>typeof x==="string"?{w:x,ref:""}:{w:String(x&&x.w||""),ref:String(x&&x.ref||"")}).map(x=>({w:x.w.trim(),ref:x.ref.trim()})).filter(x=>x.w)}));
 }
+/* glossary text: blank lines start a new paragraph, [color=#hex]text[/color] colors text */
+const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;
+function richInline(t){return esc(t).replace(COLOR_RE,(m,c,x)=>`<span class="tc" style="--c:${c}">${x}</span>`).replace(/\n/g,"<br>")}
+function paras(t,cls){return String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p${cls?` class="${cls}"`:""}>${richInline(x)}</p>`).join("")}
+const plainText=t=>String(t||"").replace(/\[\/?color[^\]]*\]/gi,"");
 const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
 /*@GLCORE-END@*/
 /* glossary terms in spell text: red underline, with the entry in a popup on hover, focus or tap */
@@ -646,7 +654,8 @@ let GL_RE=null, GL_MAP=new Map();
 function setGlossary(j){
   const a=normGlossary(j); if(!a)return false;
   GLOSSARY={v:1,entries:a}; GL_MAP=new Map();
-  a.forEach(e=>[e.n,...e.aka].forEach(t=>{const k=t.toLowerCase();if(!GL_MAP.has(k))GL_MAP.set(k,e)}));
+  a.forEach(e=>{const k=e.n.toLowerCase();if(!GL_MAP.has(k))GL_MAP.set(k,{e,w:e.n,ref:""})});
+  a.forEach(e=>e.aka.forEach(x=>{const k=x.w.toLowerCase();if(!GL_MAP.has(k)||(x.ref&&!GL_MAP.get(k).ref&&GL_MAP.get(k).e===e))GL_MAP.set(k,{e,w:x.w,ref:x.ref})}));
   const terms=[...GL_MAP.keys()].sort((x,y)=>y.length-x.length).map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
   GL_RE=terms.length?new RegExp("\\b("+terms.join("|")+")\\b","gi"):null;
   return true;
@@ -657,11 +666,13 @@ function rerenderOpen(){openSet.forEach(id=>{if(editSet.has(id))return;const d=o
 const gtip=document.createElement("div");gtip.className="gtip";gtip.id="gtip";gtip.setAttribute("role","tooltip");gtip.hidden=true;document.body.appendChild(gtip);
 let gCur=null, gAt=0;
 function showTip(el){
-  const e=GL_MAP.get(el.dataset.g); if(!e)return;
+  const hit=GL_MAP.get(el.dataset.g); if(!hit)return; const e=hit.e;
   if(gCur&&gCur!==el){gCur.classList.remove("on");gCur.removeAttribute("aria-describedby")}
   if(gCur!==el)gAt=Date.now();
   gCur=el;el.classList.add("on");el.setAttribute("aria-describedby","gtip");
-  gtip.innerHTML=`<div class="gth"><span>${esc(e.n)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${e.lead?`<p>${esc(e.lead)}</p>`:""}${e.fx.length?`<ul>${e.fx.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}</div>`;
+  gtip.innerHTML=hit.ref
+    ?`<div class="gth"><span>${esc(hit.w)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${paras(hit.ref)}<p class="gfrom">From ${esc(e.n)}</p></div>`
+    :`<div class="gth"><span>${esc(e.n)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${paras(e.lead)}${e.fx.length?`<ul>${e.fx.map(x=>`<li>${richInline(x)}</li>`).join("")}</ul>`:""}</div>`;
   gtip.hidden=false;
   const r=el.getBoundingClientRect(),w=gtip.offsetWidth,h=gtip.offsetHeight,vw=document.documentElement.clientWidth,vh=window.innerHeight;
   const x=Math.min(Math.max(12,r.left+r.width/2-w/2),vw-w-12);

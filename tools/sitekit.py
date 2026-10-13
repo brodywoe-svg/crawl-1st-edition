@@ -170,7 +170,12 @@ CONDITIONS_CSS = """
 .chead{margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 16px;color:var(--paper);font-size:1.05rem;font-weight:800;letter-spacing:.01em}
 .ctag{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
 .cbody{background:var(--paper);border-radius:0 0 12px 12px;padding:12px 18px 16px;display:grid;gap:8px}
-.clead{margin:0;font-weight:600}
+.clead{margin:0;font-weight:600;display:grid;gap:10px}
+.clead p{margin:0}
+.crefs{display:grid;gap:8px;margin-top:2px}
+.cref{border:2px solid var(--hair);border-radius:10px;padding:8px 12px;display:grid;gap:6px;font-size:.92rem}
+.cref b{font-weight:800}
+.cref p{margin:0}
 .cul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
 .cul li{position:relative;padding-left:20px;font-weight:600;line-height:1.45}
 .cul li::before{content:"";position:absolute;left:3px;top:.55em;width:7px;height:7px;background:var(--ink);transform:rotate(45deg)}
@@ -198,5 +203,22 @@ CONDITIONS_CSS = """
 .gbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .gbtns .sp{flex:1}
 .gdel{color:var(--red)!important;border-color:var(--red)!important}
+.gcolor{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 10px;border:2px solid var(--hair);border-radius:10px;position:sticky;top:calc(var(--navh,0px) + 70px);z-index:3;background:var(--paper)}
+.gcl{font-size:.85rem;font-weight:800;margin-right:4px}
+.gsw{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:var(--c);cursor:pointer;padding:0}
+.gsw:hover{transform:scale(1.1)}
+.gform input.gpick{width:38px;height:30px;padding:2px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);cursor:pointer}
+.gcolor .btn{padding:4px 10px;font-size:.8rem}
+.ghelp{flex-basis:100%;font-weight:600;color:var(--muted);font-size:.78rem}
+.glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
+.gwords{display:grid;gap:8px}
+.gwlist{display:grid;gap:8px}
+.gword{display:grid;grid-template-columns:minmax(120px,200px) 1fr auto;gap:8px;align-items:start}
+.gword input,.gword textarea{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
+.gword textarea{resize:vertical;field-sizing:content;min-height:2.6em;line-height:1.4}
+.gwords>.btn{justify-self:start}
+@media (max-width:600px){.gword{grid-template-columns:1fr}.gword .gwdel{justify-self:start}}
+.gprev{display:grid;gap:6px}
+.gprevbody{border:2px dashed var(--hair);border-radius:10px;padding:10px 14px;display:grid;gap:8px}
 @media (max-width:600px){.gform input,.gform textarea,.cbar input{font-size:16px}}
 """

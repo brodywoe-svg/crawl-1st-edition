@@ -14,7 +14,10 @@
    ],
    "notes": [],
    "aka": [
-    "Bleeding"
+    {
+     "w": "Bleeding",
+     "ref": ""
+    }
    ]
   },
   {
@@ -271,8 +274,14 @@
    "fx": [],
    "notes": [],
    "aka": [
-    "Target",
-    "Target Area"
+    {
+     "w": "Target",
+     "ref": "Target. The effect is aimed directly at one specific creature or object. The caster chooses who.\n\nWhen you target: you pick a creature or object you can see within range. Example: you cast Bane on the goblin chieftain.\n\nWhen you are targeted: a goblin shaman casts Bane on you, or a bandit throws a dagger at you."
+    },
+    {
+     "w": "Target Area",
+     "ref": "Target Area. Whenever a spell or effect covers an area, such as a cone, line, sphere or cube, and affects everyone inside it, you are being targeted. Even though you aren’t the direct target of the attack or effect, being inside the selected area makes you a target of that spell. If any part of the area overlaps a creature’s space, that creature is also considered a target.\n\nWhen you target: you pick where the effect goes, and every creature caught inside it is affected, friend or foe. Example: you cast Bramblesnatch in a 15-foot line from you. The two goblins in that line must make the save, and so must your ally if they’re standing there.\n\nWhen you are targeted: a fire blast erupts nearby, and its edge reaches your square."
+    }
    ]
   },
   {
