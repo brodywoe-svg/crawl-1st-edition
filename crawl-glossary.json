@@ -13,8 +13,12 @@
      "ref": "At the beginning of each Player(s), and Non-Player Character's (NPC) turn in combat, they roll an Action die, depending on the result of the die and the features that creature has, they generate that many Action Points (AP) for that turn."
     },
     {
+     "w": "AP",
+     "ref": "Action Points (AP) are the resource used by players and non-player characters to commit/use an actions, whether it be swinging a sword or casting firebolt, during their turn. Action point's expire at the start or each players next turn. Action Points can be used in the place of Magic Points, but Magic points cannot be used for Actions."
+    },
+    {
      "w": "Action Point",
-     "ref": "Action Points (AP) are the resource used by players and non-player characters to commit/use an actions, whether it be swinging a sword or casting firebolt, during their turn. Action point's expire at the start or each players next turn."
+     "ref": "Action Points (AP) are the resource used by players and non-player characters to commit/use an actions, whether it be swinging a sword or casting firebolt, during their turn. Action point's expire at the start or each players next turn. Action Points can be used in the place of Magic Points, but Magic points cannot be used for Actions."
     }
    ]
   },
