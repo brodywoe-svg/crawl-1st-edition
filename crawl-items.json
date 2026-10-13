@@ -134,7 +134,7 @@
    "cat": "Weapon",
    "sub": "Swords",
    "slot": "",
-   "badge": true,
+   "badge": false,
    "rarity": "Uncommon",
    "magic": false,
    "value": "18 (G)",
@@ -519,7 +519,7 @@
    "weight": "8lb",
    "actions": "",
    "props": "1d8 slashing, Versatile 1d10, Dwarven Durability",
-   "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
+   "feat": "[color=#8e171c]Dwarven Durability[/color] - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "desc": "",
    "extra": []
   },
