@@ -2527,7 +2527,7 @@
    ],
    "props": "",
    "grants": "",
-   "feat": "Serrated - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
+   "feat": "[color=#8e171c]Serrated[/color] - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "quote": "\"Dwarves polish. Elves grow. We hammer the iron black and leave the barbs where they fall. A clean wound heals. A Black Iron wound reminds.\" -Grushka Ashmaw, Chief of the Black Boughs",
    "extra": []
   },
@@ -2878,7 +2878,7 @@
    ],
    "props": "",
    "grants": "",
-   "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
+   "feat": "[color=#8e171c]Dwarven Durability[/color] - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "quote": "\"Every dwarf child learns the axe before the pick. The mountain can wait. The things living in it won't.\" -Godfrey Stoneheart",
    "extra": []
   },
@@ -2922,7 +2922,7 @@
    ],
    "props": "",
    "grants": "",
-   "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
+   "feat": "[color=#8e171c]Dwarven Durability[/color] - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "quote": "\"Any fool can make an axe. A dwarf makes one their grandchildren will still be using.\" -Godfrey Stoneheart",
    "extra": []
   },
@@ -2970,7 +2970,7 @@
    ],
    "props": "",
    "grants": "",
-   "feat": "Forgery (DC X) - This document appears genuine. A creature examining it must succeed on an Investigation check against DC X to notice it’s forged.\n\n[color=#8e171c]Forged Documents[/color]\nWhen you craft a Forged Document, choose its type and make a crafting roll. Forgeries follow these rules:\n\n[color=#8e171c]Document Type[/color]: Each type of document draws on a different skill:\nPersonal Letter: Persuasion\nWrit of Passage: Deception\nLegal Document: Lore\nRoyal Decree: Lore\n\n[color=#8e171c]Crafting Roll[/color]: Roll a d20 and add your Scribing Rank and your Rank in the document’s associated skill. The total becomes the document’s Forgery DC.\n[color=#8e171c]No Failure[/color]: The document is always completed. A low roll simply makes a poor forgery, and anyone who looks closely may see through it.\n[color=#8e171c]Official Seal[/color]: A Royal Decree also requires an Official Seal as a material.",
+   "feat": "[color=#8e171c]Forgery (DC X)[/color] - This document appears genuine. A creature examining it must succeed on an Investigation check against DC X to notice it’s forged.\n\n[color=#8e171c]Forged Documents[/color]\nWhen you craft a Forged Document, choose its type and make a crafting roll. Forgeries follow these rules:\n\n[color=#8e171c]Document Type[/color]: Each type of document draws on a different skill:\nPersonal Letter: Persuasion\nWrit of Passage: Deception\nLegal Document: Lore\nRoyal Decree: Lore\n\n[color=#8e171c]Crafting Roll[/color]: Roll a d20 and add your Scribing Rank and your Rank in the document’s associated skill. The total becomes the document’s Forgery DC.\n[color=#8e171c]No Failure[/color]: The document is always completed. A low roll simply makes a poor forgery, and anyone who looks closely may see through it.\n[color=#8e171c]Official Seal[/color]: A Royal Decree also requires an Official Seal as a material.",
    "quote": "“I don’t forge documents. I write the letters the guard captain would have written, had he been a more reasonable man.” -Oswin Quillfeather",
    "extra": []
   },
