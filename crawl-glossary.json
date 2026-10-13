@@ -692,15 +692,15 @@
   {
    "n": "Thrown",
    "sec": "Properties",
-   "lead": "You can throw a weapon that has the Thrown property to make a ranged attack. The numbers after it are the normal range and long range (for example, Thrown 20/60). If it's a melee weapon, you use the same modifier for the attack and damage rolls that you would use for a melee attack with it.",
+   "lead": "You can expend 2 Action Points (AP) to throw a weapon or item that has the Thrown property, when you do, make a ranged attack. The numbers after it are the normal range and long range (for example, Thrown 20/60). If it's a melee weapon, you use the same modifier for the attack and damage rolls that you would use for a melee attack with it. If it's an Item such a Alchemist fire, you make a Dexterity Ranged attack against a target.",
    "fx": [],
-   "notes": [
+   "notes": [],
+   "aka": [
     {
-     "l": "Designer's note",
-     "t": "Draft wording based on the SRD 5.1. Check it against Crawl's Action Pool rules."
+     "w": "Thrown",
+     "ref": "You can expend 2 Action Points (AP) to throw a weapon or item that has the Thrown property, when you do, make a ranged attack. The numbers after it are the normal range and long range (for example, Thrown 20/60). If it's a melee weapon, you use the same modifier for the attack and damage rolls that you would use for a melee attack with it. If it's an Item such a Alchemist fire, you make a Dexterity Ranged attack against a target."
     }
    ],
-   "aka": [],
    "tip": false
   },
   {
