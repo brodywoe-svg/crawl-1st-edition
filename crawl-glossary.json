@@ -2,6 +2,23 @@
  "v": 1,
  "entries": [
   {
+   "n": "Action Pool",
+   "sec": "Combat System",
+   "lead": "[color=#8e171c]The Action Pool[/color]\nYour Action Pool holds all of your Action Points (AP), Magic Points \n(MP) and Exhaustion Points. The combined total can never exceed \nyour Max Pool.\n\n[color=#8e171c]Overflow. [/color]If you would gain points that put you over your Max Pool, \nyou choose which of the new points to keep and which are lost. For \nexample, if you gain both AP and MP, you decide how many of each \nto keep.\n\n[color=#8e171c]Exhaustion.[/color] Exhaustion Points take up space in your pool like any \nother point, but they can’t be spent or lost to overflow. If your pool is \never completely filled with Exhaustion Points, you die.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Action Die",
+     "ref": "At the beginning of each Player(s), and Non-Player Character's (NPC) turn in combat, they roll an Action die, depending on the result of the die and the features that creature has, they generate that many Action Points (AP) for that turn."
+    },
+    {
+     "w": "Action Point",
+     "ref": "Action Points (AP) are the resource used by players and non-player characters to commit/use an actions, whether it be swinging a sword or casting firebolt, during their turn. Action point's expire at the start or each players next turn."
+    }
+   ]
+  },
+  {
    "n": "Bleeding",
    "sec": "Conditions",
    "lead": "Some attacks wound a creature deeply enough to make it bleed. While Bleeding:",
