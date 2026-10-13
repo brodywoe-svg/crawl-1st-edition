@@ -265,9 +265,9 @@
    "aka": []
   },
   {
-   "n": "Target",
-   "sec": "Targeting",
-   "lead": "",
+   "n": "Targeting",
+   "sec": "Combat Rules",
+   "lead": "Targeting\nTargeting describes who or what a spell, attack or effect is aimed at. It works the same way whether you’re the one casting or the one being cast at.\n\nTarget. The effect is aimed directly at one specific creature or object. The caster chooses who.\n\nTarget Area. Whenever a spell or effect covers an area, such as a cone, line, sphere or cube, and affects everyone inside it, you are being targeted. Even though you aren’t the direct target of the attack or effect, being inside the selected area makes you a target of that spell. If any part of the area overlaps a creature’s space, that creature is also considered a target.\n\nWhen you target\nWhen you cast a spell or use an ability, its card tells you whether you choose a Target or a Target Area.\n\nTarget: you pick a creature or object you can see within range. Example: you cast Bane on the goblin chieftain.\nTarget Area: you pick where the effect goes, and every creature caught inside it is affected, friend or foe. Example: you cast Bramblesnatch in a 15-foot line from you. The two goblins in that line must make the save, and so must your ally if they’re standing there.\n\nWhen you are targeted\nWhen an enemy’s spell, attack or effect is aimed at you, or you’re standing inside its area, you are targeted.\n\nTarget: a goblin shaman casts Bane on you, or a bandit throws a dagger at you.\nTarget Area: a fire blast erupts nearby, and its edge reaches your square.\n\nAny rule that says “when you are targeted” counts both cases. For example, Arcane Barrier can be cast whenever you’re targeted by a spell cast by a hostile creature, so it protects you whether a spell is aimed at you or you’re caught in its blast.",
    "fx": [],
    "notes": [],
    "aka": [
