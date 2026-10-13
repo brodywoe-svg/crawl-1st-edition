@@ -646,9 +646,10 @@ function normGlossary(j){
 }
 /* glossary text: blank lines start a new paragraph, [color=#hex]text[/color] colors text */
 const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;
-function richInline(t){return esc(t).replace(COLOR_RE,(m,c,x)=>`<span class="tc" style="--c:${c}">${x}</span>`).replace(/\n/g,"<br>")}
+const LINK_RE=/\[link=([a-z-]+\.html(?:\?[\w=&-]*)?(?:#[\w-]*)?)\]([\s\S]*?)\[\/link\]/gi;
+function richInline(t){return esc(t).replace(COLOR_RE,(m,c,x)=>`<span class="tc" style="--c:${c}">${x}</span>`).replace(LINK_RE,(m,u,x)=>`<a class="ilink" href="${u}">${x}</a>`).replace(/\n/g,"<br>")}
 function paras(t,cls){return String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p${cls?` class="${cls}"`:""}>${richInline(x)}</p>`).join("")}
-const plainText=t=>String(t||"").replace(/\[\/?color[^\]]*\]/gi,"");
+const plainText=t=>String(t||"").replace(/\[\/?(?:color|link)[^\]]*\]/gi,"");
 const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
 /*@GLCORE-END@*/
 /* glossary terms in spell text: red underline, with the entry in a popup on hover, focus or tap */

@@ -106,7 +106,7 @@ def glossary_page(template, glossary, name):
         "const $=id=>document.getElementById(id);"
         "const esc=s=>String(s??\"\").replace(/[&<>\"]/g,c=>({\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\"}[c]));"
         f"const GLOSSARY={as_js(glossary)};window.GL_PAGE={json.dumps(page)};"
-        + (f"const CATALOG={as_js(read_catalog())};" if catalog else "") + "\n"
+        + f"const CATALOG={as_js(read_catalog())};\n"
     )
     shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")
     script = (ROOT / "src" / "editkit.js").read_text(encoding="utf-8") + (ROOT / "src" / ("catalog.js" if catalog else "glossary.js")).read_text(encoding="utf-8")

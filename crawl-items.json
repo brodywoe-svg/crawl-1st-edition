@@ -41,8 +41,8 @@
    "id": "i-arrow",
    "n": "Arrow",
    "nc": "",
-   "cat": "Weapon",
-   "sub": "Miscellaneous",
+   "cat": "Ammunition",
+   "sub": "Arrows",
    "slot": "",
    "badge": false,
    "rarity": "Common",
@@ -1067,8 +1067,8 @@
    "id": "i-lead-shot",
    "n": "Lead Shot",
    "nc": "",
-   "cat": "Weapon",
-   "sub": "Miscellaneous",
+   "cat": "Ammunition",
+   "sub": "Shot",
    "slot": "",
    "badge": false,
    "rarity": "Uncommon",
@@ -2345,7 +2345,7 @@
      "qty": 1
     }
    ],
-   "props": "Volatile",
+   "props": "",
    "grants": "",
    "feat": "Volatile - You can throw this at a target within 20ft as a ranged attack. On a hit, the flask shatters and the target becomes Enflamed.",
    "quote": "“Treat it like a sleeping dragon. Gently, respectfully, and as far from your own face as your arm allows.” -Isolde Vexmire",
@@ -2389,7 +2389,7 @@
      "qty": 1
     }
    ],
-   "props": "Cleansing",
+   "props": "",
    "grants": "",
    "feat": "Cleansing - A creature that drinks this ends the Poisoned condition and has advantage on saving throws against poison for 1 hour.",
    "quote": "“The secret to curing poison is a little of the poison itself. The secret to staying alive as an alchemist is knowing exactly how little.” -Isolde Vexmire",
@@ -2477,7 +2477,7 @@
      "qty": 1
     }
    ],
-   "props": "1d8 slashing, Versatile 1d10, Serrated",
+   "props": "",
    "grants": "",
    "feat": "[color=#8e171c]Serrated[/color] - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "quote": "\"My father told me a sword should be beautiful. Then he watched me win my first duel with one that wasn't. Beauty is for the hall. The edge only has to be honest, and pain is the most honest thing there is.\" -Grushka Ashmaw, Chief of the Black Boughs",
@@ -2525,7 +2525,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 piercing, Thrown 20/60, Versatile 1d8, Serrated",
+   "props": "",
    "grants": "",
    "feat": "Serrated - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "quote": "\"Dwarves polish. Elves grow. We hammer the iron black and leave the barbs where they fall. A clean wound heals. A Black Iron wound reminds.\" -Grushka Ashmaw, Chief of the Black Boughs",
@@ -2573,7 +2573,7 @@
      "qty": 1
     }
    ],
-   "props": "Restorative, Clotting",
+   "props": "",
    "grants": "",
    "feat": "Restorative - A creature that drinks this regains 1d4 + 1 hit points.\n\nClotting - A Bleeding creature that drinks this removes the Bleeding condition.",
    "quote": "“My clan forges the black blades, but it’s the warren shamans who keep my warriors breathing. Every Ashblood learns two things young: how to swing a serrated edge, and which warren to run to when one swings back.” -Grushka Ashmaw, Chief of the Black Boughs",
@@ -2613,7 +2613,7 @@
      "qty": 1
     }
    ],
-   "props": "Scattering",
+   "props": "",
    "grants": "",
    "feat": "Scattering - You can spend 1 AP to scatter the caltrops across a 5 ft. square within 5 ft. of you. A creature that enters the area must succeed on a DC 12 Dexterity saving throw or take 1d4 piercing damage and end its movement. You can gather the caltrops back up outside of combat.",
    "quote": "“Four points, and one of them always faces up. It’s the simplest invention I’ve ever made, and the one I’m proudest of.” -Wendle Cogsworth",
@@ -2692,7 +2692,7 @@
      "qty": 1
     }
    ],
-   "props": "Staunching",
+   "props": "",
    "grants": "",
    "feat": "Staunching - Apply this to yourself or a creature within 5 ft. to end the Bleeding condition.",
    "quote": "“Orcs make wounds that won’t close. I make the paste that closes them. Business between us has never been better.” -Isolde Vexmire",
@@ -2784,7 +2784,7 @@
      "qty": 1
     }
    ],
-   "props": "Hearty, Fortifying",
+   "props": "",
    "grants": "",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\nFortifying - A creature that eats this has advantage on Constitution saving throws until its next rest or camp.",
    "quote": "“The mountain clans forge the axes and the gold clans sell them, but it’s us hill folk who keep them all fed. Every dwarf who ever marched off to war did it with a belly full of my mother’s borscht.” -Hilde Cragkettle, Hill Dwarf Cook",
@@ -2828,7 +2828,7 @@
      "qty": 1
     }
    ],
-   "props": "Neck",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“Among the Dragonkin, giving one of your own scales means ‘I’d guard you like treasure.’ I once made one for a human sailor wearing his sweetheart’s scale like a medal, grinning like a fool. I was a fool in love once too. Mine just didn’t come with a scale. They do make lovely enchanting pieces, mind you, but I’ve never had the heart to ask anyone to part with one.” -Lucien Gilt",
@@ -2876,7 +2876,7 @@
      "qty": 1
     }
    ],
-   "props": "1d8 slashing, Versatile 1d10, Dwarven Durability",
+   "props": "",
    "grants": "",
    "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "quote": "\"Every dwarf child learns the axe before the pick. The mountain can wait. The things living in it won't.\" -Godfrey Stoneheart",
@@ -2920,7 +2920,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 slashing, Light, Thrown 20/60, Dwarven Durability",
+   "props": "",
    "grants": "",
    "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "quote": "\"Any fool can make an axe. A dwarf makes one their grandchildren will still be using.\" -Godfrey Stoneheart",
@@ -2968,7 +2968,7 @@
      "qty": 1
     }
    ],
-   "props": "Forgery DC X",
+   "props": "",
    "grants": "",
    "feat": "Forgery (DC X) - This document appears genuine. A creature examining it must succeed on an Investigation check against DC X to notice it’s forged.\n\n[color=#8e171c]Forged Documents[/color]\nWhen you craft a Forged Document, choose its type and make a crafting roll. Forgeries follow these rules:\n\n[color=#8e171c]Document Type[/color]: Each type of document draws on a different skill:\nPersonal Letter: Persuasion\nWrit of Passage: Deception\nLegal Document: Lore\nRoyal Decree: Lore\n\n[color=#8e171c]Crafting Roll[/color]: Roll a d20 and add your Scribing Rank and your Rank in the document’s associated skill. The total becomes the document’s Forgery DC.\n[color=#8e171c]No Failure[/color]: The document is always completed. A low roll simply makes a poor forgery, and anyone who looks closely may see through it.\n[color=#8e171c]Official Seal[/color]: A Royal Decree also requires an Official Seal as a material.",
    "quote": "“I don’t forge documents. I write the letters the guard captain would have written, had he been a more reasonable man.” -Oswin Quillfeather",
@@ -3012,7 +3012,7 @@
      "qty": 1
     }
    ],
-   "props": "Hearty, Filling",
+   "props": "",
    "grants": "",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\nFilling - A creature that eats this gains 1 extra slot in its Action Pool until its next rest or camp. This slot can only hold Action Points or Magic Points, never Exhaustion Points.",
    "quote": "“Adventurers ask me for something that’ll make them strong. I give them stew. Strength is just being fed, rested, and loved by someone who expects you back.” -Millie Goldhorne",
@@ -3060,7 +3060,7 @@
      "qty": 1
     }
    ],
-   "props": "Restorative",
+   "props": "",
    "grants": "",
    "feat": "Restorative - A creature that drinks this regains 2d4 + 2 hit points.",
    "quote": "“I never was one for draughts. Sure, they’ll heal ya, if all you’ve got is a scratch. But for anything worse? Potions, my friend. Potions are where the real medicine is.” -Emile Thimbleton, Gnomish Alchemist",
@@ -3104,7 +3104,7 @@
      "qty": 1
     }
    ],
-   "props": "Hearty",
+   "props": "",
    "grants": "",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.",
    "quote": "“You can tell everything about a party by how they eat. The ones who share their bread come home. The ones who eat alone in the dark usually don’t.” -Millie Goldhorne",
@@ -3144,7 +3144,7 @@
      "qty": 1
     }
    ],
-   "props": "Rings, Weighted Band",
+   "props": "",
    "grants": "",
    "feat": "Weighted Band - Your unarmed attacks deal +1 bludgeoning damage. If you wear two Hillbrand Rings, the bonus becomes +2.",
    "quote": "“I robbed my way across the Hills of Moruk for twenty years. Fought soldiers, sellswords, and a bear once. But the one crowd I learned never to brawl with was the midwives of Moruk. Every one of them wore a Hillbrand wedding band, and every one of them had arms from hauling babies into the world. I still can’t chew on the left side.” -Durgan Flintknuckle, Retired Bandit",
@@ -3268,7 +3268,7 @@
      "qty": 1
     }
    ],
-   "props": "1d4 piercing, Finesse, Light, Thrown 20/60",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "\"Every good smith's first weapon is a dagger. If you can't do small blades well, no one will come to you for the big ones.\" -Molly Stoneheart",
@@ -3348,7 +3348,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 slashing, Light, Thrown 20/60",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "\"A hand axe chops wood in the morning and skulls by nightfall. Make it sturdy enough for both.\" -Molly Stoneheart",
@@ -3432,7 +3432,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 piercing, Finesse, Light",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "\"Balance is everything. A sword that fights its wielder will lose to one that doesn't.\" -Molly Stoneheart",
@@ -3596,7 +3596,7 @@
      "qty": 1
     }
    ],
-   "props": "Holds 40 arrows or bolts",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“Dungeon archers always ask for the big one. Down there, nobody’s selling arrows.” -Hollis Tanworth",
@@ -3676,7 +3676,7 @@
      "qty": 1
     }
    ],
-   "props": "Arms, Light, 5% Armor",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“An archer’s first lesson is the bowstring slapping their wrist. Their second is coming to me for bracers.” -Hollis Tanworth",
@@ -3724,7 +3724,7 @@
      "qty": 1
     }
    ],
-   "props": "Torso, Light, 5% Armor",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“Leather on the outside, linen on the inside. Wear one without the lining for a week and you’ll understand why tanners and tailors are on speaking terms.” -Hollis Tanworth",
@@ -3764,7 +3764,7 @@
      "qty": 1
     }
    ],
-   "props": "Holds 20 arrows or bolts",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“Twenty arrows. Enough for a hunt, a skirmish, or one very bad afternoon.” -Hollis Tanworth",
@@ -3844,7 +3844,7 @@
      "qty": 1
     }
    ],
-   "props": "Other, Quick Draw 1",
+   "props": "",
    "grants": "",
    "feat": "Quick Draw 1 - While you wear this Sheath with a sword sheathed in it, you gain 1 additional Action Point at the start of your first turn in a combat. This Action Point (AP) can only be spent on melee weapon attacks. You can only benefit from one item with the Quick Draw feature.",
    "quote": "“A fighter who fumbles their blade loose has already lost the first exchange. A good sheath gives the sword back to your hand before you’ve finished reaching.” -Hollis Tanworth",
@@ -3920,7 +3920,7 @@
      "qty": 1
     }
    ],
-   "props": "Head, Clothing, 3% Armor",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“A good hood keeps out the rain, the cold, and the eyes of strangers.” -Mirra Threadwell",
@@ -3960,7 +3960,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 bludgeoning, Finesse, Versatile 1d8, Livingwood",
+   "props": "",
    "grants": "",
    "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
    "quote": "“Elves don’t cut staves from dead wood. We ask the living branch, and if the tree agrees, it lets us carry a piece of it.” -Faelan Ashgrove",
@@ -4000,7 +4000,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 piercing, Ammunition 100/400, Two-Handed, Livingwood",
+   "props": "",
    "grants": "",
    "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
    "quote": "“Humans shape their bows. Elves grow ours, and only finish what the tree began.” -Faelan Ashgrove",
@@ -4040,7 +4040,7 @@
      "qty": 1
     }
    ],
-   "props": "Picking",
+   "props": "",
    "grants": "",
    "feat": "Picking - You can use a lockpick to make a Thievery check to open a lock. If the check fails, the lockpick breaks and can’t be used again. Without a lockpick or a similar tool, you can’t attempt to pick a lock.",
    "quote": "“I make locks and I make lockpicks. People ask if that’s a conflict of interest. I tell them it’s job security.” -Wendle Cogsworth",
@@ -4119,7 +4119,7 @@
      "qty": 1
     }
    ],
-   "props": "Restorative",
+   "props": "",
    "grants": "",
    "feat": "Restorative - A creature that drinks this regains 1d6 + 1 hit points.",
    "quote": "“It tastes like a cellar floor, and it’ll close a wound before you finish complaining about the taste. Medicine was never meant to be pleasant.” -Isolde Vexmire",
@@ -4167,7 +4167,7 @@
      "qty": 1
     }
    ],
-   "props": "Slumbering",
+   "props": "",
    "grants": "",
    "feat": "Slumbering - A humanoid that drinks this must succeed on a DC 14 Constitution saving throw or fall Unconscious for 1 hour. The creature wakes early if it takes damage or another creature uses an action to shake it awake. The brew is colorless and nearly tasteless when mixed into another drink.",
    "quote": "“Surface folk fear our blades, but the Matriarchs have never needed blades. A cup of wine, a quiet toast, and by morning a rival is simply… gone. The deep has always preferred patience to steel.” -Ilvane Mournshade, Dark Elf Apothecary",
@@ -4211,7 +4211,7 @@
      "qty": 1
     }
    ],
-   "props": "Torso, Light, 5% Armor",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“Knights brag about their plate, but ask them what’s underneath. It’s my stitching keeping them alive.” -Mirra Threadwell",
@@ -4291,7 +4291,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 bludgeoning, Versatile 1d8",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“A walking stick for the road, and a reason to keep walking for anyone who’d stop you.” -Tobin Burrowbark",
@@ -4520,7 +4520,7 @@
      "qty": 1
     }
    ],
-   "props": "1d6 piercing, Ammunition 80/320, Two-Handed",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“Yew remembers the shape you give it. Be kind to it, and it’ll be kind to your aim.” -Tobin Burrowbark",
@@ -4632,7 +4632,7 @@
      "qty": 1
     }
    ],
-   "props": "Neck, Sacred",
+   "props": "",
    "grants": "",
    "feat": "Sacred - This item counts as a holy symbol for any spell or feature that requires one.",
    "quote": "“I don’t pray. But I’ve made symbols for a dozen gods, and I’ll admit some of them feel warmer in the hand than others.” -Lucien Gilt",
@@ -4668,7 +4668,7 @@
      "qty": 1
     }
    ],
-   "props": "Rings",
+   "props": "",
    "grants": "",
    "feat": "",
    "quote": "“A plain silver ring is a promise waiting to be made. Enchanters see an empty vessel. Lovers see a question. Both pay well.” -Lucien Gilt",
@@ -4851,7 +4851,7 @@
      "qty": 1
     }
    ],
-   "props": "Rousing",
+   "props": "",
    "grants": "",
    "feat": "Rousing - Holding this under the nose of a creature within 5 ft. ends the Dazed condition, or wakes it if it’s Unconscious but has at least 1 hit point.",
    "quote": "“A single whiff will wake a sleeping ogre. I know this because I’ve tested it. I don’t recommend testing it.” -Isolde Vexmire",
@@ -4895,7 +4895,7 @@
      "qty": 1
     }
    ],
-   "props": "Preserved, Quick Bite",
+   "props": "",
    "grants": "",
    "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten during a rest or at camp without a Cooking Fire.\n\nQuick Bite - You can eat this outside of a rest by spending 1 AP, regaining hit points equal to the cook’s Cooking Rank. A creature can only benefit from one Quick Bite between rests.",
    "quote": "“Hardtack fills your belly at camp. Jerky’s what you chew on while something is chasing you. Smart adventurers carry both.” -Bram Copperpot",
@@ -4939,7 +4939,7 @@
      "qty": 1
     }
    ],
-   "props": "Scroll",
+   "props": "",
    "grants": "",
    "feat": "Scroll - When you craft this, choose one spell you know, one language you know, and the scroll’s Rank (X). X can’t exceed your Scribing Tier’s maximum or your own Rank in that spell. If you meet the TC, X increases by 1. The spell is written into the scroll in that language. A spellcaster who knows the language can read the scroll to cast the spell, following the Spell Scroll rules. You must be capable of casting the spell in order to copy it to a scroll.\n\n[color=#8e171c]Naming Convention for Scrolls[/color]\nSpell Scrolls are named by their Rank, language, and spell, such as a [color=#8e171c]+1 Dwarvish Spell Scroll of Firebolt[/color].\n\n[color=#8e171c]Spell Scrolls[/color]\nA spellcaster can read a Spell Scroll to cast the spell stored in it, even if they don’t know that spell or aren’t high enough level to learn it. Reading a scroll follows these rules:\n\n[color=#8e171c]Class[/color]: Your class must be listed in the spell’s Class Requirements.\n[color=#8e171c]Language[/color]: You must know the language the scroll was written in.\n[color=#8e171c]Cost[/color]: You pay the spell’s normal casting cost, using MP or AP in place of MP.\n[color=#8e171c]Rank[/color]: The spell is cast at the Rank listed on the scroll, using your own spellcasting modifier.\n[color=#8e171c]Overreaching[/color]: If the spell’s Level is higher than your character level, you gain Exhaustion Points equal to the difference after the spell resolves.\n[color=#8e171c]Single Use[/color]: The scroll crumbles to ash once read.\n[color=#8e171c]Magic[/color]: Spell Scrolls count as magic items.\n\n[color=#8e171c]Scribing Tiers → Scroll Rank[/color]\nBasic: Up to +3 or less\nAdvance: Up to +6 or less\nMastery: Up to +10 or less\n\n[color=#8e171c]Magical Scribing[/color]\nScribing recipes that involve spells, such as spell scrolls or copying spells into a spellbook, can only be crafted by a character who can cast spells.",
    "quote": "“A scroll is a spell asleep on a page. Wake it gently, and only when you mean it. And never, ever wake one you aren’t ready for.” -Oswin Quillfeather",
@@ -4983,7 +4983,7 @@
      "qty": 1
     }
    ],
-   "props": "Warming",
+   "props": "",
    "grants": "",
    "feat": "Warming - A creature that eats this has advantage on saving throws against extreme cold until its next rest or camp.",
    "quote": "“Half the dungeons out there are colder than a dwarf’s handshake. A bowl of this before you go down, and you’ll feel the peppers long after you’ve forgotten the cold.” -Bram Copperpot",
@@ -5063,7 +5063,7 @@
      "qty": 1
     }
    ],
-   "props": "Preserved, Nourishing",
+   "props": "",
    "grants": "",
    "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten at camp or during a rest without a Cooking Fire.\n\nNourishing - A creature that eats this during a rest or at camp regains hit points equal to the cook’s Cooking Rank.",
    "quote": "“It won’t win you any friends at the table, but it’ll keep you alive long enough to find a better one. Every adventurer who’s laughed at my hardtack has come back for more.” -Bram Copperpot",
@@ -5146,7 +5146,7 @@
      "qty": 1
     }
    ],
-   "props": "Feet, Clothing, 3% Armor, Whisperweave",
+   "props": "",
    "grants": "",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "quote": "“There is one rule in the deep, older than the Matriarchs and colder than the stone: whoever is heard first, dies first. Every step I stitch into these soles is a step you’ll never have to explain to something hungry.” -Viscara Duskthread",
@@ -5186,7 +5186,7 @@
      "qty": 1
     }
    ],
-   "props": "Head, Clothing, 3% Armor, Whisperweave",
+   "props": "",
    "grants": "",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "quote": "“Surface folk think the dark is empty, so they fill it with torches and noise. We learned to wear it instead. A good hood doesn’t hide your face, child. It convinces the dark you were never there at all.” -Viscara Duskthread",
@@ -5230,7 +5230,7 @@
      "qty": 1
     }
    ],
-   "props": "Shoulders, Light, 5% Armor, Whisperweave",
+   "props": "",
    "grants": "",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "quote": "“The broodmothers spin silk stronger than steel and lighter than breath, and they never once thought to make armor of it. My grandmother did. She spent forty years learning to take it from them without being eaten, and every thread in this mantle is a lesson she survived.” -Viscara Duskthread",

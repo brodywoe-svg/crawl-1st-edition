@@ -13,7 +13,7 @@ NAV_ITEMS = [
     ("Character Creator", None, None),
     ("Classes", None, None),
     ("Crafting", "crafting.html", None),
-    ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
+    ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Ammunition", "items.html?c=ammunition"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
                              ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items")]),
     ("Glossary", "glossary.html", "glossary"),
     ("About", None, None),
@@ -244,6 +244,12 @@ CONDITIONS_CSS = """
 .clead{margin:0;font-weight:600;display:grid;gap:10px}
 .clead p{margin:0}
 .crefs{display:grid;gap:8px;margin-top:2px}
+.gfacts{margin:2px 0 0;display:grid;grid-template-columns:max-content 1fr;gap:5px 14px;font-size:.92rem}
+.gfacts dt{font-weight:800}
+.gfacts dd{margin:0;font-weight:600}
+.gmod{border:2px solid var(--ink);border-radius:12px;padding:10px 14px;background:var(--page)}
+.gmod+.gmod{margin-top:8px}
+@media (max-width:600px){.gfacts{grid-template-columns:1fr;gap:0}.gfacts dd{margin-bottom:6px}}
 .cref{border:2px solid var(--hair);border-radius:10px;padding:8px 12px;display:grid;gap:6px;font-size:.92rem}
 .cref b{font-weight:800}
 .cref p{margin:0}
@@ -388,11 +394,34 @@ CONDITIONS_CSS = """
   .ichart th:nth-child(n+3),.ichart td:nth-child(n+3){text-align:center}
   .ichart thead th{font-size:.5rem;letter-spacing:0;overflow-wrap:normal!important}
   .ichart .ctag2,.gedit.iedit,.ichart .hl{display:none}
+  .rchart th:nth-child(2),.rchart td:nth-child(2),.rchart th:nth-child(5),.rchart td:nth-child(5){display:none}
+  .rchart th:nth-child(3),.rchart td:nth-child(3),.rchart th:nth-child(4),.rchart td:nth-child(4){width:40px}
   .ichart .hs{display:inline}
   .idet td{overflow-wrap:anywhere}
   .dbtns{display:block!important}
   .ihead td,.ichart thead th,.isub th,.idet td{padding-inline:10px}
 }
+/* crafting chart */
+.rchart th:nth-child(2),.rchart td:nth-child(2){width:190px;text-align:left}
+.rchart th:nth-child(3),.rchart td:nth-child(3),.rchart th:nth-child(4),.rchart td:nth-child(4){width:56px;text-align:center}
+.rchart th:nth-child(5),.rchart td:nth-child(5){width:130px;text-align:left}
+.rchart .ihead td:nth-child(n+2){font-size:.85rem}
+.rchart .rtier{background:var(--ink);color:var(--paper);width:20px;height:20px;font-size:.68rem}
+.rdet{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:18px;padding-top:10px;font-size:.92rem}
+.rmain{display:grid;gap:2px;align-content:start}
+.rside{border:2px solid var(--ink);border-radius:12px;padding:10px 12px;align-self:start;display:grid;gap:10px}
+.rside h3{margin:0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ybox{display:grid;gap:6px}
+.ybox+.ybox{border-top:1px solid var(--hair);padding-top:8px}
+.yname{margin:0;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:6px}
+.yname .ilink{text-decoration-color:currentColor}
+.yname .flask svg{width:18px;height:18px}
+.yfacts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:.85rem}
+.yfacts dt{font-weight:800;color:var(--muted)}
+.yfacts dd{margin:0;font-weight:600}
+.ilink.small{font-size:.8rem}
+.gtop{justify-content:flex-end;margin-bottom:-4px}
+@media (max-width:760px){.rdet{grid-template-columns:1fr}}
 .gres h2{font-size:1rem}
 .glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
 .gwords{display:grid;gap:8px}

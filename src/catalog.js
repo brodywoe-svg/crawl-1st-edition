@@ -4,7 +4,7 @@
               nc: name color (#hex or ""); magic: true if the item is magical
               actions: weapon actions; props: the properties line; feat: what each property does
               badge: the flask badge, meaning it still needs playtesting
-              cat: Weapon | Armor | Consumable | Crafting Material | Magic Item
+              cat: Weapon | Ammunition | Armor | Consumable | Crafting Material | Magic Item
               sub: weapon type, armor type, or a group name; slot: armor slot
      recipe = {id, n, tier, badge, kind, prof, pre, ing:[{item,qty}], matNote, applies, ws, time, dc, tc,
                qty:{l,v}, makes:[{item,qty}], props, grants, feat, quote, extra:[{k,v}]}
@@ -13,13 +13,14 @@
 const KIND = window.GL_PAGE === "crafting" ? "recipes" : "items";
 const CATS = [
   ["Weapon", "Weapons", ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Special", "Miscellaneous"]],
+  ["Ammunition", "Ammunition", ["Arrows", "Bolts", "Shot", "Other"]],
   ["Armor", "Armor", ["Clothing", "Light", "Medium", "Heavy", "Accessories"]],
   ["Consumable", "Consumables", ["Food", "Potions", "Alchemical", "Scrolls and Documents", "Tools"]],
   ["Crafting Material", "Crafting Materials", ["Metalwork", "Woodwork", "Cloth and Leather", "Alchemy and Herbs", "Cooking Ingredients", "Scribing Supplies", "Other"]],
   ["Magic Item", "Magic Items", ["Weapons", "Armor", "Accessories", "Wondrous Items", "Other"]],
 ];
 /* items.html?c=weapons shows one category, like a page of its own (the Items menu links here) */
-const CAT_SLUGS = { weapons: "Weapon", armor: "Armor", consumables: "Consumable", materials: "Crafting Material", "magic-items": "Magic Item" };
+const CAT_SLUGS = { weapons: "Weapon", ammunition: "Ammunition", armor: "Armor", consumables: "Consumable", materials: "Crafting Material", "magic-items": "Magic Item" };
 const catSlug = c => Object.keys(CAT_SLUGS).find(k => CAT_SLUGS[k] === c) || "";
 const SLOTS = ["Head", "Neck", "Shoulders", "Torso", "Waist", "Arms", "Hands", "Legs", "Feet", "Rings", "Other"];
 const PROFS = ["Blacksmithing", "Tailoring", "Woodworking", "Cooking", "Alchemy", "Leatherworking", "Scribing", "Tinkering", "Goldsmithing", "Enchanting"];
@@ -122,8 +123,11 @@ const PLAYTEST = `<span class="flask" title="Needs playtesting" role="img" aria-
 const tierBadge = t => `<span class="rtier" title="${esc(t)} recipe">${esc((t || "B")[0])}</span>`;
 
 /* ---------------------------------------------------------------- recipes (cards) */
+/* a recipe's yield properties are the item's own properties, so editing the item updates the recipe */
+function yieldProps(r) { const i = r.makes[0] && itemById(r.makes[0].item); return (i && i.props) || r.props }
 function recipeBody(r) {
-  const yieldLine = r.makes.length ? `<p class="rl"><b>Yield:</b> ${r.makes.map(m => itemLink(m.item, m.qty)).join(", ")}${r.props ? ` (${richInline(r.props)})` : ""}</p>` : "";
+  const yp = yieldProps(r);
+  const yieldLine = r.makes.length ? `<p class="rl"><b>Yield:</b> ${r.makes.map(m => itemLink(m.item, m.qty)).join(", ")}${yp ? ` (${richInline(yp)})` : ""}</p>` : "";
   return (r.kind ? `<p class="rkind">${esc(r.kind)}</p>` : "") +
     (r.pre ? `<p class="rl pre"><b>Prerequisites:</b> ${richInline(r.pre)}</p>` : "") +
     `<p class="rl"><b>Material Cost:</b> ${r.ing.length ? r.ing.map(m => itemLink(m.item, m.qty)).join(", ") : "none listed"}${r.matNote ? ", " + richInline(r.matNote) : ""}</p>` +
@@ -134,6 +138,24 @@ function recipeBody(r) {
     (r.feat ? `<div class="rfeat">${paras(r.feat)}</div>` : "") +
     (r.quote ? `<div class="rquote">${paras(r.quote)}</div>` : "");
 }
+/* the item box shown beside a recipe: the yielded item's own details, linked to the Items page */
+function yieldBox(r) {
+  return r.makes.map(m => { const i = itemById(m.item); if (!i) return "";
+    const facts = [["Category", (catOf(i.cat) || ["", i.cat])[1] + (i.sub ? " · " + i.sub : "") + (i.slot ? " · " + i.slot : "")], ["Rarity", i.rarity], ["Value", i.value], ["Weight", i.weight], ["Magic", i.magic ? "Yes" : ""]].filter(f => f[1]);
+    return `<div class="ybox"><p class="yname"><a class="ilink" href="items.html#${esc(i.id)}">${nameHTML(i)}</a>${i.badge ? PLAYTEST : ""}</p>` +
+      `<dl class="yfacts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` +
+      (i.props ? `<p class="rl"><b>Properties:</b> ${richInline(i.props)}</p>` : "") +
+      (i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : "") +
+      `<p class="rl"><a class="ilink small" href="items.html#${esc(i.id)}">${ADMIN ? "Open or edit this item" : "Open this item"} on the Items page</a></p></div>` }).join("");
+}
+function recipeRow(r, showProf) {
+  const isOpen = open.has(r._id) || editing.has(r._id), y = r.makes[0];
+  const yieldTxt = y ? qtyName(itemName(y.item), y.qty) : r.kind ? r.kind.replace(" Modifier", " modifier") : "—";
+  return `<tbody class="irow${isOpen ? " open" : ""}" id="${esc(r.id)}" data-id="${r._id}">
+<tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${tierBadge(r.tier)}<span class="iname">${esc(recipeName(r))}</span>${r.badge ? PLAYTEST : ""}${showProf && r.prof ? `<span class="ctag2">${esc(r.prof)}</span>` : ""}</button>${ADMIN && !editing.has(r._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(recipeName(r))}">Edit</button>` : ""}</div></td><td>${esc(yieldTxt)}</td><td>${esc(r.dc || "—")}</td><td>${esc(r.tc || "—")}</td><td>${esc(r.time || "—")}</td></tr>
+${isOpen ? `<tr class="idet"><td colspan="5">${editing.has(r._id) ? recipeForm(r) : `<div class="rdet"><div class="rmain">${recipeBody(r)}</div>${r.makes.length ? `<aside class="rside"><h3>Yields</h3>${yieldBox(r)}</aside>` : ""}</div>${ADMIN ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(recipeName(r))}</button></div>` : ""}`}</td></tr>` : ""}</tbody>`;
+}
+const RHEAD = `<thead><tr><th>Recipe</th><th>Yield</th><th>DC</th><th>TC</th><th>Time</th></tr></thead>`;
 function recipeCard(r) {
   if (editing.has(r._id)) return recipeForm(r);
   return `<section class="cond rcard" id="${esc(r.id)}" data-id="${r._id}"><h2 class="chead"><span class="rname">${tierBadge(r.tier)}<span>${esc(recipeName(r))}</span></span><span class="chr">` +
@@ -155,10 +177,10 @@ function itemDetail(i) {
       line("Workstations Required", r.ws) + line("Crafting Time", r.time) +
       (r.dc || r.tc ? `<p class="rl"><b>Crafting DC:</b> ${esc(r.dc || "—")} | <b>TC:</b> ${esc(r.tc || "—")}</p>` : "") + `</div>`).join("");
   const props = (i.props ? `<p class="rl">${richInline(i.props)}</p>` : "") + (i.feat ? `<div class="rfeat">${paras(i.feat)}</div>` : "");
-  return (isWeapon(i) || i.actions ? sec("Weapon actions", i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : none) : "") +
-    sec("Properties", props || none) +
+  return sec("Properties", props || none) +
+    (isWeapon(i) || i.actions ? sec("Weapon actions", i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : none) : "") +
     sec("Description", (i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
-    (made.length ? sec("Crafting recipe", recipeBlock) : "") +
+    (made.length ? sec("Crafting recipe", recipeBlock) : ADMIN && !i._new ? sec("Crafting recipe", `<p class="muted">No crafting recipe yet. <a class="ilink" href="crafting.html?make=${encodeURIComponent(i.id)}">Create one on the Crafting page</a></p>`) : "") +
     (used.length ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "") +
     (ADMIN && !i._new ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
 }
@@ -202,7 +224,7 @@ const formEnd = (x, what) => `
 <div class="glab">More details <small>Any other details, each with its own label.</small></div>
 <div class="xlist">${(drafts.get(x._id) || x).extra.map(extraRow).join("")}</div>
 <button type="button" class="btn xadd">Add a detail</button>
-<div class="gprev"><span class="glab">Preview</span><div class="gprevbody"></div></div>
+${KIND === "recipes" ? `<div class="gprev"><span class="glab">Preview</span><div class="gprevbody"></div></div>` : ""}
 <p class="gerr" role="alert"></p>
 <div class="gbtns"><button type="button" class="btn gdel">${x._new ? "Remove" : "Delete " + what}</button><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>`;
 const NAME_COLORS = [["", "No color"], ["#8e171c", "Crawl red"], ["#1f5fbf", "Blue"], ["#2e7d32", "Green"], ["#6a1b9a", "Purple"], ["#b7791f", "Gold"]];
@@ -211,10 +233,12 @@ function nameColorPicker(nc) {
     NAME_COLORS.map(([c, n]) => `<button type="button" class="ncsw${c === nc ? " on" : ""}" data-nc="${c}" style="--c:${c || "transparent"}" title="${n}" aria-label="${n}" aria-pressed="${c === nc}">${c ? "" : "✕"}</button>`).join("") +
     `<input type="color" class="ncpick" value="${nc || "#8e171c"}" aria-label="Pick any name color" title="Pick any color"><input type="hidden" data-k="nc" value="${esc(nc)}"></div>`;
 }
+const topBtns = `<div class="gbtns gtop"><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>`;
 function itemForm(i) {
   const id = k => `c${k}-${i._id}`, d = drafts.get(i._id) || i;
   const subs = (catOf(d.cat) || CATS[3])[2];
   return `<div class="gediting gform iform" data-id="${i._id}">
+${topBtns}
 ${fld(id("n"), "Name", "", inp(id("n"), "n", d.n))}
 ${nameColorPicker(d.nc || "")}
 <label class="chk"><input type="checkbox" data-k="magic"${d.magic ? " checked" : ""}> Magic item</label>
@@ -227,16 +251,16 @@ ${fld(id("rarity"), "Rarity", "", sel(id("rarity"), "rarity", d.rarity || "", [[
 ${fld(id("value"), "Value", "", inp(id("value"), "value", d.value, ' placeholder="e.g. 15 gp"'))}
 ${fld(id("weight"), "Weight", "", inp(id("weight"), "weight", d.weight, ' placeholder="e.g. 3 lb"'))}
 </div>
-${fld(id("actions"), "Weapon actions", d.cat === "Weapon" ? "Leave a blank line between paragraphs." : "Leave empty if the item has none.", area(id("actions"), "actions", d.actions, 3))}
-${fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated.", inp(id("props"), "props", d.props))}
+${fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
 ${fld(id("feat"), "What the properties do", "Leave a blank line between paragraphs.", area(id("feat"), "feat", d.feat, 3))}
+${fld(id("actions"), "Weapon actions", d.cat === "Weapon" ? "Leave a blank line between paragraphs." : "Leave empty if the item has none.", area(id("actions"), "actions", d.actions, 3))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
 ${formEnd(i, "item")}</div>`;
 }
 function recipeForm(r) {
   const id = k => `c${k}-${r._id}`, d = drafts.get(r._id) || { ...r, makes: r.makes.map(m => ({ qty: m.qty, name: itemName(m.item) })), ing: r.ing.map(m => ({ qty: m.qty, name: itemName(m.item) })) };
-  return `<section class="cond gediting" data-id="${r._id}"><div class="chead"><span>${r._new ? "New recipe" : "Editing " + esc(recipeName(r))}</span></div>
-<div class="cbody gform">
+  return `<div class="gediting gform iform" data-id="${r._id}">
+${topBtns}
 ${fld(id("n"), "Recipe name", "", inp(id("n"), "n", d.n))}
 <label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> ${FLASK} Needs playtesting</label>
 <div class="grid3">
@@ -261,11 +285,11 @@ ${fld(id("qv"), "Amount", "", inp(id("qv"), "qv", d.qv ?? d.qty.v, ' placeholder
 <div class="glab">Yield <small>What it makes. Modifiers can leave this empty and use Grants.</small></div>
 <div class="qlist qmakes">${d.makes.map(x => qtyRow(x, "makes")).join("")}</div>
 <button type="button" class="btn qadd" data-q="makes">Add yield</button>
-${fld(id("props"), "Yield properties", "Shown in brackets after the yield, e.g. 1d4 piercing, Finesse.", inp(id("props"), "props", d.props))}
+${fld(id("props"), "Yield properties", "Only used when the item has no properties of its own. Edit the item on the Items page to change its properties.", inp(id("props"), "props", d.props))}
 ${fld(id("grants"), "Grants", "For modifiers.", inp(id("grants"), "grants", d.grants))}
 ${fld(id("feat"), "Features and rules", "Leave a blank line between paragraphs.", area(id("feat"), "feat", d.feat, 4))}
 ${fld(id("quote"), "Quote", "", area(id("quote"), "quote", d.quote, 2))}
-${formEnd(r, "recipe")}</div></section>`;
+${formEnd(r, "recipe")}</div>`;
 }
 function readForm(f) {
   const d = {}; f.querySelectorAll("[data-k]").forEach(el => { d[el.dataset.k] = el.type === "checkbox" ? el.checked : el.value });
@@ -316,12 +340,12 @@ function render() {
   $("ccount").textContent = KIND === "items" ? plural(n, "item", "items") : plural(n, "recipe", "recipes");
   let h = "";
   if (KIND === "items") h = itemsChart(l);
-  else if (query()) h = l.length ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist rlist">${l.map(recipeCard).join("")}</div>` : "";
+  else if (query()) h = l.length ? `<div class="ghead gres"><h2>Best matches first</h2></div><table class="ichart rchart">${RHEAD}${l.map(r => recipeRow(r, true)).join("")}</table>` : "";
   else {
     const profs = [...PROFS, ...[...new Set(l.map(r => r.prof))].filter(p => !PROFS.includes(p)).sort()];
     for (const p of profs) {
       const g = l.filter(r => (r.prof || "") === p).sort((a, b) => (a._new ? -1 : b._new ? 1 : 0) || lc(recipeName(a)).localeCompare(lc(recipeName(b))));
-      if (g.length) h += `<section class="gsec"><div class="ghead"><h2>${esc(p || "Other")}</h2><span class="muted">${plural(g.length, "recipe", "recipes")}</span></div><div class="clist rlist">${g.map(recipeCard).join("")}</div></section>`;
+      if (g.length) h += `<section class="icat"><h2 class="icath">${esc(p || "Other")} <span>${plural(g.length, "recipe", "recipes")}</span></h2><table class="ichart rchart">${RHEAD}${g.map(r => recipeRow(r, false)).join("")}</table></section>`;
     }
   }
   $("clist").innerHTML = h;
@@ -451,7 +475,7 @@ function showHash() {
   const id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
   const x = rows().find(r => r.id === id); if (!x) return;
   if (query() || $("cfilter").value) { $("cq").value = ""; $("cfilter").value = "" }
-  if (KIND === "items") open.add(x._id);
+  open.add(x._id);
   render();
   const el = document.getElementById(id); if (!el) return;
   el.scrollIntoView({ block: "start" }); el.classList.remove("flash"); void el.getBoundingClientRect(); el.classList.add("flash");
@@ -465,7 +489,7 @@ async function refreshFromGitHub() {
   } catch (x) { }
 }
 AdminHooks.canSignOut = () => { if (dirty || editing.size) { say("Save or discard your changes before signing out."); return false } return true };
-AdminHooks.signedIn = quiet => { render(); if (!quiet) say(KIND === "items" ? "Signed in as admin. Open any item to edit it, or click Add item." : "Signed in as admin. Click Edit on any recipe, or Add recipe."); refreshFromGitHub() };
+AdminHooks.signedIn = quiet => { render(); setTimeout(startRecipeFor); if (!quiet) say(KIND === "items" ? "Signed in as admin. Open any item to edit it, or click Add item." : "Signed in as admin. Click Edit on any recipe, or Add recipe."); refreshFromGitHub() };
 AdminHooks.signedOut = () => { editing.clear(); drafts.clear(); items = items.filter(x => !x._new); recipes = recipes.filter(x => !x._new); render(); say("Signed out.") };
 
 load(CATALOG);
@@ -476,3 +500,12 @@ if (STATIC) {
     .finally(() => { render(); restoreAdmin(); showHash() });
 }
 render(); showHash();
+/* crafting.html?make=<item id> (from an item with no recipe): start a new recipe that makes it */
+function startRecipeFor() {
+  const id = KIND === "recipes" && new URLSearchParams(location.search).get("make"); if (!id || !ADMIN) return;
+  const it = itemById(id); history.replaceState(null, "", "crafting.html"); if (!it) return;
+  const x = { id: newId("r"), n: it.n, tier: "Basic", badge: false, kind: "", prof: "", pre: "", ing: [], matNote: "", applies: "", ws: "", time: "", dc: "", tc: "", qty: { l: "", v: "" }, makes: [{ item: it.id, qty: 1 }], props: "", grants: "", feat: "", quote: "", extra: [], _id: ++uid, _new: true };
+  recipes.push(x); editing.add(x._id); open.add(x._id); render();
+  const el = document.querySelector(`.gediting[data-id="${x._id}"]`); if (el) { el.scrollIntoView({ block: "center" }); el.querySelector('[data-k="prof"]').focus() }
+  say(`New recipe for ${it.n}. Fill it in, click Done, then Save changes.`);
+}

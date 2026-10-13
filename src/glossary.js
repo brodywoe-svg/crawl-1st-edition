@@ -68,13 +68,43 @@ function score(e, q) {
   return wordStart(text) ? 20 : 10;
 }
 const noteText = e => e.notes.map(n => `${n.l}: ${n.t}`).join("\n");
+/* items and recipes (crawl-items.json), so Properties and Modifiers can list where they're used */
+let CAT = (typeof CATALOG !== "undefined" && CATALOG) || { items: [], recipes: [] };
+const lcs = x => String(x || "").toLowerCase();
+const baseName = n => n.replace(/\s*\((?:DC )?X\)$/i, "").replace(/\s+X$/, "").trim();
+const ARMOR_TYPES = ["clothing", "light", "medium", "heavy"];
+function propItems(e) {
+  const b = lcs(baseName(e.n));
+  return (CAT.items || []).filter(i => String(i.props || "").split(",").map(x => lcs(x.trim())).some(x =>
+    (x === b || x.startsWith(b + " ") || x.startsWith(b + " (")) && !(i.cat === "Armor" && ARMOR_TYPES.includes(x)))).sort((x, y) => x.n.localeCompare(y.n));
+}
+function modRecipes(e) {
+  const b = lcs(baseName(e.n));
+  return (CAT.recipes || []).filter(r => r.kind && (lcs(r.grants).includes(b) || lcs(r.n).startsWith(b)));
+}
+const itemNameById = id => ((CAT.items || []).find(i => i.id === id) || { n: "(missing item)" }).n;
+const isFact = x => /^[A-Z][\w'’]*(?: [\w'’]+){0,2}:\s/.test(x);
+function factsHTML(rows) { return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>` : "" }
 function bodyHTML(e) {
   const notes = e.notes.map(n => `<p class="cnote"><b>${esc(n.l)}:</b> ${richInline(n.t)}</p>`).join("");
   const words = e.aka.filter(x => x.ref);
+  const bullets = e.fx.filter(x => !isFact(x)), facts = e.fx.filter(isFact).map(x => { const i = x.indexOf(":"); return [x.slice(0, i), richInline(x.slice(i + 1).trim())] });
+  if (e.sec === "Properties") {
+    const used = propItems(e);
+    if (used.length) facts.push(["Found on", used.map(i => `<a class="ilink" href="items.html#${esc(i.id)}">${esc(i.n)}</a>`).join(", ")]);
+  }
+  let mod = "";
+  if (e.sec === "Modifiers") mod = modRecipes(e).map(r => `<div class="gmod">` + factsHTML([
+    ["Type", esc(r.kind)], ["Applies to", richInline(r.applies || "—")], ["Grants", richInline(r.grants || "—")],
+    ["Recipe", `<a class="ilink" href="crafting.html#${esc(r.id)}">${esc(r.n)}</a> <span class="muted">${esc(r.tier)} ${esc(r.prof)}</span>`],
+    ["Prerequisites", richInline(r.pre || "—")],
+    ["Materials", (r.ing || []).map(m => `<a class="ilink" href="items.html#${esc(m.item)}">${m.qty > 1 ? m.qty + " × " : ""}${esc(itemNameById(m.item))}</a>`).join(", ") || "—"],
+    ["Crafting", [r.dc && r.dc !== "—" ? "DC " + r.dc : "", r.tc && r.tc !== "—" ? "TC " + r.tc : "", r.time, r.ws].filter(Boolean).map(esc).join(" · ")]
+  ]) + `</div>`).join("");
   return (e.lead ? `<div class="clead">${paras(e.lead)}</div>` : "") +
-    (e.fx.length ? `<ul class="cul">${e.fx.map(x => `<li>${richInline(x)}</li>`).join("")}</ul>` : "") + notes +
+    (bullets.length ? `<ul class="cul">${bullets.map(x => `<li>${richInline(x)}</li>`).join("")}</ul>` : "") + factsHTML(facts) + mod + notes +
     (words.length ? `<div class="crefs">${words.map(x => `<div class="cref"><b>${esc(x.w)}</b>${paras(x.ref)}</div>`).join("")}</div>` : "") +
-    (!e.lead && !e.fx.length && !notes && !words.length ? `<p class="clead">No description yet.</p>` : "");
+    (!e.lead && !e.fx.length && !notes && !words.length && !mod ? `<p class="clead">No description yet.</p>` : "");
 }
 function card(e, tag) {
   if (editing.has(e._id)) return form(e);
@@ -232,6 +262,7 @@ AdminHooks.signedOut = () => { editing.clear(); drafts.clear(); entries = entrie
 load(GLOSSARY);
 if (STATIC) {
   $("adminBtn").hidden = false; showAdminBtn();
+  fetch("crawl-items.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => { if (j && Array.isArray(j.items)) { CAT = j; render() } }).catch(() => { });
   fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null)
     .then(j => { if (j && !dirty) load(j) }).catch(() => { })
     .finally(() => { render(); navUpdate(); restoreAdmin() });

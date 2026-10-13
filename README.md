@@ -80,13 +80,15 @@ section name on an entry creates the section.
 
 The **Items** page is a chart grouped by category: Weapons (by weapon type), Armor
 (by armor type, then slot), Consumables, Crafting Materials and Magic Items. Each row shows the
-item's name, rarity, value, weight and a Magic? check box; click it to see its weapon actions, properties,
+item's name, rarity, a Magic? check box, value and weight; click it to see its properties, weapon actions,
 description and crafting recipe. Signed in as admin, click **Edit** on any row, or
-use **Add item**. The **Items** menu opens one category at a time (Weapons, Armor,
+use **Add item**. The **Items** menu opens one category at a time (Weapons, Ammunition, Armor,
 Consumables, Materials, Magic Items), e.g. `items.html?c=weapons`.
 
-The **Crafting** page lists every recipe by profession, in the same layout as the
-Crafting Compendium cards: tier badge, prerequisites, material cost, workstations,
+The **Crafting** page is a chart of recipes by profession (Recipe, Yield, DC, TC,
+Time). Click a recipe to open its card, in the same layout as the Crafting
+Compendium, with the item it yields shown beside it (category, rarity, value,
+weight and properties come straight from the Items page). The card shows: tier badge, prerequisites, material cost, workstations,
 time, DC and TC, servings or batch, yield, features and the quote. Materials and
 yields link to their items. Typing a new item name in a recipe creates that item
 (under Crafting Materials). Both pages save to `crawl-items.json`.
