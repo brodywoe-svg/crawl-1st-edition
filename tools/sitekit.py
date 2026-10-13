@@ -317,13 +317,24 @@ CONDITIONS_CSS = """
 .ichart{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:2px solid var(--ink);border-top:0;border-radius:0 0 14px 14px;overflow:hidden}
 .gres+.ichart{border-top:2px solid var(--ink);border-radius:14px}
 .ichart thead th{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:8px 14px;border-bottom:2px solid var(--ink);background:var(--paper)}
-.ichart th:nth-child(n+2),.ichart td:nth-child(n+2){width:110px;text-align:right}
+.ichart th:nth-child(n+2),.ichart td:nth-child(n+2){width:100px;text-align:right}
+.ichart th:nth-child(2),.ichart td:nth-child(2){width:120px;text-align:left}
+.ichart th:nth-child(5),.ichart td:nth-child(5){width:80px;text-align:center}
+.ichart .hs{display:none}
+.magicbox{width:18px;height:18px;accent-color:var(--ink);vertical-align:middle;margin:0}
+.magicbox:disabled{opacity:1;cursor:default}
+.ncolor{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.ncolor .glab{margin-right:4px}
+.pvname{margin:0 0 4px;font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ncsw{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:var(--c);cursor:pointer;padding:0;font-size:.7rem;font-weight:800;color:var(--ink)}
+.ncsw.on{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
+.gform input.ncpick{width:40px;height:28px;padding:2px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);cursor:pointer}
 .isub th{background:var(--soft);text-align:left!important;font-size:.82rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;border-bottom:1px solid var(--hair)}
 .ihead td{padding:0 14px;border-bottom:1px solid var(--hair);font-weight:600;font-size:.95rem;vertical-align:middle}
 .irow:last-child .ihead td,.irow:last-child .idet td{border-bottom:0}
 .itoggle{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;padding:9px 0;cursor:pointer;font-weight:700}
-.itoggle svg{width:10px;height:6px;flex:none;transition:transform .15s;transform:rotate(-90deg)}
-.irow.open .itoggle svg{transform:none}
+.itoggle>svg{width:10px;height:6px;flex:none;transition:transform .15s;transform:rotate(-90deg)}
+.irow.open .itoggle>svg{transform:none}
 .itoggle:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
 .ihead:hover td{background:var(--soft)}
 .icell{display:flex;align-items:center;gap:8px}
@@ -339,7 +350,7 @@ CONDITIONS_CSS = """
 .dsec p{margin:0}
 .drec{display:grid;gap:3px}
 .drec+.drec{margin-top:8px}
-.dbtns{margin-top:12px}
+.dbtns{margin-top:12px;display:none}
 .iform{padding-top:8px;display:grid;gap:12px}
 /* recipe cards */
 .rlist{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));align-items:start}
@@ -368,7 +379,18 @@ CONDITIONS_CSS = """
 .gform>.btn{justify-self:start}
 @media (max-width:600px){
   .xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input,.gform select{font-size:16px}
-  .ichart th:nth-child(n+2),.ichart td:nth-child(n+2){width:64px;padding-inline:8px}
+  .ichart{table-layout:fixed}
+  .ichart th:nth-child(n+2),.ichart td:nth-child(n+2){padding-inline:3px;font-size:.74rem;overflow-wrap:anywhere}
+  .ichart th:nth-child(2),.ichart td:nth-child(2){width:62px}
+  .ichart th:nth-child(3),.ichart td:nth-child(3){width:46px}
+  .ichart th:nth-child(4),.ichart td:nth-child(4){width:50px}
+  .ichart th:nth-child(5),.ichart td:nth-child(5){width:50px}
+  .ichart th:nth-child(n+3),.ichart td:nth-child(n+3){text-align:center}
+  .ichart thead th{font-size:.5rem;letter-spacing:0;overflow-wrap:normal!important}
+  .ichart .ctag2,.gedit.iedit,.ichart .hl{display:none}
+  .ichart .hs{display:inline}
+  .idet td{overflow-wrap:anywhere}
+  .dbtns{display:block!important}
   .ihead td,.ichart thead th,.isub th,.idet td{padding-inline:10px}
 }
 .gres h2{font-size:1rem}

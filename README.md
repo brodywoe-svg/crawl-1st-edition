@@ -80,7 +80,7 @@ section name on an entry creates the section.
 
 The **Items** page is a chart grouped by category: Weapons (by weapon type), Armor
 (by armor type, then slot), Consumables, Crafting Materials and Magic Items. Each row shows the
-item's name, value and weight; click it to see its weapon actions, properties,
+item's name, rarity, value, weight and a Magic? check box; click it to see its weapon actions, properties,
 description and crafting recipe. Signed in as admin, click **Edit** on any row, or
 use **Add item**. The **Items** menu opens one category at a time (Weapons, Armor,
 Consumables, Materials, Magic Items), e.g. `items.html?c=weapons`.

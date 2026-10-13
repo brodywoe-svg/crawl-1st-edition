@@ -18,6 +18,7 @@ document.addEventListener("focusin", ev => { if (ev.target.matches && ev.target.
 side.addEventListener("mousedown", ev => { if (ev.target.closest("button")) ev.preventDefault() });
 function colorSel(c) {
   const t = lastBox && lastBox.isConnected ? lastBox : null;
+  if (t && window.colorNameHook && window.colorNameHook(t, c)) { sideMsg(c ? "Name color set." : "Name color removed."); return }
   if (!t || t.selectionStart === t.selectionEnd) { sideMsg("Select some text in one of the boxes first, then pick a color.", true); return }
   sideMsg("");
   const a = t.selectionStart, b = t.selectionEnd, v = t.value;
