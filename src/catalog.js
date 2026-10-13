@@ -149,7 +149,7 @@ function yieldBox(r) {
       `<p class="rl"><a class="ilink small" href="items.html#${esc(i.id)}">${ADMIN ? "Open or edit this item" : "Open this item"} on the Items page</a></p></div>` }).join("");
 }
 function recipeRow(r, showProf) {
-  const isOpen = open.has(r._id) || editing.has(r._id), y = r.makes[0];
+  const isOpen = open.has(r.id) || editing.has(r._id), y = r.makes[0];
   const yieldTxt = y ? qtyName(itemName(y.item), y.qty) : r.kind ? r.kind.replace(" Modifier", " modifier") : "—";
   return `<tbody class="irow${isOpen ? " open" : ""}" id="${esc(r.id)}" data-id="${r._id}">
 <tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${tierBadge(r.tier)}<span class="iname">${esc(recipeName(r))}</span>${r.badge ? PLAYTEST : ""}${showProf && r.prof ? `<span class="ctag2">${esc(r.prof)}</span>` : ""}</button>${ADMIN && !editing.has(r._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(recipeName(r))}">Edit</button>` : ""}</div></td><td>${esc(yieldTxt)}</td><td>${esc(r.dc || "—")}</td><td>${esc(r.tc || "—")}</td><td>${esc(r.time || "—")}</td></tr>
@@ -188,7 +188,7 @@ function itemDetail(i) {
 }
 const nameHTML = i => `<span class="iname${i.nc ? " tc" : ""}"${i.nc ? ` style="--c:${i.nc}"` : ""}>${esc(i.n || "New item")}</span>`;
 function itemRow(i, showCat) {
-  const isOpen = open.has(i._id) || editing.has(i._id);
+  const isOpen = open.has(i.id) || editing.has(i._id);
   const tag = showCat ? `<span class="ctag2">${esc(i.sub || catOf(i.cat)[1])}</span>` : i.slot && i.cat === "Armor" ? `<span class="ctag2">${esc(i.slot)}</span>` : "";
   return `<tbody class="irow${isOpen ? " open" : ""}" id="${esc(i.id)}" data-id="${i._id}">
 <tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${nameHTML(i)}${i.badge ? PLAYTEST : ""}${tag}</button>${ADMIN && !editing.has(i._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(i.n)}">Edit</button>` : ""}</div></td><td>${esc(i.rarity || "—")}</td><td class="imagic"><input type="checkbox" class="magicbox" aria-label="${esc(i.n)} is magic"${i.magic ? " checked" : ""}${ADMIN && !editing.has(i._id) ? "" : " disabled"}></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
@@ -399,11 +399,11 @@ $("clist").addEventListener("click", ev => {
   const x = rowOf(b); if (!x) return;
   if (b.classList.contains("itoggle")) {
     if (editing.has(x._id)) return;
-    if (open.has(x._id)) open.delete(x._id); else open.add(x._id);
+    if (open.has(x.id)) open.delete(x.id); else open.add(x.id);
     render(); const t = document.querySelector(`.irow[data-id="${x._id}"] .itoggle`); if (t) t.focus(); return;
   }
   if (b.classList.contains("gedit")) {
-    editing.add(x._id); open.add(x._id); render();
+    editing.add(x._id); open.add(x.id); render();
     const el = document.querySelector(`.gediting[data-id="${x._id}"] [data-k="n"]`); if (el) el.focus();
   } else if (b.classList.contains("gcancel")) { closeForm(x); render() }
   else if (b.classList.contains("gdel")) {
@@ -411,7 +411,7 @@ $("clist").addEventListener("click", ev => {
       const uses = KIND === "items" ? recipes.filter(r => [...r.makes, ...r.ing].some(m => m.item === x.id)).length : 0;
       b.dataset.sure = "1"; b.textContent = uses ? `Used in ${plural(uses, "recipe", "recipes")}. Click again to delete` : "Click again to delete"; return;
     }
-    const wasNew = x._new, name = nameOf(x); closeForm(x); open.delete(x._id);
+    const wasNew = x._new, name = nameOf(x); closeForm(x); open.delete(x.id);
     if (!wasNew) {
       if (KIND === "items") { items = items.filter(y => y !== x); recipes.forEach(r => { r.makes = r.makes.filter(m => m.item !== x.id); r.ing = r.ing.filter(m => m.item !== x.id) }) }
       else recipes = recipes.filter(y => y !== x);
@@ -444,7 +444,7 @@ $("gAdd").addEventListener("click", () => {
   const x = KIND === "items"
     ? { id: newId("i"), n: "", nc: "", cat: f || "Weapon", sub: "", slot: "", badge: false, rarity: "", magic: f === "Magic Item", value: "", weight: "", actions: "", props: "", feat: "", desc: "", extra: [], _id: ++uid, _new: true }
     : { id: newId("r"), n: "", tier: "Basic", badge: false, kind: "", prof: f || "", pre: "", ing: [], matNote: "", applies: "", ws: "", time: "", dc: "", tc: "", qty: { l: "", v: "" }, makes: [], props: "", grants: "", feat: "", quote: "", extra: [], _id: ++uid, _new: true };
-  rows().push(x); editing.add(x._id); open.add(x._id); $("cq").value = ""; render();
+  rows().push(x); editing.add(x._id); open.add(x.id); $("cq").value = ""; render();
   const el = document.querySelector(`.gediting[data-id="${x._id}"]`);
   if (el) { el.scrollIntoView({ block: "center" }); el.querySelector('[data-k="n"]').focus() }
 });
@@ -473,15 +473,23 @@ $("discardBtn").addEventListener("click", () => { load(JSON.parse(original)); ed
 window.addEventListener("beforeunload", ev => { if (dirty || editing.size) { ev.preventDefault(); ev.returnValue = "" } });
 
 /* open the item or recipe named in the address (#i-… or #r-…) */
-function showHash() {
+/* open the item or recipe named in the address (#i-… or #r-…) and bring it into view.
+   Open rows are remembered by id, so reloading the data never closes them. */
+function showHash(ev) {
   const id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
   const x = rows().find(r => r.id === id); if (!x) return;
-  if (query() || $("cfilter").value) { $("cq").value = ""; $("cfilter").value = "" }
-  open.add(x._id);
-  render();
-  const el = document.getElementById(id); if (!el) return;
-  el.scrollIntoView({ block: "start" }); el.classList.remove("flash"); void el.getBoundingClientRect(); el.classList.add("flash");
+  if (query() || $("cfilter").value) {
+    $("cq").value = ""; $("cfilter").value = "";
+    if (KIND === "items" && location.search) history.replaceState(null, "", "items.html" + location.hash);
+  }
+  open.add(x.id); render();
+  const go = () => { const el = document.getElementById(id); if (!el) return;
+    el.scrollIntoView({ block: "start", behavior: ev && ev.type === "hashchange" ? "smooth" : "auto" });
+    el.classList.remove("flash"); void el.getBoundingClientRect(); el.classList.add("flash") };
+  requestAnimationFrame(go);
 }
+/* after the newest data loads, keep the opened row where the reader is looking */
+function keepHashInView() { const el = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1))); if (el) el.scrollIntoView({ block: "start" }) }
 window.addEventListener("hashchange", showHash);
 
 async function refreshFromGitHub() {
@@ -499,15 +507,16 @@ if (STATIC) {
   $("adminBtn").hidden = false; showAdminBtn();
   fetch("crawl-items.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null)
     .then(j => { if (j && !dirty) load(j) }).catch(() => { })
-    .finally(() => { render(); restoreAdmin(); showHash() });
+    .finally(() => { render(); keepHashInView(); restoreAdmin() });
 }
 render(); showHash();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(keepHashInView);
 /* crafting.html?make=<item id> (from an item with no recipe): start a new recipe that makes it */
 function startRecipeFor() {
   const id = KIND === "recipes" && new URLSearchParams(location.search).get("make"); if (!id || !ADMIN) return;
   const it = itemById(id); history.replaceState(null, "", "crafting.html"); if (!it) return;
   const x = { id: newId("r"), n: it.n, tier: "Basic", badge: false, kind: "", prof: "", pre: "", ing: [], matNote: "", applies: "", ws: "", time: "", dc: "", tc: "", qty: { l: "", v: "" }, makes: [{ item: it.id, qty: 1 }], props: "", grants: "", feat: "", quote: "", extra: [], _id: ++uid, _new: true };
-  recipes.push(x); editing.add(x._id); open.add(x._id); render();
+  recipes.push(x); editing.add(x._id); open.add(x.id); render();
   const el = document.querySelector(`.gediting[data-id="${x._id}"]`); if (el) { el.scrollIntoView({ block: "center" }); el.querySelector('[data-k="prof"]').focus() }
   say(`New recipe for ${it.n}. Fill it in, click Done, then Save changes.`);
 }
