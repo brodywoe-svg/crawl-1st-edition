@@ -4,14 +4,14 @@
   {
    "id": "race-mv6f1zhbq5zj",
    "n": "Elf",
-   "desc": "",
+   "desc": "Elves are the pointy eared, tall, and slender people of yore known for their long lifespans that are nearly ten times longer than humans. Elves hail from all over the realm from the High-Elf's (sometimes called Highborn elves) that have long integrated with human Monarchy's and settlements, To the Wood Elves who defend their ancestral forests and grove homelands, and lastly the Dark Elves, who reside in the deep underground in the midnight of their monolithic strongholds and cities.",
    "asi": "+1 Dexterity",
    "prof": "Perception,",
-   "langs": "Common, Elvish, Two languages of your choice",
+   "langs": "Common, Elvish,",
    "feats": [
     {
-     "n": "Elvish Ancestry",
-     "d": "You have an advantage on saving throws against spells or effects that Charm you."
+     "n": "Elvish Heritage",
+     "d": "You have an advantage on saving throws against spells or effects that Charm or put you to Sleep."
     }
    ],
    "extra": [
@@ -26,16 +26,66 @@
    ],
    "subs": [
     {
-     "id": "sub-mv6f8i2lwtkc",
-     "n": "High Elf",
-     "desc": "You are a High elf whose lineage traces back to the western country of Astoria.",
-     "asi": "+1 Intelligence,",
-     "prof": "",
-     "langs": "",
+     "id": "sub-mv72xqg0nnax",
+     "n": "Dark Elf",
+     "desc": "",
+     "asi": "+1 Charisma",
+     "prof": "Stealth",
+     "langs": "One additional Language of your choice",
      "feats": [
       {
-       "n": "Arcane Heritage",
+       "n": "Superior Darkvision",
+       "d": "Your Darkvision has a range of 60 feet, instead of 30"
+      },
+      {
+       "n": "One with the Night",
+       "d": "You can blend in with dim areas and hide amongst dark areas, you can take the hide action when in dim or dark areas."
+      },
+      {
+       "n": "Nighspun Lineage",
+       "d": "You learn and know the following crafting recipes:\n[color=#b7791f]Whisperweave Hood[/color], [color=#b7791f]Whsiperweave Boots[/color], [color=#b7791f]Whisperweave Mantle[/color], [color=#b7791f]Night Brew[/color]"
+      }
+     ],
+     "extra": []
+    },
+    {
+     "id": "sub-mv6f8i2lwtkc",
+     "n": "High Elf",
+     "desc": "You are a High elf whose lineage traces back to the ancient Highborn elves from a time of magic, innovation, and Warfare. Many High Elves have a high aptitude for Magic and the Arcane Arts with many of them becoming mages and even the ones that don't dabble in magic to a small degree without meaning to.",
+     "asi": "+1 Intelligence,",
+     "prof": "Arcane",
+     "langs": "Two additional Languages of your choice",
+     "feats": [
+      {
+       "n": "Arcane Lineage",
        "d": "Choose a 1st level spell of your choice from the Wizard spell list, you know that spell and may cast it once per day."
+      },
+      {
+       "n": "Alchemical Dabblings",
+       "d": "Choose a Basic Alchemy crafting recipe, you learn that recipe."
+      }
+     ],
+     "extra": []
+    },
+    {
+     "id": "sub-mv72akj46g9t",
+     "n": "Wood Elf",
+     "desc": "You are a Wood Elf that hails from the deep forests, groves, and Timber Heartlands that your people call home. Where as high-elves chose to move away from typical values and beliefs, trading clans for innovation and expansion, Wood-elves pride themselves on their heritage, clan, and traditions being fiercely loyal to their community. Many wood-elves that leave their community usually do so out of loss, necessity, or a mission of grave importance. Many wood-elf's integrating into new places and city's for the first time can come off as awkward, credulous, or slow on the uptake when it comes to things like sarcasm or unliteral social demeanors and jokes.",
+     "asi": "+1 Wisdom",
+     "prof": "",
+     "langs": "One additional Language of your choice",
+     "feats": [
+      {
+       "n": "Swift Feet",
+       "d": "Your Ground movement speed is 40ft."
+      },
+      {
+       "n": "Deft Landing",
+       "d": "Falling damage you take\nfrom falling 20ft or less is halved."
+      },
+      {
+       "n": "Grove Lineage",
+       "d": "You learn and know the following crafting recipes: [color=#b7791f]Livingwood Quarterstaff[/color], [color=#b7791f]Livingwood Shortbow[/color]"
       }
      ],
      "extra": []
