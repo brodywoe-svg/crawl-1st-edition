@@ -2650,7 +2650,7 @@
    "makes": [],
    "props": "",
    "grants": "Enchanted: Chattering, fills 1 open modifier slot",
-   "feat": "Chattering - When you craft this, record a message of up to 25 words in your own voice. Whenever the object is opened, it speaks the message aloud. You can choose for it to speak every time it’s opened, or only once before falling silent.",
+   "feat": "[color=#8e171c]Chattering [/color]- When you craft this, record a message of up to 25 words in your own voice. Whenever the object is opened, it speaks the message aloud. You can choose for it to speak every time it’s opened, or only once before falling silent.",
    "quote": "“My first chattering box was meant for my mother. It said ‘I love you’ every time she opened it. She kept her tea in it for forty years, and complained every single morning.” -Aelindra Moonweave",
    "extra": []
   },
