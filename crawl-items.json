@@ -16,7 +16,7 @@
    "actions": "",
    "props": "Thrown 20/30ft, Volatile",
    "feat": "[color=#8e171c]Volatile[/color] - On a hit, the flask shatters and the target becomes Enflamed.",
-   "desc": "",
+   "desc": "A sealed glass vial of lamp oil and sulfuric powder that bursts into flame when it shatters. Handle it gently, respectfully, and as far from your face as possible.",
    "extra": []
   },
   {
@@ -34,7 +34,7 @@
    "actions": "",
    "props": "Cleansing",
    "feat": "Cleansing - A creature that drinks this ends the Poisoned condition and has advantage on saving throws against poison for 1 hour.",
-   "desc": "",
+   "desc": "A vial of cleansing tonic brewed from a little snake venom and charcoal root. It ends poisoning and guards against more for an hour.",
    "extra": []
   },
   {
@@ -52,7 +52,7 @@
    "actions": "",
    "props": "",
    "feat": "",
-   "desc": "",
+   "desc": "A straight wooden shaft with an iron head and even fletching. A crooked one is just a very expensive stick.",
    "extra": []
   },
   {
@@ -142,7 +142,7 @@
    "actions": "",
    "props": "1d8 slashing, Versatile 1d10, Serrated",
    "feat": "[color=#8e171c]Serrated[/color] - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
-   "desc": "",
+   "desc": "A longsword hammered black in the Ash-Forged way of the Black Boughs, its edge left barbed and rough rather than polished. Not beautiful, but brutally honest: its wounds keep bleeding long after the fight.",
    "extra": []
   },
   {
@@ -160,7 +160,7 @@
    "actions": "",
    "props": "1d6 piercing, Thrown 20/60, Versatile 1d8, Serrated",
    "feat": "[color=#8e171c]Serrated[/color] - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
-   "desc": "",
+   "desc": "An Ash-Forged spear with a blackened, barbed iron head on a long haft. Made by the orcs of the Black Boughs to leave wounds that don't close cleanly.",
    "extra": []
   },
   {
@@ -196,7 +196,7 @@
    "actions": "",
    "props": "Restorative, Clotting",
    "feat": "[color=#8e171c]Restorative[/color] - A creature that drinks this regains 1d4 + 1 hit points.\n\n[color=#8e171c]Clotting[/color] - A Bleeding creature that drinks this removes the Bleeding condition.",
-   "desc": "",
+   "desc": "A dark draught brewed with troll's blood by the warren shamans of the Ashblood. It heals a little and stops bleeding at once, so warriors carry it into every fight with a serrated blade.",
    "extra": []
   },
   {
@@ -376,7 +376,7 @@
    "actions": "",
    "props": "Staunching",
    "feat": "[color=#8e171c]Staunching[/color] - Apply this to yourself or a creature within 5 ft. to end the Bleeding condition.",
-   "desc": "",
+   "desc": "A thick paste of yarrow and chalk in a small tin. Spread on a wound, it stops bleeding in moments.",
    "extra": []
   },
   {
@@ -443,12 +443,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "8 (S)",
+   "weight": "1 lbs",
    "actions": "",
    "props": "Hearty, Fortifying",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\nFortifying - A creature that eats this has advantage on Constitution saving throws until its next rest or camp.",
-   "desc": "",
+   "desc": "A deep red hill dwarf borscht of beets, cabbage, meat and dill, soured with beet kvass. Generations of dwarven soldiers have marched to war on a belly full of it.",
    "extra": []
   },
   {
@@ -461,12 +461,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "50 (G)",
+   "weight": "0.2 lbs",
    "actions": "",
    "props": "Neck",
    "feat": "",
-   "desc": "",
+   "desc": "A Dragonkin scale set in silver wire and hung on a silver chain. Among the Dragonkin, giving one of your own scales means \"I'd guard you like treasure,\" so few are ever made.",
    "extra": []
   },
   {
@@ -516,11 +516,11 @@
    "rarity": "Uncommon",
    "magic": false,
    "value": "15 (G)",
-   "weight": "8lb",
+   "weight": "8 lbs",
    "actions": "",
    "props": "1d8 slashing, Versatile 1d10, Dwarven Durability",
    "feat": "[color=#8e171c]Dwarven Durability[/color] - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
-   "desc": "",
+   "desc": "A heavy, broad-bladed axe on a long ash haft, Mountain-Forged so it never rusts, corrodes or breaks. Every dwarf child learns the axe before the pick, and this is the axe they learn on.",
    "extra": []
   },
   {
@@ -534,11 +534,11 @@
    "rarity": "Uncommon",
    "magic": false,
    "value": "6 (G)",
-   "weight": "4lbs",
+   "weight": "4 lbs",
    "actions": "",
    "props": "1d6 slashing, Light, Thrown 20/60, Dwarven Durability",
    "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
-   "desc": "",
+   "desc": "A hand axe forged in the Mountain-Forged tradition, its head bonded so tightly to the haft that rust, acid and sundering blows can't touch it. Dwarves make them to outlast their owners, and their grandchildren's owners too.",
    "extra": []
   },
   {
@@ -646,7 +646,7 @@
    "actions": "",
    "props": "Forgery DC X",
    "feat": "Forgery (DC X) - This document appears genuine. A creature examining it must succeed on an Investigation check against DC X to notice it’s forged.",
-   "desc": "",
+   "desc": "A letter, writ, legal document or royal decree that looks genuine. How long it fools anyone depends on how good the forger was.",
    "extra": []
   },
   {
@@ -695,7 +695,7 @@
    "badge": false,
    "rarity": "Common",
    "magic": false,
-   "value": "50 (G)",
+   "value": "25 (G)",
    "weight": "3 lbs",
    "actions": "",
    "props": "",
@@ -731,12 +731,12 @@
    "badge": true,
    "rarity": "Common",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "8 (S)",
+   "weight": "1.5 lbs",
    "actions": "",
    "props": "Hearty, Filling",
    "feat": "[color=#8e171c]Hearty[/color] - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\n[color=#8e171c]Filling[/color] - A creature that eats this gains 1 extra slot in its Action Pool until its next rest or camp. This slot can only hold Action Points or Magic Points, never Exhaustion Points.",
-   "desc": "",
+   "desc": "A thick stew of root vegetables, meat and herbs, slow-cooked in a pot. Filling enough to keep a fighter going until the next camp.",
    "extra": []
   },
   {
@@ -772,7 +772,7 @@
    "actions": "",
    "props": "Restorative",
    "feat": "[color=#8e171c]Restorative[/color] - A creature that drinks this regains 2d4 + 2 hit points.",
-   "desc": "",
+   "desc": "A carefully brewed potion of redcap, yarrow and spring water. Stronger than any draught, for wounds worse than a scratch.",
    "extra": []
   },
   {
@@ -785,12 +785,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "5 (S)",
+   "weight": "1 lbs",
    "actions": "",
    "props": "Hearty",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.",
-   "desc": "",
+   "desc": "A round loaf of honeyed bread baked over the campfire. Halflings say a party that shares its bread comes home; this loaf is hearty enough to ease exhaustion.",
    "extra": []
   },
   {
@@ -808,7 +808,7 @@
    "actions": "",
    "props": "Rings, Weighted Band",
    "feat": "[color=#8e171c]Weighted Band[/color] - Your unarmed attacks deal +1 bludgeoning damage. If you wear two Hillbrand Rings, the bonus becomes +2.",
-   "desc": "",
+   "desc": "A heavy gold-and-silver wedding band from the Hills of Moruk, where the midwives who wear them are known for their arms. It adds real weight to an unarmed punch.",
    "extra": []
   },
   {
@@ -898,7 +898,7 @@
    "actions": "",
    "props": "1d4 piercing, Finesse, Light, Thrown 20/60",
    "feat": "",
-   "desc": "",
+   "desc": "A short, double-edged iron blade, light enough to hide in a boot and balanced enough to throw. Every smith's first weapon, and the one they're judged by.",
    "extra": []
   },
   {
@@ -934,7 +934,7 @@
    "actions": "",
    "props": "1d6 slashing, Light, Thrown 20/60",
    "feat": "",
-   "desc": "",
+   "desc": "A short iron axe on an ash haft, as handy for splitting firewood as it is for splitting shields. Light enough to throw, sturdy enough to swing all day.",
    "extra": []
   },
   {
@@ -952,7 +952,7 @@
    "actions": "",
    "props": "1d8 slashing, Versatile 1d10",
    "feat": "",
-   "desc": "",
+   "desc": "A straight, double-edged iron sword with a cross-shaped hilt, long enough to keep foes at a distance and light enough for one hand. The plain, reliable weapon of soldiers, guards and sellswords everywhere.",
    "extra": []
   },
   {
@@ -988,7 +988,7 @@
    "actions": "",
    "props": "1d6 piercing, Finesse, Light",
    "feat": "",
-   "desc": "",
+   "desc": "A short, straight iron sword built for quick thrusts in close quarters. A well-balanced one moves with its wielder instead of fighting them.",
    "extra": []
   },
   {
@@ -1037,12 +1037,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "3 (G)",
+   "weight": "2 lbs",
    "actions": "",
    "props": "Holds 40 arrows or bolts",
    "feat": "",
-   "desc": "",
+   "desc": "A deep leather quiver with a buckled strap that holds 40 arrows or bolts. Dungeon archers want the big one, because nobody down there is selling arrows.",
    "extra": []
   },
   {
@@ -1078,7 +1078,7 @@
    "actions": "",
    "props": "",
    "feat": "",
-   "desc": "",
+   "desc": "A small, heavy ball of cast lead, the ammunition that actually does the work when a firearm goes off.",
    "extra": []
   },
   {
@@ -1091,12 +1091,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "3 (G)",
+   "weight": "1 lbs",
    "actions": "",
    "props": "Arms, Light, 5% Armor",
    "feat": "",
-   "desc": "",
+   "desc": "Stiff leather guards laced around the forearms. An archer's first lesson is the bowstring slapping their wrist; their second is buying a pair of these.",
    "extra": []
   },
   {
@@ -1109,12 +1109,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "8 (G)",
+   "weight": "5 lbs",
    "actions": "",
    "props": "Torso, Light, 5% Armor",
    "feat": "",
-   "desc": "",
+   "desc": "A sleeveless leather vest lined with linen. Tough on the outside and comfortable on the inside, so it can be worn for days on the road.",
    "extra": []
   },
   {
@@ -1127,12 +1127,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "1 (G)",
+   "weight": "1 lbs",
    "actions": "",
    "props": "Holds 20 arrows or bolts",
    "feat": "",
-   "desc": "",
+   "desc": "A leather quiver that holds 20 arrows or bolts. Enough for a hunt, a skirmish, or one very bad afternoon.",
    "extra": []
   },
   {
@@ -1168,7 +1168,7 @@
    "actions": "",
    "props": "Other, Quick Draw 1",
    "feat": "[color=#8e171c]Quick Draw 1[/color] - While you wear this Sheath with a sword sheathed in it, you gain 1 additional Action Point at the start of your first turn in a combat. This Action Point (AP) can only be spent on melee weapon attacks. You can only benefit from one item with the Quick Draw feature.",
-   "desc": "",
+   "desc": "A fitted leather sheath with iron buckles, shaped so a sword slides out cleanly. It puts the blade back in the hand before the wearer has finished reaching for it.",
    "extra": []
   },
   {
@@ -1199,12 +1199,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "5 (S)",
+   "weight": "0.5 lbs",
    "actions": "",
    "props": "Head, Clothing, 3% Armor",
    "feat": "",
-   "desc": "",
+   "desc": "A simple linen hood that keeps out the rain, the cold and the eyes of strangers.",
    "extra": []
   },
   {
@@ -1222,7 +1222,7 @@
    "actions": "",
    "props": "1d6 bludgeoning, Finesse, Versatile 1d8, Livingwood",
    "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
-   "desc": "",
+   "desc": "A staff of silverbark, shaped by elves from a living branch the tree agreed to give. It weighs half as much as a common staff, never rots or warps, and slowly mends its own nicks and cracks.",
    "extra": []
   },
   {
@@ -1240,7 +1240,7 @@
    "actions": "",
    "props": "1d6 piercing, Ammunition 100/400, Two-Handed, Livingwood",
    "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
-   "desc": "",
+   "desc": "A shortbow grown, not cut, from a living silverbark branch and finished by an elven bowyer. It's lighter, shoots farther than a common bow, and heals its own small damage.",
    "extra": []
   },
   {
@@ -1258,7 +1258,7 @@
    "actions": "",
    "props": "Picking",
    "feat": "[color=#8e171c]Picking[/color] - You can use a lockpick to make a Thievery check to open a lock. If the check fails, the lockpick breaks and can’t be used again. Without a lockpick or a similar tool, you can’t attempt to pick a lock.",
-   "desc": "",
+   "desc": "A thin, bent iron pick with a leather-wrapped grip, used to open locks without a key. A failed attempt snaps it.",
    "extra": []
   },
   {
@@ -1326,11 +1326,11 @@
    "rarity": "Uncommon",
    "magic": false,
    "value": "35 (G)",
-   "weight": "0.5",
+   "weight": "0.5 lbs",
    "actions": "",
    "props": "Restorative",
    "feat": "[color=#8e171c]Restorative[/color] - A creature that drinks this regains 1d6 + 1 hit points.",
-   "desc": "",
+   "desc": "A small vial of bitter redcap brew that tastes like a cellar floor. It closes minor wounds before the drinker finishes complaining about the taste.",
    "extra": []
   },
   {
@@ -1344,11 +1344,11 @@
    "rarity": "Uncommon",
    "magic": false,
    "value": "35 (G)",
-   "weight": "0.5",
+   "weight": "0.5 lbs",
    "actions": "",
    "props": "Slumbering",
    "feat": "[color=#8e171c]Slumbering[/color] - A humanoid that drinks this must succeed on a DC 14 Constitution saving throw or fall Unconscious for 1 hour. The creature wakes early if it takes damage or another creature uses an action to shake it awake. The brew is colorless and nearly tasteless when mixed into another drink.",
-   "desc": "",
+   "desc": "A colorless, nearly tasteless sleeping brew of the dark elf Matriarchs. Slipped into a cup of wine, it puts a humanoid to sleep for an hour, and sometimes for good.",
    "extra": []
   },
   {
@@ -1361,12 +1361,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "5 (G)",
+   "weight": "6 lbs",
    "actions": "",
    "props": "Torso, Light, 5% Armor",
    "feat": "",
-   "desc": "",
+   "desc": "A thick coat of quilted linen and wool. Worn alone it turns aside glancing blows; worn under plate, it's what keeps knights alive.",
    "extra": []
   },
   {
@@ -1618,7 +1618,7 @@
    "actions": "",
    "props": "1d6 bludgeoning, Versatile 1d8",
    "feat": "",
-   "desc": "",
+   "desc": "A sturdy length of ash wood, shod at both ends. A walking stick on the road, and a reason to keep walking for anyone who tries to stop you.",
    "extra": []
   },
   {
@@ -1726,7 +1726,7 @@
    "actions": "",
    "props": "1d6 piercing, Ammunition 80/320, Two-Handed",
    "feat": "",
-   "desc": "",
+   "desc": "A compact yew bow, short enough to draw from horseback or a crowded corridor. Yew remembers the shape it's given, so a well-made one keeps its aim for years.",
    "extra": []
   },
   {
@@ -1793,12 +1793,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "10 (G)",
+   "weight": "0.2 lbs",
    "actions": "",
    "props": "Neck, Sacred",
    "feat": "Sacred - This item counts as a holy symbol for any spell or feature that requires one.",
-   "desc": "",
+   "desc": "A silver emblem of a god on a fine silver chain. It counts as a holy symbol for any spell or feature that needs one.",
    "extra": []
   },
   {
@@ -1847,12 +1847,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "5 (G)",
+   "weight": "0 lbs",
    "actions": "",
    "props": "Rings",
    "feat": "",
-   "desc": "",
+   "desc": "A plain band of drawn silver wire. Enchanters see an empty vessel; lovers see a question.",
    "extra": []
   },
   {
@@ -1960,7 +1960,7 @@
    "actions": "",
    "props": "Rousing",
    "feat": "[color=#8e171c]Rousing[/color] - Holding this under the nose of a creature within 5 ft. ends the Dazed condition, or wakes it if it’s Unconscious but has at least 1 hit point.",
-   "desc": "",
+   "desc": "A small tin of sharp ammonia salts and mint. One whiff under the nose clears a dazed head or wakes the unconscious.",
    "extra": []
   },
   {
@@ -1973,12 +1973,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "3 (S)",
+   "weight": "0.5 lbs",
    "actions": "",
    "props": "Preserved, Quick Bite",
    "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten during a rest or at camp without a Cooking Fire.\n\nQuick Bite - You can eat this outside of a rest by spending 1 AP, regaining hit points equal to the cook’s Cooking Rank. A creature can only benefit from one Quick Bite between rests.",
-   "desc": "",
+   "desc": "Strips of salted meat smoked over hickory chips. It keeps for two weeks and can be eaten on the run, one quick bite at a time.",
    "extra": []
   },
   {
@@ -2032,7 +2032,7 @@
    "actions": "",
    "props": "Scroll",
    "feat": "Scroll - When you craft this, choose one spell you know, one language you know, and the scroll’s Rank (X). X can’t exceed your Scribing Tier’s maximum or your own Rank in that spell. If you meet the TC, X increases by 1. The spell is written into the scroll in that language. A spellcaster who knows the language can read the scroll to cast the spell, following the Spell Scroll rules. You must be capable of casting the spell in order to copy it to a scroll.",
-   "desc": "",
+   "desc": "A sheet of parchment holding a single spell, written in a chosen language at a chosen rank. It's a spell asleep on a page, and it crumbles to ash once read.",
    "extra": []
   },
   {
@@ -2045,12 +2045,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "6 (S)",
+   "weight": "1 lbs",
    "actions": "",
    "props": "Warming",
    "feat": "Warming - A creature that eats this has advantage on saving throws against extreme cold until its next rest or camp.",
-   "desc": "",
+   "desc": "A fiery soup of root vegetables and fire peppers. Its warmth lingers long after the bowl is empty, keeping out the worst of the cold.",
    "extra": []
   },
   {
@@ -2135,12 +2135,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "2 (S)",
+   "weight": "0.5 lbs",
    "actions": "",
    "props": "Preserved, Nourishing",
    "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten at camp or during a rest without a Cooking Fire.\n\nNourishing - A creature that eats this during a rest or at camp regains hit points equal to the cook’s Cooking Rank.",
-   "desc": "",
+   "desc": "Dense, salted biscuits that won't spoil for two weeks and can be eaten without a fire. It won't win any friends at the table, but it keeps adventurers alive.",
    "extra": []
   },
   {
@@ -2212,7 +2212,7 @@
    "actions": "",
    "props": "Feet, Clothing, 3% Armor, Whisperweave",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
-   "desc": "",
+   "desc": "Soft boots stitched from broodmother silk, with soles that never make a sound. In the deep, whoever is heard first dies first; these make sure it isn't you.",
    "extra": []
   },
   {
@@ -2230,7 +2230,7 @@
    "actions": "",
    "props": "Head, Clothing, 3% Armor, Whisperweave",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
-   "desc": "",
+   "desc": "A hood of dark elf spider silk that makes no sound, can't be torn or stained, and weighs nothing at all. It doesn't hide the wearer's face so much as convince the dark they were never there.",
    "extra": []
   },
   {
@@ -2243,12 +2243,12 @@
    "badge": false,
    "rarity": "",
    "magic": false,
-   "value": "",
-   "weight": "",
+   "value": "30 (G)",
+   "weight": "0 lbs",
    "actions": "",
    "props": "Shoulders, Light, 5% Armor, Whisperweave",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
-   "desc": "",
+   "desc": "A shoulder mantle woven from silk the broodmothers spin, stronger than steel and lighter than breath. It makes no sound, never tears or stains, and weighs nothing.",
    "extra": []
   },
   {
