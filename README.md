@@ -76,6 +76,14 @@ Every glossary section gets its own page and a link in the **Glossary** menu
 (for example *Combat Rules* → `glossary.html?s=combat-rules`). Typing a new
 section name on an entry creates the section.
 
+## Races
+
+The **Races** page lists each race with its description, ability score
+increases, starting proficiencies, languages, features (name in red, then what it
+does) and any extra details such as Size or Speed, followed by its subraces. Signed
+in as admin: **Add race**, **Edit** on a race, **Add a subrace to …** under a race,
+and **Edit** on a subrace. Saves to `crawl-races.json`.
+
 ## Items and Crafting
 
 The **Items** page is a chart grouped by category: Weapons (by weapon type), Armor
@@ -117,6 +125,8 @@ The spell list lives in [`crawl-spells.json`](crawl-spells.json).
 | `src/glossary.js` | The Glossary and Conditions pages: search, and admin editing |
 | `crawl-items.json` | Items and crafting recipes |
 | `src/catalog.js` | The Items and Crafting pages |
+| `crawl-races.json` | Races and subraces |
+| `src/races.js` | The Races page |
 | `src/editkit.js` | The Text color sidebar shared by the editing pages |
 | `tools/sitekit.py` | The top navigation bar and the Glossary and Conditions page layouts |
 | `app/` | The Windows app (Electron) |

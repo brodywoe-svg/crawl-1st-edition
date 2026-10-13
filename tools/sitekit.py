@@ -12,6 +12,8 @@ import re
 NAV_ITEMS = [
     ("Character Creator", None, None),
     ("Classes", None, None),
+    ("Races", "races.html", None),
+    ("Backgrounds", None, None),
     ("Spells", "index.html", [("All spells", "index.html?show=all"), ("By magic source", None),
                               ("Arcane", "index.html?source=arcane"), ("Divine", "index.html?source=divine"), ("Primal", "index.html?source=primal"), ("Occult", "index.html?source=occult"),
                               ("By class", None),
@@ -24,7 +26,7 @@ NAV_ITEMS = [
     ("About", None, None),
 ]
 # which nav item each page belongs to
-SECTION = {"spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
+SECTION = {"races": "Races", "spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
 
 CARET = '<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 
@@ -106,6 +108,7 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 @media (max-width:700px){
   .navin{gap:4px;padding-inline:6px}
   .navlinks{flex-wrap:wrap;justify-content:center}
+  .navitem.soon{display:none}
   .navitem.soon small,.navctl .adminbtn span,.navctl .modebtn span{display:none}
   .navctl .adminbtn,.navctl .modebtn{padding:6px}
   .navitem{padding:10px 7px;font-size:.66rem;letter-spacing:.04em}
@@ -198,6 +201,34 @@ CATALOG_PAGES = {
     "crafting": ("Crafting", "Every crafting recipe, sorted by profession. The badge on each recipe shows its tier, and a flask badge means it still needs playtesting. Click any material or yield to see that item on the Items page.",
                  "Search recipes or ingredients", "Add recipe"),
 }
+
+
+def races_shell(logo_svg, admin_modal):
+    return f"""
+<div class="wrap condwrap">
+<header class="intro">
+  {logo_svg}
+  <h1>Races</h1>
+  <p>The peoples of Crawl 1st Edition. Each race lists its ability score increases, starting proficiencies, languages and features, followed by its subraces.</p>
+</header>
+<div class="cbar">
+  <input id="cq" type="search" placeholder="Search races and subraces" aria-label="Search races and subraces" autocomplete="off">
+  <span class="ccount" id="ccount"></span>
+  <button type="button" class="btn solid" id="gAdd" hidden>Add race</button>
+</div>
+<p class="gmsg" id="gmsg" role="status"></p>
+<main id="clist"></main>
+<p class="cempty" id="cempty" hidden></p>
+</div>
+{admin_modal}
+<div class="savebar" id="savebar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">You have unsaved changes.</span>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn solid" id="saveBtn">Save changes</button>
+  </div>
+</div>
+"""
 
 
 def catalog_shell(page, logo_svg, admin_modal):
@@ -434,6 +465,20 @@ CONDITIONS_CSS = """
 .ilink.small{font-size:.8rem}
 .gtop{justify-content:flex-end;margin-bottom:-4px}
 @media (max-width:760px){.rdet{grid-template-columns:1fr}}
+/* races */
+.rlist2{display:grid;gap:14px}
+.subs{display:grid;gap:10px;margin-top:6px}
+.subs>h3{margin:4px 0 0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.subr{border:2px solid var(--ink);border-radius:12px;padding:10px 14px;display:grid;gap:6px;background:var(--page)}
+.subh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.subh b{font-size:1.02rem;font-weight:800}
+.subr .gedit,.rbtn{color:var(--ink);border-color:var(--ink);padding:2px 10px;font-size:.72rem}
+.subr .gedit:hover{background:var(--ink);color:var(--paper)}
+.rfeats{display:grid;gap:6px}
+.rfeats p{margin:0;font-weight:600}
+.rform{display:grid;gap:12px}
+.subs .rform{border:2px dashed var(--ink);border-radius:12px;padding:12px 14px}
+.addsub{justify-self:start}
 .gres h2{font-size:1rem}
 .glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
 .gwords{display:grid;gap:8px}
