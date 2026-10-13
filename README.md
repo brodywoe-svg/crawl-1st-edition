@@ -57,13 +57,18 @@ name (for example *Keywords*) makes a new section on the Glossary page. Click
 **Save changes** to write `crawl-glossary.json`.
 
 Glossary names show in red, underlined, in spell text (when a spell isn't being
-edited). Hover over one, or tap it on a phone, to see its entry. Under
-**Underlined words in spells** you can add other words (for example *Target Area*),
-each with its own popup text; leave the popup text empty to show the whole entry.
+edited). Hover over one, or tap it on a phone, to see its tooltip. Under
+**Tooltip words**, click **Create tooltip word** to add other words (for example
+*Target Area*), each with its own tooltip text; leave the text empty to show the
+whole entry.
 
-In the editor, leave a blank line between paragraphs. To color text, select it
-and click a color in the **Text color** bar; this adds `[color=#hex]...[/color]`
-around it. **Remove color** takes it off again. The preview shows the result.
+In the editor, leave a blank line between paragraphs. The **Text color** sidebar
+appears on the right while you edit: select text in any box and click a color. This
+adds `[color=#hex]...[/color]` around it; **Remove color** takes it off. The preview
+shows the result.
+
+Searching the glossary lists the best matches first: entries whose name matches,
+then tooltip words, then entries that only mention the word.
 
 Signing in as admin lasts for the browser tab, across all pages, until you
 click **Admin · Sign out** or close the tab.

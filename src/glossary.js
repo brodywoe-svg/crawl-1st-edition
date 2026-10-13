@@ -23,12 +23,29 @@ function sections() {
 function visible() {
   let list = entries.filter(e => !e._new || editing.has(e._id));
   if (PAGE === "conditions") list = list.filter(e => e.sec === FIRST || editing.has(e._id));
-  const q = $("cq").value.trim().toLowerCase();
-  if (q) list = list.filter(e => editing.has(e._id) ||
-    plainText([e.n, e.lead, ...e.fx, ...e.notes.map(n => n.t), ...e.aka.map(x => x.w + " " + x.ref)].join(" ")).toLowerCase().includes(q));
+  const q = query();
+  if (q) {
+    list.forEach(e => { e._score = score(e, q) });
+    return list.filter(e => e._score > 0 || editing.has(e._id)).sort((a, b) => b._score - a._score || byName(a, b));
+  }
   return list.sort((a, b) => (a._new ? -1 : 0) - (b._new ? -1 : 0) || byName(a, b));
 }
 
+const query = () => $("cq").value.trim().toLowerCase().replace(/\s+/g, " ");
+/* best matches first: the name, then a tooltip word, then anything in the text */
+function score(e, q) {
+  const n = e.n.toLowerCase(), words = e.aka.map(x => x.w.toLowerCase()), wordStart = t => new RegExp("(^|\\W)" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).test(t);
+  if (n === q) return 100;
+  if (n.startsWith(q)) return 90;
+  if (words.includes(q)) return 85;
+  if (words.some(w => w.startsWith(q))) return 80;
+  if (wordStart(n)) return 70;
+  if (n.includes(q)) return 65;
+  if (words.some(w => w.includes(q))) return 60;
+  const text = plainText([e.lead, ...e.fx, ...e.notes.map(x => x.t), ...e.aka.map(x => x.ref)].join(" ")).toLowerCase();
+  if (!text.includes(q)) return 0;
+  return wordStart(text) ? 20 : 10;
+}
 const noteText = e => e.notes.map(n => `${n.l}: ${n.t}`).join("\n");
 function bodyHTML(e) {
   const notes = e.notes.map(n => `<p class="cnote"><b>${esc(n.l)}:</b> ${richInline(n.t)}</p>`).join("");
@@ -47,8 +64,8 @@ function card(e, tag) {
 }
 const SWATCHES = [["Crawl red", "#8e171c"], ["Blue", "#1f5fbf"], ["Green", "#2e7d32"], ["Purple", "#6a1b9a"], ["Gold", "#b7791f"]];
 function wordRow(x) {
-  return `<div class="gword"><input type="text" class="gw" value="${esc(x.w)}" placeholder="Word, e.g. Target Area" aria-label="Underlined word" autocomplete="off">` +
-    `<textarea class="gref" rows="2" placeholder="What the popup shows for this word. Leave empty to show the whole entry." aria-label="Popup text for this word">${esc(x.ref)}</textarea>` +
+  return `<div class="gword"><input type="text" class="gw" value="${esc(x.w)}" placeholder="Tooltip word, e.g. Target Area" aria-label="Tooltip word" autocomplete="off">` +
+    `<textarea class="gref" rows="2" placeholder="What the tooltip shows for this word. Leave empty to show the whole entry." aria-label="Tooltip text for this word">${esc(x.ref)}</textarea>` +
     `<button type="button" class="btn gwdel">Remove</button></div>`;
 }
 function form(e) {
@@ -58,11 +75,10 @@ function form(e) {
 <div class="cbody gform">
 <label for="${id("n")}">Name<input type="text" id="${id("n")}" data-k="n" value="${esc(d.n)}" autocomplete="off"></label>
 <label for="${id("sec")}">Section <small>Entries in "Conditions" also show on the Conditions page.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
-<div class="gcolor" role="toolbar" aria-label="Text color"><span class="gcl">Text color</span>${SWATCHES.map(([n, c]) => `<button type="button" class="gsw" data-c="${c}" style="--c:${c}" title="${n}" aria-label="Color selected text ${n}"></button>`).join("")}<input type="color" class="gpick" value="#8e171c" aria-label="Pick any color" title="Pick any color"><button type="button" class="btn gapply">Color selected text</button><button type="button" class="btn gclear">Remove color</button><small class="ghelp">Select text in any box below, then pick a color.</small></div>
 <label for="${id("lead")}">Description <small>Leave a blank line between paragraphs.</small><textarea id="${id("lead")}" data-k="lead" rows="6">${esc(d.lead)}</textarea></label>
 <label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="4">${esc(d.fx)}</textarea></label>
 <label for="${id("notes")}">Notes <small>One per line. Start a line with "Designer's note:" to label it as one.</small><textarea id="${id("notes")}" data-k="notes" rows="2">${esc(d.notes)}</textarea></label>
-<div class="gwords"><span class="glab">Underlined words in spells <small>The name is always underlined and shows the whole entry. Add other words here, each with its own popup text if you like.</small></span><div class="gwlist">${d.aka.map(wordRow).join("")}</div><button type="button" class="btn gwadd">Add a word</button></div>
+<div class="gwords"><span class="glab">Tooltip words <small>The entry's name is always a tooltip word and shows the whole entry. Create more here, each with its own tooltip text if you like.</small></span><div class="gwlist">${d.aka.map(wordRow).join("")}</div><button type="button" class="btn gwadd">Create tooltip word</button></div>
 <div class="gprev"><span class="glab">Preview</span><div class="gprevbody"></div></div>
 <p class="gerr" role="alert"></p>
 <div class="gbtns"><button type="button" class="btn gdel">${e._new ? "Remove" : "Delete entry"}</button><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>
@@ -94,13 +110,15 @@ function render() {
   const n = list.filter(e => !e._new).length;
   $("ccount").textContent = `${n} ${n === 1 ? noun[0] : noun[1]}`;
   let h;
-  if (PAGE === "conditions") h = `<div class="clist">${list.map(e => card(e, false)).join("")}</div>`;
+  if (query()) h = list.length ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist">${list.map(e => card(e, PAGE !== "conditions")).join("")}</div>` : "";
+  else if (PAGE === "conditions") h = `<div class="clist">${list.map(e => card(e, false)).join("")}</div>`;
   else h = sections().map(sec => {
     const items = list.filter(e => e.sec === sec); if (!items.length) return "";
     return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2>${sec === FIRST ? `<a class="glink" href="conditions.html">Open the Conditions page</a>` : ""}</div><div class="clist">${items.map(e => card(e, true)).join("")}</div></section>`;
   }).join("");
   $("clist").innerHTML = h;
   document.querySelectorAll(".gediting").forEach(preview);
+  $("gside").hidden = !editing.size; document.body.classList.toggle("gside-on", editing.size > 0);
   $("cempty").hidden = list.length > 0;
   $("gsecs").innerHTML = sections().map(s => `<option value="${esc(s)}">`).join("");
   $("gAdd").hidden = !ADMIN;
@@ -133,7 +151,7 @@ $("clist").addEventListener("click", ev => {
     if (!name) { err("Give the entry a name."); return }
     if (entries.some(x => x !== e && !x._new && x.n.toLowerCase() === name.toLowerCase())) { err(`There's already an entry called ${name}.`); return }
     const p = fromDraft(d), seen = new Set();
-    for (const x of p.aka) { const k = x.w.toLowerCase(); if (seen.has(k)) { err(`"${x.w}" is listed twice under Underlined words.`); return } seen.add(k) }
+    for (const x of p.aka) { const k = x.w.toLowerCase(); if (seen.has(k)) { err(`"${x.w}" is listed twice under Tooltip words.`); return } seen.add(k) }
     e.n = name; e.sec = d.sec.trim().replace(/\s+/g, " ") || FIRST;
     e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka;
     delete e._new; editing.delete(e._id); drafts.delete(e._id);
@@ -142,14 +160,23 @@ $("clist").addEventListener("click", ev => {
   }
 });
 let lastBox = null;
+document.body.insertAdjacentHTML("beforeend", `<aside class="gside" id="gside" hidden aria-label="Text color">
+<div class="gsh">Text color</div>
+<div class="gsb">
+<div class="gsws">${SWATCHES.map(([n, c]) => `<button type="button" class="gsw" data-c="${c}" style="--c:${c}" title="${n}" aria-label="Color selected text ${n}"></button>`).join("")}</div>
+<label class="gpickl">Any color <input type="color" class="gpick" id="gpick" value="#8e171c"></label>
+<button type="button" class="btn solid gapply">Color selected text</button>
+<button type="button" class="btn gclear">Remove color</button>
+<p class="ghelp" id="gsideMsg">Select text in any box, then pick a color.</p>
+</div></aside>`);
+const side = $("gside"), sideMsg = (m, bad) => { $("gsideMsg").textContent = m || "Select text in any box, then pick a color."; $("gsideMsg").classList.toggle("bad", !!bad) };
 $("clist").addEventListener("focusin", ev => { if (ev.target.matches(".gediting textarea, .gediting input[type=text]")) lastBox = ev.target });
 $("clist").addEventListener("input", ev => { const f = ev.target.closest(".gediting"); if (f) preview(f) });
-$("clist").addEventListener("change", ev => { if (ev.target.matches(".gpick")) { const f = ev.target.closest(".gediting"); if (lastBox && f.contains(lastBox) && lastBox.selectionStart !== lastBox.selectionEnd) colorSel(f, ev.target.value) } });
-$("clist").addEventListener("mousedown", ev => { if (ev.target.closest(".gsw,.gapply,.gclear")) ev.preventDefault() });
-function colorSel(f, c) {
-  const t = lastBox && f.contains(lastBox) ? lastBox : null, err = m => { f.querySelector(".gerr").textContent = m };
-  if (!t || t.selectionStart === t.selectionEnd) { err("Select some text in one of the boxes first, then pick a color."); return }
-  err("");
+side.addEventListener("mousedown", ev => { if (ev.target.closest("button")) ev.preventDefault() });
+function colorSel(c) {
+  const t = lastBox && lastBox.isConnected ? lastBox : null, f = t && t.closest(".gediting");
+  if (!f || t.selectionStart === t.selectionEnd) { sideMsg("Select some text in one of the boxes first, then pick a color.", true); return }
+  sideMsg("");
   const a = t.selectionStart, b = t.selectionEnd, v = t.value;
   let mid = v.slice(a, b).replace(/\[\/?color[^\]]*\]/gi, "");
   if (c) mid = `[color=${c}]${mid}[/color]`;
@@ -157,11 +184,17 @@ function colorSel(f, c) {
   if (!document.execCommand || !document.execCommand("insertText", false, mid)) t.setRangeText(mid, a, b, "select");
   t.setSelectionRange(a, a + mid.length); preview(f);
 }
+side.addEventListener("click", ev => {
+  const sw = ev.target.closest(".gsw"); if (sw) { $("gpick").value = sw.dataset.c; colorSel(sw.dataset.c); return }
+  if (ev.target.closest(".gapply")) { colorSel($("gpick").value); return }
+  if (ev.target.closest(".gclear")) colorSel("");
+});
+$("gpick").addEventListener("change", () => { if (lastBox && lastBox.isConnected && lastBox.selectionStart !== lastBox.selectionEnd) colorSel($("gpick").value) });
+/* keep the sidebar clear of the save bar on small screens */
+new MutationObserver(() => document.documentElement.style.setProperty("--sbh", $("savebar").hidden ? "0px" : $("savebar").offsetHeight + "px"))
+  .observe($("savebar"), { attributes: true, attributeFilter: ["hidden"] });
 $("clist").addEventListener("click", ev => {
   const f = ev.target.closest(".gediting"); if (!f) return;
-  const sw = ev.target.closest(".gsw"); if (sw) { f.querySelector(".gpick").value = sw.dataset.c; colorSel(f, sw.dataset.c); return }
-  if (ev.target.closest(".gapply")) { colorSel(f, f.querySelector(".gpick").value); return }
-  if (ev.target.closest(".gclear")) { colorSel(f, ""); return }
   if (ev.target.closest(".gwadd")) { f.querySelector(".gwlist").insertAdjacentHTML("beforeend", wordRow({ w: "", ref: "" })); f.querySelector(".gword:last-child .gw").focus(); return }
   const del = ev.target.closest(".gwdel"); if (del) { del.closest(".gword").remove(); preview(f) }
 }, true);

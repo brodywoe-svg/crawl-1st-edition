@@ -203,13 +203,32 @@ CONDITIONS_CSS = """
 .gbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .gbtns .sp{flex:1}
 .gdel{color:var(--red)!important;border-color:var(--red)!important}
-.gcolor{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 10px;border:2px solid var(--hair);border-radius:10px;position:sticky;top:calc(var(--navh,0px) + 70px);z-index:3;background:var(--paper)}
-.gcl{font-size:.85rem;font-weight:800;margin-right:4px}
+/* text color sidebar, shown while an entry is being edited */
+.gside{position:fixed;z-index:20;right:16px;top:calc(var(--navh,0px) + 16px);width:184px;background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.gsh{color:var(--paper);font-weight:800;font-size:.9rem;padding:8px 12px}
+.gsb{background:var(--paper);border-radius:0 0 12px 12px;padding:10px 12px 12px;display:grid;gap:8px}
+.gsws{display:flex;flex-wrap:wrap;gap:6px}
 .gsw{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:var(--c);cursor:pointer;padding:0}
 .gsw:hover{transform:scale(1.1)}
-.gform input.gpick{width:38px;height:30px;padding:2px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);cursor:pointer}
-.gcolor .btn{padding:4px 10px;font-size:.8rem}
-.ghelp{flex-basis:100%;font-weight:600;color:var(--muted);font-size:.78rem}
+.gpickl{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.82rem;font-weight:800}
+.gpick{width:44px;height:30px;padding:2px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);cursor:pointer}
+.gside .btn{padding:6px 10px;font-size:.8rem;width:100%}
+.ghelp{margin:0;font-weight:600;color:var(--muted);font-size:.76rem;line-height:1.35}
+.ghelp.bad{color:var(--red)}
+/* between 1000 and 1320px wide, make room for the sidebar beside the entries */
+@media (min-width:1000px) and (max-width:1319px){
+  body.gside-on .condwrap{max-width:1132px;padding-right:232px}
+}
+@media (max-width:999px){
+  .gside{top:auto;left:12px;right:12px;bottom:calc(12px + var(--sbh,0px));width:auto}
+  .gsh{display:none}
+  .gsb{border-radius:12px;grid-template-columns:auto auto 1fr 1fr;align-items:center}
+  .gside .btn{width:auto}
+  .ghelp{grid-column:1/-1}
+  body.gside-on .condwrap{padding-bottom:220px}
+}
+@media (max-width:640px){.gsb{grid-template-columns:1fr 1fr}.gsws{grid-column:1/-1}}
+.gres h2{font-size:1rem}
 .glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
 .gwords{display:grid;gap:8px}
 .gwlist{display:grid;gap:8px}
