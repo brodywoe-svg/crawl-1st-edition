@@ -1,4 +1,46 @@
 {
  "v": 1,
- "races": []
+ "races": [
+  {
+   "id": "race-mv6f1zhbq5zj",
+   "n": "Elf",
+   "desc": "",
+   "asi": "+1 Dexterity",
+   "prof": "Perception,",
+   "langs": "Common, Elvish, Two languages of your choice",
+   "feats": [
+    {
+     "n": "Elvish Ancestry",
+     "d": "You have an advantage on saving throws against spells or effects that Charm you."
+    }
+   ],
+   "extra": [
+    {
+     "k": "Size",
+     "v": "Medium"
+    },
+    {
+     "k": "Darkvision",
+     "v": "30ft"
+    }
+   ],
+   "subs": [
+    {
+     "id": "sub-mv6f8i2lwtkc",
+     "n": "High Elf",
+     "desc": "You are a High elf whose lineage traces back to the western country of Astoria.",
+     "asi": "+1 Intelligence,",
+     "prof": "",
+     "langs": "",
+     "feats": [
+      {
+       "n": "Arcane Heritage",
+       "d": "Choose a 1st level spell of your choice from the Wizard spell list, you know that spell and may cast it once per day."
+      }
+     ],
+     "extra": []
+    }
+   ]
+  }
+ ]
 }
