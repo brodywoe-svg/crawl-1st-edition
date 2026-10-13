@@ -317,9 +317,9 @@ CONDITIONS_CSS = """
 .ichart{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:2px solid var(--ink);border-top:0;border-radius:0 0 14px 14px;overflow:hidden}
 .gres+.ichart{border-top:2px solid var(--ink);border-radius:14px}
 .ichart thead th{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:8px 14px;border-bottom:2px solid var(--ink);background:var(--paper)}
-.ichart th:nth-child(n+2),.ichart td:nth-child(n+2){width:100px;text-align:right}
-.ichart th:nth-child(2),.ichart td:nth-child(2){width:120px;text-align:left}
-.ichart th:nth-child(5),.ichart td:nth-child(5){width:80px;text-align:center}
+.ichart th:nth-child(n+2),.ichart td:nth-child(n+2){width:96px;text-align:right}
+.ichart th:nth-child(2),.ichart td:nth-child(2){width:110px;text-align:center}
+.ichart th:nth-child(3),.ichart td:nth-child(3){width:80px;text-align:center}
 .ichart .hs{display:none}
 .magicbox{width:18px;height:18px;accent-color:var(--ink);vertical-align:middle;margin:0}
 .magicbox:disabled{opacity:1;cursor:default}
@@ -381,10 +381,10 @@ CONDITIONS_CSS = """
   .xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input,.gform select{font-size:16px}
   .ichart{table-layout:fixed}
   .ichart th:nth-child(n+2),.ichart td:nth-child(n+2){padding-inline:3px;font-size:.74rem;overflow-wrap:anywhere}
-  .ichart th:nth-child(2),.ichart td:nth-child(2){width:62px}
-  .ichart th:nth-child(3),.ichart td:nth-child(3){width:46px}
-  .ichart th:nth-child(4),.ichart td:nth-child(4){width:50px}
-  .ichart th:nth-child(5),.ichart td:nth-child(5){width:50px}
+  .ichart th:nth-child(2),.ichart td:nth-child(2){width:64px}
+  .ichart th:nth-child(3),.ichart td:nth-child(3){width:48px}
+  .ichart th:nth-child(4),.ichart td:nth-child(4){width:46px}
+  .ichart th:nth-child(5),.ichart td:nth-child(5){width:44px}
   .ichart th:nth-child(n+3),.ichart td:nth-child(n+3){text-align:center}
   .ichart thead th{font-size:.5rem;letter-spacing:0;overflow-wrap:normal!important}
   .ichart .ctag2,.gedit.iedit,.ichart .hl{display:none}

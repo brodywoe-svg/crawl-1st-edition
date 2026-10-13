@@ -632,7 +632,8 @@ async function exportSpell(s,fmt,d){
 }
 
 /*@GLCORE@*/
-/* glossary data (crawl-glossary.json): {v:1, entries:[{n, sec, lead, fx:[effects], notes:[{l,t}], aka:[other words to match]}]} */
+/* glossary data (crawl-glossary.json): {v:1, entries:[{n, sec, lead, fx:[effects], notes:[{l,t}], aka:[{w,ref}], tip}]}
+   tip:false keeps an entry out of the spell tooltips (for everyday words such as Light) */
 function normGlossary(j){
   const a=j&&Array.isArray(j.entries)?j.entries:null; if(!a)return null;
   const list=x=>Array.isArray(x)?x:[];
@@ -640,7 +641,8 @@ function normGlossary(j){
     n:e.n.trim(), sec:String(e.sec||"Conditions").trim()||"Conditions", lead:String(e.lead||"").trim(),
     fx:list(e.fx).map(x=>String(x).trim()).filter(Boolean),
     notes:list(e.notes).filter(n=>n&&String(n.t||"").trim()).map(n=>({l:String(n.l||"Note").trim()||"Note",t:String(n.t).trim()})),
-    aka:list(e.aka).map(x=>typeof x==="string"?{w:x,ref:""}:{w:String(x&&x.w||""),ref:String(x&&x.ref||"")}).map(x=>({w:x.w.trim(),ref:x.ref.trim()})).filter(x=>x.w)}));
+    aka:list(e.aka).map(x=>typeof x==="string"?{w:x,ref:""}:{w:String(x&&x.w||""),ref:String(x&&x.ref||"")}).map(x=>({w:x.w.trim(),ref:x.ref.trim()})).filter(x=>x.w),
+    tip:e.tip!==false}));
 }
 /* glossary text: blank lines start a new paragraph, [color=#hex]text[/color] colors text */
 const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;
@@ -654,8 +656,9 @@ let GL_RE=null, GL_MAP=new Map();
 function setGlossary(j){
   const a=normGlossary(j); if(!a)return false;
   GLOSSARY={v:1,entries:a}; GL_MAP=new Map();
-  a.forEach(e=>{const k=e.n.toLowerCase();if(!GL_MAP.has(k))GL_MAP.set(k,{e,w:e.n,ref:""})});
-  a.forEach(e=>e.aka.forEach(x=>{const k=x.w.toLowerCase();if(!GL_MAP.has(k)||(x.ref&&!GL_MAP.get(k).ref&&GL_MAP.get(k).e===e))GL_MAP.set(k,{e,w:x.w,ref:x.ref})}));
+  const tips=a.filter(e=>e.tip);
+  tips.forEach(e=>{const k=e.n.toLowerCase();if(!GL_MAP.has(k))GL_MAP.set(k,{e,w:e.n,ref:""})});
+  tips.forEach(e=>e.aka.forEach(x=>{const k=x.w.toLowerCase();if(!GL_MAP.has(k)||(x.ref&&!GL_MAP.get(k).ref&&GL_MAP.get(k).e===e))GL_MAP.set(k,{e,w:x.w,ref:x.ref})}));
   const terms=[...GL_MAP.keys()].sort((x,y)=>y.length-x.length).map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
   GL_RE=terms.length?new RegExp("\\b("+terms.join("|")+")\\b","gi"):null;
   return true;
