@@ -17,6 +17,10 @@
    "desc": "You perform a ritual of Absolution over a corpse, or number of corpses equal to your spellcasting ability Modifier, forgiving them for the sins they committed in life, for the next 2 months the corpse(s) cannot be affected by spells like the Animated dead, Raise Dead, or Resurrection.",
    "dmg": "N/A"
   },
+  "comp": {
+   "v": true,
+   "s": true
+  },
   "tiers": [
    [
     "—",
@@ -58,11 +62,7 @@
     "",
     ""
    ]
-  ],
-  "comp": {
-   "v": true,
-   "s": true
-  }
+  ]
  },
  {
   "n": "Acid Spray",
@@ -78,6 +78,11 @@
    "time": "Instantaneous",
    "range": "15ft (Single Target)",
    "desc": "You extend your hand toward a creature you can see within range and project a Stream of acidic wash from your palm. The creature must succeed on a Dexterity saving throw or take 2d12 Acid damage and if your target is wearing metallic armor their AC is reduced by 1 until the start of your next turn, if the target is a Construct their AC is instead Reduced by 3. On Successful save the targets AC is not reduced and the target only takes half damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d12 for each slot level above 1st."
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
   },
   "tiers": [
    [
@@ -120,12 +125,7 @@
     "",
     ""
    ]
-  ],
-  "comp": {
-   "v": true,
-   "s": true,
-   "m": true
-  }
+  ]
  },
  {
   "n": "Aid",
@@ -252,6 +252,11 @@
    "desc": "When you are targeted by a spell cast by a hostile creature, you can cast this spell to create a protective barrier of arcane energy around you. Until the start of your next turn, you gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
    "dmg": "N/A"
   },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
+  },
   "tiers": [
    [
     "",
@@ -293,12 +298,7 @@
     "Absorption",
     "When you cast this spell, If a spell attack misses you, or you succeed on a saving throw against a spell targeting you, you gain MP equal to half that spell’s casting cost."
    ]
-  ],
-  "comp": {
-   "v": true,
-   "s": true,
-   "m": true
-  }
+  ]
  },
  {
   "n": "Arcane Gate",
@@ -790,7 +790,7 @@
    "cat": "Enchantment",
    "time": "1 Action",
    "range": "10ft (Single Target)",
-   "desc": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
+   "desc": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is Charmed by you until the spell ends or until you or your companions do anything harmful to it. The Charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
   },
   "comp": {
    "v": true,
@@ -2168,24 +2168,6 @@
   ]
  },
  {
-  "n": "Flame Bolt",
-  "tags": [
-   "Arcane",
-   "Primal"
-  ],
-  "lv": 1,
-  "f": {
-   "cat": "Evocation",
-   "time": "1 Action",
-   "range": "30ft (Single Target)",
-   "desc": "You extend a hand in the direction of a target you choose that’s within range, and project a bolt of magic flame towards them. Make a spell attack towards the target within range, On a Hit the target takes 1d8 fire damage. The magical flame created by this spell doesn’t not set organic material on fire."
-  },
-  "comp": {
-   "v": true,
-   "s": true
-  }
- },
- {
   "n": "Flame of Absolution",
   "tags": [
    "Divine"
@@ -2757,22 +2739,67 @@
   "n": "Jump Jolt",
   "tags": [
    "Arcane",
-   "Primal",
-   "Occult"
+   "Primal"
   ],
-  "lv": 1,
+  "lv": 2,
   "f": {
-   "mat": "A Coil of copper wire",
+   "mat": "1 Copper Wire",
    "cat": "Evocation",
-   "time": "1 Action",
+   "time": "Instantaneous ",
    "range": "30ft (Single Target)",
-   "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be targeted only once by each casting of this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the Initial lightning damage dealt to the first Target increases by 1d6 for each slot level above 1st."
+   "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be only be targeted once each round by this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n",
+   "pre": "+2 ARCANE or +2 NATURE",
+   "cls": "Wizard, Sorcerer, Druid",
+   "cost": "4 MP",
+   "type": "Ranged Spell Attack"
   },
   "comp": {
    "v": true,
    "s": true,
    "m": true
-  }
+  },
+  "tiers": [
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "This spell can leap up to a total of 4 targets in a single cast.\n"
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "This spell can leap up to a total of 5 targets in a single cast."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Coursing Current",
+    "Whenever you hit a target with this spell and the spell leaps to a new target, On a hit, the deals an additional d6 of lighting damage."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Living Lightning",
+    "Whenever this spell leaps to a new target, you may target a creature that has already been targeted once by this spell."
+   ]
+  ]
  },
  {
   "n": "Kinetic Explosion",
