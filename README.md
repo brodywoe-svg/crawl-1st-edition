@@ -78,12 +78,17 @@ section name on an entry creates the section.
 
 ## Items and Crafting
 
-Signed in as admin, **Add item** on the Items page creates an item (name, type,
-rarity, cost, weight, description, properties and any extra labelled details).
-**Add recipe** on the Crafting page creates a recipe: pick what it makes and its
-ingredients from your items (typing a new name creates that item), then add tools,
-check, time, cost and notes. Recipes link to their items, and each item shows
-which recipes craft it and which use it. Both pages save to `crawl-items.json`.
+The **Items** page is a chart grouped by category: Weapons (by weapon type), Armor
+(by armor type, then slot), Consumables and Crafting Materials. Each row shows the
+item's name, value and weight; click it to see its crafting recipe, weapon actions
+(or properties) and description. Signed in as admin, open an item and click
+**Edit**, or use **Add item**.
+
+The **Crafting** page lists every recipe by profession, in the same layout as the
+Crafting Compendium cards: tier badge, prerequisites, material cost, workstations,
+time, DC and TC, servings or batch, yield, features and the quote. Materials and
+yields link to their items. Typing a new item name in a recipe creates that item
+(under Crafting Materials). Both pages save to `crawl-items.json`.
 
 Signing in as admin lasts for the browser tab, across all pages, until you
 click **Admin · Sign out** or close the tab.

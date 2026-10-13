@@ -23,6 +23,14 @@
    ]
   },
   {
+   "n": "Blackened Cookware",
+   "sec": "Crafting Rules",
+   "lead": "Whenever the Camp Cook prepares a meal using a Cooking Pot or Pan, it becomes Blackened. A Blackened Pot can be scraped once to collect 1 Pinch of Soot, which cleans the pot.",
+   "fx": [],
+   "notes": [],
+   "aka": []
+  },
+  {
    "n": "Bleeding",
    "sec": "Conditions",
    "lead": "Some attacks wound a creature deeply enough to make it bleed. While Bleeding:",
@@ -101,6 +109,14 @@
    "aka": []
   },
   {
+   "n": "Enchanted",
+   "sec": "Crafting Rules",
+   "lead": "An item with the Enchanted property is a magical item. It counts as magical for the purposes of Detect Magic and similar spells and effects. The Enchanted property itself doesn’t make the item deal magical damage, though some of its enchantments might.\n\nEnchanted is always listed last in an item’s properties, followed by a colon and the item’s enchantments. Example: Longsword (1d8 slashing, Versatile 1d10, Enchanted: Luminous, Ensorcelled)\n\nGrants: Enchanted: Luminous, fills 1 open modifier slot\nGrants: Enchanted: Ensorcelled, fills 1 open modifier slot\n\nSimple Objects: Everyday objects that weren’t made from a recipe, such as boxes, lockets, cups, or tools bought at market, count as Basic items with 1 modifier slot.",
+   "fx": [],
+   "notes": [],
+   "aka": []
+  },
+  {
    "n": "Enflamed",
    "sec": "Conditions",
    "lead": "A creature that is set on fire, engulfed in flame or set ablaze becomes Enflamed. While Enflamed:",
@@ -159,6 +175,30 @@
     "For the purpose of hiding, the creature is heavily obscured.",
     "When a creature tries to locate a nearby Invisible creature, the Invisible creature makes a Dexterity (Stealth) check against the searcher's Passive Perception. On a failure, its location is revealed."
    ],
+   "notes": [],
+   "aka": []
+  },
+  {
+   "n": "Meals",
+   "sec": "Crafting Rules",
+   "lead": "During a rest, while the party is at camp, the party designates one member to be the Camp Cook. The cook can prepare one meal, and the recipe determines how many servings it makes. The cook decides who receives each serving. Player Characters and Allies can only benefit from one meal per rest.",
+   "fx": [],
+   "notes": [],
+   "aka": []
+  },
+  {
+   "n": "Modifier Slots",
+   "sec": "Crafting Rules",
+   "lead": "Every item has modifier slots based on the Tier badge of its recipe: Basic items have 1 slot, Advanced items have 2, and Mastery items have 3.\n\n[color=#8e171c]At Creation[/color]: If your crafting roll meets the TC, you can add a modifier to an open slot. You can also choose to leave the slot open.\n\n[color=#8e171c]Filling Slots Later[/color]: An open slot can be filled later with an Enchantment Modifier or a Craftable Modifier, such as Silvered Edge.\n\n[color=#8e171c]Mundane by Default[/color]: Most modifiers are mundane bonuses or features. An item with modifiers isn’t magical unless a modifier specifically says it is.\n\n[color=#8e171c]Innate Properties[/color]: Anything listed in a recipe’s Yield line when the item is created is an innate property, and doesn’t count toward its modifier slots.",
+   "fx": [],
+   "notes": [],
+   "aka": []
+  },
+  {
+   "n": "Monster Cooking",
+   "sec": "Crafting Rules",
+   "lead": "Monster recipes are difficult to prepare. If your crafting roll fails the DC, the meal is ruined and the ingredients are lost.",
+   "fx": [],
    "notes": [],
    "aka": []
   },
@@ -253,6 +293,22 @@
      "t": "no default escape rule. Each effect that Restrains defines how it ends."
     }
    ],
+   "aka": []
+  },
+  {
+   "n": "Ruined Meals",
+   "sec": "Crafting Rules",
+   "lead": "A ruined monster meal can still be eaten, but any creature that eats it gains the Sickened condition until its next rest or camp.",
+   "fx": [],
+   "notes": [],
+   "aka": []
+  },
+  {
+   "n": "Servings",
+   "sec": "Crafting Rules",
+   "lead": "Each Cooking recipe lists how many people it feeds. If your crafting roll meets or exceeds the recipe’s TC, you make additional servings, as listed on the recipe.",
+   "fx": [],
+   "notes": [],
    "aka": []
   },
   {

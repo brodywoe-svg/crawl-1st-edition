@@ -183,16 +183,16 @@ def glossary_shell(page, logo_svg, admin_modal):
 
 
 CATALOG_PAGES = {
-    "items": ("Items", "Every item in Crawl 1st Edition: weapons, armor, materials, potions and more. Search by name, type or anything on the card.",
+    "items": ("Items", "Every item in Crawl 1st Edition, sorted into weapons, armor, consumables and crafting materials. Click an item to see its crafting recipe, weapon actions and description.",
               "Search items", "Add item"),
-    "crafting": ("Crafting", "Crafting recipes: what each one makes, what goes into it, and what you need to make it. Click an item to see it on the Items page.",
+    "crafting": ("Crafting", "Every crafting recipe, sorted by profession. The badge on each recipe shows its tier. Click any material or yield to see that item on the Items page.",
                  "Search recipes or ingredients", "Add recipe"),
 }
 
 
 def catalog_shell(page, logo_svg, admin_modal):
     title, intro, placeholder, add = CATALOG_PAGES[page]
-    type_filter = '<select id="ctype" aria-label="Item type" hidden></select>' if page == "items" else ""
+    type_filter = f'<select id="cfilter" aria-label="{"Category" if page == "items" else "Profession"}"></select>'
     return f"""
 <div class="wrap condwrap">
 <header class="intro">
@@ -210,7 +210,7 @@ def catalog_shell(page, logo_svg, admin_modal):
 <main id="clist"></main>
 <p class="cempty" id="cempty" hidden></p>
 </div>
-<datalist id="itemNames"></datalist><datalist id="itemTypes"></datalist><datalist id="itemRarities"></datalist>
+<datalist id="itemNames"></datalist><datalist id="profs"></datalist>
 {admin_modal}
 <div class="savebar" id="savebar" hidden>
   <div class="in">
@@ -296,25 +296,69 @@ CONDITIONS_CSS = """
 @media (max-width:640px){.gsb{grid-template-columns:1fr 1fr}.gsws{grid-column:1/-1}}
 /* items and crafting */
 .cbar select{font:600 .95rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 10px;background:var(--paper);color:var(--ink)}
-.facts{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-size:.8rem;font-weight:600;border:2px solid var(--ink);border-radius:999px;padding:3px 10px}
-.chip b{font-weight:800;margin-right:4px}
-.fact{margin:0;font-weight:600}
-.fact b{font-weight:800}
-.fact .cul{margin-top:6px}
+.muted{color:var(--muted);font-weight:600}
 .ilink{color:var(--ink);font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
 .ilink.gone{text-decoration:none;color:var(--muted)}
 .ilink small{font-weight:600}
-.cond.flash{animation:flash 1.6s ease-out}
 @keyframes flash{0%,40%{box-shadow:0 0 0 5px var(--red)}100%{box-shadow:0 0 0 0 transparent}}
-.cond{scroll-margin-top:calc(var(--navh,0px) + 80px)}
+.flash{animation:flash 1.6s ease-out}
+.irow.flash .ihead td{animation:flashbg 1.6s ease-out}
+@keyframes flashbg{0%,40%{background:var(--soft)}100%{background:transparent}}
+.cond,.irow{scroll-margin-top:calc(var(--navh,0px) + 80px)}
+/* items chart */
+.icat{margin-top:18px}
+.icath{margin:0;background:var(--ink);color:var(--paper);border-radius:14px 14px 0 0;padding:10px 16px;font-size:1.15rem;font-weight:800;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.icath span{font-size:.75rem;font-weight:700;opacity:.8}
+.ichart{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:2px solid var(--ink);border-top:0;border-radius:0 0 14px 14px;overflow:hidden}
+.gres+.ichart{border-top:2px solid var(--ink);border-radius:14px}
+.ichart thead th{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:8px 14px;border-bottom:2px solid var(--ink);background:var(--paper)}
+.ichart th:nth-child(n+2),.ichart td:nth-child(n+2){width:110px;text-align:right}
+.isub th{background:var(--soft);text-align:left!important;font-size:.82rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;border-bottom:1px solid var(--hair)}
+.ihead td{padding:0 14px;border-bottom:1px solid var(--hair);font-weight:600;font-size:.95rem;vertical-align:middle}
+.irow:last-child .ihead td,.irow:last-child .idet td{border-bottom:0}
+.itoggle{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;padding:9px 0;cursor:pointer;font-weight:700}
+.itoggle svg{width:10px;height:6px;flex:none;transition:transform .15s;transform:rotate(-90deg)}
+.irow.open .itoggle svg{transform:none}
+.itoggle:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+.ihead:hover td{background:var(--soft)}
+.ctag2{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:1px 7px;color:var(--muted);white-space:nowrap}
+.idet td{padding:4px 14px 16px;border-bottom:1px solid var(--hair);text-align:left!important;width:auto!important}
+.idet .dsec{border-top:1px solid var(--hair);padding-top:10px;margin-top:10px;display:grid;gap:6px}
+.idet .dsec:first-child{border-top:0;margin-top:4px}
+.dsec h3{margin:0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.dsec p{margin:0}
+.drec{display:grid;gap:3px}
+.drec+.drec{margin-top:8px}
+.dbtns{margin-top:12px}
+.iform{padding-top:8px}
+/* recipe cards */
+.rlist{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));align-items:start}
+.rname{display:flex;align-items:center;gap:8px;min-width:0}
+.rtier{flex:none;width:22px;height:22px;display:grid;place-items:center;background:var(--paper);color:var(--ink);font-size:.75rem;font-weight:800;clip-path:polygon(50% 0,63% 13%,82% 9%,84% 28%,100% 38%,91% 56%,97% 75%,79% 82%,72% 100%,50% 92%,28% 100%,21% 82%,3% 75%,9% 56%,0 38%,16% 28%,18% 9%,37% 13%)}
+.flask svg{width:22px;height:22px;display:block}
+.rcard .chead{font-size:.95rem;text-transform:uppercase;letter-spacing:.02em;padding:9px 12px}
+.rcard .cbody{padding:10px 14px 14px;gap:2px;font-size:.9rem}
+.rl{margin:0;font-weight:600;line-height:1.4}
+.rl b{font-weight:700}
+.rl.pre{font-style:italic}
+.rkind{margin:0;color:var(--red);font-weight:800;font-style:italic}
+.rfeat,.rquote{display:grid;gap:8px;margin-top:10px}
+.rfeat p,.rquote p{margin:0;font-weight:600}
+.rquote{font-style:italic}
+.chk{display:flex!important;flex-direction:row;align-items:center;gap:8px;align-self:end;padding-bottom:10px}
+.chk input{width:18px!important;height:18px}
+.gform select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .xlist,.qlist{display:grid;gap:8px}
 .xrow{display:grid;grid-template-columns:minmax(110px,180px) 1fr auto;gap:8px}
 .qrow{display:grid;grid-template-columns:76px 1fr auto;gap:8px}
 .xrow input,.qrow input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
 .gform>.btn{justify-self:start}
-@media (max-width:600px){.xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input{font-size:16px}}
+@media (max-width:600px){
+  .xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input,.gform select{font-size:16px}
+  .ichart th:nth-child(n+2),.ichart td:nth-child(n+2){width:64px;padding-inline:8px}
+  .ihead td,.ichart thead th,.isub th,.idet td{padding-inline:10px}
+}
 .gres h2{font-size:1rem}
 .glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
 .gwords{display:grid;gap:8px}
