@@ -2479,7 +2479,7 @@
    ],
    "props": "1d8 slashing, Versatile 1d10, Serrated",
    "grants": "",
-   "feat": "Serrated - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
+   "feat": "[color=#8e171c]Serrated[/color] - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "quote": "\"My father told me a sword should be beautiful. Then he watched me win my first duel with one that wasn't. Beauty is for the hall. The edge only has to be honest, and pain is the most honest thing there is.\" -Grushka Ashmaw, Chief of the Black Boughs",
    "extra": []
   },
