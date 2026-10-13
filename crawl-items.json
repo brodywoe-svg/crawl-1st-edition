@@ -12,7 +12,8 @@
    "props": "Volatile",
    "feat": "Volatile - You can throw this at a target within 20ft as a ranged attack. On a hit, the flask shatters and the target becomes Enflamed.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-antitoxin",
@@ -25,7 +26,8 @@
    "props": "Cleansing",
    "feat": "Cleansing - A creature that drinks this ends the Poisoned condition and has advantage on saving throws against poison for 1 hour.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-arrow",
@@ -38,7 +40,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-ash-stave",
@@ -51,7 +54,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-axe-haft",
@@ -64,7 +68,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bag-of-caltrops",
@@ -77,7 +82,8 @@
    "props": "Scattering",
    "feat": "Scattering - You can spend 1 AP to scatter the caltrops across a 5 ft. square within 5 ft. of you. A creature that enters the area must succeed on a DC 12 Dexterity saving throw or take 1d4 piercing damage and end its movement. You can gather the caltrops back up outside of combat.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-beet",
@@ -90,7 +96,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-black-iron-longsword",
@@ -103,7 +110,8 @@
    "props": "1d8 slashing, Versatile 1d10, Serrated",
    "feat": "Serrated - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-black-iron-spear",
@@ -116,7 +124,8 @@
    "props": "1d6 piercing, Thrown 20/60, Versatile 1d8, Serrated",
    "feat": "Serrated - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-block-of-beeswax",
@@ -129,7 +138,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bloodclutch-draught",
@@ -142,7 +152,8 @@
    "props": "Restorative, Clotting",
    "feat": "Restorative - A creature that drinks this regains 1d4 + 1 hit points.\n\nClotting - A Bleeding creature that drinks this removes the Bleeding condition.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-bottle-of-beet-kvass",
@@ -155,7 +166,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bowstring",
@@ -168,7 +180,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bundle-of-charcoal-root",
@@ -181,7 +194,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bundle-of-dill",
@@ -194,7 +208,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bundle-of-feathers",
@@ -207,7 +222,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bundle-of-herbs",
@@ -220,7 +236,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bundle-of-hickory-chips",
@@ -233,7 +250,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-bundle-of-yarrow",
@@ -246,7 +264,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-charcoal-bundle",
@@ -259,7 +278,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-clotting-salve",
@@ -272,7 +292,8 @@
    "props": "Staunching",
    "feat": "Staunching - Apply this to yourself or a creature within 5 ft. to end the Bleeding condition.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-counterweight",
@@ -285,7 +306,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-crossguard",
@@ -298,7 +320,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-cut-of-meat",
@@ -311,7 +334,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-deepvalley-borscht",
@@ -324,7 +348,8 @@
    "props": "Hearty, Fortifying",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\nFortifying - A creature that eats this has advantage on Constitution saving throws until its next rest or camp.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-dragonbrood-charm",
@@ -337,7 +362,8 @@
    "props": "Neck",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-dragonkin-scale",
@@ -350,7 +376,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-duskcap-mushroom",
@@ -363,7 +390,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-dwarven-iron-battleaxe",
@@ -376,7 +404,8 @@
    "props": "1d8 slashing, Versatile 1d10, Dwarven Durability",
    "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-dwarven-iron-hand-axe",
@@ -389,7 +418,8 @@
    "props": "1d6 slashing, Light, Thrown 20/60, Dwarven Durability",
    "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-flask-of-lamp-oil",
@@ -402,7 +432,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-flask-of-spring-water",
@@ -415,7 +446,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-flask-of-troll-s-blood",
@@ -428,7 +460,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-flask-of-water",
@@ -441,7 +474,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-flax-bundle",
@@ -454,7 +488,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-forged-document",
@@ -467,7 +502,8 @@
    "props": "Forgery DC X",
    "feat": "Forgery (DC X) - This document appears genuine. A creature examining it must succeed on an Investigation check against DC X to notice it’s forged.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-glass-vial",
@@ -480,7 +516,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-glowcap-mushroom",
@@ -493,7 +530,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-gold-ingot",
@@ -506,7 +544,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-hardwood-plank",
@@ -519,7 +558,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-harvest-stew",
@@ -532,7 +572,8 @@
    "props": "Hearty, Filling",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\nFilling - A creature that eats this gains 1 extra slot in its Action Pool until its next rest or camp. This slot can only hold Action Points or Magic Points, never Exhaustion Points.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-head-of-cabbage",
@@ -545,7 +586,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-healing-potion",
@@ -558,7 +600,8 @@
    "props": "Restorative",
    "feat": "Restorative - A creature that drinks this regains 2d4 + 2 hit points.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-hearthfire-bread",
@@ -571,7 +614,8 @@
    "props": "Hearty",
    "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-hillbrand-ring",
@@ -584,7 +628,8 @@
    "props": "Rings, Weighted Band",
    "feat": "Weighted Band - Your unarmed attacks deal +1 bludgeoning damage. If you wear two Hillbrand Rings, the bonus becomes +2.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-honeycomb",
@@ -597,7 +642,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-arrowhead",
@@ -610,7 +656,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-bar",
@@ -623,7 +670,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-buckle",
@@ -636,7 +684,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-dagger",
@@ -649,7 +698,8 @@
    "props": "1d4 piercing, Finesse, Light, Thrown 20/60",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-gear",
@@ -662,7 +712,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-hand-axe",
@@ -675,7 +726,8 @@
    "props": "1d6 slashing, Light, Thrown 20/60",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-rivet",
@@ -688,7 +740,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-shortsword",
@@ -701,7 +754,8 @@
    "props": "1d6 piercing, Finesse, Light",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-iron-spring",
@@ -714,7 +768,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-large-axe-haft",
@@ -727,7 +782,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-large-leather-quiver",
@@ -740,7 +796,8 @@
    "props": "Holds 40 arrows or bolts",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-lead-ingot",
@@ -753,7 +810,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-lead-shot",
@@ -766,7 +824,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-leather-bracers",
@@ -779,7 +838,8 @@
    "props": "Arms, Light, 5% Armor",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-leather-jerkin",
@@ -792,7 +852,8 @@
    "props": "Torso, Light, 5% Armor",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-leather-quiver",
@@ -805,7 +866,8 @@
    "props": "Holds 20 arrows or bolts",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-leather-strip",
@@ -818,7 +880,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-leather-sword-sheath",
@@ -831,7 +894,8 @@
    "props": "Other, Quick Draw 1",
    "feat": "Quick Draw 1 - While you wear this Sheath with a sword sheathed in it, you gain 1 additional Action Point at the start of your first turn in a combat. This Action Point (AP) can only be spent on melee weapon attacks. You can only benefit from one item with the Quick Draw feature.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-linen-bolt",
@@ -844,7 +908,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-linen-hood",
@@ -857,7 +922,8 @@
    "props": "Head, Clothing, 3% Armor",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-livingwood-quarterstaff",
@@ -870,7 +936,8 @@
    "props": "1d6 bludgeoning, Finesse, Versatile 1d8, Livingwood",
    "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-livingwood-shortbow",
@@ -883,7 +950,8 @@
    "props": "1d6 piercing, Ammunition 100/400, Two-Handed, Livingwood",
    "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-lockpick",
@@ -896,7 +964,8 @@
    "props": "Picking",
    "feat": "Picking - You can use a lockpick to make a Thievery check to open a lock. If the check fails, the lockpick breaks and can’t be used again. Without a lockpick or a similar tool, you can’t attempt to pick a lock.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-lodestone",
@@ -909,7 +978,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-long-haft",
@@ -922,7 +992,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-lump-of-sulfur",
@@ -935,7 +1006,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-minor-healing-draught",
@@ -948,7 +1020,8 @@
    "props": "Restorative",
    "feat": "Restorative - A creature that drinks this regains 1d6 + 1 hit points.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-night-brew",
@@ -961,7 +1034,8 @@
    "props": "Slumbering",
    "feat": "Slumbering - A humanoid that drinks this must succeed on a DC 14 Constitution saving throw or fall Unconscious for 1 hour. The creature wakes early if it takes damage or another creature uses an action to shake it awake. The brew is colorless and nearly tasteless when mixed into another drink.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-padded-gambeson",
@@ -974,7 +1048,8 @@
    "props": "Torso, Light, 5% Armor",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-piece-of-chalk",
@@ -987,7 +1062,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-ammonia-salt",
@@ -1000,7 +1076,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-arcane-dust",
@@ -1013,7 +1090,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-chalk",
@@ -1026,7 +1104,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-pine-resin",
@@ -1039,7 +1118,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-red-ochre",
@@ -1052,7 +1132,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-salt",
@@ -1065,7 +1146,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-saltpeter",
@@ -1078,7 +1160,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-soot",
@@ -1091,7 +1174,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-sulfuric-powder",
@@ -1104,7 +1188,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pinch-of-tree-gum",
@@ -1117,7 +1202,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pommel",
@@ -1130,7 +1216,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-pouch-of-fire-peppers",
@@ -1143,7 +1230,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-quarterstaff",
@@ -1156,7 +1244,8 @@
    "props": "1d6 bludgeoning, Versatile 1d8",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-quill",
@@ -1169,7 +1258,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-redcap-mushroom",
@@ -1182,7 +1272,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-sack-of-flour",
@@ -1195,7 +1286,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-sack-of-root-vegetables",
@@ -1208,7 +1300,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-sheet-of-parchment",
@@ -1221,7 +1314,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-shortbow",
@@ -1234,7 +1328,8 @@
    "props": "1d6 piercing, Ammunition 80/320, Two-Handed",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silk-bolt",
@@ -1247,7 +1342,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silver-arrowhead",
@@ -1260,7 +1356,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silver-chain",
@@ -1273,7 +1370,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silver-holy-symbol",
@@ -1286,7 +1384,8 @@
    "props": "Neck, Sacred",
    "feat": "Sacred - This item counts as a holy symbol for any spell or feature that requires one.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silver-ingot",
@@ -1299,7 +1398,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silver-nugget",
@@ -1312,7 +1412,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silver-ring",
@@ -1325,7 +1426,8 @@
    "props": "Rings",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silver-wire",
@@ -1338,7 +1440,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-silverbark-stave",
@@ -1351,7 +1454,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-small-handle",
@@ -1364,7 +1468,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-small-iron-buckle",
@@ -1377,7 +1482,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-small-tin",
@@ -1390,7 +1496,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-smelling-salts",
@@ -1403,7 +1510,8 @@
    "props": "Rousing",
    "feat": "Rousing - Holding this under the nose of a creature within 5 ft. ends the Dazed condition, or wakes it if it’s Unconscious but has at least 1 hit point.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-smoked-jerky",
@@ -1416,7 +1524,8 @@
    "props": "Preserved, Quick Bite",
    "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten during a rest or at camp without a Cooking Fire.\n\nQuick Bite - You can eat this outside of a rest by spending 1 AP, regaining hit points equal to the cook’s Cooking Rank. A creature can only benefit from one Quick Bite between rests.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-softwood-plank",
@@ -1429,7 +1538,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-songbird-feather",
@@ -1442,7 +1552,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-spell-scroll",
@@ -1455,7 +1566,8 @@
    "props": "Scroll",
    "feat": "Scroll - When you craft this, choose one spell you know, one language you know, and the scroll’s Rank (X). X can’t exceed your Scribing Tier’s maximum or your own Rank in that spell. If you meet the TC, X increases by 1. The spell is written into the scroll in that language. A spellcaster who knows the language can read the scroll to cast the spell, following the Spell Scroll rules. You must be capable of casting the spell in order to copy it to a scroll.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": true
   },
   {
    "id": "i-spiced-ember-soup",
@@ -1468,7 +1580,8 @@
    "props": "Warming",
    "feat": "Warming - A creature that eats this has advantage on saving throws against extreme cold until its next rest or camp.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-sprig-of-mint",
@@ -1481,7 +1594,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-stick-of-sealing-wax",
@@ -1494,7 +1608,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-tanned-hide",
@@ -1507,7 +1622,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-thread-spool",
@@ -1520,7 +1636,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-traveler-s-hardtack",
@@ -1533,7 +1650,8 @@
    "props": "Preserved, Nourishing",
    "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten at camp or during a rest without a Cooking Fire.\n\nNourishing - A creature that eats this during a rest or at camp regains hit points equal to the cook’s Cooking Rank.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-vial-of-cave-spider-venom",
@@ -1546,7 +1664,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-vial-of-lampblack-ink",
@@ -1559,7 +1678,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-vial-of-snake-venom",
@@ -1572,7 +1692,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-whisperweave-boots",
@@ -1585,7 +1706,8 @@
    "props": "Feet, Clothing, 3% Armor, Whisperweave",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-whisperweave-hood",
@@ -1598,7 +1720,8 @@
    "props": "Head, Clothing, 3% Armor, Whisperweave",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-whisperweave-mantle",
@@ -1611,7 +1734,8 @@
    "props": "Shoulders, Light, 5% Armor, Whisperweave",
    "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-wool-bolt",
@@ -1624,7 +1748,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-wrapped-grip",
@@ -1637,7 +1762,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   },
   {
    "id": "i-yew-stave",
@@ -1650,7 +1776,8 @@
    "props": "",
    "feat": "",
    "desc": "",
-   "extra": []
+   "extra": [],
+   "badge": false
   }
  ],
  "recipes": [

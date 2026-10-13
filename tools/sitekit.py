@@ -183,9 +183,9 @@ def glossary_shell(page, logo_svg, admin_modal):
 
 
 CATALOG_PAGES = {
-    "items": ("Items", "Every item in Crawl 1st Edition, sorted into weapons, armor, consumables and crafting materials. Click an item to see its crafting recipe, weapon actions and description.",
+    "items": ("Items", "Every item in Crawl 1st Edition, sorted into weapons, armor, consumables and crafting materials. Click an item to see its crafting recipe, weapon actions and description. A flask badge means the item still needs playtesting.",
               "Search items", "Add item"),
-    "crafting": ("Crafting", "Every crafting recipe, sorted by profession. The badge on each recipe shows its tier. Click any material or yield to see that item on the Items page.",
+    "crafting": ("Crafting", "Every crafting recipe, sorted by profession. The badge on each recipe shows its tier, and a flask badge means it still needs playtesting. Click any material or yield to see that item on the Items page.",
                  "Search recipes or ingredients", "Add recipe"),
 }
 
@@ -336,6 +336,8 @@ CONDITIONS_CSS = """
 .rname{display:flex;align-items:center;gap:8px;min-width:0}
 .rtier{flex:none;width:22px;height:22px;display:grid;place-items:center;background:var(--paper);color:var(--ink);font-size:.75rem;font-weight:800;clip-path:polygon(50% 0,63% 13%,82% 9%,84% 28%,100% 38%,91% 56%,97% 75%,79% 82%,72% 100%,50% 92%,28% 100%,21% 82%,3% 75%,9% 56%,0 38%,16% 28%,18% 9%,37% 13%)}
 .flask svg{width:22px;height:22px;display:block}
+.itoggle .flask svg{width:18px;height:18px}
+.chk svg{width:20px;height:20px}
 .rcard .chead{font-size:.95rem;text-transform:uppercase;letter-spacing:.02em;padding:9px 12px}
 .rcard .cbody{padding:10px 14px 14px;gap:2px;font-size:.9rem}
 .rl{margin:0;font-weight:600;line-height:1.4}
@@ -345,7 +347,7 @@ CONDITIONS_CSS = """
 .rfeat,.rquote{display:grid;gap:8px;margin-top:10px}
 .rfeat p,.rquote p{margin:0;font-weight:600}
 .rquote{font-style:italic}
-.chk{display:flex!important;flex-direction:row;align-items:center;gap:8px;align-self:end;padding-bottom:10px}
+.chk{display:flex!important;flex-direction:row;align-items:center;gap:8px;justify-self:start;font-weight:800;white-space:nowrap;cursor:pointer}
 .chk input{width:18px!important;height:18px}
 .gform select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}

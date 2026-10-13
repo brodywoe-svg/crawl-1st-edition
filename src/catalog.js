@@ -1,6 +1,7 @@
 /* Items and Crafting pages. Both read and write crawl-items.json:
      {v:2, items:[item], recipes:[recipe]}
-     item   = {id, n, cat, sub, slot, value, weight, props, feat, desc, extra:[{k,v}]}
+     item   = {id, n, cat, sub, slot, badge, value, weight, props, feat, desc, extra:[{k,v}]}
+              badge: the flask badge, meaning it still needs playtesting
               cat: Weapon | Armor | Consumable | Crafting Material
               sub: weapon type, armor type, or a group name; slot: armor slot
      recipe = {id, n, tier, badge, kind, prof, pre, ing:[{item,qty}], matNote, applies, ws, time, dc, tc,
@@ -30,7 +31,7 @@ const catOf = c => CATS.find(x => x[0] === c);
 function normItem(i) {
   const cat = catOf(str(i.cat)) ? str(i.cat) : (/weapon/i.test(i.type) ? "Weapon" : /armor|shield/i.test(i.type) ? "Armor" : /potion|food/i.test(i.type) ? "Consumable" : "Crafting Material");
   return {
-    id: str(i.id) || newId("i"), n: str(i.n), cat, sub: str(i.sub), slot: str(i.slot), value: str(i.value ?? i.cost), weight: str(i.weight),
+    id: str(i.id) || newId("i"), n: str(i.n), cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, value: str(i.value ?? i.cost), weight: str(i.weight),
     props: str(i.props && !Array.isArray(i.props) ? i.props : ""), feat: str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : "")), desc: str(i.desc), extra: extras(i.extra)
   };
 }
@@ -109,6 +110,7 @@ const itemLink = (id, qty) => {
 const recipeLink = r => `<a class="ilink" href="${KIND === "recipes" ? "" : "crafting.html"}#${esc(r.id)}">${esc(recipeName(r))}</a>`;
 const line = (label, v, cls = "") => v ? `<p class="rl${cls}"><b>${label}:</b> ${richInline(v)}</p>` : "";
 const FLASK = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 3.2 4-1.1-.6 4.1 3.8 1.8-2.6 3.2 2.6 3.2-3.8 1.8.6 4.1-4-1.1L12 23l-2.6-3.2-4 1.1.6-4.1-3.8-1.8L4.8 12 2.2 8.8 6 7l-.6-4.1 4 1.1z" fill="#f29a2e"/><path d="M10.3 6.5h3.4v.9h-.6v2.9l2.9 5.2c.4.7-.1 1.5-.9 1.5H8.9c-.8 0-1.3-.8-.9-1.5l2.9-5.2V7.4h-.6z" fill="#fff"/></svg>`;
+const PLAYTEST = `<span class="flask" title="Needs playtesting" role="img" aria-label="Needs playtesting">${FLASK}</span>`;
 const tierBadge = t => `<span class="rtier" title="${esc(t)} recipe">${esc((t || "B")[0])}</span>`;
 
 /* ---------------------------------------------------------------- recipes (cards) */
@@ -127,7 +129,7 @@ function recipeBody(r) {
 function recipeCard(r) {
   if (editing.has(r._id)) return recipeForm(r);
   return `<section class="cond rcard" id="${esc(r.id)}" data-id="${r._id}"><h2 class="chead"><span class="rname">${tierBadge(r.tier)}<span>${esc(recipeName(r))}</span></span><span class="chr">` +
-    (r.badge ? `<span class="flask" title="Flask badge">${FLASK}</span>` : "") +
+    (r.badge ? PLAYTEST : "") +
     (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(recipeName(r))}">Edit</button>` : "") +
     `</span></h2><div class="cbody">${recipeBody(r)}</div></section>`;
 }
@@ -153,7 +155,7 @@ function itemRow(i, showCat) {
   const isOpen = open.has(i._id) || editing.has(i._id);
   const tag = showCat ? `<span class="ctag2">${esc(i.sub || catOf(i.cat)[1])}</span>` : i.slot && i.cat === "Armor" ? `<span class="ctag2">${esc(i.slot)}</span>` : "";
   return `<tbody class="irow${isOpen ? " open" : ""}" id="${esc(i.id)}" data-id="${i._id}">
-<tr class="ihead"><td><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>${esc(i.n || "New item")}</span>${tag}</button></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
+<tr class="ihead"><td><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>${esc(i.n || "New item")}</span>${i.badge ? PLAYTEST : ""}${tag}</button></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
 ${isOpen ? `<tr class="idet"><td colspan="3">${editing.has(i._id) ? itemForm(i) : itemDetail(i)}</td></tr>` : ""}</tbody>`;
 }
 function itemsChart(l) {
@@ -196,6 +198,7 @@ function itemForm(i) {
   const subs = (catOf(d.cat) || CATS[3])[2];
   return `<div class="gediting gform iform" data-id="${i._id}">
 ${fld(id("n"), "Name", "", inp(id("n"), "n", d.n))}
+<label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> ${FLASK} Needs playtesting</label>
 <div class="grid3">
 ${fld(id("cat"), "Category", "", sel(id("cat"), "cat", d.cat, CATS.map(c => [c[0], c[1]])))}
 ${fld(id("sub"), d.cat === "Weapon" ? "Weapon type" : d.cat === "Armor" ? "Armor type" : "Group", "", inp(id("sub"), "sub", d.sub, ` list="subs-${i._id}"`) + `<datalist id="subs-${i._id}">${subs.map(s => `<option value="${esc(s)}">`).join("")}</datalist>`)}
@@ -213,11 +216,11 @@ function recipeForm(r) {
   return `<section class="cond gediting" data-id="${r._id}"><div class="chead"><span>${r._new ? "New recipe" : "Editing " + esc(recipeName(r))}</span></div>
 <div class="cbody gform">
 ${fld(id("n"), "Recipe name", "", inp(id("n"), "n", d.n))}
+<label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> ${FLASK} Needs playtesting</label>
 <div class="grid3">
 ${fld(id("prof"), "Profession", "", inp(id("prof"), "prof", d.prof, ' list="profs"'))}
 ${fld(id("tier"), "Tier badge", "", sel(id("tier"), "tier", d.tier, TIERS.map(t => [t, t])))}
 ${fld(id("kind"), "Kind", "", sel(id("kind"), "kind", d.kind, KINDS.map(k => [k, k || "Makes an item"])))}
-<label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> Flask badge</label>
 </div>
 ${fld(id("pre"), "Prerequisites", "", inp(id("pre"), "pre", d.pre, ' placeholder="e.g. +1 Blacksmithing"'))}
 <div class="glab">Material Cost <small>Pick items from the list, or type a new name to create that item.</small></div>
@@ -250,7 +253,7 @@ function readForm(f) {
   return d;
 }
 function fromDraft(d, x) {
-  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), cat: d.cat, sub: str(d.sub), slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), props: str(d.props), feat: str(d.feat), desc: str(d.desc), extra: extras(d.extra) };
+  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), cat: d.cat, sub: str(d.sub), badge: !!d.badge, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), props: str(d.props), feat: str(d.feat), desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
     ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote), applies: str(d.applies),
@@ -354,7 +357,7 @@ $("clist").addEventListener("click", ev => {
       if (!name && !named(d.makes).length) { err("Give the recipe a name, or pick what it makes."); return }
       const created = [];
       for (const r of [...named(d.makes), ...named(d.ing)]) if (!itemByName(r.name) && !created.some(c => lc(c.n) === lc(str(r.name)))) {
-        created.push({ id: newId("i"), n: str(r.name).replace(/\s+/g, " "), cat: "Crafting Material", sub: "Other", slot: "", value: "", weight: "", props: "", feat: "", desc: "", extra: [], _id: ++uid });
+        created.push({ id: newId("i"), n: str(r.name).replace(/\s+/g, " "), cat: "Crafting Material", sub: "Other", slot: "", badge: false, value: "", weight: "", props: "", feat: "", desc: "", extra: [], _id: ++uid });
       }
       items.push(...created);
       Object.assign(x, fromDraft(d, x));
@@ -367,7 +370,7 @@ $("clist").addEventListener("click", ev => {
 $("gAdd").addEventListener("click", () => {
   const f = $("cfilter").value;
   const x = KIND === "items"
-    ? { id: newId("i"), n: "", cat: f || "Weapon", sub: "", slot: "", value: "", weight: "", props: "", feat: "", desc: "", extra: [], _id: ++uid, _new: true }
+    ? { id: newId("i"), n: "", cat: f || "Weapon", sub: "", slot: "", badge: false, value: "", weight: "", props: "", feat: "", desc: "", extra: [], _id: ++uid, _new: true }
     : { id: newId("r"), n: "", tier: "Basic", badge: false, kind: "", prof: f || "", pre: "", ing: [], matNote: "", applies: "", ws: "", time: "", dc: "", tc: "", qty: { l: "", v: "" }, makes: [], props: "", grants: "", feat: "", quote: "", extra: [], _id: ++uid, _new: true };
   rows().push(x); editing.add(x._id); open.add(x._id); $("cq").value = ""; render();
   const el = document.querySelector(`.gediting[data-id="${x._id}"]`);
