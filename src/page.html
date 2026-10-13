@@ -642,7 +642,7 @@ function normGlossary(j){
     fx:list(e.fx).map(x=>String(x).trim()).filter(Boolean),
     notes:list(e.notes).filter(n=>n&&String(n.t||"").trim()).map(n=>({l:String(n.l||"Note").trim()||"Note",t:String(n.t).trim()})),
     aka:list(e.aka).map(x=>typeof x==="string"?{w:x,ref:""}:{w:String(x&&x.w||""),ref:String(x&&x.ref||"")}).map(x=>({w:x.w.trim(),ref:x.ref.trim()})).filter(x=>x.w),
-    tip:e.tip!==false}));
+    tip:e.tip!==false,...(e.hideRefs?{hideRefs:true}:{})}));
 }
 /* glossary text: blank lines start a new paragraph, [color=#hex]text[/color] colors text */
 const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;

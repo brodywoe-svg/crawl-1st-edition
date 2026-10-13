@@ -16,7 +16,7 @@ const CATS = [
   ["Ammunition", "Ammunition", ["Arrows", "Bolts", "Shot", "Other"]],
   ["Armor", "Armor", ["Clothing", "Light", "Medium", "Heavy", "Accessories"]],
   ["Consumable", "Consumables", ["Food", "Potions", "Alchemical", "Scrolls and Documents", "Tools"]],
-  ["Crafting Material", "Crafting Materials", ["Metalwork", "Woodwork", "Cloth and Leather", "Alchemy and Herbs", "Cooking Ingredients", "Scribing Supplies", "Other"]],
+  ["Crafting Material", "Crafting Materials", ["Blacksmithing", "Woodworking", "Cloth and Leather", "Alchemy and Herbs", "Cooking Ingredients", "Scribing Supplies", "Other"]],
   ["Magic Item", "Magic Items", ["Weapons", "Armor", "Accessories", "Wondrous Items", "Other"]],
 ];
 /* items.html?c=weapons shows one category, like a page of its own (the Items menu links here) */
@@ -25,7 +25,7 @@ const catSlug = c => Object.keys(CAT_SLUGS).find(k => CAT_SLUGS[k] === c) || "";
 const SLOTS = ["Head", "Neck", "Shoulders", "Torso", "Waist", "Arms", "Hands", "Legs", "Feet", "Rings", "Other"];
 const PROFS = ["Blacksmithing", "Tailoring", "Woodworking", "Cooking", "Alchemy", "Leatherworking", "Scribing", "Tinkering", "Goldsmithing", "Enchanting"];
 const TIERS = ["Basic", "Advanced", "Mastery"];
-const RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Legendary"];
+const RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "(Varies)"];
 const HEX = /^#[0-9a-f]{3,8}$/i;
 const KINDS = ["", "Craftable Modifier", "Enchantment Modifier"];
 let items = [], recipes = [], original = "", dirty = false, uid = 0;
@@ -176,10 +176,12 @@ function itemDetail(i) {
       `<p class="rl"><b>Material Cost:</b> ${r.ing.map(m => itemLink(m.item, m.qty)).join(", ") || "none listed"}${r.matNote ? ", " + richInline(r.matNote) : ""}</p>` +
       line("Workstations Required", r.ws) + line("Crafting Time", r.time) +
       (r.dc || r.tc ? `<p class="rl"><b>Crafting DC:</b> ${esc(r.dc || "—")} | <b>TC:</b> ${esc(r.tc || "—")}</p>` : "") + `</div>`).join("");
-  const props = (i.props ? `<p class="rl">${richInline(i.props)}</p>` : "") + (i.feat ? `<div class="rfeat">${paras(i.feat)}</div>` : "");
-  return sec("Properties", props || none) +
-    (isWeapon(i) || i.actions ? sec("Weapon actions", i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : none) : "") +
+  /* crafting materials show only a description and their recipe */
+  const mat = i.cat === "Crafting Material";
+  return (mat ? "" : sec("Properties", i.props ? `<p class="rl">${richInline(i.props)}</p>` : none)) +
     sec("Description", (i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
+    (!mat && i.feat ? sec("Properties Defined", `<div class="rfeat">${paras(i.feat)}</div>`) : "") +
+    (!mat && (isWeapon(i) || i.actions) ? sec("Weapon actions", i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : none) : "") +
     (made.length ? sec("Crafting recipe", recipeBlock) : ADMIN && !i._new ? sec("Crafting recipe", `<p class="muted">No crafting recipe yet. <a class="ilink" href="crafting.html?make=${encodeURIComponent(i.id)}">Create one on the Crafting page</a></p>`) : "") +
     (used.length ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "") +
     (ADMIN && !i._new ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
@@ -251,10 +253,10 @@ ${fld(id("rarity"), "Rarity", "", sel(id("rarity"), "rarity", d.rarity || "", [[
 ${fld(id("value"), "Value", "", inp(id("value"), "value", d.value, ' placeholder="e.g. 15 gp"'))}
 ${fld(id("weight"), "Weight", "", inp(id("weight"), "weight", d.weight, ' placeholder="e.g. 3 lb"'))}
 </div>
-${fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
-${fld(id("feat"), "What the properties do", "Leave a blank line between paragraphs.", area(id("feat"), "feat", d.feat, 3))}
-${fld(id("actions"), "Weapon actions", d.cat === "Weapon" ? "Leave a blank line between paragraphs." : "Leave empty if the item has none.", area(id("actions"), "actions", d.actions, 3))}
+${d.cat === "Crafting Material" ? "" : fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
+${d.cat === "Crafting Material" ? "" : fld(id("feat"), "Properties Defined", "What each property does. Leave a blank line between paragraphs.", area(id("feat"), "feat", d.feat, 3))}
+${d.cat === "Crafting Material" ? "" : fld(id("actions"), "Weapon actions", d.cat === "Weapon" ? "Leave a blank line between paragraphs." : "Leave empty if the item has none.", area(id("actions"), "actions", d.actions, 3))}
 ${formEnd(i, "item")}</div>`;
 }
 function recipeForm(r) {
@@ -299,7 +301,7 @@ function readForm(f) {
   return d;
 }
 function fromDraft(d, x) {
-  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), actions: str(d.actions), props: str(d.props), feat: str(d.feat), desc: str(d.desc), extra: extras(d.extra) };
+  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), feat: str(d.feat ?? x.feat), desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
     ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote), applies: str(d.applies),

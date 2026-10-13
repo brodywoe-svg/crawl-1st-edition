@@ -87,7 +87,7 @@ const isFact = x => /^[A-Z][\w'’]*(?: [\w'’]+){0,2}:\s/.test(x);
 function factsHTML(rows) { return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>` : "" }
 function bodyHTML(e) {
   const notes = e.notes.map(n => `<p class="cnote"><b>${esc(n.l)}:</b> ${richInline(n.t)}</p>`).join("");
-  const words = e.aka.filter(x => x.ref);
+  const words = e.hideRefs ? [] : e.aka.filter(x => x.ref);
   const bullets = e.fx.filter(x => !isFact(x)), facts = e.fx.filter(isFact).map(x => { const i = x.indexOf(":"); return [x.slice(0, i), richInline(x.slice(i + 1).trim())] });
   if (e.sec === "Properties") {
     const used = propItems(e);
@@ -119,7 +119,7 @@ function wordRow(x) {
     `<button type="button" class="btn gwdel">Remove</button></div>`;
 }
 function form(e) {
-  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka, tip: e.tip };
+  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka, tip: e.tip, hideRefs: e.hideRefs };
   const id = k => `g${k}-${e._id}`;
   return `<section class="cond gediting" data-id="${e._id}"><div class="chead"><span>${e._new ? "New entry" : "Editing " + esc(e.n)}</span></div>
 <div class="cbody gform">
@@ -129,7 +129,7 @@ function form(e) {
 <label for="${id("lead")}">Description <small>Leave a blank line between paragraphs.</small><textarea id="${id("lead")}" data-k="lead" rows="6">${esc(d.lead)}</textarea></label>
 <label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="4">${esc(d.fx)}</textarea></label>
 <label for="${id("notes")}">Notes <small>One per line. Start a line with "Designer's note:" to label it as one.</small><textarea id="${id("notes")}" data-k="notes" rows="2">${esc(d.notes)}</textarea></label>
-<div class="gwords"><span class="glab">Tooltip words <small>The entry's name is always a tooltip word and shows the whole entry. Create more here, each with its own tooltip text if you like.</small></span><div class="gwlist">${d.aka.map(wordRow).join("")}</div><button type="button" class="btn gwadd">Create tooltip word</button></div>
+<div class="gwords"><span class="glab">Tooltip words <small>The entry's name is always a tooltip word and shows the whole entry. Create more here, each with its own tooltip text if you like.</small></span><div class="gwlist">${d.aka.map(wordRow).join("")}</div><button type="button" class="btn gwadd">Create tooltip word</button><label class="chk"><input type="checkbox" data-k="hideRefs"${d.hideRefs ? " checked" : ""}> Hide tooltip text on the Glossary page <small>(it still shows when you hover in spells)</small></label></div>
 <div class="gprev"><span class="glab">Preview</span><div class="gprevbody"></div></div>
 <p class="gerr" role="alert"></p>
 <div class="gbtns"><button type="button" class="btn gdel">${e._new ? "Remove" : "Delete entry"}</button><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>
@@ -204,7 +204,7 @@ $("clist").addEventListener("click", ev => {
     const p = fromDraft(d), seen = new Set();
     for (const x of p.aka) { const k = x.w.toLowerCase(); if (seen.has(k)) { err(`"${x.w}" is listed twice under Tooltip words.`); return } seen.add(k) }
     e.n = name; e.sec = d.sec.trim().replace(/\s+/g, " ") || FIRST;
-    e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka; e.tip = d.tip !== false;
+    e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka; e.tip = d.tip !== false; if (d.hideRefs) e.hideRefs = true; else delete e.hideRefs;
     delete e._new; editing.delete(e._id); drafts.delete(e._id);
     render(); markDirty();
     const was = only(); navUpdate();
