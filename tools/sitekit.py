@@ -13,7 +13,8 @@ NAV_ITEMS = [
     ("Character Creator", None, None),
     ("Classes", None, None),
     ("Crafting", "crafting.html", None),
-    ("Items", "items.html", None),
+    ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
+                             ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items")]),
     ("Glossary", "glossary.html", "glossary"),
     ("About", None, None),
 ]
@@ -53,10 +54,13 @@ def nav_html(active, controls="", sections=("Conditions",)):
         if not menu:
             parts.append(f'<a class="navitem" href="{href}"{cur}>{label}</a>')
             continue
-        items = "".join(f'<a href="{section_href(t)}">{html.escape(t)}</a>' for t in sections)
+        if menu == "glossary":
+            items, menu_id = "".join(f'<a href="{section_href(t)}">{html.escape(t)}</a>' for t in sections), ' id="navGlossary"'
+        else:
+            items, menu_id = "".join(f'<a href="{h}">{html.escape(t)}</a>' for t, h in menu), ""
         parts.append(
             f'<div class="navdrop"><a class="navitem" href="{href}"{cur} aria-haspopup="true">{label}{CARET}</a>'
-            f'<div class="navmenu" id="navGlossary">{items}</div></div>'
+            f'<div class="navmenu"{menu_id}>{items}</div></div>'
         )
     parts.append(f'</div><div class="navctl" id="navctl">{controls}</div></div></nav>')
     parts.append(f"<script>{NAV_JS}</script>")
@@ -124,7 +128,8 @@ NAV_JS = """(function(){
   function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function href(s){return s==='Conditions'?'conditions.html':'glossary.html?s='+slug(s)}
-  function mark(){if(!menu)return;var here=location.pathname.split('/').pop()+location.search;[].forEach.call(menu.querySelectorAll('a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+  function mark(){var here=location.pathname.split('/').pop()+location.search;[].forEach.call(document.querySelectorAll('.navmenu a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+  window.crawlNavMark=mark;
   window.crawlNavSections=function(list){
     if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
     (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
@@ -321,6 +326,11 @@ CONDITIONS_CSS = """
 .irow.open .itoggle svg{transform:none}
 .itoggle:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
 .ihead:hover td{background:var(--soft)}
+.icell{display:flex;align-items:center;gap:8px}
+.icell .itoggle{flex:1;min-width:0}
+.gedit.iedit{color:var(--ink);border-color:var(--ink);padding:2px 10px;font-size:.7rem}
+.gedit.iedit:hover{background:var(--ink);color:var(--paper)}
+.dused{margin-top:10px!important;border-top:1px solid var(--hair);padding-top:10px}
 .ctag2{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:1px 7px;color:var(--muted);white-space:nowrap}
 .idet td{padding:4px 14px 16px;border-bottom:1px solid var(--hair);text-align:left!important;width:auto!important}
 .idet .dsec{border-top:1px solid var(--hair);padding-top:10px;margin-top:10px;display:grid;gap:6px}
@@ -330,7 +340,7 @@ CONDITIONS_CSS = """
 .drec{display:grid;gap:3px}
 .drec+.drec{margin-top:8px}
 .dbtns{margin-top:12px}
-.iform{padding-top:8px}
+.iform{padding-top:8px;display:grid;gap:12px}
 /* recipe cards */
 .rlist{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));align-items:start}
 .rname{display:flex;align-items:center;gap:8px;min-width:0}

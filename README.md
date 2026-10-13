@@ -79,10 +79,11 @@ section name on an entry creates the section.
 ## Items and Crafting
 
 The **Items** page is a chart grouped by category: Weapons (by weapon type), Armor
-(by armor type, then slot), Consumables and Crafting Materials. Each row shows the
-item's name, value and weight; click it to see its crafting recipe, weapon actions
-(or properties) and description. Signed in as admin, open an item and click
-**Edit**, or use **Add item**.
+(by armor type, then slot), Consumables, Crafting Materials and Magic Items. Each row shows the
+item's name, value and weight; click it to see its weapon actions, properties,
+description and crafting recipe. Signed in as admin, click **Edit** on any row, or
+use **Add item**. The **Items** menu opens one category at a time (Weapons, Armor,
+Consumables, Materials, Magic Items), e.g. `items.html?c=weapons`.
 
 The **Crafting** page lists every recipe by profession, in the same layout as the
 Crafting Compendium cards: tier badge, prerequisites, material cost, workstations,

@@ -437,6 +437,11 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .irow.open .itoggle svg{transform:none}
 .itoggle:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
 .ihead:hover td{background:var(--soft)}
+.icell{display:flex;align-items:center;gap:8px}
+.icell .itoggle{flex:1;min-width:0}
+.gedit.iedit{color:var(--ink);border-color:var(--ink);padding:2px 10px;font-size:.7rem}
+.gedit.iedit:hover{background:var(--ink);color:var(--paper)}
+.dused{margin-top:10px!important;border-top:1px solid var(--hair);padding-top:10px}
 .ctag2{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:1px 7px;color:var(--muted);white-space:nowrap}
 .idet td{padding:4px 14px 16px;border-bottom:1px solid var(--hair);text-align:left!important;width:auto!important}
 .idet .dsec{border-top:1px solid var(--hair);padding-top:10px;margin-top:10px;display:grid;gap:6px}
@@ -446,7 +451,7 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .drec{display:grid;gap:3px}
 .drec+.drec{margin-top:8px}
 .dbtns{margin-top:12px}
-.iform{padding-top:8px}
+.iform{padding-top:8px;display:grid;gap:12px}
 /* recipe cards */
 .rlist{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));align-items:start}
 .rname{display:flex;align-items:center;gap:8px;min-width:0}
@@ -489,7 +494,7 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .gprev{display:grid;gap:6px}
 .gprevbody{border:2px dashed var(--hair);border-radius:10px;padding:10px 14px;display:grid;gap:8px}
 @media (max-width:600px){.gform input,.gform textarea,.cbar input{font-size:16px}}
-</style><nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks"><a class="navitem navhome" href="index.html">Spells</a><span class="navitem soon" aria-disabled="true" title="Coming soon">Character Creator<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Classes<small>Soon</small></span><a class="navitem" href="crafting.html">Crafting</a><a class="navitem" href="items.html">Items</a><div class="navdrop"><a class="navitem" href="glossary.html" aria-current="page" aria-haspopup="true">Glossary<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu" id="navGlossary"><a href="conditions.html">Conditions</a><a href="glossary.html?s=combat-rules">Combat Rules</a><a href="glossary.html?s=combat-system">Combat System</a><a href="glossary.html?s=crafting-rules">Crafting Rules</a></div></div><span class="navitem soon" aria-disabled="true" title="Coming soon">About<small>Soon</small></span></div><div class="navctl" id="navctl"><button type="button" class="adminbtn" id="adminBtn" hidden aria-haspopup="dialog"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="2.5" y="7" width="11" height="8" rx="1.5" fill="currentColor"/></svg><span id="adminLabel">Admin</span></button><button type="button" class="modebtn" id="modeBtn" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="modeIcon" d="M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z" fill="currentColor"/></svg><span id="modeLabel">Dark mode</span></button></div></div></nav><script>(function(){
+</style><nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks"><a class="navitem navhome" href="index.html">Spells</a><span class="navitem soon" aria-disabled="true" title="Coming soon">Character Creator<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Classes<small>Soon</small></span><a class="navitem" href="crafting.html">Crafting</a><div class="navdrop"><a class="navitem" href="items.html" aria-haspopup="true">Items<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu"><a href="items.html?c=weapons">Weapons</a><a href="items.html?c=armor">Armor</a><a href="items.html?c=consumables">Consumables</a><a href="items.html?c=materials">Materials</a><a href="items.html?c=magic-items">Magic Items</a></div></div><div class="navdrop"><a class="navitem" href="glossary.html" aria-current="page" aria-haspopup="true">Glossary<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu" id="navGlossary"><a href="conditions.html">Conditions</a><a href="glossary.html?s=combat-rules">Combat Rules</a><a href="glossary.html?s=combat-system">Combat System</a><a href="glossary.html?s=crafting-rules">Crafting Rules</a></div></div><span class="navitem soon" aria-disabled="true" title="Coming soon">About<small>Soon</small></span></div><div class="navctl" id="navctl"><button type="button" class="adminbtn" id="adminBtn" hidden aria-haspopup="dialog"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="2.5" y="7" width="11" height="8" rx="1.5" fill="currentColor"/></svg><span id="adminLabel">Admin</span></button><button type="button" class="modebtn" id="modeBtn" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="modeIcon" d="M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z" fill="currentColor"/></svg><span id="modeLabel">Dark mode</span></button></div></div></nav><script>(function(){
   var nav=document.querySelector('.sitenav'),links=nav&&nav.querySelector('.navlinks'),busy=false;
   var STEPS=['nav-c1','nav-c2','nav-c3','nav-c4','nav-c5'];
   function fit(){
@@ -508,7 +513,8 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
   function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function href(s){return s==='Conditions'?'conditions.html':'glossary.html?s='+slug(s)}
-  function mark(){if(!menu)return;var here=location.pathname.split('/').pop()+location.search;[].forEach.call(menu.querySelectorAll('a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+  function mark(){var here=location.pathname.split('/').pop()+location.search;[].forEach.call(document.querySelectorAll('.navmenu a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+  window.crawlNavMark=mark;
   window.crawlNavSections=function(list){
     if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
     (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});

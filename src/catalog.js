@@ -1,8 +1,9 @@
 /* Items and Crafting pages. Both read and write crawl-items.json:
      {v:2, items:[item], recipes:[recipe]}
-     item   = {id, n, cat, sub, slot, badge, value, weight, props, feat, desc, extra:[{k,v}]}
+     item   = {id, n, cat, sub, slot, badge, value, weight, actions, props, feat, desc, extra:[{k,v}]}
+              actions: weapon actions; props: the properties line; feat: what each property does
               badge: the flask badge, meaning it still needs playtesting
-              cat: Weapon | Armor | Consumable | Crafting Material
+              cat: Weapon | Armor | Consumable | Crafting Material | Magic Item
               sub: weapon type, armor type, or a group name; slot: armor slot
      recipe = {id, n, tier, badge, kind, prof, pre, ing:[{item,qty}], matNote, applies, ws, time, dc, tc,
                qty:{l,v}, makes:[{item,qty}], props, grants, feat, quote, extra:[{k,v}]}
@@ -14,7 +15,11 @@ const CATS = [
   ["Armor", "Armor", ["Clothing", "Light", "Medium", "Heavy", "Accessories"]],
   ["Consumable", "Consumables", ["Food", "Potions", "Alchemical", "Scrolls and Documents", "Tools"]],
   ["Crafting Material", "Crafting Materials", ["Metalwork", "Woodwork", "Cloth and Leather", "Alchemy and Herbs", "Cooking Ingredients", "Scribing Supplies", "Other"]],
+  ["Magic Item", "Magic Items", ["Weapons", "Armor", "Accessories", "Wondrous Items", "Other"]],
 ];
+/* items.html?c=weapons shows one category, like a page of its own (the Items menu links here) */
+const CAT_SLUGS = { weapons: "Weapon", armor: "Armor", consumables: "Consumable", materials: "Crafting Material", "magic-items": "Magic Item" };
+const catSlug = c => Object.keys(CAT_SLUGS).find(k => CAT_SLUGS[k] === c) || "";
 const SLOTS = ["Head", "Neck", "Shoulders", "Torso", "Waist", "Arms", "Hands", "Legs", "Feet", "Rings", "Other"];
 const PROFS = ["Blacksmithing", "Tailoring", "Woodworking", "Cooking", "Alchemy", "Leatherworking", "Scribing", "Tinkering", "Goldsmithing", "Enchanting"];
 const TIERS = ["Basic", "Advanced", "Mastery"];
@@ -31,7 +36,7 @@ const catOf = c => CATS.find(x => x[0] === c);
 function normItem(i) {
   const cat = catOf(str(i.cat)) ? str(i.cat) : (/weapon/i.test(i.type) ? "Weapon" : /armor|shield/i.test(i.type) ? "Armor" : /potion|food/i.test(i.type) ? "Consumable" : "Crafting Material");
   return {
-    id: str(i.id) || newId("i"), n: str(i.n), cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, value: str(i.value ?? i.cost), weight: str(i.weight),
+    id: str(i.id) || newId("i"), n: str(i.n), cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
     props: str(i.props && !Array.isArray(i.props) ? i.props : ""), feat: str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : "")), desc: str(i.desc), extra: extras(i.extra)
   };
 }
@@ -74,7 +79,7 @@ function score(x, q) {
   const linked = (KIND === "items" ? [x.cat, x.sub, x.slot] : [x.prof, x.kind, ...[...x.makes, ...x.ing].map(r => itemName(r.item))]).map(lc);
   if (linked.includes(q)) return 60;
   if (linked.some(t => t.includes(q))) return 50;
-  const text = lc(plainText(KIND === "items" ? [x.value, x.weight, x.props, x.feat, x.desc, ...x.extra.map(r => r.k + " " + r.v)].join(" ")
+  const text = lc(plainText(KIND === "items" ? [x.value, x.weight, x.actions, x.props, x.feat, x.desc, ...x.extra.map(r => r.k + " " + r.v)].join(" ")
     : [x.pre, x.matNote, x.applies, x.ws, x.time, x.props, x.grants, x.feat, x.quote, ...x.extra.map(r => r.k + " " + r.v)].join(" ")));
   if (!text.includes(q)) return 0;
   return wordStart(text) ? 20 : 10;
@@ -139,23 +144,25 @@ const isWeapon = i => i.cat === "Weapon";
 function itemDetail(i) {
   const made = recipes.filter(r => !r._new && r.makes.some(m => m.item === i.id));
   const used = recipes.filter(r => !r._new && r.ing.some(m => m.item === i.id));
-  const recipeBlock = made.length ? made.map(r => `<div class="drec"><p class="rl"><b>${recipeLink(r)}</b> <span class="muted">${esc(r.tier)} ${esc(r.prof)}</span></p>` +
+  const none = `<p class="muted">None listed yet.</p>`;
+  const sec = (title, body) => `<div class="dsec"><h3>${title}</h3>${body}</div>`;
+  const recipeBlock = made.map(r => `<div class="drec"><p class="rl"><b>${recipeLink(r)}</b> <span class="muted">${esc(r.tier)} ${esc(r.prof)}</span></p>` +
       (r.pre ? `<p class="rl pre"><b>Prerequisites:</b> ${richInline(r.pre)}</p>` : "") +
       `<p class="rl"><b>Material Cost:</b> ${r.ing.map(m => itemLink(m.item, m.qty)).join(", ") || "none listed"}${r.matNote ? ", " + richInline(r.matNote) : ""}</p>` +
       line("Workstations Required", r.ws) + line("Crafting Time", r.time) +
-      (r.dc || r.tc ? `<p class="rl"><b>Crafting DC:</b> ${esc(r.dc || "—")} | <b>TC:</b> ${esc(r.tc || "—")}</p>` : "") + `</div>`).join("")
-    : `<p class="muted">No crafting recipe.</p>`;
-  const props = (i.props ? `<p class="rl"><b>${isWeapon(i) ? "Damage and properties" : "Properties"}:</b> ${richInline(i.props)}</p>` : "") + (i.feat ? `<div class="rfeat">${paras(i.feat)}</div>` : "");
-  return `<div class="dsec"><h3>Crafting recipe</h3>${recipeBlock}${used.length ? `<p class="rl"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : ""}</div>` +
-    (isWeapon(i) ? `<div class="dsec"><h3>Weapon actions</h3>${props || `<p class="muted">None listed yet.</p>`}</div>` : props ? `<div class="dsec"><h3>Properties</h3>${props}</div>` : "") +
-    `<div class="dsec"><h3>Description</h3>${i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`}${i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")}</div>` +
-    (ADMIN ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
+      (r.dc || r.tc ? `<p class="rl"><b>Crafting DC:</b> ${esc(r.dc || "—")} | <b>TC:</b> ${esc(r.tc || "—")}</p>` : "") + `</div>`).join("");
+  const props = (i.props ? `<p class="rl">${richInline(i.props)}</p>` : "") + (i.feat ? `<div class="rfeat">${paras(i.feat)}</div>` : "");
+  return (isWeapon(i) || i.actions ? sec("Weapon actions", i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : none) : "") +
+    sec("Properties", props || none) +
+    sec("Description", (i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
+    (made.length ? sec("Crafting recipe", recipeBlock) : "") +
+    (used.length ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "");
 }
 function itemRow(i, showCat) {
   const isOpen = open.has(i._id) || editing.has(i._id);
   const tag = showCat ? `<span class="ctag2">${esc(i.sub || catOf(i.cat)[1])}</span>` : i.slot && i.cat === "Armor" ? `<span class="ctag2">${esc(i.slot)}</span>` : "";
   return `<tbody class="irow${isOpen ? " open" : ""}" id="${esc(i.id)}" data-id="${i._id}">
-<tr class="ihead"><td><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>${esc(i.n || "New item")}</span>${i.badge ? PLAYTEST : ""}${tag}</button></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
+<tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>${esc(i.n || "New item")}</span>${i.badge ? PLAYTEST : ""}${tag}</button>${ADMIN && !editing.has(i._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(i.n)}">Edit</button>` : ""}</div></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
 ${isOpen ? `<tr class="idet"><td colspan="3">${editing.has(i._id) ? itemForm(i) : itemDetail(i)}</td></tr>` : ""}</tbody>`;
 }
 function itemsChart(l) {
@@ -206,8 +213,9 @@ ${d.cat === "Armor" ? fld(id("slot"), "Slot", "", sel(id("slot"), "slot", d.slot
 ${fld(id("value"), "Value", "", inp(id("value"), "value", d.value, ' placeholder="e.g. 15 gp"'))}
 ${fld(id("weight"), "Weight", "", inp(id("weight"), "weight", d.weight, ' placeholder="e.g. 3 lb"'))}
 </div>
-${fld(id("props"), d.cat === "Weapon" ? "Damage and properties" : "Properties", "Shown on its own line, e.g. 1d8 slashing, Versatile 1d10.", inp(id("props"), "props", d.props))}
-${fld(id("feat"), d.cat === "Weapon" ? "Weapon actions and features" : "Features", "What each property or action does. Leave a blank line between paragraphs.", area(id("feat"), "feat", d.feat, 3))}
+${fld(id("actions"), "Weapon actions", d.cat === "Weapon" ? "Leave a blank line between paragraphs." : "Leave empty if the item has none.", area(id("actions"), "actions", d.actions, 3))}
+${fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated.", inp(id("props"), "props", d.props))}
+${fld(id("feat"), "What the properties do", "Leave a blank line between paragraphs.", area(id("feat"), "feat", d.feat, 3))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
 ${formEnd(i, "item")}</div>`;
 }
@@ -253,7 +261,7 @@ function readForm(f) {
   return d;
 }
 function fromDraft(d, x) {
-  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), cat: d.cat, sub: str(d.sub), badge: !!d.badge, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), props: str(d.props), feat: str(d.feat), desc: str(d.desc), extra: extras(d.extra) };
+  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), cat: d.cat, sub: str(d.sub), badge: !!d.badge, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), actions: str(d.actions), props: str(d.props), feat: str(d.feat), desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
     ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote), applies: str(d.applies),
@@ -274,13 +282,22 @@ function saveDrafts() {
 }
 
 /* ---------------------------------------------------------------- page */
+let firstFill = true;
+function catHeading() {
+  if (KIND !== "items") return;
+  const c = catOf($("cfilter").value), h = document.querySelector(".intro h1");
+  h.textContent = c ? c[1] : "Items"; document.title = "Crawl " + (c ? c[1] : "Items");
+  if (window.crawlNavMark) window.crawlNavMark();
+}
 function fillFilter() {
-  const s = $("cfilter"), cur = s.value;
+  const s = $("cfilter");
+  let cur = s.value;
+  if (firstFill && KIND === "items") { cur = CAT_SLUGS[new URLSearchParams(location.search).get("c")] || ""; firstFill = false }
   const opts = KIND === "items" ? CATS.map(c => [c[0], c[1]]) : [...new Set([...PROFS.filter(p => recipes.some(r => r.prof === p)), ...recipes.map(r => r.prof).filter(Boolean).sort()])].map(p => [p, p]);
   s.innerHTML = `<option value="">${KIND === "items" ? "All categories" : "All professions"}</option>` + opts.map(([v, l]) => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(l)}</option>`).join("");
 }
 function render() {
-  saveDrafts(); fillFilter();
+  saveDrafts(); fillFilter(); catHeading();
   const l = visible(), n = l.filter(x => !x._new).length;
   $("ccount").textContent = KIND === "items" ? plural(n, "item", "items") : plural(n, "recipe", "recipes");
   let h = "";
@@ -298,7 +315,8 @@ function render() {
   sideShow(editing.size > 0);
   const total = rows().filter(x => !x._new).length;
   $("cempty").hidden = l.length > 0;
-  $("cempty").textContent = total ? "Nothing matches. Try a different word, or clear the search." : (KIND === "items" ? "No items yet." : "No recipes yet.") + (ADMIN ? ` Click ${KIND === "items" ? "Add item" : "Add recipe"} to create the first one.` : "");
+  const fc = KIND === "items" && catOf($("cfilter").value), inCat = fc ? items.filter(i => !i._new && i.cat === fc[0]).length : total;
+  $("cempty").textContent = !inCat && !query() && fc ? `No ${lc(fc[1])} yet.${ADMIN ? " Click Add item to create the first one." : ""}` : total ? "Nothing matches. Try a different word, or clear the search." : (KIND === "items" ? "No items yet." : "No recipes yet.") + (ADMIN ? ` Click ${KIND === "items" ? "Add item" : "Add recipe"} to create the first one.` : "");
   $("itemNames").innerHTML = items.filter(i => !i._new).sort(byName).map(i => `<option value="${esc(i.n)}">`).join("");
   $("profs").innerHTML = [...new Set([...PROFS, ...recipes.map(r => r.prof).filter(Boolean)])].map(p => `<option value="${esc(p)}">`).join("");
   $("gAdd").hidden = !ADMIN;
@@ -357,7 +375,7 @@ $("clist").addEventListener("click", ev => {
       if (!name && !named(d.makes).length) { err("Give the recipe a name, or pick what it makes."); return }
       const created = [];
       for (const r of [...named(d.makes), ...named(d.ing)]) if (!itemByName(r.name) && !created.some(c => lc(c.n) === lc(str(r.name)))) {
-        created.push({ id: newId("i"), n: str(r.name).replace(/\s+/g, " "), cat: "Crafting Material", sub: "Other", slot: "", badge: false, value: "", weight: "", props: "", feat: "", desc: "", extra: [], _id: ++uid });
+        created.push({ id: newId("i"), n: str(r.name).replace(/\s+/g, " "), cat: "Crafting Material", sub: "Other", slot: "", badge: false, value: "", weight: "", actions: "", props: "", feat: "", desc: "", extra: [], _id: ++uid });
       }
       items.push(...created);
       Object.assign(x, fromDraft(d, x));
@@ -370,14 +388,17 @@ $("clist").addEventListener("click", ev => {
 $("gAdd").addEventListener("click", () => {
   const f = $("cfilter").value;
   const x = KIND === "items"
-    ? { id: newId("i"), n: "", cat: f || "Weapon", sub: "", slot: "", badge: false, value: "", weight: "", props: "", feat: "", desc: "", extra: [], _id: ++uid, _new: true }
+    ? { id: newId("i"), n: "", cat: f || "Weapon", sub: "", slot: "", badge: false, value: "", weight: "", actions: "", props: "", feat: "", desc: "", extra: [], _id: ++uid, _new: true }
     : { id: newId("r"), n: "", tier: "Basic", badge: false, kind: "", prof: f || "", pre: "", ing: [], matNote: "", applies: "", ws: "", time: "", dc: "", tc: "", qty: { l: "", v: "" }, makes: [], props: "", grants: "", feat: "", quote: "", extra: [], _id: ++uid, _new: true };
   rows().push(x); editing.add(x._id); open.add(x._id); $("cq").value = ""; render();
   const el = document.querySelector(`.gediting[data-id="${x._id}"]`);
   if (el) { el.scrollIntoView({ block: "center" }); el.querySelector('[data-k="n"]').focus() }
 });
 $("cq").addEventListener("input", render);
-$("cfilter").addEventListener("change", render);
+$("cfilter").addEventListener("change", () => {
+  if (KIND === "items") { const sl = catSlug($("cfilter").value); history.replaceState(null, "", "items.html" + (sl ? "?c=" + sl : "") + location.hash) }
+  render();
+});
 
 $("saveBtn").addEventListener("click", async () => {
   if (editing.size) { $("saveMsg").textContent = "Click Done (or Cancel) on what you're editing first."; return }
