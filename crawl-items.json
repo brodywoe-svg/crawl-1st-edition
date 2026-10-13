@@ -15,9 +15,14 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Thrown 20/30ft, Volatile",
-   "feat": "[color=#8e171c]Volatile[/color] - On a hit, the flask shatters and the target becomes Enflamed.",
    "desc": "A sealed glass vial of lamp oil and sulfuric powder that bursts into flame when it shatters. Handle it gently, respectfully, and as far from your face as possible.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Volatile",
+     "d": "On a hit, the flask shatters and the target becomes Enflamed."
+    }
+   ]
   },
   {
    "id": "i-antitoxin",
@@ -33,9 +38,14 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Cleansing",
-   "feat": "Cleansing - A creature that drinks this ends the Poisoned condition and has advantage on saving throws against poison for 1 hour.",
    "desc": "A vial of cleansing tonic brewed from a little snake venom and charcoal root. It ends poisoning and guards against more for an hour.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Cleansing",
+     "d": "A creature that drinks this ends the Poisoned condition and has advantage on saving throws against poison for 1 hour."
+    }
+   ]
   },
   {
    "id": "i-arrow",
@@ -51,9 +61,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A straight wooden shaft with an iron head and even fletching. A crooked one is just a very expensive stick.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-ash-stave",
@@ -69,9 +79,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A straight length of ash wood. It bends before it breaks, which is why every good axe haft and quarterstaff starts as one.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-axe-haft",
@@ -87,9 +97,9 @@
    "weight": "1.5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A curved ash handle cut to fit a hand axe head.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bag-of-caltrops",
@@ -105,9 +115,14 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "Scattering",
-   "feat": "[color=#8e171c]Scattering[/color] - You can spend 1 AP to scatter the caltrops across a 5 ft. square within 5 ft. of you. A creature that enters the area must succeed on a DC 12 Dexterity saving throw or take 1d4 piercing damage and end its movement. You can gather the caltrops back up outside of combat.",
    "desc": "A bag of Caltrops contains 20 caltrops.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Scattering",
+     "d": "You can spend 1 AP to scatter the caltrops across a 5 ft. square within 5 ft. of you. A creature that enters the area must succeed on a DC 12 Dexterity saving throw or take 1d4 piercing damage and end its movement. You can gather the caltrops back up outside of combat."
+    }
+   ]
   },
   {
    "id": "i-beet",
@@ -123,9 +138,9 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A deep red root vegetable, the heart of any hill dwarf borscht.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-black-iron-longsword",
@@ -141,9 +156,14 @@
    "weight": "4 lbs",
    "actions": "",
    "props": "1d8 slashing, Versatile 1d10, Serrated",
-   "feat": "[color=#8e171c]Serrated[/color] - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "desc": "A longsword hammered black in the Ash-Forged way of the Black Boughs, its edge left barbed and rough rather than polished. Not beautiful, but brutally honest: its wounds keep bleeding long after the fight.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Serrated",
+     "d": "When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-black-iron-spear",
@@ -159,9 +179,14 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "1d6 piercing, Thrown 20/60, Versatile 1d8, Serrated",
-   "feat": "[color=#8e171c]Serrated[/color] - When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot.",
    "desc": "An Ash-Forged spear with a blackened, barbed iron head on a long haft. Made by the orcs of the Black Boughs to leave wounds that don't close cleanly.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Serrated",
+     "d": "When you roll the highest number on this weapon's damage die, the target gains the Bleeding condition. This feature doesn't take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-block-of-beeswax",
@@ -177,9 +202,9 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A block of golden beeswax, the base of good sealing wax.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bloodclutch-draught",
@@ -195,9 +220,18 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Restorative, Clotting",
-   "feat": "[color=#8e171c]Restorative[/color] - A creature that drinks this regains 1d4 + 1 hit points.\n\n[color=#8e171c]Clotting[/color] - A Bleeding creature that drinks this removes the Bleeding condition.",
    "desc": "A dark draught brewed with troll's blood by the warren shamans of the Ashblood. It heals a little and stops bleeding at once, so warriors carry it into every fight with a serrated blade.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Restorative",
+     "d": "A creature that drinks this regains 1d4 + 1 hit points."
+    },
+    {
+     "n": "Clotting",
+     "d": "A Bleeding creature that drinks this removes the Bleeding condition."
+    }
+   ]
   },
   {
    "id": "i-bottle-of-beet-kvass",
@@ -213,9 +247,9 @@
    "weight": "1.5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bottle of sour fermented beet kvass, brewed by hill dwarves.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bowstring",
@@ -231,9 +265,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A waxed string of twisted sinew or linen, made to fit a bow.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bundle-of-charcoal-root",
@@ -249,9 +283,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bundle of black, chalky roots that soak up poison in the gut.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bundle-of-dill",
@@ -267,9 +301,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bundle of fresh dill with a sharp, bright smell.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bundle-of-feathers",
@@ -285,9 +319,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A tied bundle of goose and crow feathers for fletching arrows or cutting quills.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bundle-of-herbs",
@@ -303,9 +337,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bundle of thyme, sage and rosemary from a kitchen garden.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bundle-of-hickory-chips",
@@ -321,9 +355,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A sack of dry hickory chips. Smoldered under meat, they give jerky its flavor and keep it from spoiling.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-bundle-of-yarrow",
@@ -339,9 +373,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bundle of dried yarrow, the soldier's herb. Pressed into a cut, it slows the bleeding.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-charcoal-bundle",
@@ -357,9 +391,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A tied bundle of charcoal that burns hot and clean. Forges need it, and Ash-Forged smiths blacken their iron with it.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-clotting-salve",
@@ -375,9 +409,14 @@
    "weight": "0.3 lbs",
    "actions": "",
    "props": "Staunching",
-   "feat": "[color=#8e171c]Staunching[/color] - Apply this to yourself or a creature within 5 ft. to end the Bleeding condition.",
    "desc": "A thick paste of yarrow and chalk in a small tin. Spread on a wound, it stops bleeding in moments.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Staunching",
+     "d": "Apply this to yourself or a creature within 5 ft. to end the Bleeding condition."
+    }
+   ]
   },
   {
    "id": "i-counterweight",
@@ -393,9 +432,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A shaped weight of lead used to balance traps, drawbridges and hidden doors.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-crossguard",
@@ -411,9 +450,9 @@
    "weight": "0.8 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "The forged iron bar between a sword's blade and grip. It keeps an enemy's edge off the wielder's fingers.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-cut-of-meat",
@@ -429,9 +468,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A fresh cut of beef, mutton or venison. Use it quickly, or salt it and smoke it.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-deepvalley-borscht",
@@ -447,9 +486,18 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "Hearty, Fortifying",
-   "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\nFortifying - A creature that eats this has advantage on Constitution saving throws until its next rest or camp.",
    "desc": "A deep red hill dwarf borscht of beets, cabbage, meat and dill, soured with beet kvass. Generations of dwarven soldiers have marched to war on a belly full of it.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Hearty",
+     "d": "A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank."
+    },
+    {
+     "n": "Fortifying",
+     "d": "A creature that eats this has advantage on Constitution saving throws until its next rest or camp."
+    }
+   ]
   },
   {
    "id": "i-dragonbrood-charm",
@@ -465,9 +513,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "Neck",
-   "feat": "",
    "desc": "A Dragonkin scale set in silver wire and hung on a silver chain. Among the Dragonkin, giving one of your own scales means \"I'd guard you like treasure,\" so few are ever made.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-dragonkin-scale",
@@ -483,9 +531,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A single scale from one of the Dragonkin, given only as a promise of protection. It's never sold lightly.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-duskcap-mushroom",
@@ -501,9 +549,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A grey mushroom from the lightless deep. A sliver brings sleep; more brings worse.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-dwarven-iron-battleaxe",
@@ -519,9 +567,14 @@
    "weight": "8 lbs",
    "actions": "",
    "props": "1d8 slashing, Versatile 1d10, Dwarven Durability",
-   "feat": "[color=#8e171c]Dwarven Durability[/color] - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "desc": "A heavy, broad-bladed axe on a long ash haft, Mountain-Forged so it never rusts, corrodes or breaks. Every dwarf child learns the axe before the pick, and this is the axe they learn on.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Dwarven Durability",
+     "d": "This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-dwarven-iron-hand-axe",
@@ -537,9 +590,14 @@
    "weight": "4 lbs",
    "actions": "",
    "props": "1d6 slashing, Light, Thrown 20/60, Dwarven Durability",
-   "feat": "Dwarven Durability - This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot.",
    "desc": "A hand axe forged in the Mountain-Forged tradition, its head bonded so tightly to the haft that rust, acid and sundering blows can't touch it. Dwarves make them to outlast their owners, and their grandchildren's owners too.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Dwarven Durability",
+     "d": "This weapon can't be damaged by rust, acid, or sundering effects. This feature doesn't take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-flask-of-lamp-oil",
@@ -555,9 +613,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A flask of thick, flammable lamp oil.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-flask-of-spring-water",
@@ -573,9 +631,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A flask of clear water drawn straight from a spring. Alchemists swear it works better than well water.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-flask-of-troll-s-blood",
@@ -591,9 +649,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A flask of dark troll's blood that still tries to clot and knit. Taking it from the troll is the hard part.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-flask-of-water",
@@ -609,9 +667,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A stoppered flask of clean water.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-flax-bundle",
@@ -627,9 +685,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bundle of retted flax stalks, ready to be spun and woven into linen.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-forged-document",
@@ -645,9 +703,14 @@
    "weight": "0.3 lbs",
    "actions": "",
    "props": "Forgery DC X",
-   "feat": "Forgery (DC X) - This document appears genuine. A creature examining it must succeed on an Investigation check against DC X to notice it’s forged.",
    "desc": "A letter, writ, legal document or royal decree that looks genuine. How long it fools anyone depends on how good the forger was.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Forgery (DC X)",
+     "d": "This document appears genuine. A creature examining it must succeed on an Investigation check against DC X to notice it’s forged."
+    }
+   ]
   },
   {
    "id": "i-glass-vial",
@@ -663,9 +726,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small corked glass vial for potions, draughts and inks.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-glowcap-mushroom",
@@ -681,9 +744,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pale mushroom that gives off a soft blue glow, even after it's picked.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-gold-ingot",
@@ -699,9 +762,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small, heavy ingot of pure gold. Worth a fortune in coin, and more in the right jeweler's hands.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-hardwood-plank",
@@ -717,9 +780,9 @@
    "weight": "4 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A seasoned plank of oak or maple. Dense and strong enough for handles and tool hafts.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-harvest-stew",
@@ -735,9 +798,18 @@
    "weight": "1.5 lbs",
    "actions": "",
    "props": "Hearty, Filling",
-   "feat": "[color=#8e171c]Hearty[/color] - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.\n\n[color=#8e171c]Filling[/color] - A creature that eats this gains 1 extra slot in its Action Pool until its next rest or camp. This slot can only hold Action Points or Magic Points, never Exhaustion Points.",
    "desc": "A thick stew of root vegetables, meat and herbs, slow-cooked in a pot. Filling enough to keep a fighter going until the next camp.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Hearty",
+     "d": "A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank."
+    },
+    {
+     "n": "Filling",
+     "d": "A creature that eats this gains 1 extra slot in its Action Pool until its next rest or camp. This slot can only hold Action Points or Magic Points, never Exhaustion Points."
+    }
+   ]
   },
   {
    "id": "i-head-of-cabbage",
@@ -753,9 +825,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A firm head of green cabbage.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-healing-potion",
@@ -771,9 +843,14 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Restorative",
-   "feat": "[color=#8e171c]Restorative[/color] - A creature that drinks this regains 2d4 + 2 hit points.",
    "desc": "A carefully brewed potion of redcap, yarrow and spring water. Stronger than any draught, for wounds worse than a scratch.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Restorative",
+     "d": "A creature that drinks this regains 2d4 + 2 hit points."
+    }
+   ]
   },
   {
    "id": "i-hearthfire-bread",
@@ -789,9 +866,14 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "Hearty",
-   "feat": "Hearty - A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.",
    "desc": "A round loaf of honeyed bread baked over the campfire. Halflings say a party that shares its bread comes home; this loaf is hearty enough to ease exhaustion.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Hearty",
+     "d": "A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank."
+    }
+   ]
   },
   {
    "id": "i-hillbrand-ring",
@@ -807,9 +889,14 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Rings, Weighted Band",
-   "feat": "[color=#8e171c]Weighted Band[/color] - Your unarmed attacks deal +1 bludgeoning damage. If you wear two Hillbrand Rings, the bonus becomes +2.",
    "desc": "A heavy gold-and-silver wedding band from the Hills of Moruk, where the midwives who wear them are known for their arms. It adds real weight to an unarmed punch.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Weighted Band",
+     "d": "Your unarmed attacks deal +1 bludgeoning damage. If you wear two Hillbrand Rings, the bonus becomes +2."
+    }
+   ]
   },
   {
    "id": "i-honeycomb",
@@ -825,9 +912,9 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A dripping slab of wild honeycomb. Halflings bake it into their hearthfire bread.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-arrowhead",
@@ -843,9 +930,9 @@
    "weight": "0.02 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small, sharpened iron point, ready to be fitted to an arrow shaft.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-bar",
@@ -861,9 +948,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A rough bar of smelted iron, the backbone of every smithy. Blades, rivets, buckles and gears all start here.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-buckle",
@@ -879,9 +966,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A thick, sturdy buckle made to hold a quiver, a pack or a breastplate in place.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-dagger",
@@ -897,9 +984,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "1d4 piercing, Finesse, Light, Thrown 20/60",
-   "feat": "",
    "desc": "A short, double-edged iron blade, light enough to hide in a boot and balanced enough to throw. Every smith's first weapon, and the one they're judged by.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-gear",
@@ -915,9 +1002,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small toothed wheel of hammered iron. Two or more together make a mechanism.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-hand-axe",
@@ -933,9 +1020,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "1d6 slashing, Light, Thrown 20/60",
-   "feat": "",
    "desc": "A short iron axe on an ash haft, as handy for splitting firewood as it is for splitting shields. Light enough to throw, sturdy enough to swing all day.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-mv62433jz13p",
@@ -951,9 +1038,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "1d8 slashing, Versatile 1d10",
-   "feat": "",
    "desc": "A straight, double-edged iron sword with a cross-shaped hilt, long enough to keep foes at a distance and light enough for one hand. The plain, reliable weapon of soldiers, guards and sellswords everywhere.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-rivet",
@@ -969,9 +1056,9 @@
    "weight": "0.05 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small iron pin with a domed head. It holds axe heads to hafts and plates to straps.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-shortsword",
@@ -987,9 +1074,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "1d6 piercing, Finesse, Light",
-   "feat": "",
    "desc": "A short, straight iron sword built for quick thrusts in close quarters. A well-balanced one moves with its wielder instead of fighting them.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-iron-spring",
@@ -1005,9 +1092,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A coil of tempered iron wire that stores force until it's released. Found in locks, traps and clever little doors.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-large-axe-haft",
@@ -1023,9 +1110,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A long, thick ash haft made for two-handed battleaxes. Dwarves pay well for good ones.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-large-leather-quiver",
@@ -1041,9 +1128,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "Holds 40 arrows or bolts",
-   "feat": "",
    "desc": "A deep leather quiver with a buckled strap that holds 40 arrows or bolts. Dungeon archers want the big one, because nobody down there is selling arrows.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-lead-ingot",
@@ -1059,9 +1146,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A dull, heavy ingot of soft lead. Tinkerers pour it into shot and counterweights.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-lead-shot",
@@ -1077,9 +1164,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small, heavy ball of cast lead, the ammunition that actually does the work when a firearm goes off.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-leather-bracers",
@@ -1095,9 +1182,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "Arms, Light, 5% Armor",
-   "feat": "",
    "desc": "Stiff leather guards laced around the forearms. An archer's first lesson is the bowstring slapping their wrist; their second is buying a pair of these.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-leather-jerkin",
@@ -1113,9 +1200,9 @@
    "weight": "5 lbs",
    "actions": "",
    "props": "Torso, Light, 5% Armor",
-   "feat": "",
    "desc": "A sleeveless leather vest lined with linen. Tough on the outside and comfortable on the inside, so it can be worn for days on the road.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-leather-quiver",
@@ -1131,9 +1218,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "Holds 20 arrows or bolts",
-   "feat": "",
    "desc": "A leather quiver that holds 20 arrows or bolts. Enough for a hunt, a skirmish, or one very bad afternoon.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-leather-strip",
@@ -1149,9 +1236,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A narrow strip of tanned leather for wrapping grips, binding hafts and making straps.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-leather-sword-sheath",
@@ -1167,9 +1254,14 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Other, Quick Draw 1",
-   "feat": "[color=#8e171c]Quick Draw 1[/color] - While you wear this Sheath with a sword sheathed in it, you gain 1 additional Action Point at the start of your first turn in a combat. This Action Point (AP) can only be spent on melee weapon attacks. You can only benefit from one item with the Quick Draw feature.",
    "desc": "A fitted leather sheath with iron buckles, shaped so a sword slides out cleanly. It puts the blade back in the hand before the wearer has finished reaching for it.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Quick Draw 1",
+     "d": "While you wear this Sheath with a sword sheathed in it, you gain 1 additional Action Point at the start of your first turn in a combat. This Action Point (AP) can only be spent on melee weapon attacks. You can only benefit from one item with the Quick Draw feature."
+    }
+   ]
   },
   {
    "id": "i-linen-bolt",
@@ -1185,9 +1277,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A rolled bolt of plain linen cloth. Tailors cut it into hoods, linings and gambesons.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-linen-hood",
@@ -1203,9 +1295,9 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Head, Clothing, 3% Armor",
-   "feat": "",
    "desc": "A simple linen hood that keeps out the rain, the cold and the eyes of strangers.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-livingwood-quarterstaff",
@@ -1221,9 +1313,14 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "1d6 bludgeoning, Finesse, Versatile 1d8, Livingwood",
-   "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
    "desc": "A staff of silverbark, shaped by elves from a living branch the tree agreed to give. It weighs half as much as a common staff, never rots or warps, and slowly mends its own nicks and cracks.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Livingwood",
+     "d": "This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-livingwood-shortbow",
@@ -1239,9 +1336,14 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "1d6 piercing, Ammunition 100/400, Two-Handed, Livingwood",
-   "feat": "Livingwood - This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
    "desc": "A shortbow grown, not cut, from a living silverbark branch and finished by an elven bowyer. It's lighter, shoots farther than a common bow, and heals its own small damage.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Livingwood",
+     "d": "This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-lockpick",
@@ -1257,9 +1359,14 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "Picking",
-   "feat": "[color=#8e171c]Picking[/color] - You can use a lockpick to make a Thievery check to open a lock. If the check fails, the lockpick breaks and can’t be used again. Without a lockpick or a similar tool, you can’t attempt to pick a lock.",
    "desc": "A thin, bent iron pick with a leather-wrapped grip, used to open locks without a key. A failed attempt snaps it.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Picking",
+     "d": "You can use a lockpick to make a Thievery check to open a lock. If the check fails, the lockpick breaks and can’t be used again. Without a lockpick or a similar tool, you can’t attempt to pick a lock."
+    }
+   ]
   },
   {
    "id": "i-lodestone",
@@ -1275,9 +1382,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A naturally magnetic stone that always tugs toward its twin. Enchanters use it to call thrown weapons home.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-long-haft",
@@ -1293,9 +1400,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A long, straight wooden pole for spears and other polearms.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-lump-of-sulfur",
@@ -1311,9 +1418,9 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A yellow, foul-smelling lump of brimstone dug from near hot springs and volcanic vents.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-minor-healing-draught",
@@ -1329,9 +1436,14 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Restorative",
-   "feat": "[color=#8e171c]Restorative[/color] - A creature that drinks this regains 1d6 + 1 hit points.",
    "desc": "A small vial of bitter redcap brew that tastes like a cellar floor. It closes minor wounds before the drinker finishes complaining about the taste.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Restorative",
+     "d": "A creature that drinks this regains 1d6 + 1 hit points."
+    }
+   ]
   },
   {
    "id": "i-night-brew",
@@ -1347,9 +1459,14 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Slumbering",
-   "feat": "[color=#8e171c]Slumbering[/color] - A humanoid that drinks this must succeed on a DC 14 Constitution saving throw or fall Unconscious for 1 hour. The creature wakes early if it takes damage or another creature uses an action to shake it awake. The brew is colorless and nearly tasteless when mixed into another drink.",
    "desc": "A colorless, nearly tasteless sleeping brew of the dark elf Matriarchs. Slipped into a cup of wine, it puts a humanoid to sleep for an hour, and sometimes for good.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Slumbering",
+     "d": "A humanoid that drinks this must succeed on a DC 14 Constitution saving throw or fall Unconscious for 1 hour. The creature wakes early if it takes damage or another creature uses an action to shake it awake. The brew is colorless and nearly tasteless when mixed into another drink."
+    }
+   ]
   },
   {
    "id": "i-padded-gambeson",
@@ -1365,9 +1482,9 @@
    "weight": "6 lbs",
    "actions": "",
    "props": "Torso, Light, 5% Armor",
-   "feat": "",
    "desc": "A thick coat of quilted linen and wool. Worn alone it turns aside glancing blows; worn under plate, it's what keeps knights alive.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-piece-of-chalk",
@@ -1383,9 +1500,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A stick of white chalk. Abjurers draw their warding circles with it.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-ammonia-salt",
@@ -1401,9 +1518,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of sharp-smelling salt crystals. One whiff makes the eyes water.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-arcane-dust",
@@ -1419,9 +1536,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of glittering dust left behind when magic is spent. Every enchantment starts with some.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-chalk",
@@ -1437,9 +1554,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of powdered white chalk, used to thicken salves and whiten parchment.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-pine-resin",
@@ -1455,9 +1572,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of sticky golden pine resin, used to seal wrappings and stiffen wax.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-red-ochre",
@@ -1473,9 +1590,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of red earth pigment that colors sealing wax.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-salt",
@@ -1491,9 +1608,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of coarse salt. It seasons a meal and keeps meat from spoiling.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-saltpeter",
@@ -1509,9 +1626,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of white crystals scraped from cave walls. Mixed with sulfur, it makes things burn fast.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-soot",
@@ -1527,9 +1644,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of black soot scraped from a blackened cooking pot. The secret of lampblack ink.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-sulfuric-powder",
@@ -1545,9 +1662,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of yellow-grey alchemical powder that flares at the first spark. Every hedge-wizard's Firebolt owes something to it.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pinch-of-tree-gum",
@@ -1563,9 +1680,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pinch of hardened tree gum that binds ink and lets it flow.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pommel",
@@ -1581,9 +1698,9 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A weighted iron cap for the end of a sword's grip. It balances the blade and makes a fine bludgeon in a pinch.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-pouch-of-fire-peppers",
@@ -1599,9 +1716,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A pouch of small red peppers hot enough to warm a dwarf's bones.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-quarterstaff",
@@ -1617,9 +1734,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "1d6 bludgeoning, Versatile 1d8",
-   "feat": "",
    "desc": "A sturdy length of ash wood, shod at both ends. A walking stick on the road, and a reason to keep walking for anyone who tries to stop you.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-quill",
@@ -1635,9 +1752,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A cut and sharpened feather pen. Goose for letters, crow for fine lines.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-redcap-mushroom",
@@ -1653,9 +1770,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A red-capped mushroom that grows in damp cellars. Bitter, but it helps wounds close.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-sack-of-flour",
@@ -1671,9 +1788,9 @@
    "weight": "5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small sack of milled wheat flour, the start of bread and hardtack.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-sack-of-root-vegetables",
@@ -1689,9 +1806,9 @@
    "weight": "5 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A sack of potatoes, carrots and turnips, enough for a pot of stew.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-sheet-of-parchment",
@@ -1707,9 +1824,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A sheet of scraped and chalked hide, made to outlast the one who writes on it.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-shortbow",
@@ -1725,9 +1842,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "1d6 piercing, Ammunition 80/320, Two-Handed",
-   "feat": "",
    "desc": "A compact yew bow, short enough to draw from horseback or a crowded corridor. Yew remembers the shape it's given, so a well-made one keeps its aim for years.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silk-bolt",
@@ -1743,9 +1860,9 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bolt of spider silk from the deep, stronger than steel thread and nearly weightless.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silver-arrowhead",
@@ -1761,9 +1878,9 @@
    "weight": "0.02 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A silver arrow point for creatures that shrug off iron, such as werewolves and restless dead.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silver-chain",
@@ -1779,9 +1896,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A fine chain of hundreds of tiny silver links. It hangs holy symbols and charms.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silver-holy-symbol",
@@ -1797,9 +1914,14 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "Neck, Sacred",
-   "feat": "Sacred - This item counts as a holy symbol for any spell or feature that requires one.",
    "desc": "A silver emblem of a god on a fine silver chain. It counts as a holy symbol for any spell or feature that needs one.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Sacred",
+     "d": "This item counts as a holy symbol for any spell or feature that requires one."
+    }
+   ]
   },
   {
    "id": "i-silver-ingot",
@@ -1815,9 +1937,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bright ingot of refined silver. Jewelers draw it into wire, and smiths know it bites deep into lycanthropes and fiends.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silver-nugget",
@@ -1833,9 +1955,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A raw nugget of silver, pried from a vein or panned from a cold stream. A common focus for warding enchantments.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silver-ring",
@@ -1851,9 +1973,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "Rings",
-   "feat": "",
    "desc": "A plain band of drawn silver wire. Enchanters see an empty vessel; lovers see a question.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silver-wire",
@@ -1869,9 +1991,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A coil of silver drawn thinner than a hair. Jewelers bend it into rings, chains and settings.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-silverbark-stave",
@@ -1887,9 +2009,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A living branch of silverbark, freely given by an elven grove. It never quite stops growing.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-small-handle",
@@ -1905,9 +2027,9 @@
    "weight": "0.3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A short, shaped wooden grip for daggers and knives.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-small-iron-buckle",
@@ -1923,9 +2045,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A light iron buckle for sheaths, pouches and belts.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-small-tin",
@@ -1941,9 +2063,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A small lidded tin for salves and smelling salts.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-smelling-salts",
@@ -1959,9 +2081,14 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "Rousing",
-   "feat": "[color=#8e171c]Rousing[/color] - Holding this under the nose of a creature within 5 ft. ends the Dazed condition, or wakes it if it’s Unconscious but has at least 1 hit point.",
    "desc": "A small tin of sharp ammonia salts and mint. One whiff under the nose clears a dazed head or wakes the unconscious.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Rousing",
+     "d": "Holding this under the nose of a creature within 5 ft. ends the Dazed condition, or wakes it if it’s Unconscious but has at least 1 hit point."
+    }
+   ]
   },
   {
    "id": "i-smoked-jerky",
@@ -1977,9 +2104,18 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Preserved, Quick Bite",
-   "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten during a rest or at camp without a Cooking Fire.\n\nQuick Bite - You can eat this outside of a rest by spending 1 AP, regaining hit points equal to the cook’s Cooking Rank. A creature can only benefit from one Quick Bite between rests.",
    "desc": "Strips of salted meat smoked over hickory chips. It keeps for two weeks and can be eaten on the run, one quick bite at a time.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Preserved",
+     "d": "This food doesn’t spoil for 2 weeks and can be eaten during a rest or at camp without a Cooking Fire."
+    },
+    {
+     "n": "Quick Bite",
+     "d": "You can eat this outside of a rest by spending 1 AP, regaining hit points equal to the cook’s Cooking Rank. A creature can only benefit from one Quick Bite between rests."
+    }
+   ]
   },
   {
    "id": "i-softwood-plank",
@@ -1995,9 +2131,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A light plank of pine or cedar. Easy to split and shave into arrow shafts.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-songbird-feather",
@@ -2013,9 +2149,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bright feather from a singing bird. Enchanters say it still remembers the song.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-spell-scroll",
@@ -2031,9 +2167,14 @@
    "weight": "0.3 lbs",
    "actions": "",
    "props": "Scroll",
-   "feat": "Scroll - When you craft this, choose one spell you know, one language you know, and the scroll’s Rank (X). X can’t exceed your Scribing Tier’s maximum or your own Rank in that spell. If you meet the TC, X increases by 1. The spell is written into the scroll in that language. A spellcaster who knows the language can read the scroll to cast the spell, following the Spell Scroll rules. You must be capable of casting the spell in order to copy it to a scroll.",
    "desc": "A sheet of parchment holding a single spell, written in a chosen language at a chosen rank. It's a spell asleep on a page, and it crumbles to ash once read.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Scroll",
+     "d": "When you craft this, choose one spell you know, one language you know, and the scroll’s Rank (X). X can’t exceed your Scribing Tier’s maximum or your own Rank in that spell. If you meet the TC, X increases by 1. The spell is written into the scroll in that language. A spellcaster who knows the language can read the scroll to cast the spell, following the Spell Scroll rules. You must be capable of casting the spell in order to copy it to a scroll."
+    }
+   ]
   },
   {
    "id": "i-spiced-ember-soup",
@@ -2049,9 +2190,14 @@
    "weight": "1 lbs",
    "actions": "",
    "props": "Warming",
-   "feat": "Warming - A creature that eats this has advantage on saving throws against extreme cold until its next rest or camp.",
    "desc": "A fiery soup of root vegetables and fire peppers. Its warmth lingers long after the bowl is empty, keeping out the worst of the cold.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Warming",
+     "d": "A creature that eats this has advantage on saving throws against extreme cold until its next rest or camp."
+    }
+   ]
   },
   {
    "id": "i-sprig-of-mint",
@@ -2067,9 +2213,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A fresh sprig of mint, for flavor and a clear head.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-stick-of-sealing-wax",
@@ -2085,9 +2231,9 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A stick of red sealing wax for closing letters and pressing seals.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-tanned-hide",
@@ -2103,9 +2249,9 @@
    "weight": "4 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A whole animal hide, cured and softened. Leatherworkers cut it into strips, bracers and quivers.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-thread-spool",
@@ -2121,9 +2267,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A wooden spool wound with strong waxed thread.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-traveler-s-hardtack",
@@ -2139,9 +2285,18 @@
    "weight": "0.5 lbs",
    "actions": "",
    "props": "Preserved, Nourishing",
-   "feat": "Preserved - This food doesn’t spoil for 2 weeks and can be eaten at camp or during a rest without a Cooking Fire.\n\nNourishing - A creature that eats this during a rest or at camp regains hit points equal to the cook’s Cooking Rank.",
    "desc": "Dense, salted biscuits that won't spoil for two weeks and can be eaten without a fire. It won't win any friends at the table, but it keeps adventurers alive.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Preserved",
+     "d": "This food doesn’t spoil for 2 weeks and can be eaten at camp or during a rest without a Cooking Fire."
+    },
+    {
+     "n": "Nourishing",
+     "d": "A creature that eats this during a rest or at camp regains hit points equal to the cook’s Cooking Rank."
+    }
+   ]
   },
   {
    "id": "i-vial-of-cave-spider-venom",
@@ -2157,9 +2312,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "Clear venom from a giant cave spider. Colorless, nearly tasteless, and a favorite of dark elf apothecaries.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-vial-of-lampblack-ink",
@@ -2175,9 +2330,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A vial of deep black ink made from soot and gum. Scrolls and forgeries both start here.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-vial-of-snake-venom",
@@ -2193,9 +2348,9 @@
    "weight": "0.1 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "Venom milked from a poisonous snake. In the right dose, it's the cure for its own poison.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-whisperweave-boots",
@@ -2211,9 +2366,14 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "Feet, Clothing, 3% Armor, Whisperweave",
-   "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "desc": "Soft boots stitched from broodmother silk, with soles that never make a sound. In the deep, whoever is heard first dies first; these make sure it isn't you.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Whisperweave",
+     "d": "This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-whisperweave-hood",
@@ -2229,9 +2389,14 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "Head, Clothing, 3% Armor, Whisperweave",
-   "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "desc": "A hood of dark elf spider silk that makes no sound, can't be torn or stained, and weighs nothing at all. It doesn't hide the wearer's face so much as convince the dark they were never there.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Whisperweave",
+     "d": "This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-whisperweave-mantle",
@@ -2247,9 +2412,14 @@
    "weight": "0 lbs",
    "actions": "",
    "props": "Shoulders, Light, 5% Armor, Whisperweave",
-   "feat": "Whisperweave - This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
    "desc": "A shoulder mantle woven from silk the broodmothers spin, stronger than steel and lighter than breath. It makes no sound, never tears or stains, and weighs nothing.",
-   "extra": []
+   "extra": [],
+   "pdefs": [
+    {
+     "n": "Whisperweave",
+     "d": "This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot."
+    }
+   ]
   },
   {
    "id": "i-wool-bolt",
@@ -2265,9 +2435,9 @@
    "weight": "3 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A bolt of thick woven wool. Warm, padded and forgiving.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-wrapped-grip",
@@ -2283,9 +2453,9 @@
    "weight": "0.2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "Leather strips wound tight around a core and sealed with pine resin, so a sweaty palm keeps hold of the sword.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   },
   {
    "id": "i-yew-stave",
@@ -2301,9 +2471,9 @@
    "weight": "2 lbs",
    "actions": "",
    "props": "",
-   "feat": "",
    "desc": "A springy stave of yew, heartwood on one side and sapwood on the other. The bowyer's favorite.",
-   "extra": []
+   "extra": [],
+   "pdefs": []
   }
  ],
  "recipes": [

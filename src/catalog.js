@@ -1,8 +1,8 @@
 /* Items and Crafting pages. Both read and write crawl-items.json:
      {v:2, items:[item], recipes:[recipe]}
-     item   = {id, n, nc, cat, sub, slot, badge, rarity, magic, value, weight, actions, props, feat, desc, extra:[{k,v}]}
+     item   = {id, n, nc, cat, sub, slot, badge, rarity, magic, value, weight, actions, props, pdefs:[{n,d}], desc, extra:[{k,v}]}
               nc: name color (#hex or ""); magic: true if the item is magical
-              actions: weapon actions; props: the properties line; feat: what each property does
+              actions: weapon actions; props: the properties line; pdefs: Properties Defined (name shown in red, then what it does)
               badge: the flask badge, meaning it still needs playtesting
               cat: Weapon | Ammunition | Armor | Consumable | Crafting Material | Magic Item
               sub: weapon type, armor type, or a group name; slot: armor slot
@@ -37,11 +37,18 @@ const newId = p => p + "-" + Date.now().toString(36) + Math.random().toString(36
 const extras = x => list(x).map(r => ({ k: str(r && r.k), v: str(r && r.v) })).filter(r => r.k || r.v);
 const qtys = x => list(x).map(r => ({ item: str(r && r.item), qty: Math.max(1, Math.round(+(r && r.qty) || 1)) })).filter(r => r.item);
 const catOf = c => CATS.find(x => x[0] === c);
+/* old "Name - what it does" paragraphs become Properties Defined rows */
+function pdefsFrom(t) {
+  return String(t || "").split(/\n\s*\n/).map(x => x.trim()).filter(Boolean).map(x => {
+    const m = x.match(/^(.{1,60}?)\s+-\s+([\s\S]+)$/);
+    return m ? { n: m[1].replace(/\[\/?color[^\]]*\]/gi, "").trim(), d: m[2].trim() } : { n: "", d: x };
+  });
+}
 function normItem(i) {
   const cat = catOf(str(i.cat)) ? str(i.cat) : (/weapon/i.test(i.type) ? "Weapon" : /armor|shield/i.test(i.type) ? "Armor" : /potion|food/i.test(i.type) ? "Consumable" : "Crafting Material");
   return {
     id: str(i.id) || newId("i"), n: str(i.n), nc: HEX.test(str(i.nc)) ? str(i.nc) : "", cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, rarity: str(i.rarity), magic: !!i.magic, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
-    props: str(i.props && !Array.isArray(i.props) ? i.props : ""), feat: str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : "")), desc: str(i.desc), extra: extras(i.extra)
+    props: str(i.props && !Array.isArray(i.props) ? i.props : ""), pdefs: Array.isArray(i.pdefs) ? i.pdefs.map(x => ({ n: str(x && x.n), d: str(x && x.d) })).filter(x => x.n || x.d) : pdefsFrom(str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : ""))), desc: str(i.desc), extra: extras(i.extra)
   };
 }
 function normRecipe(r) {
@@ -83,7 +90,7 @@ function score(x, q) {
   const linked = (KIND === "items" ? [x.cat, x.sub, x.slot, x.rarity, x.magic ? "magic" : ""] : [x.prof, x.kind, ...[...x.makes, ...x.ing].map(r => itemName(r.item))]).map(lc);
   if (linked.includes(q)) return 60;
   if (linked.some(t => t.includes(q))) return 50;
-  const text = lc(plainText(KIND === "items" ? [x.value, x.weight, x.actions, x.props, x.feat, x.desc, ...x.extra.map(r => r.k + " " + r.v)].join(" ")
+  const text = lc(plainText(KIND === "items" ? [x.value, x.weight, x.actions, x.props, ...x.pdefs.map(p => p.n + " " + p.d), x.desc, ...x.extra.map(r => r.k + " " + r.v)].join(" ")
     : [x.pre, x.matNote, x.applies, x.ws, x.time, x.props, x.grants, x.feat, x.quote, ...x.extra.map(r => r.k + " " + r.v)].join(" ")));
   if (!text.includes(q)) return 0;
   return wordStart(text) ? 20 : 10;
@@ -202,7 +209,7 @@ function itemDetail(i) {
   const mat = i.cat === "Crafting Material";
   return (mat ? "" : sec("Properties", i.props ? `<p class="rl">${richInline(i.props)}</p>` : none)) +
     sec("Description", (i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
-    (!mat && i.feat ? sec("Properties Defined", `<div class="rfeat">${paras(i.feat)}</div>`) : "") +
+    (!mat && i.pdefs.length ? sec("Properties Defined", `<div class="rfeat">${i.pdefs.map(p => `<p>${p.n ? `<span class="pdn">${esc(p.n)}</span> - ` : ""}${richInline(p.d)}</p>`).join("")}</div>`) : "") +
     (!mat && (isWeapon(i) || i.actions) ? sec("Weapon actions", i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : none) : "") +
     (made.length ? sec("Crafting recipe", recipeBlock) : ADMIN && !i._new ? sec("Crafting recipe", `<p class="muted">No crafting recipe yet. <a class="ilink" href="crafting.html?make=${encodeURIComponent(i.id)}">Create one on the Crafting page</a></p>`) : "") +
     (used.length ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "") +
@@ -257,6 +264,7 @@ function nameColorPicker(nc) {
     NAME_COLORS.map(([c, n]) => `<button type="button" class="ncsw${c === nc ? " on" : ""}" data-nc="${c}" style="--c:${c || "transparent"}" title="${n}" aria-label="${n}" aria-pressed="${c === nc}">${c ? "" : "✕"}</button>`).join("") +
     `<input type="color" class="ncpick" value="${nc || "#8e171c"}" aria-label="Pick any name color" title="Pick any color"><input type="hidden" data-k="nc" value="${esc(nc)}"></div>`;
 }
+const pdefRow = x => `<div class="prow"><input type="text" class="pn" value="${esc(x.n)}" placeholder="Property name, e.g. Serrated" aria-label="Property name" autocomplete="off"><textarea class="pd" rows="2" placeholder="What the property does" aria-label="What the property does">${esc(x.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
 const topBtns = `<div class="gbtns gtop"><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>`;
 function itemForm(i) {
   const id = k => `c${k}-${i._id}`, d = drafts.get(i._id) || i;
@@ -277,10 +285,11 @@ ${fld(id("weight"), "Weight", "", inp(id("weight"), "weight", d.weight, ' placeh
 </div>
 ${d.cat === "Crafting Material" ? "" : fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
-${d.cat === "Crafting Material" ? "" : fld(id("feat"), "Properties Defined", "What each property does. Leave a blank line between paragraphs.", area(id("feat"), "feat", d.feat, 3))}
+${d.cat === "Crafting Material" ? "" : `<div class="glab">Properties Defined <small>The property's name shows in red, followed by what it does.</small></div><div class="plist">${(d.pdefs || []).map(pdefRow).join("")}</div><button type="button" class="btn padd">Add another property</button>`}
 ${d.cat === "Crafting Material" ? "" : fld(id("actions"), "Weapon actions", d.cat === "Weapon" ? "Leave a blank line between paragraphs." : "Leave empty if the item has none.", area(id("actions"), "actions", d.actions, 3))}
 ${formEnd(i, "item")}</div>`;
 }
+const isCooking = p => /^cook/i.test(String(p || "").trim());
 function recipeForm(r) {
   const id = k => `c${k}-${r._id}`, d = drafts.get(r._id) || { ...r, makes: r.makes.map(m => ({ qty: m.qty, name: itemName(m.item) })), ing: r.ing.map(m => ({ qty: m.qty, name: itemName(m.item) })) };
   return `<div class="gediting gform iform" data-id="${r._id}">
@@ -296,15 +305,13 @@ ${fld(id("pre"), "Prerequisites", "", inp(id("pre"), "pre", d.pre, ' placeholder
 <div class="glab">Material Cost <small>Pick items from the list, or type a new name to create that item.</small></div>
 <div class="qlist qing">${d.ing.map(x => qtyRow(x, "ing")).join("")}</div>
 <button type="button" class="btn qadd" data-q="ing">Add material</button>
-${fld(id("matNote"), "Other materials", "Anything that isn't an item, e.g. plus the spell's own material component.", inp(id("matNote"), "matNote", d.matNote))}
 ${fld(id("applies"), "Applies To", "For modifiers.", inp(id("applies"), "applies", d.applies))}
 <div class="grid3">
 ${fld(id("ws"), "Workstations Required", "", inp(id("ws"), "ws", d.ws))}
 ${fld(id("time"), "Crafting Time", "", inp(id("time"), "time", d.time))}
 ${fld(id("dc"), "Crafting DC", "", inp(id("dc"), "dc", d.dc))}
 ${fld(id("tc"), "TC", "", inp(id("tc"), "tc", d.tc))}
-${fld(id("ql"), "Servings or Batch", "", sel(id("ql"), "ql", d.ql ?? d.qty.l, [["", "None"], ["Servings", "Servings"], ["Batch", "Batch"]]))}
-${fld(id("qv"), "Amount", "", inp(id("qv"), "qv", d.qv ?? d.qty.v, ' placeholder="e.g. 4 (+1 on TC)"'))}
+${isCooking(d.prof) ? fld(id("qv"), "Servings", "", inp(id("qv"), "qv", d.qv ?? d.qty.v, ' placeholder="e.g. 4 (+1 on TC)"')) : fld(id("qv"), "Batch", "How many it makes, if more than one.", inp(id("qv"), "qv", d.qv ?? d.qty.v, ' placeholder="e.g. 2 (+1 on TC)"'))}
 </div>
 <div class="glab">Yield <small>What it makes. Modifiers can leave this empty and use Grants.</small></div>
 <div class="qlist qmakes">${d.makes.map(x => qtyRow(x, "makes")).join("")}</div>
@@ -320,14 +327,15 @@ function readForm(f) {
   d.extra = [...f.querySelectorAll(".xrow")].map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
   const q = c => [...f.querySelectorAll(".qrow." + c)].map(r => ({ qty: +r.querySelector(".qn").value || 1, name: r.querySelector(".qi").value }));
   if (KIND === "recipes") { d.makes = q("makes"); d.ing = q("ing") }
+  else if (f.querySelector(".plist")) d.pdefs = [...f.querySelectorAll(".prow")].map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value }));
   return d;
 }
 function fromDraft(d, x) {
-  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), feat: str(d.feat ?? x.feat), desc: str(d.desc), extra: extras(d.extra) };
+  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
-    ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote), applies: str(d.applies),
-    ws: str(d.ws), time: str(d.time), dc: str(d.dc), tc: str(d.tc), qty: { l: d.ql, v: d.ql ? str(d.qv) : "" }, props: str(d.props), grants: str(d.grants),
+    ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote ?? x.matNote), applies: str(d.applies),
+    ws: str(d.ws), time: str(d.time), dc: str(d.dc), tc: str(d.tc), qty: { l: str(d.qv) ? (isCooking(d.prof) ? "Servings" : "Batch") : "", v: str(d.qv) }, props: str(d.props), grants: str(d.grants),
     feat: str(d.feat), quote: str(d.quote), extra: extras(d.extra), makes: link(d.makes), ing: link(d.ing)
   };
 }
@@ -415,7 +423,7 @@ $("clist").addEventListener("change", ev => {
   }
   if (ev.target.classList.contains("ncpick")) { setNameColor(ev.target.closest(".gediting"), ev.target.value); return }
   const f = ev.target.closest(".gediting");
-  if (f && (ev.target.dataset.k === "cat")) { render(); return }
+  if (f && (ev.target.dataset.k === "cat" || ev.target.dataset.k === "prof")) { render(); return }
   if (f) preview(f);
 });
 $("clist").addEventListener("click", ev => {
@@ -423,7 +431,8 @@ $("clist").addEventListener("click", ev => {
   const f = b.closest(".gediting");
   if (f && b.classList.contains("xadd")) { f.querySelector(".xlist").insertAdjacentHTML("beforeend", extraRow({ k: "", v: "" })); f.querySelector(".xrow:last-child .xk").focus(); return }
   if (f && b.classList.contains("qadd")) { const c = b.dataset.q; f.querySelector(c === "makes" ? ".qmakes" : ".qing").insertAdjacentHTML("beforeend", qtyRow({ qty: 1, name: "" }, c)); f.querySelector(`.qrow.${c}:last-child .qi`).focus(); return }
-  if (f && b.classList.contains("xdel")) { b.closest(".xrow,.qrow").remove(); preview(f); return }
+  if (f && b.classList.contains("xdel")) { b.closest(".xrow,.qrow,.prow").remove(); preview(f); return }
+  if (f && b.classList.contains("padd")) { f.querySelector(".plist").insertAdjacentHTML("beforeend", pdefRow({ n: "", d: "" })); f.querySelector(".prow:last-child .pn").focus(); return }
   if (f && b.classList.contains("ncsw")) { setNameColor(f, b.dataset.nc); return }
   const x = rowOf(b); if (!x) return;
   if (b.classList.contains("itoggle")) {
@@ -458,7 +467,7 @@ $("clist").addEventListener("click", ev => {
       if (!name && !named(d.makes).length) { err("Give the recipe a name, or pick what it makes."); return }
       const created = [];
       for (const r of [...named(d.makes), ...named(d.ing)]) if (!itemByName(r.name) && !created.some(c => lc(c.n) === lc(str(r.name)))) {
-        created.push({ id: newId("i"), n: str(r.name).replace(/\s+/g, " "), nc: "", cat: "Crafting Material", sub: "Other", slot: "", badge: false, rarity: "", magic: false, value: "", weight: "", actions: "", props: "", feat: "", desc: "", extra: [], _id: ++uid });
+        created.push({ id: newId("i"), n: str(r.name).replace(/\s+/g, " "), nc: "", cat: "Crafting Material", sub: "Other", slot: "", badge: false, rarity: "", magic: false, value: "", weight: "", actions: "", pdefs: [], props: "", feat: "", desc: "", extra: [], _id: ++uid });
       }
       items.push(...created);
       Object.assign(x, fromDraft(d, x));
@@ -471,7 +480,7 @@ $("clist").addEventListener("click", ev => {
 $("gAdd").addEventListener("click", () => {
   const f = $("cfilter").value;
   const x = KIND === "items"
-    ? { id: newId("i"), n: "", nc: "", cat: f || "Weapon", sub: "", slot: "", badge: false, rarity: "", magic: f === "Magic Item", value: "", weight: "", actions: "", props: "", feat: "", desc: "", extra: [], _id: ++uid, _new: true }
+    ? { id: newId("i"), n: "", nc: "", cat: f || "Weapon", sub: "", slot: "", badge: false, rarity: "", magic: f === "Magic Item", value: "", weight: "", actions: "", pdefs: [], props: "", feat: "", desc: "", extra: [], _id: ++uid, _new: true }
     : { id: newId("r"), n: "", tier: "Basic", badge: false, kind: "", prof: f || "", pre: "", ing: [], matNote: "", applies: "", ws: "", time: "", dc: "", tc: "", qty: { l: "", v: "" }, makes: [], props: "", grants: "", feat: "", quote: "", extra: [], _id: ++uid, _new: true };
   rows().push(x); editing.add(x._id); open.add(x.id); $("cq").value = ""; render();
   const el = document.querySelector(`.gediting[data-id="${x._id}"]`);

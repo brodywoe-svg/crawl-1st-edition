@@ -12,6 +12,11 @@ import re
 NAV_ITEMS = [
     ("Character Creator", None, None),
     ("Classes", None, None),
+    ("Spells", "index.html", [("All spells", "index.html?show=all"), ("By magic source", None),
+                              ("Arcane", "index.html?source=arcane"), ("Divine", "index.html?source=divine"), ("Primal", "index.html?source=primal"), ("Occult", "index.html?source=occult"),
+                              ("By class", None),
+                              ("Wizard", "index.html?class=wizard"), ("Sorcerer", "index.html?class=sorcerer"), ("Cleric", "index.html?class=cleric"), ("Paladin", "index.html?class=paladin"),
+                              ("Druid", "index.html?class=druid"), ("Warlock", "index.html?class=warlock"), ("Bard", "index.html?class=bard")]),
     ("Crafting", "crafting.html", [("Blacksmithing", "crafting.html?p=blacksmithing"), ("Tailoring", "crafting.html?p=tailoring"), ("Woodworking", "crafting.html?p=woodworking"), ("Cooking", "crafting.html?p=cooking"), ("Alchemy", "crafting.html?p=alchemy"), ("Leatherworking", "crafting.html?p=leatherworking"), ("Scribing", "crafting.html?p=scribing"), ("Tinkering", "crafting.html?p=tinkering"), ("Goldsmithing", "crafting.html?p=goldsmithing"), ("Enchanting", "crafting.html?p=enchanting")]),
     ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Ammunition", "items.html?c=ammunition"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
                              ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items")]),
@@ -44,7 +49,6 @@ def nav_html(active, controls="", sections=("Conditions",)):
     sec = SECTION.get(active)
     parts = [
         '<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks">',
-        f'<a class="navitem navhome" href="index.html"{' aria-current="page"' if active == "spells" else ""}>Spells</a>',
     ]
     for label, href, menu in NAV_ITEMS:
         if href is None:
@@ -57,7 +61,7 @@ def nav_html(active, controls="", sections=("Conditions",)):
         if menu == "glossary":
             items, menu_id = "".join(f'<a href="{section_href(t)}">{html.escape(t)}</a>' for t in sections), ' id="navGlossary"'
         else:
-            items, menu_id = "".join(f'<a href="{h}">{html.escape(t)}</a>' for t, h in menu), ""
+            items, menu_id = "".join(f'<a href="{h}">{html.escape(t)}</a>' if h else f'<span class="navmenuh">{html.escape(t)}</span>' for t, h in menu), ""
         parts.append(
             f'<div class="navdrop"><a class="navitem" href="{href}"{cur} aria-haspopup="true">{label}{CARET}</a>'
             f'<div class="navmenu"{menu_id}>{items}</div></div>'
@@ -90,6 +94,7 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 @media (hover:none){.navdrop:hover .navmenu{display:none}}
 .navmenu a{display:block;padding:10px 12px;border-radius:8px;font:700 .92rem var(--font);color:var(--ink);text-decoration:none}
 .navmenu a:hover,.navmenu a:focus-visible{background:var(--soft);outline:none}
+.navmenuh{display:block;padding:8px 12px 2px;font:800 .62rem var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .navmenu a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 /* NAV_JS steps through these until the links fit on one row beside the buttons */
 .nav-c1 .navitem{padding-inline:9px;letter-spacing:.06em}
@@ -383,6 +388,13 @@ CONDITIONS_CSS = """
 .qrow{display:grid;grid-template-columns:76px 1fr auto;gap:8px}
 .xrow input,.qrow input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
 .gform>.btn{justify-self:start}
+.plist{display:grid;gap:8px}
+.prow{display:grid;grid-template-columns:minmax(120px,200px) 1fr auto;gap:8px;align-items:start}
+.prow input,.prow textarea{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.prow .pn{color:var(--red);font-weight:800}
+.prow textarea{resize:vertical;field-sizing:content;min-height:2.6em;line-height:1.4}
+.pdn{color:var(--red);font-weight:800}
+@media (max-width:600px){.prow{grid-template-columns:1fr}.prow .xdel{justify-self:start}}
 @media (max-width:600px){
   .xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input,.gform select{font-size:16px}
   .ichart{table-layout:fixed}

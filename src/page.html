@@ -386,12 +386,21 @@ let view="All", cls="", original=JSON.stringify(SPELLS), dirty=false, art=null, 
 SPELLS.forEach(s=>s._id=++uid);
 const CLASSES=[["Wizard","Arcane"],["Sorcerer","Arcane"],["Cleric","Divine"],["Paladin","Divine"],["Druid","Primal"],["Warlock","Occult"],["Bard","Occult"]];
 try{const v=localStorage.getItem("crawl-view");if(v&&(v==="All"||TRADS.includes(v)))view=v;const c=localStorage.getItem("crawl-class");if(c&&CLASSES.some(x=>x[0]===c)){cls=c;view="All"}}catch(e){}
+/* the Spells menu links here with ?source=arcane, ?class=wizard or ?show=all */
+try{const q=new URLSearchParams(location.search),src=q.get("source"),cl=q.get("class"),cap=x=>x?x[0].toUpperCase()+x.slice(1).toLowerCase():"";
+  if(q.get("show")==="all"){view="All";cls=""}
+  else if(src&&TRADS.includes(cap(src))){view=cap(src);cls=""}
+  else if(cl&&CLASSES.some(x=>x[0]===cap(cl))){view="All";cls=cap(cl)}
+  if(q.has("show")||q.has("source")||q.has("class"))localStorage.setItem("crawl-view",view),localStorage.setItem("crawl-class",cls);
+}catch(e){}
 function canLearn(s,c){
   const req=(s.f.cls||"").trim();
   if(req) return new RegExp("\\b"+c+"s?\\b","i").test(req);
   const tr=CLASSES.find(x=>x[0]===c)[1]; return s.tags.includes(tr);
 }
-function setFilter(v,c){view=v;cls=c;try{localStorage.setItem("crawl-view",view);localStorage.setItem("crawl-class",cls)}catch(e){}renderCounts();render()}
+function setFilter(v,c){view=v;cls=c;try{localStorage.setItem("crawl-view",view);localStorage.setItem("crawl-class",cls)}catch(e){}
+  if(window.CRAWL_STATIC||window.crawlApp)try{history.replaceState(null,"","index.html"+(cls?"?class="+cls.toLowerCase():view!=="All"?"?source="+view.toLowerCase():""));if(window.crawlNavMark)window.crawlNavMark()}catch(e){}
+  renderCounts();render()}
 try{const o=JSON.parse(sessionStorage.getItem("crawl-open")||"[]");o.forEach(n=>{const s=SPELLS.find(x=>x.n===n);if(s)openSet.add(s._id)})}catch(e){}
 
 for(let i=1;i<=20;i++){const o=document.createElement("option");o.value=i;o.textContent="Level "+i;$("lvl").appendChild(o)}
