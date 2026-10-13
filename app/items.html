@@ -1,0 +1,993 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}@font-face{font-family:"Montserrat";font-weight:600;font-style:normal;src:url(fonts/montserrat-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Montserrat";font-weight:600;font-style:italic;src:url(fonts/montserrat-latin-600-italic.woff2) format("woff2")}@font-face{font-family:"Montserrat";font-weight:700;font-style:normal;src:url(fonts/montserrat-latin-700-normal.woff2) format("woff2")}@font-face{font-family:"Montserrat";font-weight:800;font-style:normal;src:url(fonts/montserrat-latin-800-normal.woff2) format("woff2")}</style><script src="html2canvas.min.js"></script></head><body><title>Crawl Items</title><script>try{if(localStorage.getItem("crawl-mode")==="dark")document.documentElement.setAttribute("data-mode","dark")}catch(e){}</script><style>
+/* Layout: black-and-white spell cards — a filter bar over a list of collapsible spell rows; an open row becomes a fillable card with a black header bar and a +1…+10 advancement rail */
+:root{
+  --ink:#000000; --paper:#ffffff; --page:#f4f4f4; --muted:#5c5c5c; --soft:#ececec; --hair:#c9c9c9;
+  --barhover:#2a2a2a; --placeholder:#a3a3a3; --red:#a3141b;
+  --font:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+:root[data-mode="dark"]{
+  --ink:#f2f2f2; --paper:#121212; --page:#000000; --muted:#a6a6a6; --soft:#242424; --hair:#4a4a4a;
+  --barhover:#d6d6d6; --placeholder:#6b6b6b; --red:#ff6b6b;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--page);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45;font-weight:600}
+.wrap{position:relative;max-width:900px;margin:0 auto;padding-inline:16px;padding-block:28px 120px}
+.topctl{position:absolute;top:16px;right:16px;z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.adminbtn,.modebtn{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:5px 12px 5px 10px;font-size:.8rem}
+.adminbtn svg,.modebtn svg{width:14px;height:14px}
+.modebtn{border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:5px 12px 5px 10px;font-size:.8rem;align-items:center;gap:6px}
+.modebtn:hover{background:var(--soft)}
+.adminbtn:hover{background:var(--soft)}
+.adminbtn.on{background:var(--ink);color:var(--paper)}
+@media (max-width:760px){html:not(.hasnav) .wrap{padding-top:58px}.topctl{top:12px;flex-direction:row;gap:6px}}
+@media (max-width:600px){
+  .bar{position:static!important}
+  .bar input,.bar select,.setup input[type=text],.setup select,.mbody input,textarea.v{font-size:16px!important}
+}
+.modal{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.55);display:flex;align-items:flex-start;justify-content:center;padding:max(10vh,16px) 16px;overflow-y:auto}
+.mbox{width:100%;max-width:440px;background:var(--paper);border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.mhead{background:var(--ink);color:var(--paper);padding:12px 18px}
+.mhead h2{margin:0;font-size:1.1rem;font-weight:800}
+.mbody{padding:16px 18px 6px;display:grid;gap:4px}
+.mbody #loginPane,.mbody #setupPane{display:grid;gap:4px}
+.mbody #setupPane[hidden],.mbody #loginPane[hidden]{display:none}
+.mlabel{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--muted);margin-top:8px}
+.mbody input{font:600 1rem var(--font);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;background:var(--paper);color:var(--ink)}
+.mnote,.mhelp{margin:0;font-size:.82rem;font-weight:500;color:var(--muted);line-height:1.4}
+.mhelp a{color:var(--ink);font-weight:700}
+.merr{margin:8px 0 0;min-height:1.2em;font-size:.85rem;font-weight:700;color:var(--ink)}
+.mfoot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:10px 18px 16px}
+.mbtns{display:flex;gap:8px;margin-left:auto}
+.mlink{border:0;background:none;padding:0;font-size:.8rem;text-decoration:underline;text-underline-offset:3px;color:var(--muted)}
+header .logo{display:block;width:min(400px,88%);height:auto;color:var(--ink);margin:0 auto 18px}
+.intro{text-align:center}
+.intro p{margin-inline:auto}
+header h1{font-weight:800;text-align:center;font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.05;margin:0;letter-spacing:-.01em;text-wrap:balance}
+header p{margin:.5rem 0 0;color:var(--muted);max-width:62ch;font-weight:500}
+.counts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.count{background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:10px;padding:8px 12px;text-align:left;font-family:var(--font);cursor:pointer}
+.count:hover{background:var(--soft)}
+.count[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.count[aria-pressed="true"] span{color:var(--hair)}
+.hint{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin:22px 0 6px}
+.classbar{background:var(--ink);color:var(--paper);border-radius:22px;padding:6px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.classbar .lab{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;padding:0 8px 0 12px}
+.cbtn{border:2px solid var(--paper);background:transparent;color:var(--paper);border-radius:999px;padding:5px 14px;font-size:.88rem;display:grid;line-height:1.15;text-align:center}
+.cbtn small{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;opacity:.75}
+.cbtn:hover{background:var(--barhover)}
+.cbtn[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+.classbar :focus-visible{outline-color:var(--paper)}
+.count b{display:block;font-size:1.35rem;font-weight:800;font-variant-numeric:tabular-nums}
+.count span{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+@media (max-width:620px){.counts{grid-template-columns:repeat(2,minmax(0,1fr))}.count.total{grid-column:1/-1}}
+
+.bar{position:sticky;top:var(--navh,env(safe-area-inset-top,0px));z-index:5;background:var(--page);padding-block:14px 12px;margin-top:18px;border-bottom:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,select,input,textarea{font-family:var(--font);color:var(--ink)}
+button{cursor:pointer;font-weight:700;font-size:.85rem}
+.tabs{display:flex;flex-wrap:wrap;gap:4px}
+.tab{border:2px solid var(--ink);background:var(--paper);padding:5px 12px;border-radius:999px}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+#tagf{max-width:12rem}
+.bar input,.bar select{font-size:.88rem;font-weight:600;background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:6px 10px}
+#q{flex:1 1 170px;min-width:0}
+.btn{border:2px solid var(--ink);background:var(--paper);padding:6px 14px;border-radius:8px}
+.btn.solid{background:var(--ink);color:var(--paper)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+#dataMsg{color:var(--ink);font-weight:700}
+.status{font-size:.8rem;color:var(--muted);margin:10px 2px 0;font-weight:500}
+
+.list{display:grid;gap:8px;margin-top:10px}
+.spell{background:var(--paper);border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.spell>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:8px 10px 8px 10px}
+.spell>summary::-webkit-details-marker{display:none}
+.spell>summary:hover{background:var(--soft)}
+.spell[open]{background:var(--ink)}
+.spell[open]>summary{background:var(--ink);color:var(--paper)}
+.spell[open]>.card{background:var(--paper);border-radius:0 0 12px 12px}
+.sname{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-width:0}
+.sname b{font-weight:800;font-size:1.02rem;overflow-wrap:anywhere}
+.sname .cat{font-size:.78rem;color:var(--muted);font-weight:500}
+.spell[open] .sname .cat{color:var(--hair)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+button.tag{font-family:var(--font);background:transparent;color:inherit;cursor:pointer}
+button.tag:hover{background:var(--ink);color:var(--paper)}
+.tag{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;border:1.5px solid currentColor;border-radius:999px;padding:1px 7px}
+.seal{position:relative;display:grid;place-items:center;flex:none}
+.seal svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.seal span{position:relative;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.badge{width:42px;height:42px;color:var(--paper)}
+.badge path{fill:var(--ink);stroke:var(--ink);stroke-width:2;stroke-linejoin:miter}
+.badge span{font-size:1rem;position:relative;top:.05em}
+.badge.none path{fill:var(--paper);stroke-dasharray:6 5}
+.badge.none span{color:var(--muted)}
+.spell[open] .badge{color:var(--ink)}
+.spell[open] .badge path{fill:var(--paper);stroke:var(--paper)}
+.spell[open] .badge.none path{fill:var(--ink);stroke:var(--paper)}
+.spell[open] .badge.none span{color:var(--hair)}
+.chev{display:none}
+
+.card{padding:12px 18px 18px;display:grid;gap:14px}
+.sacts{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;cursor:default}
+.spell:not([open]) .sacts{display:none}
+.sacts .act,.sacts .del{background:transparent;color:var(--paper);border:2px solid var(--paper);border-radius:8px;padding:4px 12px;font-size:.8rem}
+.sacts .act:hover,.sacts .del:hover{background:var(--barhover)}
+.sacts .editbtn[aria-pressed="true"],.sacts .del.armed{background:var(--paper);color:var(--ink)}
+.sacts .actmsg{color:var(--hair);text-align:right}
+@media (max-width:600px){.sacts{grid-column:1/-1}}
+.actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end}
+.act{border:2px solid var(--ink);background:var(--paper);border-radius:8px;padding:5px 12px;font-size:.8rem}
+.act:hover{background:var(--soft)}
+.editbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.expwrap{display:inline-flex;gap:6px;align-items:center}
+.expopts{display:inline-flex;gap:4px}
+.fmt{padding:5px 10px;border-style:dashed}
+.actmsg{font-size:.78rem;color:var(--muted);font-weight:500;flex:1 1 auto;min-width:0}
+.card.editing .setup{border-bottom:2px solid var(--ink)}
+.pv{display:grid;gap:3px}
+.pv-line{margin:0;font-size:1rem;font-weight:600;line-height:1.4}
+.pv-line b{font-weight:700}
+.pv-line.pre{font-style:italic}
+.pv-line.desc span{white-space:pre-wrap}
+.pv-tblwrap{display:inline-block;max-width:100%;min-width:50%;overflow-x:auto;margin:6px 0 4px;border:2px solid var(--ink);border-radius:10px;vertical-align:top;background:var(--ink)}
+.pv-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:.95rem}
+.pv-tbl th,.pv-tbl td{border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:5px 10px;text-align:left;vertical-align:top;background:var(--paper);background-clip:padding-box}
+.pv-tbl .cbl{border-bottom-left-radius:8px}.pv-tbl .cbr{border-bottom-right-radius:8px}
+.pv-tbl .clast{border-right:0}.pv-tbl .rlast{border-bottom:0}
+.pv-tbl th{background:var(--ink);color:var(--paper);font-weight:700}
+.tblline>label::after{content:":"}
+.tbled{display:grid;gap:8px;margin-top:4px}
+.tblctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.tbllab{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.tbln{width:4.2em;font:700 .95rem var(--font);border:2px solid var(--ink);border-radius:8px;padding:4px 6px;background:var(--paper);color:var(--ink)}
+.tblh{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;margin-left:4px}
+.tblh input{accent-color:var(--ink);width:16px;height:16px}
+.tbladd,.tbldel{border:2px solid var(--ink);border-radius:8px;padding:4px 12px;font-size:.8rem;background:var(--paper)}
+.tbladd{background:var(--ink);color:var(--paper)}
+.tbldel{margin-left:auto}
+.tbldel.armed{background:var(--ink);color:var(--paper)}
+.tblgridwrap{overflow-x:auto;border:2px solid var(--ink);border-radius:10px}
+.tblgrid{border-collapse:separate;border-spacing:0;width:100%}
+.tblgrid td{border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:0;min-width:7em}
+.tblgrid td:last-child{border-right:0}.tblgrid tr:last-child td{border-bottom:0}
+.tblgrid input{width:100%;border:0;background:transparent;padding:6px 8px;font:600 .95rem var(--font);color:var(--ink)}
+.tblgrid input:focus{outline:none;background:var(--soft)}
+.tblgrid.hashead tr:first-child td{background:var(--ink)}
+.tblgrid.hashead tr:first-child input{color:var(--paper);font-weight:700}
+.tblgrid.hashead tr:first-child input::placeholder{color:var(--hair)}
+.pv-tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px;font-size:1rem}
+.pv-tags b{font-weight:700}
+.cbox{display:inline-grid;place-items:center;width:1.05em;height:1.05em;border:2px solid var(--ink);border-radius:2px;vertical-align:-.16em;color:var(--ink);background:var(--paper)}
+.cbox svg{width:100%;height:100%;visibility:hidden}
+.cbox.on svg{visibility:visible}
+.comps{display:inline-flex;flex-wrap:wrap;gap:4px 14px;vertical-align:-.15em}
+.compi{display:inline-flex;align-items:center;gap:5px;font-weight:700}
+.compi .cbox{vertical-align:0}
+.compw{gap:6px;align-items:center}
+.compl{font-weight:700;font-size:.95rem}
+.compline .comps{vertical-align:0}
+.concline{align-items:center!important;padding-block:2px}
+.cwrap{position:relative;display:inline-flex;cursor:pointer;font-size:1.05rem;align-self:center}
+.line>label.cwrap::after{content:none}
+.cwrap .cbox{vertical-align:0}
+.ccheck{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.ccheck:checked+.cbox svg{visibility:visible}
+.ccheck:focus-visible+.cbox{outline:3px solid var(--ink);outline-offset:2px}
+.x-cbox{display:inline-block;width:18px;height:18px;border:2.5px solid #000;border-radius:2px;vertical-align:-3px;box-sizing:border-box}
+.x-cbox svg{display:block;width:100%;height:100%}
+.x-comp{display:inline;margin-right:16px;white-space:nowrap}
+.x-comp .x-cbox{margin-right:5px}
+.pv-tags .tag{font-size:.7rem;padding:2px 9px}
+.ctfld{flex:1 1 100%}
+.ctedit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:2px solid var(--ink);border-radius:8px;padding:5px 6px;background:var(--paper)}
+.ctedit .tags{display:contents}
+.ctchip{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;padding:2px 4px 2px 9px}
+.ctx{border:0;background:none;color:inherit;font-size:.95rem;line-height:1;padding:0 3px;cursor:pointer}
+.ctin{flex:1 1 160px;min-width:0;border:0!important;padding:4px!important;font:600 .9rem var(--font);background:transparent;color:var(--ink)}
+.ctin:focus{outline:none}
+.ctadd{border:2px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:6px;padding:3px 10px;font-size:.75rem}
+.pv-empty{margin:0;color:var(--muted);font-weight:500}
+.pv-rail .tier{align-items:start}
+.pv-rail .dia{margin:-.7px 5px 0}
+.pv-rail .dia.ten{margin:-3.7px 2px 0}
+.pv-rail .tier:not(:last-child)::before{top:14.3px}
+.pv-rail .tier:has(.ten){margin-top:3px}
+.pv-tier{margin:0;font-size:1rem;font-weight:600;line-height:1.4;padding-block:3.8px}
+.pv-tier .tname{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.xwrap{position:fixed;left:-10000px;top:0;width:560px;background:#fff;padding:10px 22px}
+.x-card{background:#fff;color:#000;font-family:"Montserrat",Arial,sans-serif;font-weight:600}
+.x-bar{position:relative;background:#000;color:#fff}
+.x-bar::before,.x-bar::after{content:"";position:absolute;top:0;bottom:0;width:17px;background:#000}
+.x-bar::before{left:-16px;border-radius:17px 0 0 17px}
+.x-bar::after{right:-16px;border-radius:0 17px 17px 0}
+.x-top{height:36px;display:flex;align-items:center;gap:7px;padding:0 10px 0 4px}
+.x-bot{height:40px}
+.x-badge{position:relative;width:30px;height:30px;display:grid;place-items:center;flex:none}
+.x-badge svg{position:absolute;inset:0;width:100%;height:100%}
+.x-badge span{position:relative;top:-1.25px;color:#000;font-weight:800;font-size:15px;line-height:1}
+.x-title{font-size:20px;font-weight:600;letter-spacing:.005em}
+.x-body{border-left:3px solid #000;border-right:3px solid #000;padding:8px 14px 14px;display:grid;gap:12px}
+.x-line{margin:0;font-size:18px;line-height:1.22;white-space:pre-wrap}
+.x-pre{font-style:italic}
+.x-fields{display:grid}
+.x-rail{display:grid;gap:6.75px;margin-top:4.50px}
+.x-tier{position:relative;display:grid;grid-template-columns:45.00px minmax(0,1fr);column-gap:9.00px;align-items:start}
+.x-tier::before{content:"";position:absolute;left:16.50px;width:12px;top:15.88px;height:calc(100% + 6.75px);background:#000}
+.x-tier.x-last::before{display:none}
+.x-tier:has(.x-ten){margin-top:3.38px}
+.x-tier p{margin:0;font-size:18px;line-height:1.22;padding-block:5.89px}
+.x-tblwrap{margin:6px 0;border:2.5px solid #000;border-radius:10px;overflow:hidden;background:#000}
+.x-tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:16px;line-height:1.25}
+.x-tbl th,.x-tbl td{border:0;border-right:2.5px solid #000;border-bottom:2.5px solid #000;padding:5px 9px;text-align:left;vertical-align:top;background:#fff;background-clip:padding-box}
+.x-tbl .clast{border-right:0}.x-tbl .rlast{border-bottom:0}
+.x-tbl th{background:#000}
+.x-tbl .ctl{border-top-left-radius:8px}.x-tbl .ctr{border-top-right-radius:8px}.x-tbl .cbl{border-bottom-left-radius:8px}.x-tbl .cbr{border-bottom-right-radius:8px}
+.x-tbl th{background:#000;color:#fff;font-weight:700}
+.x-name{color:#8E171C}
+.x-tags{display:grid;gap:4px}
+.x-tagline{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.x-tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;border:2px solid #000;border-radius:999px;padding:2px 9px 1px;line-height:1.3}
+.x-mark{position:relative;z-index:1;width:33.75px;height:33.75px;margin:-1px 0 0 5.62px;display:grid;place-items:center}
+.x-mark::before{content:"";position:absolute;inset:4.50px;background:#fff;border:2.25px solid #000;transform:rotate(45deg);background-clip:padding-box}
+.x-mark span{position:relative;font-size:12.24px;font-weight:800}
+.x-mark.x-ten::before{display:none}
+.x-mark.x-ten{width:48.60px;height:48.60px;margin:-8.43px 0 0 -1.80px}
+.x-mark.x-ten svg{position:absolute;left:0;top:0;width:48.60px;height:48.60px}
+.setup{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.setup .fld{display:grid;gap:3px}
+.setup .fld.grow{flex:1 1 200px;min-width:0}
+.setup label.small,.setup .small{font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.setup input[type=text],.setup select{font-size:.95rem;font-weight:700;border:2px solid var(--ink);border-radius:8px;padding:6px 10px;background:var(--paper);width:100%}
+.togs{display:flex;flex-wrap:wrap;gap:4px}
+.tog{border:2px solid var(--ink);background:var(--paper);border-radius:999px;padding:4px 10px;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.tog[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.del{border:2px solid var(--ink);background:var(--paper);border-radius:8px;padding:6px 12px;font-size:.8rem}
+.del.armed{background:var(--ink);color:var(--paper)}
+
+.fields{display:grid;gap:2px}
+.line{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px}
+.line>label{font-weight:700;white-space:nowrap}
+.line>label::after{content:":"}
+.line.pre>label,.line.pre textarea{font-style:italic}
+.line textarea{flex:1 1 220px;min-width:0}
+textarea.v{font-size:1rem;font-weight:600;line-height:1.4;border:0;border-bottom:1.5px dashed var(--hair);background:transparent;padding:1px 2px;resize:none;overflow:hidden;field-sizing:content;min-height:1.6em;width:100%}
+textarea.v:hover{border-bottom-color:var(--muted)}
+textarea.v:focus{outline:none;border-bottom:1.5px solid var(--ink);background:var(--soft)}
+textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:normal}
+.line.block{display:grid;gap:0}
+
+.rail{display:grid;gap:6px;margin-top:4px}
+.tier:not(:last-child)::before{content:"";position:absolute;left:17px;width:6px;top:17px;height:calc(100% + 6px);background:var(--ink)}
+.tier{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;align-items:start}
+.dia{position:relative;z-index:1;width:30px;height:30px;margin:2px 5px 0;display:grid;place-items:center}
+.dia.ten{width:36px;height:36px;margin:-1px 2px 0}
+.dia.ten::before{display:none}
+.dia.ten svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dia.ten path{fill:var(--paper);stroke:var(--ink);stroke-width:6;stroke-linejoin:miter;stroke-miterlimit:8}
+.dia::before{content:"";position:absolute;inset:4px;background:var(--paper);border:2px solid var(--ink);transform:rotate(45deg);background-clip:padding-box}
+.dia span{position:relative;font-size:.68rem;font-weight:800}
+.tbody{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;min-width:0}
+.tbody .tn{flex:0 1 auto;width:auto;min-width:7ch;max-width:100%;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.tbody .tn:placeholder-shown{text-decoration:none}
+.tbody .tt{flex:1 1 220px}
+.empty{padding:28px 8px;color:var(--muted);font-weight:500}
+
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--ink);color:var(--paper);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center}
+.savebar .in{max-width:900px;width:100%;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.savebar .msg{flex:1 1 220px;min-width:0;font-size:.88rem}
+.savebar .btn{border-color:var(--paper)}
+.savebar .btn.ghost{background:transparent;color:var(--paper)}
+.savebar .btn.solid{background:var(--paper);color:var(--ink)}
+.savebar .btn[disabled]{opacity:.5;cursor:default}
+@media (prefers-reduced-motion:no-preference){.spell>summary{transition:background .12s}}
+/* glossary terms in spell text: red underline, rounded popup on hover or tap */
+.gl{color:var(--red);text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px;cursor:help;border-radius:3px}
+.gl:hover,.gl.on{background:var(--soft)}
+.gl:focus-visible{outline:2px solid var(--red);outline-offset:1px}
+.gtip{position:fixed;z-index:40;width:min(380px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow-y:auto;background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none;font-family:var(--font)}
+.gtip .gth{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;color:var(--paper);font-weight:800;font-size:1rem}
+.gtip .gtag{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.gtip .gtb{background:var(--paper);color:var(--ink);border-radius:0 0 12px 12px;padding:10px 14px 12px;display:grid;gap:6px;font-size:.88rem;font-weight:600;line-height:1.4}
+.gtip p{margin:0}
+.gtip .gfrom{font-size:.75rem;color:var(--muted);font-weight:700}
+.tc{color:var(--c)}
+:root[data-mode="dark"] .tc{color:color-mix(in srgb,var(--c),#fff 40%)}
+.gtip ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.gtip li{position:relative;padding-left:17px}
+.gtip li::before{content:"";position:absolute;left:2px;top:.5em;width:6px;height:6px;background:var(--ink);transform:rotate(45deg)}
+
+
+.sitenav{position:sticky;top:0;z-index:25;background:var(--ink);color:var(--paper);padding-top:env(safe-area-inset-top,0px)}
+.navin{position:relative;padding-inline:20px;display:flex;align-items:center;gap:12px}
+.navlinks{flex:1 1 auto;min-width:0;display:flex;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;gap:0 2px}
+.navctl{flex:none;margin-left:auto;display:flex;align-items:center;gap:6px}
+.navctl .adminbtn,.navctl .modebtn{background:transparent;color:var(--paper);border:2px solid var(--paper);border-radius:999px;padding:4px 11px 4px 9px;font:700 .74rem var(--font);display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+.navctl .adminbtn:hover,.navctl .modebtn:hover{background:var(--barhover)}
+.navctl .adminbtn.on{background:var(--paper);color:var(--ink)}
+.navctl svg{width:13px;height:13px}
+.navctl :focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.navitem{display:inline-flex;align-items:center;gap:6px;font:700 .78rem var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--paper);background:none;border:0;padding:15px 12px;text-decoration:none;cursor:pointer;border-radius:0;white-space:nowrap}
+.navitem svg{width:10px;height:6px}
+a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
+.navitem[aria-current="page"],.navitem[data-current]{box-shadow:inset 0 -3px 0 var(--paper)}
+.navitem.soon{opacity:.5;cursor:default}
+.navitem.soon small{font-size:.55rem;letter-spacing:.1em;border:1px solid currentColor;border-radius:999px;padding:1px 5px}
+.navitem:focus-visible{outline:3px solid var(--paper);outline-offset:-3px}
+.navdrop{position:relative;display:flex}
+.navmenu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);min-width:210px;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22)}
+.navdrop:hover .navmenu,.navdrop:focus-within .navmenu{display:grid}
+@media (hover:none){.navdrop:hover .navmenu{display:none}}
+.navmenu a{display:block;padding:10px 12px;border-radius:8px;font:700 .92rem var(--font);color:var(--ink);text-decoration:none}
+.navmenu a:hover,.navmenu a:focus-visible{background:var(--soft);outline:none}
+.navmenu a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
+/* NAV_JS steps through these until the links fit on one row beside the buttons */
+.nav-c1 .navitem{padding-inline:9px;letter-spacing:.06em}
+.nav-c2 .navitem.soon small{display:none}
+.nav-c3 .navctl .adminbtn span,.nav-c3 .navctl .modebtn span{display:none}
+.nav-c3 .navctl .adminbtn,.nav-c3 .navctl .modebtn{padding:6px}
+.nav-c4 .navitem{padding-inline:7px;font-size:.72rem;letter-spacing:.04em}
+.nav-c5 .navlinks{flex-wrap:wrap}
+@media (max-width:700px){
+  .navin{gap:4px;padding-inline:6px}
+  .navlinks{flex-wrap:wrap;justify-content:center}
+  .navitem.soon small,.navctl .adminbtn span,.navctl .modebtn span{display:none}
+  .navctl .adminbtn,.navctl .modebtn{padding:6px}
+  .navitem{padding:10px 7px;font-size:.66rem;letter-spacing:.04em}
+  .navdrop{position:static}
+  .navmenu{left:12px;right:12px;transform:none;min-width:0}
+}
+
+.condwrap{padding-block:28px 60px}
+.cbar{position:sticky;top:var(--navh,0px);z-index:5;background:var(--page);padding-block:12px;margin-top:12px!important}
+.cbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:24px}
+.cbar input{flex:1 1 240px;min-width:0;font:600 1rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 12px;background:var(--paper);color:var(--ink)}
+.ccount{font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.gmsg{margin:6px 0 0;min-height:1.2em;font-size:.85rem;font-weight:600;color:var(--muted)}
+#clist{margin-top:14px}
+.clist{display:grid;gap:12px}
+/* the card is filled with ink so no light pixels show through at the rounded corners or the top edge */
+.cond{background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;scroll-margin-top:calc(var(--navh,0px) + 16px)}
+.chead{margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 16px;color:var(--paper);font-size:1.05rem;font-weight:800;letter-spacing:.01em}
+.ctag{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.cbody{background:var(--paper);border-radius:0 0 12px 12px;padding:12px 18px 16px;display:grid;gap:8px}
+.clead{margin:0;font-weight:600;display:grid;gap:10px}
+.clead p{margin:0}
+.crefs{display:grid;gap:8px;margin-top:2px}
+.cref{border:2px solid var(--hair);border-radius:10px;padding:8px 12px;display:grid;gap:6px;font-size:.92rem}
+.cref b{font-weight:800}
+.cref p{margin:0}
+.cul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.cul li{position:relative;padding-left:20px;font-weight:600;line-height:1.45}
+.cul li::before{content:"";position:absolute;left:3px;top:.55em;width:7px;height:7px;background:var(--ink);transform:rotate(45deg)}
+.cnote{margin:2px 0 0;padding:8px 12px;border-left:4px solid var(--ink);background:var(--soft);font-size:.9rem;font-weight:600;border-radius:0 8px 8px 0}
+.cnote b{font-weight:800}
+.gsec+.gsec{margin-top:30px}
+.ghead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:12px}
+.ghead h2{margin:0;font-size:1.3rem;font-weight:800}
+.glink{font-size:.85rem;font-weight:700;color:var(--ink);text-underline-offset:3px}
+.cremoved{margin-top:24px;border:2px dashed var(--ink);border-radius:14px;padding:12px 18px}
+.cremoved h3{margin:0 0 4px;font-size:.95rem;font-weight:800}
+.cremoved p{margin:0;font-weight:600;color:var(--muted)}
+.cempty{margin:20px 0;color:var(--muted);font-weight:600}
+.chr{display:flex;align-items:center;gap:8px}
+.gedit{font:700 .72rem var(--font);color:var(--paper);background:transparent;border:2px solid var(--paper);border-radius:999px;padding:3px 12px;cursor:pointer}
+.gedit:hover{background:var(--paper);color:var(--ink)}
+.gedit:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.gform{gap:12px}
+.gform label{display:grid;gap:5px;font-size:.85rem;font-weight:800}
+.gform small{font-weight:600;color:var(--muted)}
+.gform input,.gform textarea{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
+.gform textarea{resize:vertical;line-height:1.4;field-sizing:content;min-height:3.2em}
+.gerr{margin:0;color:var(--red);font-weight:700;font-size:.88rem}
+.gerr:empty{display:none}
+.gbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gbtns .sp{flex:1}
+.gdel{color:var(--red)!important;border-color:var(--red)!important}
+/* text color sidebar, shown while an entry is being edited */
+.gside{position:fixed;z-index:20;right:16px;top:calc(var(--navh,0px) + 16px);width:184px;background:var(--ink);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.gsh{color:var(--paper);font-weight:800;font-size:.9rem;padding:8px 12px}
+.gsb{background:var(--paper);border-radius:0 0 12px 12px;padding:10px 12px 12px;display:grid;gap:8px}
+.gsws{display:flex;flex-wrap:wrap;gap:6px}
+.gsw{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:var(--c);cursor:pointer;padding:0}
+.gsw:hover{transform:scale(1.1)}
+.gpickl{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.82rem;font-weight:800}
+.gpick{width:44px;height:30px;padding:2px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);cursor:pointer}
+.gside .btn{padding:6px 10px;font-size:.8rem;width:100%}
+.ghelp{margin:0;font-weight:600;color:var(--muted);font-size:.76rem;line-height:1.35}
+.ghelp.bad{color:var(--red)}
+/* between 1000 and 1320px wide, make room for the sidebar beside the entries */
+@media (min-width:1000px) and (max-width:1319px){
+  body.gside-on .condwrap{max-width:1132px;padding-right:232px}
+}
+@media (max-width:999px){
+  .gside{top:auto;left:12px;right:12px;bottom:calc(12px + var(--sbh,0px));width:auto}
+  .gsh{display:none}
+  .gsb{border-radius:12px;grid-template-columns:auto auto 1fr 1fr;align-items:center}
+  .gside .btn{width:auto}
+  .ghelp{grid-column:1/-1}
+  body.gside-on .condwrap{padding-bottom:220px}
+}
+@media (max-width:640px){.gsb{grid-template-columns:1fr 1fr}.gsws{grid-column:1/-1}}
+/* items and crafting */
+.cbar select{font:600 .95rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 10px;background:var(--paper);color:var(--ink)}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.8rem;font-weight:600;border:2px solid var(--ink);border-radius:999px;padding:3px 10px}
+.chip b{font-weight:800;margin-right:4px}
+.fact{margin:0;font-weight:600}
+.fact b{font-weight:800}
+.fact .cul{margin-top:6px}
+.ilink{color:var(--ink);font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.ilink.gone{text-decoration:none;color:var(--muted)}
+.ilink small{font-weight:600}
+.cond.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,40%{box-shadow:0 0 0 5px var(--red)}100%{box-shadow:0 0 0 0 transparent}}
+.cond{scroll-margin-top:calc(var(--navh,0px) + 80px)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.xlist,.qlist{display:grid;gap:8px}
+.xrow{display:grid;grid-template-columns:minmax(110px,180px) 1fr auto;gap:8px}
+.qrow{display:grid;grid-template-columns:76px 1fr auto;gap:8px}
+.xrow input,.qrow input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.gform>.btn{justify-self:start}
+@media (max-width:600px){.xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input{font-size:16px}}
+.gres h2{font-size:1rem}
+.glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
+.gwords{display:grid;gap:8px}
+.gwlist{display:grid;gap:8px}
+.gword{display:grid;grid-template-columns:minmax(120px,200px) 1fr auto;gap:8px;align-items:start}
+.gword input,.gword textarea{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
+.gword textarea{resize:vertical;field-sizing:content;min-height:2.6em;line-height:1.4}
+.gwords>.btn{justify-self:start}
+@media (max-width:600px){.gword{grid-template-columns:1fr}.gword .gwdel{justify-self:start}}
+.gprev{display:grid;gap:6px}
+.gprevbody{border:2px dashed var(--hair);border-radius:10px;padding:10px 14px;display:grid;gap:8px}
+@media (max-width:600px){.gform input,.gform textarea,.cbar input{font-size:16px}}
+</style><nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks"><a class="navitem navhome" href="index.html">Spells</a><span class="navitem soon" aria-disabled="true" title="Coming soon">Character Creator<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Classes<small>Soon</small></span><a class="navitem" href="crafting.html">Crafting</a><a class="navitem" href="items.html" aria-current="page">Items</a><div class="navdrop"><a class="navitem" href="glossary.html" aria-haspopup="true">Glossary<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu" id="navGlossary"><a href="conditions.html">Conditions</a><a href="glossary.html?s=combat-rules">Combat Rules</a><a href="glossary.html?s=combat-system">Combat System</a></div></div><span class="navitem soon" aria-disabled="true" title="Coming soon">About<small>Soon</small></span></div><div class="navctl" id="navctl"><button type="button" class="adminbtn" id="adminBtn" hidden aria-haspopup="dialog"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="2.5" y="7" width="11" height="8" rx="1.5" fill="currentColor"/></svg><span id="adminLabel">Admin</span></button><button type="button" class="modebtn" id="modeBtn" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="modeIcon" d="M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z" fill="currentColor"/></svg><span id="modeLabel">Dark mode</span></button></div></div></nav><script>(function(){
+  var nav=document.querySelector('.sitenav'),links=nav&&nav.querySelector('.navlinks'),busy=false;
+  var STEPS=['nav-c1','nav-c2','nav-c3','nav-c4','nav-c5'];
+  function fit(){
+    if(!nav||busy)return;busy=true;
+    STEPS.forEach(function(c){nav.classList.remove(c)});
+    if(window.innerWidth>700){for(var i=0;i<STEPS.length&&links.scrollWidth>links.clientWidth+1;i++)nav.classList.add(STEPS[i])}
+    document.documentElement.style.setProperty('--navh',nav.offsetHeight+'px');busy=false;
+  }
+  window.crawlNavFit=fit;fit();window.addEventListener('resize',fit);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+  window.addEventListener('load',fit);
+  if(window.MutationObserver&&nav){new MutationObserver(function(){requestAnimationFrame(fit)}).observe(nav.querySelector('.navctl'),{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']})}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.activeElement&&document.activeElement.closest('.navdrop'))document.activeElement.blur()});
+  /* Glossary menu: one link per glossary section */
+  var menu=document.getElementById('navGlossary');
+  function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function href(s){return s==='Conditions'?'conditions.html':'glossary.html?s='+slug(s)}
+  function mark(){if(!menu)return;var here=location.pathname.split('/').pop()+location.search;[].forEach.call(menu.querySelectorAll('a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+  window.crawlNavSections=function(list){
+    if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
+    (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
+    menu.innerHTML=out.map(function(s){return '<a href="'+href(s)+'">'+esc(s)+'</a>'}).join('');mark();
+  };
+  mark();
+  if(window.CRAWL_STATIC&&menu&&!window.GL_PAGE)fetch('crawl-glossary.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.entries)window.crawlNavSections(j.entries.map(function(e){return e.sec||'Conditions'}))}).catch(function(){});
+})();</script>
+<div class="wrap condwrap">
+<header class="intro">
+  <svg class="logo" viewBox="0 0 531 214" role="img" aria-label="Crawl 1st Edition" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor"><path d="M134.36,117.12v35.56L97.79,189.25,60.5,152v-.43A256.19,256.19,0,0,0,89.21,146l8.14,8.14Z"/><path d="M134.36,36.57V72.11L119.65,57.42l-22.3-22.3L85.63,46.85v80.46a230.28,230.28,0,0,1-25.13,5v-15.7l.09-.08-.09-.09V72.85l.09-.09-.09-.08V37.29L97.79,0Z"/><path d="M219.23,100.94v6.55h-20.9C205.24,105.13,212.19,102.91,219.23,100.94Z"/><path d="M219.23,132.56V164L194.14,189.1V143l-24-24v70.24l-25.09-25.1v-36.6l13-5,8.38-3.23c9.37-3.62,19-7.29,28.82-10.71Z"/><path d="M207.13,25.49l-6.94-6.9L182.5.87,170.14,13.22l-25.09,25v68.85c2.38-.93,4.74-1.84,7.09-2.77,8.33-3.26,16.91-6.63,25.34-9.75,15.54-5.76,29.13-10.17,41.75-13.51V37.63Zm-13,56.91h-24V48.7L182.5,36.37,194.14,48Z"/><path d="M413.14.62V94c8.28,2.3,16.66,4.49,25.1,6.24V25.71Zm-98.1,25V72.4c3.09.22,6.19.52,9.26.87,5,.58,10.24,1.35,15.78,2.3V58h.05V.54Z"/><path d="M438.24,119.91v32L400.9,189.25h-.22l-11.51-11.56L383,171.61l-6.76-6.77-24.41,24.41h-.22l-11.51-11.56L334,171.61l-19-19v-61c.74,0,1.48.11,2.22.17,7.64.68,15.26,1.8,22.82,3.2v21.73h.05v25.5l11.65,11.64,12.3-12.3V.49H389.2V142.27l11.61,11.58,12.33-12.32V113.88C421.91,116.27,430.18,118.3,438.24,119.91Z"/><path d="M488.37,164.39H474.13V123.85c-.8,0-1.59,0-2.39,0a178.52,178.52,0,0,1-22.71-2v42.6h0v24.85h64.18Z"/><path d="M474.13,12.57v92.05c-2,.06-3.7,0-5-.05A177.16,177.16,0,0,1,449,102.35V12.49l12-12h1l9.2,9.21Z"/><path d="M304.22,37.15v127l-25.1,25.07V107.28h-24v82L230,164.16V98.1c2.3-.57,4.6-1.09,6.9-1.58,6-1.29,12.08-2.36,18.22-3.21q4.23-.61,8.47-1.07l.85-.08c1.53-.16,3.06-.33,4.6-.44,1.31-.14,2.63-.25,3.94-.33l1.18-.08c1.4-.11,2.8-.19,4.22-.25.27,0,.55,0,.82,0v-.85c0-4.55,0-9.1-.05-13.64V71.89c0-8.11,0-16.25-.06-24.36L267.48,35.89,255.15,48.22V74c-2.93.36-5.83.8-8.77,1.26-5.37.85-10.79,1.89-16.35,3.18V37.81L267.34.49h.28l11.5,11.56,6.08,6.09Z"/><polygon points="60.59 72.76 60.5 72.84 60.5 72.68 60.59 72.76"/><path d="M388.1,212.43V193.12l2.12,2.11h-6.34v-3.92H393v21.12Z"/><path d="M401.81,212.67a11.7,11.7,0,0,1-3.25-.45,7.56,7.56,0,0,1-2.5-1.18l1.11-2.45a7.43,7.43,0,0,0,2.13,1,7.82,7.82,0,0,0,2.51.42,5.1,5.1,0,0,0,1.56-.2,2,2,0,0,0,.88-.54,1.2,1.2,0,0,0,.28-.77,1.06,1.06,0,0,0-.45-.9,3.54,3.54,0,0,0-1.17-.54c-.49-.14-1-.28-1.6-.4s-1.16-.28-1.74-.47a7.11,7.11,0,0,1-1.61-.72,3.42,3.42,0,0,1-1.17-1.19,3.55,3.55,0,0,1-.43-1.84,3.89,3.89,0,0,1,.65-2.2,4.27,4.27,0,0,1,2-1.59,8.14,8.14,0,0,1,3.31-.59,10.56,10.56,0,0,1,2.62.32,7.7,7.7,0,0,1,2.26.92l-1,2.46a8.25,8.25,0,0,0-1.95-.82,7.55,7.55,0,0,0-1.94-.27,4.64,4.64,0,0,0-1.54.21,1.75,1.75,0,0,0-.86.58,1.31,1.31,0,0,0-.27.8,1.07,1.07,0,0,0,.44.9,3.34,3.34,0,0,0,1.17.54c.48.13,1,.25,1.61.38s1.17.29,1.75.47a7.94,7.94,0,0,1,1.59.72,3.42,3.42,0,0,1,1.17,1.16,3.36,3.36,0,0,1,.46,1.83,3.82,3.82,0,0,1-.66,2.17,4.46,4.46,0,0,1-2,1.59A8,8,0,0,1,401.81,212.67Z"/><path d="M412.72,212.43V201h-4.51v-2.65h12.27V201H416v11.43Z"/><path d="M431.16,209.82h7.67v2.61H427.92V198.35h10.64V201h-7.4Zm-.24-5.82h6.78v2.56h-6.78Z"/><path d="M441.42,212.43V198.35h6.4a9,9,0,0,1,4,.87,6.74,6.74,0,0,1,2.74,2.46,7.51,7.51,0,0,1,0,7.42,6.65,6.65,0,0,1-2.74,2.45,8.83,8.83,0,0,1-4,.88Zm3.28-2.66h3a5.2,5.2,0,0,0,2.44-.53,3.77,3.77,0,0,0,1.61-1.53,5,5,0,0,0,0-4.66,3.85,3.85,0,0,0-1.61-1.51,5.2,5.2,0,0,0-2.44-.54h-3Z"/><path d="M458,212.43V198.35h3.28v14.08Z"/><path d="M467.55,212.43V201h-4.5v-2.65h12.27V201h-4.51v11.43Z"/><path d="M477.07,212.43V198.35h3.28v14.08Z"/><path d="M490.5,212.67a8.5,8.5,0,0,1-3.07-.54A7.4,7.4,0,0,1,485,210.6a7,7,0,0,1-2.19-5.21,7.26,7.26,0,0,1,.57-2.91,7.16,7.16,0,0,1,1.62-2.3,7.46,7.46,0,0,1,2.45-1.53,9,9,0,0,1,6.13,0,7.33,7.33,0,0,1,2.45,1.52,7.05,7.05,0,0,1,1.62,2.31,7.74,7.74,0,0,1,0,5.83,7,7,0,0,1-1.62,2.32,7.33,7.33,0,0,1-2.45,1.52A8.61,8.61,0,0,1,490.5,212.67Zm0-2.76a4.48,4.48,0,0,0,1.73-.33,4.16,4.16,0,0,0,1.4-.94,4.44,4.44,0,0,0,.94-1.43,5.18,5.18,0,0,0,0-3.64,4.36,4.36,0,0,0-2.34-2.38,4.75,4.75,0,0,0-3.48,0,4.14,4.14,0,0,0-1.4.95,4.31,4.31,0,0,0-.93,1.43,5.18,5.18,0,0,0,0,3.64,4.42,4.42,0,0,0,.93,1.43,4,4,0,0,0,1.4.94A4.51,4.51,0,0,0,490.49,209.91Z"/><path d="M500.64,212.43V198.35h2.7l8.31,10.14h-1.31V198.35h3.22v14.08h-2.7l-8.31-10.14h1.31v10.14Z"/><path d="M279.18,74.59c0,4.55.05,9.1.05,13.65a265.07,265.07,0,0,0-42.85,5.56C230.6,95,224.91,96.45,219.23,98c-8,2.25-15.91,4.8-23.77,7.54-.33.08-.66.22-1,.33-9.75,3.39-19.42,7-29,10.76-9.87,3.83-12.15,4.74-20.38,7.92l-8.38,3.23q-.4-7.12-.83-14.25L110,136.91c-3.58,1.27-8.37,2.88-14.11,4.5-.72.21-3.53,1-7.37,2a260.41,260.41,0,0,1-28,5.34l-.6.08c-8.82,1.15-17.92,2-26.87,1.51l-11.87,12-.27-13.78C11.63,145.93,3.3,139.82.78,130.07c-2.66-10.33,1.75-21.4,8.9-29L6.84,91.88l12.49,1.7c7.45-4.41,15.94-7.18,23.94-10.33C49.16,80.92,55.82,77.74,60.5,73V90A116.22,116.22,0,0,1,42,98.35c-9.12,3.42-19.81,7.06-25.23,15.78-4,6.43-4.74,14.9,2.6,19.12,8.08,4.65,18.82,3.67,27.72,3.09,4.5-.27,9-.74,13.37-1.34a231.9,231.9,0,0,0,25.13-4.93c7.28-1.84,14.49-3.95,21.67-6.27l2.13-14.06,9.92,10c8.63-3.07,17.18-6.36,25.7-9.67,11.17-4.36,22.3-8.8,33.39-12.91,13.43-5,27-9.56,40.79-13.2a274.16,274.16,0,0,1,27.59-6A293.77,293.77,0,0,1,279.18,74.59Z"/><path d="M357,81.74c2.38.55,4.74,1.1,7.1,1.67V97.47A297.37,297.37,0,0,0,317.53,89c-4.44-.41-8.88-.68-13.31-.85V74.46c6.6.24,13.2.76,19.78,1.5,7.06.8,14,1.92,20.95,3.26q4.28-5.46,8.52-10.93C354.65,72.78,355.8,77.25,357,81.74Z"/><path d="M525.22,88.7c-2.6,11.29-9.48,19.15-18.3,24.3l2,10.69-11.51-6.33a75.49,75.49,0,0,1-25.59,3.7c-21.89-.5-43.5-5.78-64.6-11.65l-6.57,6.08-2-8.52c-1.21-.32-2.41-.68-3.62-1-1.94-.54-3.89-1.09-5.83-1.67V90c3,.83,5.89,1.68,8.85,2.52,23.12,6.61,46.82,13.54,71,14.69,17.09.82,40.65-3.37,43.31-23.89a15.29,15.29,0,0,0-4.13-13l-9.87,3.26V64.51a47.22,47.22,0,0,0-24.21-1.64V48.92a65,65,0,0,1,7.89-.63c12.24-.24,25.88,3,35.14,11.48C525.25,67.11,527.6,78.32,525.22,88.7Z"/></g></svg>
+  <h1>Items</h1>
+  <p>Every item in Crawl 1st Edition: weapons, armor, materials, potions and more. Search by name, type or anything on the card.</p>
+</header>
+<div class="cbar">
+  <input id="cq" type="search" placeholder="Search items" aria-label="Search items" autocomplete="off">
+  <select id="ctype" aria-label="Item type" hidden></select>
+  <span class="ccount" id="ccount"></span>
+  <button type="button" class="btn solid" id="gAdd" hidden>Add item</button>
+</div>
+<p class="gmsg" id="gmsg" role="status"></p>
+<main id="clist"></main>
+<p class="cempty" id="cempty" hidden></p>
+</div>
+<datalist id="itemNames"></datalist><datalist id="itemTypes"></datalist><datalist id="itemRarities"></datalist>
+<div class="modal" id="adminModal" hidden>
+  <form class="mbox" id="adminForm" novalidate role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <div class="mhead"><h2 id="adminTitle">Admin sign-in</h2></div>
+    <div class="mbody">
+      <div id="loginPane">
+        <label class="mlabel" for="adminPass">Admin password</label>
+        <input type="password" id="adminPass" autocomplete="current-password">
+      </div>
+      <div id="setupPane" hidden>
+        <p class="mnote">One-time setup. Paste a GitHub access key that can change this repo, then choose your admin password. The key is locked with your password before it's stored, so only someone with the password can use it.</p>
+        <label class="mlabel" for="setupKey">GitHub access key</label>
+        <input type="password" id="setupKey" autocomplete="off" spellcheck="false">
+        <p class="mhelp"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Make a key on GitHub</a>: choose only this repository, and set <b>Contents</b> to <b>Read and write</b>.</p>
+        <label class="mlabel" for="setupPass">New admin password</label>
+        <input type="password" id="setupPass" autocomplete="new-password">
+        <label class="mlabel" for="setupPass2">Type the password again</label>
+        <input type="password" id="setupPass2" autocomplete="new-password">
+        <p class="mhelp">Use at least 12 characters. A few random words with a number works well.</p>
+      </div>
+      <p class="merr" id="adminErr" role="alert"></p>
+    </div>
+    <div class="mfoot">
+      <button type="button" class="mlink" id="adminSwitch">First time? Set up admin access</button>
+      <span class="mbtns"><button type="button" class="btn" id="adminCancel">Cancel</button><button type="submit" class="btn solid" id="adminGo">Unlock</button></span>
+    </div>
+  </form>
+</div>
+
+<div class="savebar" id="savebar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">You have unsaved changes.</span>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn solid" id="saveBtn">Save changes</button>
+  </div>
+</div>
+<script>(function(){var b=document.getElementById('modeBtn'),r=document.documentElement;var M='M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z',S='M8 4.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zM7.2 0h1.6v2.4H7.2zM7.2 13.6h1.6V16H7.2zM0 7.2h2.4v1.6H0zM13.6 7.2H16v1.6h-2.4zM2.2 3.3l1.1-1.1 1.7 1.7-1.1 1.1zM11 12.1l1.1-1.1 1.7 1.7-1.1 1.1zM2.2 12.7l1.7-1.7 1.1 1.1-1.7 1.7zM11 3.9l1.7-1.7 1.1 1.1-1.7 1.7z';function show(){var d=r.getAttribute('data-mode')==='dark';b.setAttribute('aria-pressed',d);document.getElementById('modeLabel').textContent=d?'Light mode':'Dark mode';document.getElementById('modeIcon').setAttribute('d',d?S:M)}b.addEventListener('click',function(){var d=r.getAttribute('data-mode')!=='dark';if(d)r.setAttribute('data-mode','dark');else r.removeAttribute('data-mode');try{localStorage.setItem('crawl-mode',d?'dark':'light')}catch(e){}show()});show()})();</script><script>const APP=window.crawlApp||null;const STATIC=!APP&&!!window.CRAWL_STATIC;const $=id=>document.getElementById(id);const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));const GLOSSARY={"v":1,"entries":[{"n":"Action Pool","sec":"Combat System","lead":"[color=#8e171c]The Action Pool[/color]\nYour Action Pool holds all of your Action Points (AP), Magic Points \n(MP) and Exhaustion Points. The combined total can never exceed \nyour Max Pool.\n\n[color=#8e171c]Overflow. [/color]If you would gain points that put you over your Max Pool, \nyou choose which of the new points to keep and which are lost. For \nexample, if you gain both AP and MP, you decide how many of each \nto keep.\n\n[color=#8e171c]Exhaustion.[/color] Exhaustion Points take up space in your pool like any \nother point, but they can’t be spent or lost to overflow. If your pool is \never completely filled with Exhaustion Points, you die.","fx":[],"notes":[],"aka":[{"w":"Action Die","ref":"At the beginning of each Player(s), and Non-Player Character's (NPC) turn in combat, they roll an Action die, depending on the result of the die and the features that creature has, they generate that many Action Points (AP) for that turn."},{"w":"AP","ref":"Action Points (AP) are the resource used by players and non-player characters to commit/use an actions, whether it be swinging a sword or casting firebolt, during their turn. Action point's expire at the start or each players next turn. Action Points can be used in the place of Magic Points, but Magic points cannot be used for Actions."},{"w":"Action Point","ref":"Action Points (AP) are the resource used by players and non-player characters to commit/use an actions, whether it be swinging a sword or casting firebolt, during their turn. Action point's expire at the start or each players next turn. Action Points can be used in the place of Magic Points, but Magic points cannot be used for Actions."}]},{"n":"Bleeding","sec":"Conditions","lead":"Some attacks wound a creature deeply enough to make it bleed. While Bleeding:","fx":["The creature takes 2 Bleeding damage at the start of each of its turns, and 2 Bleeding damage for every 5 feet it moves on its turn.","A creature that's Bleeding can spend 2 AP to hold its wound closed, taking no Bleeding damage from movement until the end of its turn.","Any healing from a spell ends the condition.","Creatures without blood, such as Constructs and Undead, are immune to this condition.","Creatures that regenerate each turn, such as Trolls, are immune to this condition."],"notes":[],"aka":[{"w":"Bleeding","ref":""}]},{"n":"Blinded","sec":"Conditions","lead":"Certain creatures and spells can impair a creature's sight, leaving it Blinded. While Blinded:","fx":["The creature can't see, and it automatically fails any check that requires sight.","The creature has Disadvantage on attack rolls that require sight.","Attack rolls against the creature have Advantage."],"notes":[],"aka":[]},{"n":"Charmed","sec":"Conditions","lead":"A creature that fails to resist a magical enchantment can become Charmed. While Charmed:","fx":["The creature can't attack the charmer or target it with harmful abilities or magical effects.","The charmer has Advantage on any check to interact socially with the creature."],"notes":[],"aka":[]},{"n":"Dazed","sec":"Conditions","lead":"A creature hit hard enough, or caught in the right circumstances, can become Dazed. While Dazed:","fx":["The creature has Disadvantage on Opportunity Attacks.","The creature has Disadvantage on Dexterity saving throws.","Whenever the creature fails a Dexterity saving throw, it falls Prone."],"notes":[],"aka":[]},{"n":"Deafened","sec":"Conditions","lead":"Certain creatures and spells can impair a creature's hearing, leaving it Deafened. While Deafened:","fx":["The creature can't hear, and it automatically fails any check that requires hearing.","Any spell that requires the target to hear a word, command or spoken phrase, such as the Command spell or any of the Power Word spells, has no effect on a Deafened creature."],"notes":[],"aka":[]},{"n":"Drenched","sec":"Conditions","lead":"A creature that has been submerged in water, or is soaked thoroughly with a liquid, becomes Drenched. While Drenched:","fx":["The creature has Disadvantage on saving throws against spells that deal Lightning damage. If the spell uses an attack roll instead, the attacker has Advantage.","A creature soaked in water has Resistance to Fire damage. If it takes Fire damage from a spell that targets an area, it still resists that damage, but the water evaporates and the condition ends.","If the creature is soaked in a flammable liquid, such as oil or liquor, any Fire or Lightning damage it takes ignites it, ending this condition and making it Enflamed.","The condition ends after 1 minute."],"notes":[],"aka":[]},{"n":"Enflamed","sec":"Conditions","lead":"A creature that is set on fire, engulfed in flame or set ablaze becomes Enflamed. While Enflamed:","fx":["The creature takes 1d6 Fire damage at the start of each of its turns.","The creature can spend 2 AP on its turn to put out the flames, ending the condition.","Becoming Drenched in water ends the condition.","Creatures immune to Fire damage are immune to this condition."],"notes":[],"aka":[]},{"n":"Frightened","sec":"Conditions","lead":"A creature whose safety is put at risk can become Frightened. While Frightened:","fx":["The creature has Disadvantage on ability checks and attack rolls while the source of its fear is within its line of sight.","The creature can't willingly move closer to the source of its fear."],"notes":[],"aka":[]},{"n":"Grappled","sec":"Conditions","lead":"A grapple is an attack that deals no damage but holds a target in place. While Grappled:","fx":["The creature's speed becomes 0, and it can't benefit from any bonus to its speed.","If a creature is Grappled by another creature, it can spend 1 AP on its turn to try to escape, making either a Strength (Athletics) check or a Dexterity (Acrobatics) check contested by the grappler's Strength (Athletics) check. On a success, the condition ends.","The condition ends if the grappler becomes Incapacitated.","The condition ends if an effect moves the Grappled creature out of the grappler's reach, such as being thrown or pushed away."],"notes":[],"aka":[]},{"n":"Incapacitated","sec":"Conditions","lead":"A creature that is impaired and unable to use certain limbs or act clearly becomes Incapacitated. While Incapacitated:","fx":["The creature can't spend AP or MP, and it can't take reactions.","At the start of its turn, the creature can't roll its Action Die.","The creature can't gain Action Points (AP) or Magic Points (MP)."],"notes":[],"aka":[]},{"n":"Invisible","sec":"Conditions","lead":"An Invisible creature can't be seen by normal means, without the aid of magic or a special sense. Its location can still be detected by any noise it makes or tracks it leaves. While Invisible:","fx":["Attack rolls against the creature have Disadvantage.","The creature's attack rolls have Advantage.","For the purpose of hiding, the creature is heavily obscured.","When a creature tries to locate a nearby Invisible creature, the Invisible creature makes a Dexterity (Stealth) check against the searcher's Passive Perception. On a failure, its location is revealed."],"notes":[],"aka":[]},{"n":"Muted","sec":"Conditions","lead":"A creature can be Muted by many things, from magical spells to having its tongue cut out. While Muted:","fx":["The creature can't speak, and it can't communicate through spoken language.","The creature can't cast spells that require a Verbal Component."],"notes":[{"l":"Note","t":"spell cards in the Spell Compendium now list Components, so Muted blocks any spell marked Verbal."}],"aka":[]},{"n":"Paralyzed","sec":"Conditions","lead":"Paralysis can be caused by many things, from a creature's toxic venom to a wizard's spell. While Paralyzed:","fx":["The creature is Incapacitated (see the condition), and it can't move or speak.","The creature automatically fails Strength and Dexterity saving throws.","Attack rolls against the creature have Advantage.","Any attack that hits the creature is a critical hit if the attacker is within 5 feet of it."],"notes":[{"l":"Designer's note","t":"effects that cause Paralyzed define their own duration or a saving throw that repeats without an AP cost, since an Incapacitated creature can't spend AP."}],"aka":[]},{"n":"Petrified","sec":"Conditions","lead":"A Petrified creature has been turned to stone or another solid material. While Petrified:","fx":["The creature, along with any nonmagical object it's wearing or carrying, is transformed into a solid, inanimate substance (usually stone). Its weight increases tenfold.","The creature is Incapacitated (see the condition), can't gain Exhaustion Points (EP), can't move or speak, can't age, and is unaware of its surroundings.","Attack rolls against the creature have Advantage.","The creature automatically fails Strength and Dexterity saving throws.","The creature has Resistance to all damage.","The creature is immune to poison and disease, although any poison or disease already in its system is suspended, not cured."],"notes":[],"aka":[]},{"n":"Poisoned","sec":"Conditions","lead":"A creature that has been exposed to a toxin can become Poisoned. While Poisoned:","fx":["The creature has Disadvantage on attack rolls and ability checks."],"notes":[{"l":"Designer's note","t":"Poisoned covers toxins, venoms and poisons. Sickened covers disease and nausea."}],"aka":[]},{"n":"Prone","sec":"Conditions","lead":"A Prone creature has been knocked down and is lying on the ground. While Prone:","fx":["The creature's only movement option is to crawl, unless it stands up, which ends the condition. Standing up costs half the creature's speed for that turn.","The creature has Disadvantage on attack rolls.","An attack roll against the creature has Advantage if the attacker is within 5 feet of it. Otherwise, the attack roll has Disadvantage."],"notes":[],"aka":[]},{"n":"Restrained","sec":"Conditions","lead":"A creature can be Restrained by many things, from entangling spells to the webs of giant spiders. While Restrained:","fx":["The creature's speed becomes 0, and it can't benefit from any bonus to its speed.","Attack rolls against the creature have Advantage, and the creature's attack rolls have Disadvantage.","The creature has Disadvantage on Dexterity saving throws."],"notes":[{"l":"Designer's note","t":"no default escape rule. Each effect that Restrains defines how it ends."}],"aka":[]},{"n":"Sickened","sec":"Conditions","lead":"A creature afflicted by a disease or overwhelming nausea becomes Sickened. While Sickened:","fx":["The creature has Disadvantage on Constitution saving throws. Whenever a Sickened creature fails a Constitution saving throw, it loses 1 Action Point (AP) from its Action Pool while convulsing or vomiting.","The creature has Disadvantage on all skill checks."],"notes":[{"l":"Designer's note","t":"a deliberately nasty debuff aimed at martial characters, who rely on AP. A creature with 0 AP loses nothing."}],"aka":[]},{"n":"Stunned","sec":"Conditions","lead":"A creature can be Stunned by certain martial and magical abilities. While Stunned:","fx":["The creature can't use Action Points (AP) or Magic Points (MP), can't move, and can speak only falteringly.","The creature automatically fails Strength and Dexterity saving throws.","Attack rolls against the creature have Advantage."],"notes":[{"l":"Designer's note","t":"unlike Incapacitated, a Stunned creature still rolls its Action Die and gains points. It just can't spend them until the stun ends (capped by Max Pool). A stun delays a turn rather than deleting it."}],"aka":[]},{"n":"Targeting","sec":"Combat Rules","lead":"[color=#8e171c]Targeting[/color]\nTargeting describes who or what a spell, attack or effect is aimed at. It works the same way whether you’re the one casting or the one being cast at.\n\n[color=#8e171c]Target. [/color]The effect is aimed directly at one specific creature or object. The caster chooses who.\n\n[color=#8e171c]Target Area.[/color] Whenever a spell or effect covers an area, such as a cone, line, sphere or cube, and affects everyone inside it, you are being targeted. Even though you aren’t the direct target of the attack or effect, being inside the selected area makes you a target of that spell. If any part of the area overlaps a creature’s space, that creature is also considered a target.\n\n[color=#8e171c]Whenever you target[/color]\nWhen you cast a spell or use an ability, its card tells you whether you choose a Target or a Target Area.\n\n[color=#8e171c]Target:[/color] you pick a creature or object you can see within range. Example: you cast Bane on the goblin chieftain.\nTarget Area: you pick where the effect goes, and every creature caught inside it is affected, friend or foe. Example: you cast Bramblesnatch in a 15-foot line from you. The two goblins in that line must make the save, and so must your ally if they’re standing there.\n\n[color=#8e171c]When you are targeted[/color]\nWhen an enemy’s spell, attack or effect is aimed at you, or you’re standing inside its area, you are targeted.\n\n[color=#8e171c]Target:[/color] a goblin shaman casts Bane on you, or a bandit throws a dagger at you.\nTarget Area: a fire blast erupts nearby, and its edge reaches your square.\n\nAny rule that says “when you are targeted” counts both cases. For example, Arcane Barrier can be cast whenever you’re targeted by a spell cast by a hostile creature, so it protects you whether a spell is aimed at you or you’re caught in its blast.","fx":[],"notes":[],"aka":[{"w":"Target","ref":"[color=#8e171c]Target.[/color] The effect is aimed directly at one specific creature or object. The caster chooses who.\n\n[color=#8e171c]When you target:[/color] you pick a creature or object you can see within range. Example: you cast Bane on the goblin chieftain.\n\n[color=#8e171c]When you are targeted:[/color] a goblin shaman casts Bane on you, or a bandit throws a dagger at you."},{"w":"Target Area","ref":"[color=#8e171c]Target Area.[/color] Whenever a spell or effect covers an area, such as a cone, line, sphere or cube, and affects everyone inside it, you are being targeted. Even though you aren’t the direct target of the attack or effect, being inside the selected area makes you a target of that spell. If any part of the area overlaps a creature’s space, that creature is also considered a target.\n\n[color=#8e171c]When you target:[/color] you pick where the effect goes, and every creature caught inside it is affected, friend or foe. Example: you cast Bramblesnatch in a 15-foot line from you. The two goblins in that line must make the save, and so must your ally if they’re standing there.\n\n[color=#8e171c]When you are targeted:[/color] a fire blast erupts nearby, and its edge reaches your square."}]},{"n":"Unconscious","sec":"Conditions","lead":"A creature that is asleep, knocked out or held in a fugue state is Unconscious. While Unconscious:","fx":["The creature is Incapacitated (see the condition), can't move or speak, and is unaware of its surroundings.","When a creature becomes Unconscious, it loses all Action Points (AP) and Magic Points (MP) currently in its Action Pool.","The creature drops whatever it's holding and falls Prone.","The creature automatically fails Strength and Dexterity saving throws.","Attack rolls against the creature have Advantage.","Any attack that hits the creature is a critical hit if the attacker is within 5 feet of it."],"notes":[{"l":"Designer's note","t":"Exhaustion Points stay in the pool through unconsciousness."}],"aka":[]}]};window.GL_PAGE="items";const CATALOG={"v":1,"items":[],"recipes":[]};
+
+/* glossary data (crawl-glossary.json): {v:1, entries:[{n, sec, lead, fx:[effects], notes:[{l,t}], aka:[other words to match]}]} */
+function normGlossary(j){
+  const a=j&&Array.isArray(j.entries)?j.entries:null; if(!a)return null;
+  const list=x=>Array.isArray(x)?x:[];
+  return a.filter(e=>e&&typeof e.n==="string"&&e.n.trim()).map(e=>({
+    n:e.n.trim(), sec:String(e.sec||"Conditions").trim()||"Conditions", lead:String(e.lead||"").trim(),
+    fx:list(e.fx).map(x=>String(x).trim()).filter(Boolean),
+    notes:list(e.notes).filter(n=>n&&String(n.t||"").trim()).map(n=>({l:String(n.l||"Note").trim()||"Note",t:String(n.t).trim()})),
+    aka:list(e.aka).map(x=>typeof x==="string"?{w:x,ref:""}:{w:String(x&&x.w||""),ref:String(x&&x.ref||"")}).map(x=>({w:x.w.trim(),ref:x.ref.trim()})).filter(x=>x.w)}));
+}
+/* glossary text: blank lines start a new paragraph, [color=#hex]text[/color] colors text */
+const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;
+function richInline(t){return esc(t).replace(COLOR_RE,(m,c,x)=>`<span class="tc" style="--c:${c}">${x}</span>`).replace(/\n/g,"<br>")}
+function paras(t,cls){return String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p${cls?` class="${cls}"`:""}>${richInline(x)}</p>`).join("")}
+const plainText=t=>String(t||"").replace(/\[\/?color[^\]]*\]/gi,"");
+const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
+
+/* admin sign-in, shared by every page of the GitHub Pages site. The unlocked key is kept
+   in sessionStorage, so the sign-in lasts while this browser tab is open, across pages. */
+let ADMIN=false, GH_KEY=null;
+const AdminHooks={canSignOut:()=>true,signedIn:()=>{},signedOut:()=>{}};
+const ADMIN_SS="crawl-admin-key";
+const REPO=window.CRAWL_REPO||{};
+const KDF_ITER=600000;
+const b64=u8=>{let s="";for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function passKey(pass,salt,iter){
+  const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pass),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+async function lockKey(secret,pass){
+  const salt=crypto.getRandomValues(new Uint8Array(16)), iv=crypto.getRandomValues(new Uint8Array(12));
+  const k=await passKey(pass,salt,KDF_ITER);
+  const data=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},k,new TextEncoder().encode(secret)));
+  return {v:1,cipher:"AES-256-GCM",kdf:"PBKDF2-SHA256",iterations:KDF_ITER,salt:b64(salt),iv:b64(iv),data:b64(data)};
+}
+async function unlockKey(box,pass){
+  const k=await passKey(pass,unb64(box.salt),box.iterations||KDF_ITER);
+  const out=await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(box.iv)},k,unb64(box.data));
+  return new TextDecoder().decode(out);
+}
+function gh(path,opts={},key=GH_KEY){
+  return fetch(`https://api.github.com/repos/${REPO.owner}/${REPO.repo}${path}`,{...opts,cache:"no-store",headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+key,"X-GitHub-Api-Version":"2022-11-28",...(opts.headers||{})}});
+}
+async function putFile(path,text,message,key=GH_KEY){
+  const branch=REPO.branch||"main";
+  const cur=await gh(`/contents/${encodeURIComponent(path)}?ref=${branch}`,{},key);
+  if(cur.status===401)throw {code:"bad_key"};
+  let sha; if(cur.ok)sha=(await cur.json()).sha; else if(cur.status!==404)throw {code:"http",status:cur.status};
+  const body={message,branch,content:b64(new TextEncoder().encode(text))}; if(sha)body.sha=sha;
+  const r=await gh(`/contents/${encodeURIComponent(path)}`,{method:"PUT",body:JSON.stringify(body),headers:{"Content-Type":"application/json"}},key);
+  if(r.status===401)throw {code:"bad_key"};
+  if(r.status===403||r.status===404)throw {code:"no_access"};
+  if(r.status===409)throw {code:"conflict"};
+  if(!r.ok)throw {code:"http",status:r.status};
+  return r.json();
+}
+function showAdminBtn(){$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?"Admin · Sign out":"Admin"}
+function becomeAdmin(key,quiet){GH_KEY=key;ADMIN=true;try{sessionStorage.setItem(ADMIN_SS,key)}catch(e){}closeAdmin();showAdminBtn();AdminHooks.signedIn(quiet)}
+function signOut(){if(!AdminHooks.canSignOut())return;ADMIN=false;GH_KEY=null;try{sessionStorage.removeItem(ADMIN_SS)}catch(e){}showAdminBtn();AdminHooks.signedOut()}
+function restoreAdmin(){if(!STATIC)return;let k=null;try{k=sessionStorage.getItem(ADMIN_SS)}catch(e){}if(k)becomeAdmin(k,true)}
+$("adminBtn").addEventListener("click",()=>{if(ADMIN)signOut();else openAdmin()});
+let adminMode="login";
+function setAdminMode(m){
+  adminMode=m;
+  $("loginPane").hidden=m!=="login";$("setupPane").hidden=m!=="setup";
+  $("adminTitle").textContent=m==="login"?"Admin sign-in":"Set up admin access";
+  $("adminGo").textContent=m==="login"?"Unlock":"Save and unlock";
+  $("adminSwitch").textContent=m==="login"?"First time? Set up admin access":"Back to sign-in";
+  $("adminErr").textContent="";
+}
+async function fetchAdminBox(){
+  try{const r=await fetch("admin.json",{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&j.data&&j.salt&&j.iv)return j}}catch(e){}
+  return null;
+}
+async function openAdmin(){
+  $("adminForm").reset();
+  setAdminMode((await fetchAdminBox())?"login":"setup");
+  $("adminModal").hidden=false;
+  (adminMode==="login"?$("adminPass"):$("setupKey")).focus();
+}
+function closeAdmin(){$("adminModal").hidden=true;$("adminForm").reset();$("adminErr").textContent=""}
+$("adminSwitch").addEventListener("click",()=>{setAdminMode(adminMode==="login"?"setup":"login");(adminMode==="login"?$("adminPass"):$("setupKey")).focus()});
+$("adminCancel").addEventListener("click",closeAdmin);
+$("adminModal").addEventListener("click",e=>{if(e.target===$("adminModal"))closeAdmin()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("adminModal").hidden)closeAdmin()});
+$("adminForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const err=m=>{$("adminErr").textContent=m};
+  const go=$("adminGo");
+  if(!window.crypto||!crypto.subtle){err("This browser can't do the secure unlock. Open the site over https in a current browser.");return}
+  if(adminMode==="login"){
+    const pass=$("adminPass").value; if(!pass){err("Type your admin password.");return}
+    go.disabled=true;err("Checking…");
+    try{
+      const box=await fetchAdminBox(); if(!box){setAdminMode("setup");err("Admin access isn't set up yet.");return}
+      let key; try{key=await unlockKey(box,pass)}catch(x){err("That password isn't right.");return}
+      becomeAdmin(key);
+    }finally{go.disabled=false}
+  }else{
+    const key=$("setupKey").value.trim(), p1=$("setupPass").value, p2=$("setupPass2").value;
+    if(!key){err("Paste your GitHub access key.");return}
+    if(p1.length<12){err("Use at least 12 characters for the password.");return}
+    if(p1!==p2){err("The two passwords don't match.");return}
+    go.disabled=true;err("Locking the key and saving…");
+    try{
+      const box=await lockKey(key,p1);
+      await putFile("admin.json",JSON.stringify(box,null,1)+"\n","Set up admin access",key);
+      becomeAdmin(key);
+    }catch(x){
+      const c=x&&x.code;
+      err(c==="bad_key"?"GitHub didn't accept that key. Check you copied all of it.":c==="no_access"?"That key can't change this repo. Give it access to this repository with Contents set to Read and write.":"Couldn't reach GitHub. Try again in a moment.");
+    }finally{go.disabled=false}
+  }
+});
+/* Shared editing tools for the Glossary, Items and Crafting pages:
+   the Text color sidebar (shown while something is being edited) and the save bar spacing.
+   Text inputs and textareas inside an element with class "gediting" can be colored. */
+const SWATCHES = [["Crawl red", "#8e171c"], ["Blue", "#1f5fbf"], ["Green", "#2e7d32"], ["Purple", "#6a1b9a"], ["Gold", "#b7791f"]];
+let lastBox = null;
+document.body.insertAdjacentHTML("beforeend", `<aside class="gside" id="gside" hidden aria-label="Text color">
+<div class="gsh">Text color</div>
+<div class="gsb">
+<div class="gsws">${SWATCHES.map(([n, c]) => `<button type="button" class="gsw" data-c="${c}" style="--c:${c}" title="${n}" aria-label="Color selected text ${n}"></button>`).join("")}</div>
+<label class="gpickl">Any color <input type="color" class="gpick" id="gpick" value="#8e171c"></label>
+<button type="button" class="btn solid gapply">Color selected text</button>
+<button type="button" class="btn gclear">Remove color</button>
+<p class="ghelp" id="gsideMsg">Select text in any box, then pick a color.</p>
+</div></aside>`);
+const side = $("gside"), sideMsg = (m, bad) => { $("gsideMsg").textContent = m || "Select text in any box, then pick a color."; $("gsideMsg").classList.toggle("bad", !!bad) };
+function sideShow(on) { side.hidden = !on; document.body.classList.toggle("gside-on", !!on) }
+document.addEventListener("focusin", ev => { if (ev.target.matches && ev.target.matches(".gediting textarea, .gediting input[type=text]")) lastBox = ev.target });
+side.addEventListener("mousedown", ev => { if (ev.target.closest("button")) ev.preventDefault() });
+function colorSel(c) {
+  const t = lastBox && lastBox.isConnected ? lastBox : null;
+  if (!t || t.selectionStart === t.selectionEnd) { sideMsg("Select some text in one of the boxes first, then pick a color.", true); return }
+  sideMsg("");
+  const a = t.selectionStart, b = t.selectionEnd, v = t.value;
+  let mid = v.slice(a, b).replace(/\[\/?color[^\]]*\]/gi, "");
+  if (c) mid = `[color=${c}]${mid}[/color]`;
+  t.focus(); t.setSelectionRange(a, b);
+  if (!document.execCommand || !document.execCommand("insertText", false, mid)) { t.setRangeText(mid, a, b, "select"); t.dispatchEvent(new Event("input", { bubbles: true })) }
+  t.setSelectionRange(a, a + mid.length);
+}
+side.addEventListener("click", ev => {
+  const sw = ev.target.closest(".gsw"); if (sw) { $("gpick").value = sw.dataset.c; colorSel(sw.dataset.c); return }
+  if (ev.target.closest(".gapply")) { colorSel($("gpick").value); return }
+  if (ev.target.closest(".gclear")) colorSel("");
+});
+$("gpick").addEventListener("change", () => { if (lastBox && lastBox.isConnected && lastBox.selectionStart !== lastBox.selectionEnd) colorSel($("gpick").value) });
+/* keep the sidebar clear of the save bar on small screens */
+new MutationObserver(() => document.documentElement.style.setProperty("--sbh", $("savebar").hidden ? "0px" : $("savebar").offsetHeight + "px"))
+  .observe($("savebar"), { attributes: true, attributeFilter: ["hidden"] });
+const slugOf = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const saveError = (c, what) => c === "bad_key" ? "GitHub no longer accepts your access key. It may have expired; set up admin access again." : c === "no_access" ? "Your access key can't change this repo anymore." : c === "conflict" ? `The ${what} changed on GitHub while you were editing. Reload the page and make your changes again.` : "Saving failed. Check your connection and try again.";
+/* Items and Crafting pages. Both read and write crawl-items.json:
+     {v:1, items:[item], recipes:[recipe]}
+     item   = {id, n, type, rarity, cost, weight, desc, props:[lines], extra:[{k,v}]}
+     recipe = {id, n, makes:[{item:id, qty}], ing:[{item:id, qty}], tools, check, time, cost, desc, extra:[{k,v}]}
+   Recipes point at items by id, so renaming an item keeps its recipes linked.
+   Runs after the shared admin code and src/editkit.js. */
+const KIND = window.GL_PAGE === "crafting" ? "recipes" : "items";
+const TYPES = ["Weapon", "Armor", "Shield", "Tool", "Material", "Potion", "Food", "Gear", "Treasure", "Magic Item"];
+const RARITIES = ["Common", "Uncommon", "Rare", "Very Rare", "Legendary"];
+let items = [], recipes = [], original = "", dirty = false, uid = 0;
+const editing = new Set(), drafts = new Map();
+
+const str = x => String(x ?? "").trim();
+const list = x => Array.isArray(x) ? x : [];
+const newId = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const extras = x => list(x).map(r => ({ k: str(r && r.k), v: str(r && r.v) })).filter(r => r.k || r.v);
+const qtys = x => list(x).map(r => ({ item: str(r && r.item), qty: Math.max(1, Math.round(+(r && r.qty) || 1)) })).filter(r => r.item);
+function normCatalog(j) {
+  if (!j || typeof j !== "object") return null;
+  return {
+    items: list(j.items).filter(i => i && str(i.n)).map(i => ({
+      id: str(i.id) || newId("i"), n: str(i.n), type: str(i.type), rarity: str(i.rarity), cost: str(i.cost), weight: str(i.weight),
+      desc: str(i.desc), props: list(i.props).map(str).filter(Boolean), extra: extras(i.extra)
+    })),
+    recipes: list(j.recipes).filter(r => r && (str(r.n) || list(r.makes).length)).map(r => ({
+      id: str(r.id) || newId("r"), n: str(r.n), makes: qtys(r.makes), ing: qtys(r.ing), tools: str(r.tools), check: str(r.check),
+      time: str(r.time), cost: str(r.cost), desc: str(r.desc), extra: extras(r.extra)
+    }))
+  };
+}
+function load(j) {
+  const c = normCatalog(j); if (!c) return false;
+  items = c.items.map(x => ({ ...x, _id: ++uid })); recipes = c.recipes.map(x => ({ ...x, _id: ++uid }));
+  original = JSON.stringify(clean()); return true;
+}
+const strip = o => { const { _id, _new, _score, ...x } = o; return x };
+const byName = (a, b) => a.n.toLowerCase().localeCompare(b.n.toLowerCase());
+function clean() {
+  return { v: 1, items: items.filter(x => !x._new).map(strip).sort(byName), recipes: recipes.filter(x => !x._new).map(strip).sort((a, b) => recipeName(a).toLowerCase().localeCompare(recipeName(b).toLowerCase())) };
+}
+const itemById = id => items.find(i => i.id === id);
+const itemByName = n => items.find(i => !i._new && i.n.toLowerCase() === str(n).toLowerCase());
+const itemName = id => (itemById(id) || { n: "(missing item)" }).n;
+const recipeName = r => r.n || (r.makes[0] ? itemName(r.makes[0].item) : "Untitled recipe");
+const rows = () => KIND === "items" ? items : recipes;
+
+/* ---------------------------------------------------------------- search */
+const query = () => $("cq").value.trim().toLowerCase().replace(/\s+/g, " ");
+function score(x, q) {
+  const name = (KIND === "items" ? x.n : recipeName(x)).toLowerCase(), wordStart = t => new RegExp("(^|\\W)" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).test(t);
+  if (name === q) return 100;
+  if (name.startsWith(q)) return 90;
+  if (wordStart(name)) return 75;
+  if (name.includes(q)) return 65;
+  const linked = KIND === "items" ? [x.type, x.rarity] : [...x.makes, ...x.ing].map(r => itemName(r.item));
+  if (linked.some(t => t.toLowerCase() === q)) return 60;
+  if (linked.some(t => t.toLowerCase().includes(q))) return 50;
+  const text = plainText(KIND === "items" ? [x.cost, x.weight, x.desc, ...x.props, ...x.extra.map(r => r.k + " " + r.v)].join(" ")
+    : [x.tools, x.check, x.time, x.cost, x.desc, ...x.extra.map(r => r.k + " " + r.v)].join(" ")).toLowerCase();
+  if (!text.includes(q)) return 0;
+  return wordStart(text) ? 20 : 10;
+}
+function visible() {
+  let l = rows().filter(x => !x._new || editing.has(x._id));
+  if (KIND === "items" && $("ctype").value) l = l.filter(x => x.type === $("ctype").value || editing.has(x._id));
+  const q = query();
+  const nm = x => KIND === "items" ? x.n : recipeName(x);
+  if (q) { l.forEach(x => { x._score = score(x, q) }); return l.filter(x => x._score > 0 || editing.has(x._id)).sort((a, b) => b._score - a._score || nm(a).localeCompare(nm(b))) }
+  return l.sort((a, b) => (b._new ? 1 : 0) - (a._new ? 1 : 0) || nm(a).toLowerCase().localeCompare(nm(b).toLowerCase()));
+}
+
+/* ---------------------------------------------------------------- cards */
+const itemLink = (id, qty) => {
+  const i = itemById(id), q = qty > 1 ? `${qty} × ` : "";
+  if (!i && String(id).startsWith("?")) return `<span class="ilink gone">${q}${esc(id.slice(1))} <small>(new item)</small></span>`;
+  const label = q + esc(i ? i.n : "(missing item)");
+  return i ? `<a class="ilink" href="${KIND === "items" ? "" : "items.html"}#i-${esc(i.id)}">${label}</a>` : `<span class="ilink gone">${label}</span>`;
+};
+const recipeLink = r => `<a class="ilink" href="${KIND === "recipes" ? "" : "crafting.html"}#r-${esc(r.id)}">${esc(recipeName(r))}</a>`;
+const factLine = (label, v) => v ? `<p class="fact"><b>${label}:</b> ${richInline(v)}</p>` : "";
+function itemBody(i) {
+  const made = recipes.filter(r => !r._new && r.makes.some(m => m.item === i.id));
+  const used = recipes.filter(r => !r._new && r.ing.some(m => m.item === i.id));
+  const facts = [["Rarity", i.rarity], ["Cost", i.cost], ["Weight", i.weight]].filter(f => f[1]);
+  const h = (facts.length ? `<div class="facts">${facts.map(([k, v]) => `<span class="chip"><b>${k}</b> ${esc(v)}</span>`).join("")}</div>` : "") +
+    (i.desc ? `<div class="clead">${paras(i.desc)}</div>` : "") +
+    (i.props.length ? `<ul class="cul">${i.props.map(x => `<li>${richInline(x)}</li>`).join("")}</ul>` : "") +
+    i.extra.map(r => factLine(esc(r.k || "Detail"), r.v)).join("") +
+    (made.length ? `<p class="fact links"><b>Crafted by:</b> ${made.map(recipeLink).join(", ")}</p>` : "") +
+    (used.length ? `<p class="fact links"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "");
+  return h || `<p class="clead">No details yet.</p>`;
+}
+function recipeBody(r) {
+  return (r.makes.length ? `<p class="fact links"><b>Makes:</b> ${r.makes.map(m => itemLink(m.item, m.qty)).join(", ")}</p>` : "") +
+    (r.ing.length ? `<div class="fact"><b>Ingredients:</b><ul class="cul ings">${r.ing.map(m => `<li>${itemLink(m.item, m.qty)}</li>`).join("")}</ul></div>` : `<p class="fact"><b>Ingredients:</b> none listed yet.</p>`) +
+    factLine("Tools or station", r.tools) + factLine("Check", r.check) + factLine("Time", r.time) + factLine("Cost", r.cost) +
+    (r.desc ? `<div class="clead">${paras(r.desc)}</div>` : "") +
+    r.extra.map(x => factLine(esc(x.k || "Detail"), x.v)).join("");
+}
+function card(x) {
+  if (editing.has(x._id)) return form(x);
+  const anchor = (KIND === "items" ? "i-" : "r-") + x.id, name = KIND === "items" ? x.n : recipeName(x);
+  const tag = KIND === "items" ? x.type : "Recipe";
+  return `<section class="cond" id="${esc(anchor)}" data-id="${x._id}"><h2 class="chead"><span>${esc(name)}</span><span class="chr">` +
+    (tag ? `<span class="ctag">${esc(tag)}</span>` : "") +
+    (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(name)}">Edit</button>` : "") +
+    `</span></h2><div class="cbody">${KIND === "items" ? itemBody(x) : recipeBody(x)}</div></section>`;
+}
+
+/* ---------------------------------------------------------------- forms */
+const extraRow = r => `<div class="xrow"><input type="text" class="xk" value="${esc(r.k)}" placeholder="Label, e.g. Damage" aria-label="Detail label" autocomplete="off"><input type="text" class="xv" value="${esc(r.v)}" placeholder="Value, e.g. 1d8 Slashing" aria-label="Detail value" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
+const qtyRow = (r, cls) => `<div class="qrow ${cls}"><input type="number" class="qn" min="1" value="${r.qty || 1}" aria-label="Quantity"><input type="text" class="qi" list="itemNames" value="${esc(r.name ?? (r.item ? itemName(r.item) : ""))}" placeholder="Item name" aria-label="Item" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
+function fld(id, label, help, inner) { return `<label for="${id}">${label}${help ? ` <small>${help}</small>` : ""}${inner}</label>` }
+const inp = (id, k, v, extra = "") => `<input type="text" id="${id}" data-k="${k}" value="${esc(v)}" autocomplete="off"${extra}>`;
+const area = (id, k, v, r) => `<textarea id="${id}" data-k="${k}" rows="${r}">${esc(v)}</textarea>`;
+function form(x) {
+  const id = k => `c${k}-${x._id}`, isItem = KIND === "items";
+  const d = drafts.get(x._id) || (isItem
+    ? { n: x.n, type: x.type, rarity: x.rarity, cost: x.cost, weight: x.weight, desc: x.desc, props: x.props.join("\n"), extra: x.extra }
+    : { n: x.n, tools: x.tools, check: x.check, time: x.time, cost: x.cost, desc: x.desc, extra: x.extra, makes: x.makes.map(m => ({ qty: m.qty, name: itemName(m.item) })), ing: x.ing.map(m => ({ qty: m.qty, name: itemName(m.item) })) });
+  const head = x._new ? (isItem ? "New item" : "New recipe") : "Editing " + esc(isItem ? x.n : recipeName(x));
+  const body = isItem ? `
+${fld(id("n"), "Name", "", inp(id("n"), "n", d.n))}
+<div class="grid3">
+${fld(id("type"), "Type", "", inp(id("type"), "type", d.type, ' list="itemTypes" placeholder="e.g. Weapon"'))}
+${fld(id("rarity"), "Rarity", "", inp(id("rarity"), "rarity", d.rarity, ' list="itemRarities" placeholder="e.g. Common"'))}
+${fld(id("cost"), "Cost", "", inp(id("cost"), "cost", d.cost, ' placeholder="e.g. 15 gp"'))}
+${fld(id("weight"), "Weight", "", inp(id("weight"), "weight", d.weight, ' placeholder="e.g. 3 lb"'))}
+</div>
+${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 4))}
+${fld(id("props"), "Properties", "One per line. Each line becomes a bullet point.", area(id("props"), "props", d.props, 3))}`
+    : `
+${fld(id("n"), "Recipe name", "Leave empty to use the name of the first item it makes.", inp(id("n"), "n", d.n))}
+<div class="glab">Makes <small>The item or items this recipe produces. Pick from the list, or type a new name to create that item.</small></div>
+<div class="qlist qmakes">${(d.makes.length ? d.makes : [{ qty: 1, name: "" }]).map(r => qtyRow(r, "makes")).join("")}</div>
+<button type="button" class="btn qadd" data-q="makes">Add another result</button>
+<div class="glab">Ingredients <small>Each ingredient links to its item on the Items page.</small></div>
+<div class="qlist qing">${d.ing.map(r => qtyRow(r, "ing")).join("")}</div>
+<button type="button" class="btn qadd" data-q="ing">Add ingredient</button>
+<div class="grid3">
+${fld(id("tools"), "Tools or station", "", inp(id("tools"), "tools", d.tools, ' placeholder="e.g. Alchemist\'s kit"'))}
+${fld(id("check"), "Check", "", inp(id("check"), "check", d.check, ' placeholder="e.g. DC 12 Crafting"'))}
+${fld(id("time"), "Time", "", inp(id("time"), "time", d.time, ' placeholder="e.g. 1 hour"'))}
+${fld(id("cost"), "Cost", "", inp(id("cost"), "cost", d.cost, ' placeholder="e.g. 10 gp"'))}
+</div>
+${fld(id("desc"), "Instructions or notes", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}`;
+  return `<section class="cond gediting" data-id="${x._id}"><div class="chead"><span>${head}</span></div>
+<div class="cbody gform">${body}
+<div class="glab">More details <small>Add any other details you want on the card, each with its own label.</small></div>
+<div class="xlist">${d.extra.map(extraRow).join("")}</div>
+<button type="button" class="btn xadd">Add a detail</button>
+<div class="gprev"><span class="glab">Preview</span><div class="gprevbody"></div></div>
+<p class="gerr" role="alert"></p>
+<div class="gbtns"><button type="button" class="btn gdel">${x._new ? "Remove" : isItem ? "Delete item" : "Delete recipe"}</button><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>
+</div></section>`;
+}
+function readForm(f) {
+  const d = {}; f.querySelectorAll("[data-k]").forEach(el => { d[el.dataset.k] = el.value });
+  d.extra = [...f.querySelectorAll(".xrow")].map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
+  const q = c => [...f.querySelectorAll(".qrow." + c)].map(r => ({ qty: +r.querySelector(".qn").value || 1, name: r.querySelector(".qi").value }));
+  if (KIND === "recipes") { d.makes = q("makes"); d.ing = q("ing") }
+  return d;
+}
+function fromDraft(d, x) {
+  const base = { ...x, n: str(d.n).replace(/\s+/g, " "), cost: str(d.cost), desc: str(d.desc), extra: extras(d.extra) };
+  if (KIND === "items") return { ...base, type: str(d.type), rarity: str(d.rarity), weight: str(d.weight), props: d.props.split("\n").map(s => s.replace(/^\s*[-•*]\s*/, "").trim()).filter(Boolean) };
+  const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name), qty: Math.max(1, Math.round(r.qty)) } });
+  return { ...base, tools: str(d.tools), check: str(d.check), time: str(d.time), makes: link(d.makes), ing: link(d.ing) };
+}
+function preview(f) {
+  const x = rows().find(r => r._id === +f.dataset.id), b = f.querySelector(".gprevbody"); if (!x || !b) return;
+  const p = fromDraft(readForm(f), x);
+  b.innerHTML = KIND === "items" ? itemBody(p) : recipeBody(p);
+}
+function saveDrafts() { document.querySelectorAll(".gediting").forEach(f => drafts.set(+f.dataset.id, readForm(f))) }
+
+/* ---------------------------------------------------------------- page */
+function render() {
+  saveDrafts();
+  const l = visible(), n = l.filter(x => !x._new).length, noun = KIND === "items" ? ["item", "items"] : ["recipe", "recipes"];
+  $("ccount").textContent = `${n} ${n === 1 ? noun[0] : noun[1]}`;
+  $("clist").innerHTML = l.length ? (query() ? `<div class="ghead gres"><h2>Best matches first</h2></div>` : "") + `<div class="clist">${l.map(card).join("")}</div>` : "";
+  document.querySelectorAll(".gediting").forEach(preview);
+  sideShow(editing.size > 0);
+  const total = rows().filter(x => !x._new).length;
+  $("cempty").hidden = l.length > 0;
+  $("cempty").textContent = total ? "Nothing matches. Try a different word, or clear the search." : (KIND === "items" ? "No items yet." : "No recipes yet.") + (ADMIN ? ` Click ${KIND === "items" ? "Add item" : "Add recipe"} to create the first one.` : "");
+  $("itemNames").innerHTML = items.filter(i => !i._new).sort(byName).map(i => `<option value="${esc(i.n)}">`).join("");
+  $("itemTypes").innerHTML = [...new Set([...TYPES, ...items.map(i => i.type).filter(Boolean)])].map(t => `<option value="${esc(t)}">`).join("");
+  $("itemRarities").innerHTML = RARITIES.map(t => `<option value="${esc(t)}">`).join("");
+  if (KIND === "items") {
+    const sel = $("ctype"), cur = sel.value, types = [...new Set(items.filter(i => !i._new).map(i => i.type).filter(Boolean))].sort();
+    sel.innerHTML = `<option value="">All types</option>` + types.map(t => `<option${t === cur ? " selected" : ""}>${esc(t)}</option>`).join("");
+    sel.hidden = !types.length;
+  }
+  $("gAdd").hidden = !ADMIN;
+}
+const say = m => { $("gmsg").textContent = m };
+function markDirty() {
+  dirty = JSON.stringify(clean()) !== original;
+  $("savebar").hidden = !dirty;
+  if (dirty) { $("saveMsg").textContent = KIND === "items" ? "You have unsaved item changes." : "You have unsaved recipe changes."; $("saveBtn").disabled = false; $("discardBtn").disabled = false }
+}
+const rowOf = el => { const c = el.closest(".cond"); return c ? rows().find(x => x._id === +c.dataset.id) : null };
+function closeForm(x) { editing.delete(x._id); drafts.delete(x._id); if (x._new) { if (KIND === "items") items = items.filter(y => y !== x); else recipes = recipes.filter(y => y !== x) } }
+
+$("clist").addEventListener("input", ev => { const f = ev.target.closest(".gediting"); if (f) preview(f) });
+$("clist").addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  const f = b.closest(".gediting");
+  if (f && b.classList.contains("xadd")) { f.querySelector(".xlist").insertAdjacentHTML("beforeend", extraRow({ k: "", v: "" })); f.querySelector(".xrow:last-child .xk").focus(); return }
+  if (f && b.classList.contains("qadd")) { const c = b.dataset.q; f.querySelector(c === "makes" ? ".qmakes" : ".qing").insertAdjacentHTML("beforeend", qtyRow({ qty: 1, name: "" }, c)); f.querySelector(`.qrow.${c}:last-child .qi`).focus(); return }
+  if (f && b.classList.contains("xdel")) { b.closest(".xrow,.qrow").remove(); preview(f); return }
+  const x = rowOf(b); if (!x) return;
+  if (b.classList.contains("gedit")) {
+    editing.add(x._id); render();
+    const el = document.querySelector(`.gediting[data-id="${x._id}"] [data-k="n"]`); if (el) el.focus();
+  } else if (b.classList.contains("gcancel")) { closeForm(x); render() }
+  else if (b.classList.contains("gdel")) {
+    if (!x._new && !b.dataset.sure) {
+      const uses = KIND === "items" ? recipes.filter(r => [...r.makes, ...r.ing].some(m => m.item === x.id)).length : 0;
+      b.dataset.sure = "1"; b.textContent = uses ? `Used in ${uses} recipe${uses === 1 ? "" : "s"}. Click again to delete` : "Click again to delete"; return;
+    }
+    const wasNew = x._new, name = KIND === "items" ? x.n : recipeName(x); closeForm(x);
+    if (!wasNew) {
+      if (KIND === "items") { items = items.filter(y => y !== x); recipes.forEach(r => { r.makes = r.makes.filter(m => m.item !== x.id); r.ing = r.ing.filter(m => m.item !== x.id) }) }
+      else recipes = recipes.filter(y => y !== x);
+    }
+    render(); markDirty(); if (!wasNew) say(`Deleted ${name}. Click Save changes to keep it deleted.`);
+  } else if (b.classList.contains("gdone")) {
+    const f2 = b.closest(".gediting"), d = readForm(f2), err = m => { f2.querySelector(".gerr").textContent = m };
+    if (KIND === "items") {
+      const name = str(d.n).replace(/\s+/g, " ");
+      if (!name) { err("Give the item a name."); return }
+      if (items.some(y => y !== x && !y._new && y.n.toLowerCase() === name.toLowerCase())) { err(`There's already an item called ${name}.`); return }
+      Object.assign(x, fromDraft(d, x)); x.n = name;
+    } else {
+      const named = l => l.filter(r => str(r.name));
+      if (!named(d.makes).length) { err("Pick the item this recipe makes."); return }
+      const created = [];
+      for (const r of [...named(d.makes), ...named(d.ing)]) if (!itemByName(r.name) && !created.some(c => c.n.toLowerCase() === str(r.name).toLowerCase())) {
+        const it = { id: newId("i"), n: str(r.name).replace(/\s+/g, " "), type: "", rarity: "", cost: "", weight: "", desc: "", props: [], extra: [], _id: ++uid };
+        created.push(it);
+      }
+      items.push(...created);
+      Object.assign(x, fromDraft(d, x));
+      if (created.length) say(`Also created ${created.length === 1 ? "a new item" : "new items"}: ${created.map(c => c.n).join(", ")}. Fill in ${created.length === 1 ? "its" : "their"} details on the Items page.`);
+      else say("");
+    }
+    delete x._new; editing.delete(x._id); drafts.delete(x._id);
+    render(); markDirty();
+  }
+});
+$("gAdd").addEventListener("click", () => {
+  const x = KIND === "items"
+    ? { id: newId("i"), n: "", type: $("ctype").value || "", rarity: "", cost: "", weight: "", desc: "", props: [], extra: [], _id: ++uid, _new: true }
+    : { id: newId("r"), n: "", makes: [], ing: [], tools: "", check: "", time: "", cost: "", desc: "", extra: [], _id: ++uid, _new: true };
+  rows().push(x); editing.add(x._id); $("cq").value = ""; render();
+  const f = document.querySelector(`.gediting[data-id="${x._id}"]`);
+  if (f) { f.scrollIntoView({ block: "center" }); (f.querySelector(KIND === "items" ? '[data-k="n"]' : ".qi") || f.querySelector("input")).focus() }
+});
+$("cq").addEventListener("input", render);
+if ($("ctype")) $("ctype").addEventListener("change", render);
+
+$("saveBtn").addEventListener("click", async () => {
+  if (editing.size) { $("saveMsg").textContent = "Click Done (or Cancel) on what you're editing first."; return }
+  if (!ADMIN || !GH_KEY) { $("saveMsg").textContent = "Sign in as admin to save."; return }
+  $("saveBtn").disabled = true; $("discardBtn").disabled = true; $("saveMsg").textContent = "Saving to the site…";
+  try {
+    const data = clean();
+    await putFile("crawl-items.json", JSON.stringify(data, null, 1) + "\n", KIND === "items" ? "Update items from the admin page" : "Update crafting recipes from the admin page");
+    original = JSON.stringify(data); dirty = false;
+    $("saveMsg").textContent = "Saved. Everyone sees the changes in about a minute.";
+    setTimeout(() => { if (!dirty) $("savebar").hidden = true }, 4000);
+  } catch (x) {
+    $("saveMsg").textContent = saveError(x && x.code, "items and recipes");
+    $("saveBtn").disabled = false; $("discardBtn").disabled = false;
+  }
+});
+$("discardBtn").addEventListener("click", () => { load(JSON.parse(original)); editing.clear(); drafts.clear(); dirty = false; $("savebar").hidden = true; say(""); render() });
+window.addEventListener("beforeunload", ev => { if (dirty || editing.size) { ev.preventDefault(); ev.returnValue = "" } });
+
+/* open the card named in the address (#i-… or #r-…) */
+function showHash() {
+  const id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
+  let el = document.getElementById(id);
+  if (!el && (query() || ($("ctype") && $("ctype").value))) { $("cq").value = ""; if ($("ctype")) $("ctype").value = ""; render(); el = document.getElementById(id) }
+  if (!el) return;
+  el.scrollIntoView({ block: "start" }); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+}
+window.addEventListener("hashchange", showHash);
+
+async function refreshFromGitHub() {
+  try {
+    const r = await gh(`/contents/crawl-items.json?ref=${REPO.branch || "main"}`, { headers: { "Accept": "application/vnd.github.raw+json" } });
+    if (r.ok && !dirty && !editing.size && load(await r.json())) render();
+  } catch (x) { }
+}
+AdminHooks.canSignOut = () => { if (dirty || editing.size) { say("Save or discard your changes before signing out."); return false } return true };
+AdminHooks.signedIn = quiet => { render(); if (!quiet) say(KIND === "items" ? "Signed in as admin. Click Edit on any item, or Add item." : "Signed in as admin. Click Edit on any recipe, or Add recipe."); refreshFromGitHub() };
+AdminHooks.signedOut = () => { editing.clear(); drafts.clear(); items = items.filter(x => !x._new); recipes = recipes.filter(x => !x._new); render(); say("Signed out.") };
+
+load(CATALOG);
+if (STATIC) {
+  $("adminBtn").hidden = false; showAdminBtn();
+  fetch("crawl-items.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null)
+    .then(j => { if (j && !dirty) load(j) }).catch(() => { })
+    .finally(() => { render(); restoreAdmin(); showHash() });
+}
+render(); showHash();
+</script></body></html>

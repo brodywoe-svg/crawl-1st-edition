@@ -6,6 +6,27 @@ const PAGE = window.GL_PAGE || "glossary";
 const FIRST = "Conditions";
 let entries = [], uid = 0, original = "", dirty = false;
 const editing = new Set(), drafts = new Map();
+/* glossary.html?s=combat-rules shows one section on its own page, like the Conditions page */
+const SLUG = PAGE === "glossary" ? new URLSearchParams(location.search).get("s") : null;
+function only() {
+  if (PAGE === "conditions") return FIRST;
+  if (!SLUG) return null;
+  return [...new Set(entries.map(e => e.sec))].find(x => slugOf(x) === SLUG) || null;
+}
+const secHref = sec => sec === FIRST ? "conditions.html" : "glossary.html?s=" + encodeURIComponent(slugOf(sec));
+let shownOnly;
+function pageHeading() {
+  const o = only(); if (PAGE !== "glossary" || o === shownOnly) return; shownOnly = o;
+  const h = document.querySelector(".intro h1"), p = document.querySelector(".intro p");
+  if (o) {
+    h.textContent = o; document.title = "Crawl " + o;
+    p.innerHTML = `Every entry in the ${esc(o)} section of the glossary. <a href="glossary.html">See the whole Glossary</a>.`;
+    $("cq").placeholder = `Search ${o}`; $("cq").setAttribute("aria-label", `Search ${o}`);
+  } else if (SLUG) {
+    p.innerHTML = `There's no glossary section with that name any more, so here's the whole Glossary.`;
+  }
+}
+function navUpdate() { if (window.crawlNavSections) window.crawlNavSections(sections()) }
 
 function load(j) {
   const a = normGlossary(j); if (!a) return false;
@@ -22,7 +43,7 @@ function sections() {
 }
 function visible() {
   let list = entries.filter(e => !e._new || editing.has(e._id));
-  if (PAGE === "conditions") list = list.filter(e => e.sec === FIRST || editing.has(e._id));
+  const o = only(); if (o) list = list.filter(e => e.sec === o || editing.has(e._id));
   const q = query();
   if (q) {
     list.forEach(e => { e._score = score(e, q) });
@@ -62,7 +83,6 @@ function card(e, tag) {
     (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(e.n)}">Edit</button>` : "") +
     `</span></h2><div class="cbody">${bodyHTML(e)}</div></section>`;
 }
-const SWATCHES = [["Crawl red", "#8e171c"], ["Blue", "#1f5fbf"], ["Green", "#2e7d32"], ["Purple", "#6a1b9a"], ["Gold", "#b7791f"]];
 function wordRow(x) {
   return `<div class="gword"><input type="text" class="gw" value="${esc(x.w)}" placeholder="Tooltip word, e.g. Target Area" aria-label="Tooltip word" autocomplete="off">` +
     `<textarea class="gref" rows="2" placeholder="What the tooltip shows for this word. Leave empty to show the whole entry." aria-label="Tooltip text for this word">${esc(x.ref)}</textarea>` +
@@ -74,7 +94,7 @@ function form(e) {
   return `<section class="cond gediting" data-id="${e._id}"><div class="chead"><span>${e._new ? "New entry" : "Editing " + esc(e.n)}</span></div>
 <div class="cbody gform">
 <label for="${id("n")}">Name<input type="text" id="${id("n")}" data-k="n" value="${esc(d.n)}" autocomplete="off"></label>
-<label for="${id("sec")}">Section <small>Entries in "Conditions" also show on the Conditions page.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
+<label for="${id("sec")}">Section <small>Each section gets its own page and a link in the Glossary menu. Type a new name to start a new section.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
 <label for="${id("lead")}">Description <small>Leave a blank line between paragraphs.</small><textarea id="${id("lead")}" data-k="lead" rows="6">${esc(d.lead)}</textarea></label>
 <label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="4">${esc(d.fx)}</textarea></label>
 <label for="${id("notes")}">Notes <small>One per line. Start a line with "Designer's note:" to label it as one.</small><textarea id="${id("notes")}" data-k="notes" rows="2">${esc(d.notes)}</textarea></label>
@@ -105,20 +125,20 @@ function preview(f) { const b = f.querySelector(".gprevbody"); if (b) b.innerHTM
 function saveDrafts() { document.querySelectorAll(".gediting").forEach(f => drafts.set(+f.dataset.id, readForm(f))) }
 
 function render() {
-  saveDrafts();
-  const list = visible(), noun = PAGE === "conditions" ? ["condition", "conditions"] : ["entry", "entries"];
+  saveDrafts(); pageHeading();
+  const o = only(), list = visible(), noun = PAGE === "conditions" ? ["condition", "conditions"] : ["entry", "entries"];
   const n = list.filter(e => !e._new).length;
   $("ccount").textContent = `${n} ${n === 1 ? noun[0] : noun[1]}`;
   let h;
-  if (query()) h = list.length ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist">${list.map(e => card(e, PAGE !== "conditions")).join("")}</div>` : "";
-  else if (PAGE === "conditions") h = `<div class="clist">${list.map(e => card(e, false)).join("")}</div>`;
+  if (query()) h = list.length ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist">${list.map(e => card(e, !o)).join("")}</div>` : "";
+  else if (o) h = `<div class="clist">${list.map(e => card(e, false)).join("")}</div>`;
   else h = sections().map(sec => {
     const items = list.filter(e => e.sec === sec); if (!items.length) return "";
-    return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2>${sec === FIRST ? `<a class="glink" href="conditions.html">Open the Conditions page</a>` : ""}</div><div class="clist">${items.map(e => card(e, true)).join("")}</div></section>`;
+    return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><div class="clist">${items.map(e => card(e, true)).join("")}</div></section>`;
   }).join("");
   $("clist").innerHTML = h;
   document.querySelectorAll(".gediting").forEach(preview);
-  $("gside").hidden = !editing.size; document.body.classList.toggle("gside-on", editing.size > 0);
+  sideShow(editing.size > 0);
   $("cempty").hidden = list.length > 0;
   $("gsecs").innerHTML = sections().map(s => `<option value="${esc(s)}">`).join("");
   $("gAdd").hidden = !ADMIN;
@@ -144,7 +164,7 @@ $("clist").addEventListener("click", ev => {
   } else if (b.classList.contains("gdel")) {
     if (!e._new && !b.dataset.sure) { b.dataset.sure = "1"; b.textContent = "Click again to delete"; return }
     const wasNew = e._new; closeForm(e); if (!wasNew) entries = entries.filter(x => x !== e);
-    render(); markDirty(); if (!wasNew) say(`Deleted ${e.n}. Click Save changes to keep it deleted.`);
+    render(); markDirty(); navUpdate(); if (!wasNew) say(`Deleted ${e.n}. Click Save changes to keep it deleted.`);
   } else if (b.classList.contains("gdone")) {
     const f = b.closest(".gediting"), d = readForm(f), err = m => { f.querySelector(".gerr").textContent = m };
     const name = d.n.trim().replace(/\s+/g, " ");
@@ -156,50 +176,18 @@ $("clist").addEventListener("click", ev => {
     e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka;
     delete e._new; editing.delete(e._id); drafts.delete(e._id);
     render(); markDirty();
-    say(PAGE === "conditions" && e.sec !== FIRST ? `${e.n} is in the ${e.sec} section, so it now shows on the Glossary page instead.` : "");
+    const was = only(); navUpdate();
+    say(was && e.sec !== was ? `${e.n} is now in the ${e.sec} section, so it shows on that section's page instead.` : "");
   }
 });
-let lastBox = null;
-document.body.insertAdjacentHTML("beforeend", `<aside class="gside" id="gside" hidden aria-label="Text color">
-<div class="gsh">Text color</div>
-<div class="gsb">
-<div class="gsws">${SWATCHES.map(([n, c]) => `<button type="button" class="gsw" data-c="${c}" style="--c:${c}" title="${n}" aria-label="Color selected text ${n}"></button>`).join("")}</div>
-<label class="gpickl">Any color <input type="color" class="gpick" id="gpick" value="#8e171c"></label>
-<button type="button" class="btn solid gapply">Color selected text</button>
-<button type="button" class="btn gclear">Remove color</button>
-<p class="ghelp" id="gsideMsg">Select text in any box, then pick a color.</p>
-</div></aside>`);
-const side = $("gside"), sideMsg = (m, bad) => { $("gsideMsg").textContent = m || "Select text in any box, then pick a color."; $("gsideMsg").classList.toggle("bad", !!bad) };
-$("clist").addEventListener("focusin", ev => { if (ev.target.matches(".gediting textarea, .gediting input[type=text]")) lastBox = ev.target });
 $("clist").addEventListener("input", ev => { const f = ev.target.closest(".gediting"); if (f) preview(f) });
-side.addEventListener("mousedown", ev => { if (ev.target.closest("button")) ev.preventDefault() });
-function colorSel(c) {
-  const t = lastBox && lastBox.isConnected ? lastBox : null, f = t && t.closest(".gediting");
-  if (!f || t.selectionStart === t.selectionEnd) { sideMsg("Select some text in one of the boxes first, then pick a color.", true); return }
-  sideMsg("");
-  const a = t.selectionStart, b = t.selectionEnd, v = t.value;
-  let mid = v.slice(a, b).replace(/\[\/?color[^\]]*\]/gi, "");
-  if (c) mid = `[color=${c}]${mid}[/color]`;
-  t.focus(); t.setSelectionRange(a, b);
-  if (!document.execCommand || !document.execCommand("insertText", false, mid)) t.setRangeText(mid, a, b, "select");
-  t.setSelectionRange(a, a + mid.length); preview(f);
-}
-side.addEventListener("click", ev => {
-  const sw = ev.target.closest(".gsw"); if (sw) { $("gpick").value = sw.dataset.c; colorSel(sw.dataset.c); return }
-  if (ev.target.closest(".gapply")) { colorSel($("gpick").value); return }
-  if (ev.target.closest(".gclear")) colorSel("");
-});
-$("gpick").addEventListener("change", () => { if (lastBox && lastBox.isConnected && lastBox.selectionStart !== lastBox.selectionEnd) colorSel($("gpick").value) });
-/* keep the sidebar clear of the save bar on small screens */
-new MutationObserver(() => document.documentElement.style.setProperty("--sbh", $("savebar").hidden ? "0px" : $("savebar").offsetHeight + "px"))
-  .observe($("savebar"), { attributes: true, attributeFilter: ["hidden"] });
 $("clist").addEventListener("click", ev => {
   const f = ev.target.closest(".gediting"); if (!f) return;
   if (ev.target.closest(".gwadd")) { f.querySelector(".gwlist").insertAdjacentHTML("beforeend", wordRow({ w: "", ref: "" })); f.querySelector(".gword:last-child .gw").focus(); return }
   const del = ev.target.closest(".gwdel"); if (del) { del.closest(".gword").remove(); preview(f) }
 }, true);
 $("gAdd").addEventListener("click", () => {
-  const e = { n: "", sec: PAGE === "conditions" ? FIRST : (sections()[0] || FIRST), lead: "", fx: [], notes: [], aka: [], _id: ++uid, _new: true };
+  const e = { n: "", sec: only() || (SLUG ? "" : sections()[0]) || FIRST, lead: "", fx: [], notes: [], aka: [], _id: ++uid, _new: true };
   entries.push(e); editing.add(e._id); $("cq").value = ""; render();
   const f = document.querySelector(`.gediting[data-id="${e._id}"]`);
   if (f) { f.scrollIntoView({ block: "center" }); f.querySelector('[data-k="n"]').focus() }
@@ -218,19 +206,19 @@ $("saveBtn").addEventListener("click", async () => {
     setTimeout(() => { if (!dirty) $("savebar").hidden = true }, 4000);
   } catch (x) {
     const c = x && x.code;
-    $("saveMsg").textContent = c === "bad_key" ? "GitHub no longer accepts your access key. It may have expired; set up admin access again." : c === "no_access" ? "Your access key can't change this repo anymore." : c === "conflict" ? "The glossary changed on GitHub while you were editing. Reload the page and make your changes again." : "Saving failed. Check your connection and try again.";
+    $("saveMsg").textContent = saveError(c, "glossary");
     $("saveBtn").disabled = false; $("discardBtn").disabled = false;
   }
 });
 $("discardBtn").addEventListener("click", () => {
-  load(JSON.parse(original)); editing.clear(); drafts.clear(); dirty = false; $("savebar").hidden = true; say(""); render();
+  load(JSON.parse(original)); editing.clear(); drafts.clear(); dirty = false; $("savebar").hidden = true; say(""); render(); navUpdate();
 });
 window.addEventListener("beforeunload", ev => { if (dirty || editing.size) { ev.preventDefault(); ev.returnValue = "" } });
 
 async function refreshFromGitHub() {
   try {
     const r = await gh(`/contents/crawl-glossary.json?ref=${REPO.branch || "main"}`, { headers: { "Accept": "application/vnd.github.raw+json" } });
-    if (r.ok && !dirty && !editing.size && load(await r.json())) render();
+    if (r.ok && !dirty && !editing.size && load(await r.json())) { render(); navUpdate() }
   } catch (x) { }
 }
 AdminHooks.canSignOut = () => {
@@ -245,6 +233,6 @@ if (STATIC) {
   $("adminBtn").hidden = false; showAdminBtn();
   fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null)
     .then(j => { if (j && !dirty) load(j) }).catch(() => { })
-    .finally(() => { render(); restoreAdmin() });
+    .finally(() => { render(); navUpdate(); restoreAdmin() });
 }
 render();

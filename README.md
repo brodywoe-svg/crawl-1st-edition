@@ -7,6 +7,8 @@ source (Arcane, Divine, Primal, Occult), open any spell to read its card and its
 - **Website:** https://brodywoe-svg.github.io/crawl-spell-compendium/
 - **Glossary (search every term):** https://brodywoe-svg.github.io/crawl-spell-compendium/glossary.html
 - **Conditions:** https://brodywoe-svg.github.io/crawl-spell-compendium/conditions.html
+- **Items:** https://brodywoe-svg.github.io/crawl-spell-compendium/items.html
+- **Crafting:** https://brodywoe-svg.github.io/crawl-spell-compendium/crafting.html
 - **Windows app (works offline):** [Download the installer](downloads/Crawl-Spell-Compendium-Installer.zip)
 
 ## Installing the Windows app
@@ -70,6 +72,19 @@ shows the result.
 Searching the glossary lists the best matches first: entries whose name matches,
 then tooltip words, then entries that only mention the word.
 
+Every glossary section gets its own page and a link in the **Glossary** menu
+(for example *Combat Rules* → `glossary.html?s=combat-rules`). Typing a new
+section name on an entry creates the section.
+
+## Items and Crafting
+
+Signed in as admin, **Add item** on the Items page creates an item (name, type,
+rarity, cost, weight, description, properties and any extra labelled details).
+**Add recipe** on the Crafting page creates a recipe: pick what it makes and its
+ingredients from your items (typing a new name creates that item), then add tools,
+check, time, cost and notes. Recipes link to their items, and each item shows
+which recipes craft it and which use it. Both pages save to `crawl-items.json`.
+
 Signing in as admin lasts for the browser tab, across all pages, until you
 click **Admin · Sign out** or close the tab.
 
@@ -92,6 +107,9 @@ The spell list lives in [`crawl-spells.json`](crawl-spells.json).
 | `src/page.html` | The page template shared by the website and the app |
 | `crawl-glossary.json` | The glossary entries (all the conditions, plus any keywords you add) |
 | `src/glossary.js` | The Glossary and Conditions pages: search, and admin editing |
+| `crawl-items.json` | Items and crafting recipes |
+| `src/catalog.js` | The Items and Crafting pages |
+| `src/editkit.js` | The Text color sidebar shared by the editing pages |
 | `tools/sitekit.py` | The top navigation bar and the Glossary and Conditions page layouts |
 | `app/` | The Windows app (Electron) |
 | `installer/` | Install and uninstall scripts for Windows |

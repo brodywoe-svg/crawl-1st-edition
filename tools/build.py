@@ -52,20 +52,29 @@ def read_glossary():
     return json.loads(GLOSSARY.read_text(encoding="utf-8"))
 
 
+def read_catalog():
+    if not CATALOG.exists():
+        CATALOG.write_text('{\n "v": 1,\n "items": [],\n "recipes": []\n}\n', encoding="utf-8")
+    return json.loads(CATALOG.read_text(encoding="utf-8"))
+
+
 def page_body(template, spells):
     # the glossary goes in first: the TPL copy of the template also contains its placeholder
     body = template.replace("/*@GLOSSARY@*/null", as_js(read_glossary()), 1)
     body = body.replace("/*@DATA@*/", as_js(spells), 1).replace("/*@TPL@*/", as_js(template), 1)
-    body = body.replace("<!--@NAV@-->", crawlsite.nav_html("spells"), 1)
+    body = body.replace("<!--@NAV@-->", crawlsite.nav_html("spells", sections=crawlsite.glossary_sections(read_glossary())), 1)
     return body.replace("/*@NAVCSS@*/", crawlsite.NAV_CSS, 1)
 
 
+CATALOG = ROOT / "crawl-items.json"
 GLOSSARY_PAGES = {
     # file name: (page key, <title>, meta description)
     "glossary.html": ("glossary", "Crawl Glossary",
                       "The Crawl 1st Edition glossary: every rules term in one searchable list."),
     "conditions.html": ("conditions", "Crawl Conditions",
                         "The conditions of Crawl 1st Edition: what each one does and how it ends."),
+    "items.html": ("items", "Crawl Items", "Every item in Crawl 1st Edition, with what crafts it and what it's used in."),
+    "crafting.html": ("crafting", "Crawl Crafting", "Crafting recipes for Crawl 1st Edition: results, ingredients, tools and checks."),
 }
 
 
@@ -90,19 +99,22 @@ def glossary_page(template, glossary, name):
         "function show(){var d=r.getAttribute('data-mode')==='dark';b.setAttribute('aria-pressed',d);document.getElementById('modeLabel').textContent=d?'Light mode':'Dark mode';document.getElementById('modeIcon').setAttribute('d',d?S:M)}"
         "b.addEventListener('click',function(){var d=r.getAttribute('data-mode')!=='dark';if(d)r.setAttribute('data-mode','dark');else r.removeAttribute('data-mode');try{localStorage.setItem('crawl-mode',d?'dark':'light')}catch(e){}show()});show()})();"
     )
+    sections = crawlsite.glossary_sections(glossary)
+    catalog = page in ("items", "crafting")
     prelude = (
         "const APP=window.crawlApp||null;const STATIC=!APP&&!!window.CRAWL_STATIC;"
         "const $=id=>document.getElementById(id);"
         "const esc=s=>String(s??\"\").replace(/[&<>\"]/g,c=>({\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\"}[c]));"
-        f"const GLOSSARY={as_js(glossary)};window.GL_PAGE={json.dumps(page)};\n"
+        f"const GLOSSARY={as_js(glossary)};window.GL_PAGE={json.dumps(page)};"
+        + (f"const CATALOG={as_js(read_catalog())};" if catalog else "") + "\n"
     )
     shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")
-    script = (ROOT / "src" / "glossary.js").read_text(encoding="utf-8")
+    script = (ROOT / "src" / "editkit.js").read_text(encoding="utf-8") + (ROOT / "src" / ("catalog.js" if catalog else "glossary.js")).read_text(encoding="utf-8")
     return (
         f"<title>{title}</title>" + links + mode_init
         + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}</style>"
-        + crawlsite.nav_html(page, controls=admin_btn + mode_btn)
-        + crawlsite.glossary_shell(page, logo, modal)
+        + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections)
+        + (crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.glossary_shell(page, logo, modal))
         + f"<script>{mode_js}</script><script>{prelude}{shared}{script}</script>"
     )
 
@@ -166,7 +178,7 @@ def main():
     build_site(body)
     build_app(body)
     out = build_installer()
-    print(f"Built index.html, conditions.html, glossary.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
+    print(f"Built index.html, conditions.html, glossary.html, items.html, crafting.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
 
 
 if __name__ == "__main__":

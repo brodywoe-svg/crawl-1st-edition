@@ -8,23 +8,38 @@ import re
 
 # ---------------------------------------------------------------- navigation
 
-# (label, href or None when the section isn't built yet, dropdown items)
+# (label, href or None when the section isn't built yet, dropdown items or "glossary")
 NAV_ITEMS = [
     ("Character Creator", None, None),
     ("Classes", None, None),
-    ("Crafting", None, None),
-    ("Rules", None, None),
-    ("Glossary", "glossary.html", [("Conditions", "conditions.html")]),
+    ("Crafting", "crafting.html", None),
+    ("Items", "items.html", None),
+    ("Glossary", "glossary.html", "glossary"),
     ("About", None, None),
 ]
 # which nav item each page belongs to
-SECTION = {"spells": "Spells", "glossary": "Glossary", "conditions": "Glossary"}
+SECTION = {"spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
 
 CARET = '<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 
 
-def nav_html(active, controls=""):
-    """active: 'spells', 'glossary' or 'conditions'. controls: buttons for the right side."""
+def slug(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def glossary_sections(glossary):
+    """Section names in menu order: Conditions first, then A to Z."""
+    secs = {(e.get("sec") or "Conditions").strip() or "Conditions" for e in glossary.get("entries", [])}
+    secs.add("Conditions")
+    return sorted(secs, key=lambda x: (x != "Conditions", x.lower()))
+
+
+def section_href(sec):
+    return "conditions.html" if sec == "Conditions" else "glossary.html?s=" + slug(sec)
+
+
+def nav_html(active, controls="", sections=("Conditions",)):
+    """active: the page key. controls: buttons for the right side. sections: Glossary menu entries."""
     sec = SECTION.get(active)
     parts = [
         '<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks">',
@@ -38,12 +53,10 @@ def nav_html(active, controls=""):
         if not menu:
             parts.append(f'<a class="navitem" href="{href}"{cur}>{label}</a>')
             continue
-        items = "".join(
-            f'<a href="{h}"{' aria-current="page"' if h.startswith(active) else ""}>{t}</a>' for t, h in menu
-        )
+        items = "".join(f'<a href="{section_href(t)}">{html.escape(t)}</a>' for t in sections)
         parts.append(
             f'<div class="navdrop"><a class="navitem" href="{href}"{cur} aria-haspopup="true">{label}{CARET}</a>'
-            f'<div class="navmenu">{items}</div></div>'
+            f'<div class="navmenu" id="navGlossary">{items}</div></div>'
         )
     parts.append(f'</div><div class="navctl" id="navctl">{controls}</div></div></nav>')
     parts.append(f"<script>{NAV_JS}</script>")
@@ -106,6 +119,19 @@ NAV_JS = """(function(){
   window.addEventListener('load',fit);
   if(window.MutationObserver&&nav){new MutationObserver(function(){requestAnimationFrame(fit)}).observe(nav.querySelector('.navctl'),{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']})}
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.activeElement&&document.activeElement.closest('.navdrop'))document.activeElement.blur()});
+  /* Glossary menu: one link per glossary section */
+  var menu=document.getElementById('navGlossary');
+  function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function href(s){return s==='Conditions'?'conditions.html':'glossary.html?s='+slug(s)}
+  function mark(){if(!menu)return;var here=location.pathname.split('/').pop()+location.search;[].forEach.call(menu.querySelectorAll('a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+  window.crawlNavSections=function(list){
+    if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
+    (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
+    menu.innerHTML=out.map(function(s){return '<a href="'+href(s)+'">'+esc(s)+'</a>'}).join('');mark();
+  };
+  mark();
+  if(window.CRAWL_STATIC&&menu&&!window.GL_PAGE)fetch('crawl-glossary.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.entries)window.crawlNavSections(j.entries.map(function(e){return e.sec||'Conditions'}))}).catch(function(){});
 })();"""
 
 # ---------------------------------------------------------------- glossary pages
@@ -149,6 +175,46 @@ def glossary_shell(page, logo_svg, admin_modal):
 <div class="savebar" id="savebar" hidden>
   <div class="in">
     <span class="msg" id="saveMsg">You have unsaved glossary changes.</span>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn solid" id="saveBtn">Save changes</button>
+  </div>
+</div>
+"""
+
+
+CATALOG_PAGES = {
+    "items": ("Items", "Every item in Crawl 1st Edition: weapons, armor, materials, potions and more. Search by name, type or anything on the card.",
+              "Search items", "Add item"),
+    "crafting": ("Crafting", "Crafting recipes: what each one makes, what goes into it, and what you need to make it. Click an item to see it on the Items page.",
+                 "Search recipes or ingredients", "Add recipe"),
+}
+
+
+def catalog_shell(page, logo_svg, admin_modal):
+    title, intro, placeholder, add = CATALOG_PAGES[page]
+    type_filter = '<select id="ctype" aria-label="Item type" hidden></select>' if page == "items" else ""
+    return f"""
+<div class="wrap condwrap">
+<header class="intro">
+  {logo_svg}
+  <h1>{title}</h1>
+  <p>{intro}</p>
+</header>
+<div class="cbar">
+  <input id="cq" type="search" placeholder="{placeholder}" aria-label="{placeholder}" autocomplete="off">
+  {type_filter}
+  <span class="ccount" id="ccount"></span>
+  <button type="button" class="btn solid" id="gAdd" hidden>{add}</button>
+</div>
+<p class="gmsg" id="gmsg" role="status"></p>
+<main id="clist"></main>
+<p class="cempty" id="cempty" hidden></p>
+</div>
+<datalist id="itemNames"></datalist><datalist id="itemTypes"></datalist><datalist id="itemRarities"></datalist>
+{admin_modal}
+<div class="savebar" id="savebar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">You have unsaved changes.</span>
     <button class="btn ghost" id="discardBtn">Discard</button>
     <button class="btn solid" id="saveBtn">Save changes</button>
   </div>
@@ -228,6 +294,27 @@ CONDITIONS_CSS = """
   body.gside-on .condwrap{padding-bottom:220px}
 }
 @media (max-width:640px){.gsb{grid-template-columns:1fr 1fr}.gsws{grid-column:1/-1}}
+/* items and crafting */
+.cbar select{font:600 .95rem var(--font);border:2px solid var(--ink);border-radius:10px;padding:9px 10px;background:var(--paper);color:var(--ink)}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.8rem;font-weight:600;border:2px solid var(--ink);border-radius:999px;padding:3px 10px}
+.chip b{font-weight:800;margin-right:4px}
+.fact{margin:0;font-weight:600}
+.fact b{font-weight:800}
+.fact .cul{margin-top:6px}
+.ilink{color:var(--ink);font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.ilink.gone{text-decoration:none;color:var(--muted)}
+.ilink small{font-weight:600}
+.cond.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,40%{box-shadow:0 0 0 5px var(--red)}100%{box-shadow:0 0 0 0 transparent}}
+.cond{scroll-margin-top:calc(var(--navh,0px) + 80px)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.xlist,.qlist{display:grid;gap:8px}
+.xrow{display:grid;grid-template-columns:minmax(110px,180px) 1fr auto;gap:8px}
+.qrow{display:grid;grid-template-columns:76px 1fr auto;gap:8px}
+.xrow input,.qrow input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.gform>.btn{justify-self:start}
+@media (max-width:600px){.xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input{font-size:16px}}
 .gres h2{font-size:1rem}
 .glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
 .gwords{display:grid;gap:8px}

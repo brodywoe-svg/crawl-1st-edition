@@ -342,7 +342,7 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 
 </style>
 
-<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks"><a class="navitem navhome" href="index.html" aria-current="page">Spells</a><span class="navitem soon" aria-disabled="true" title="Coming soon">Character Creator<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Classes<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Crafting<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Rules<small>Soon</small></span><div class="navdrop"><a class="navitem" href="glossary.html" aria-haspopup="true">Glossary<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu"><a href="conditions.html">Conditions</a></div></div><span class="navitem soon" aria-disabled="true" title="Coming soon">About<small>Soon</small></span></div><div class="navctl" id="navctl"></div></div></nav><script>(function(){
+<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks"><a class="navitem navhome" href="index.html" aria-current="page">Spells</a><span class="navitem soon" aria-disabled="true" title="Coming soon">Character Creator<small>Soon</small></span><span class="navitem soon" aria-disabled="true" title="Coming soon">Classes<small>Soon</small></span><a class="navitem" href="crafting.html">Crafting</a><a class="navitem" href="items.html">Items</a><div class="navdrop"><a class="navitem" href="glossary.html" aria-haspopup="true">Glossary<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navmenu" id="navGlossary"><a href="conditions.html">Conditions</a><a href="glossary.html?s=combat-rules">Combat Rules</a><a href="glossary.html?s=combat-system">Combat System</a></div></div><span class="navitem soon" aria-disabled="true" title="Coming soon">About<small>Soon</small></span></div><div class="navctl" id="navctl"></div></div></nav><script>(function(){
   var nav=document.querySelector('.sitenav'),links=nav&&nav.querySelector('.navlinks'),busy=false;
   var STEPS=['nav-c1','nav-c2','nav-c3','nav-c4','nav-c5'];
   function fit(){
@@ -356,6 +356,19 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
   window.addEventListener('load',fit);
   if(window.MutationObserver&&nav){new MutationObserver(function(){requestAnimationFrame(fit)}).observe(nav.querySelector('.navctl'),{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']})}
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.activeElement&&document.activeElement.closest('.navdrop'))document.activeElement.blur()});
+  /* Glossary menu: one link per glossary section */
+  var menu=document.getElementById('navGlossary');
+  function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function href(s){return s==='Conditions'?'conditions.html':'glossary.html?s='+slug(s)}
+  function mark(){if(!menu)return;var here=location.pathname.split('/').pop()+location.search;[].forEach.call(menu.querySelectorAll('a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+  window.crawlNavSections=function(list){
+    if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
+    (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
+    menu.innerHTML=out.map(function(s){return '<a href="'+href(s)+'">'+esc(s)+'</a>'}).join('');mark();
+  };
+  mark();
+  if(window.CRAWL_STATIC&&menu&&!window.GL_PAGE)fetch('crawl-glossary.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.entries)window.crawlNavSections(j.entries.map(function(e){return e.sec||'Conditions'}))}).catch(function(){});
 })();</script>
 <div class="wrap">
 <div class="topctl">
