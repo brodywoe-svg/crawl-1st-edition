@@ -123,6 +123,27 @@ const PLAYTEST = `<span class="flask" title="Needs playtesting" role="img" aria-
 const tierBadge = t => `<span class="rtier" title="${esc(t)} recipe">${esc((t || "B")[0])}</span>`;
 
 /* ---------------------------------------------------------------- recipes (cards) */
+/* the price to buy every material, from each item's Value ("15 (G)", "3 (S)", "5 (C)"); 10 C = 1 S, 10 S = 1 G */
+function toCopper(v) {
+  let total = 0, found = false;
+  String(v || "").replace(/(\d+(?:\.\d+)?)\s*\(?\s*([GSC])\s*\)?/gi, (m, n, u) => { found = true; total += +n * { G: 100, S: 10, C: 1 }[u.toUpperCase()] });
+  return found ? total : null;
+}
+function money(c) {
+  c = Math.round(c); const g = Math.floor(c / 100), s = Math.floor(c % 100 / 10), k = c % 10;
+  return [g && `${g} (G)`, s && `${s} (S)`, k && `${k} (C)`].filter(Boolean).join(" ") || "0 (C)";
+}
+function materialPrice(r) {
+  let total = 0; const missing = [];
+  r.ing.forEach(m => { const i = itemById(m.item), c = i ? toCopper(i.value) : null; if (c === null) missing.push(i ? i.n : "an unknown item"); else total += c * m.qty });
+  return { total, missing };
+}
+function moneyLine(r) {
+  if (!r.ing.length) return "";
+  const { total, missing } = materialPrice(r);
+  const extra = [missing.length ? `${missing.join(", ")} not priced` : "", r.matNote ? "plus any other materials listed" : ""].filter(Boolean).join("; ");
+  return `<p class="rl"><b>Monetary Cost:</b> ${money(total)}${extra ? ` <span class="muted">(${esc(extra)})</span>` : ""}</p>`;
+}
 /* a recipe's yield properties are the item's own properties, so editing the item updates the recipe */
 function yieldProps(r) { const i = r.makes[0] && itemById(r.makes[0].item); return (i && i.props) || r.props }
 function recipeBody(r) {
@@ -131,6 +152,7 @@ function recipeBody(r) {
   return (r.kind ? `<p class="rkind">${esc(r.kind)}</p>` : "") +
     (r.pre ? `<p class="rl pre"><b>Prerequisites:</b> ${richInline(r.pre)}</p>` : "") +
     `<p class="rl"><b>Material Cost:</b> ${r.ing.length ? r.ing.map(m => itemLink(m.item, m.qty)).join(", ") : "none listed"}${r.matNote ? ", " + richInline(r.matNote) : ""}</p>` +
+    moneyLine(r) +
     line("Applies To", r.applies) + line("Workstations Required", r.ws) + line("Crafting Time", r.time) +
     (r.dc || r.tc ? `<p class="rl"><b>Crafting DC:</b> ${esc(r.dc || "—")} | <b>TC:</b> ${esc(r.tc || "—")}</p>` : "") +
     (r.qty.v ? line(esc(r.qty.l || "Servings"), r.qty.v) : "") + yieldLine + line("Grants", r.grants) +
@@ -146,7 +168,7 @@ function yieldBox(r) {
       `<dl class="yfacts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` +
       (i.props ? `<p class="rl"><b>Properties:</b> ${richInline(i.props)}</p>` : "") +
       (i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : "") +
-      `<p class="rl"><a class="ilink small" href="items.html#${esc(i.id)}">${ADMIN ? "Open or edit this item" : "Open this item"} on the Items page</a></p></div>` }).join("");
+      `</div>` }).join("");
 }
 function recipeRow(r, showProf) {
   const isOpen = open.has(r.id) || editing.has(r._id), y = r.makes[0];
@@ -323,8 +345,14 @@ function saveDrafts() {
 
 /* ---------------------------------------------------------------- page */
 let firstFill = true;
+const profSlug = p => p.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 function catHeading() {
-  if (KIND !== "items") return;
+  if (KIND !== "items") {
+    const p = $("cfilter").value, h = document.querySelector(".intro h1");
+    h.textContent = p || "Crafting"; document.title = "Crawl " + (p || "Crafting");
+    if (window.crawlNavMark) window.crawlNavMark();
+    return;
+  }
   const c = catOf($("cfilter").value), h = document.querySelector(".intro h1");
   h.textContent = c ? c[1] : "Items"; document.title = "Crawl " + (c ? c[1] : "Items");
   if (window.crawlNavMark) window.crawlNavMark();
@@ -333,6 +361,7 @@ function fillFilter() {
   const s = $("cfilter");
   let cur = s.value;
   if (firstFill && KIND === "items") { cur = CAT_SLUGS[new URLSearchParams(location.search).get("c")] || ""; firstFill = false }
+  if (firstFill && KIND === "recipes") { const q = new URLSearchParams(location.search).get("p"); cur = (q && [...PROFS, ...recipes.map(r => r.prof)].find(p => profSlug(p) === q)) || ""; firstFill = false }
   const opts = KIND === "items" ? CATS.map(c => [c[0], c[1]]) : [...new Set([...PROFS.filter(p => recipes.some(r => r.prof === p)), ...recipes.map(r => r.prof).filter(Boolean).sort()])].map(p => [p, p]);
   s.innerHTML = `<option value="">${KIND === "items" ? "All categories" : "All professions"}</option>` + opts.map(([v, l]) => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(l)}</option>`).join("");
 }
@@ -451,6 +480,7 @@ $("gAdd").addEventListener("click", () => {
 $("cq").addEventListener("input", render);
 $("cfilter").addEventListener("change", () => {
   if (KIND === "items") { const sl = catSlug($("cfilter").value); history.replaceState(null, "", "items.html" + (sl ? "?c=" + sl : "") + location.hash) }
+  else { const v = $("cfilter").value; history.replaceState(null, "", "crafting.html" + (v ? "?p=" + profSlug(v) : "") + location.hash) }
   render();
 });
 
@@ -478,9 +508,9 @@ window.addEventListener("beforeunload", ev => { if (dirty || editing.size) { ev.
 function showHash(ev) {
   const id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
   const x = rows().find(r => r.id === id); if (!x) return;
-  if (query() || $("cfilter").value) {
+  if ((query() || $("cfilter").value) && !visible().includes(x)) {
     $("cq").value = ""; $("cfilter").value = "";
-    if (KIND === "items" && location.search) history.replaceState(null, "", "items.html" + location.hash);
+    if (location.search) history.replaceState(null, "", (KIND === "items" ? "items.html" : "crafting.html") + location.hash);
   }
   open.add(x.id); render();
   const go = () => { const el = document.getElementById(id); if (!el) return;
