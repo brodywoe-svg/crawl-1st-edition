@@ -61,6 +61,10 @@
      "langs": "One additional Language of your choice",
      "feats": [
       {
+       "n": "Dwarven Weapon Training",
+       "d": "You gain proficiency in simple and martial Axes and Cudgels."
+      },
+      {
        "n": "Mountain Clan Craftsmanship",
        "d": "You learn and know the following crafting recipes: [color=#b7791f]Dwarven Iron Battleaxe[/color], [color=#b7791f]Dwarven Iron Hand Axe[/color]"
       }
