@@ -10,10 +10,6 @@
    "langs": "Common, Dwarvish",
    "feats": [
     {
-     "n": "Poison Resilience",
-     "d": "You have an advantage on saving throws against poison, and you have resistance against poison damage."
-    },
-    {
      "n": "Strong Back",
      "d": "Your maximum carry weight capacity increases by 25 lbs and your Ground Speed is not reduced when wearing Medium or heavy Armor."
     },
