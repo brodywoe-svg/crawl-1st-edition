@@ -4907,7 +4907,7 @@
    "makes": [],
    "props": "",
    "grants": "Silvered (fills 1 open modifier slot)",
-   "feat": "Silvered - This weapon counts as silver for overcoming resistances and vulnerabilities, such as those of lycanthropes, certain fiends, and aberrations.\n\n[color=#8e171c]Craftable Modifiers[/color]\nA Craftable Modifier doesn’t create a new item. Instead, it’s applied to an existing item listed in its Applies To line, filling one of that item’s open modifier slots. If the item has no open slots, the modifier can’t be applied.",
+   "feat": "[color=#8e171c]Silvered[/color] - This weapon counts as silver for overcoming resistances and vulnerabilities, such as those of lycanthropes, certain fiends, and aberrations.\n\n[color=#8e171c]Craftable Modifiers[/color]\nA Craftable Modifier doesn’t create a new item. Instead, it’s applied to an existing item listed in its Applies To line, filling one of that item’s open modifier slots. If the item has no open slots, the modifier can’t be applied.",
    "quote": "“Bring me your blade, and I’ll give it a conscience. Werewolves hate a weapon with principles.” -Lucien Gilt",
    "extra": []
   },
