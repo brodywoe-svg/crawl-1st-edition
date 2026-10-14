@@ -617,14 +617,10 @@
     "The creature has Disadvantage on Constitution saving throws. Whenever a Sickened creature fails a Constitution saving throw, it loses 1 Action Point (AP) from its Action Pool while convulsing or vomiting.",
     "The creature has Disadvantage on all skill checks."
    ],
-   "notes": [
-    {
-     "l": "Designer's note",
-     "t": "a deliberately nasty debuff aimed at martial characters, who rely on AP. A creature with 0 AP loses nothing."
-    }
-   ],
+   "notes": [],
    "aka": [],
-   "tip": true
+   "tip": true,
+   "hideRefs": true
   },
   {
    "n": "Silvered",
