@@ -682,7 +682,8 @@
      "ref": "[color=#8e171c]Target Area.[/color] Whenever a spell or effect covers an area, such as a cone, line, sphere or cube, and affects everyone inside it, you are being targeted. Even though you aren’t the direct target of the attack or effect, being inside the selected area makes you a target of that spell. If any part of the area overlaps a creature’s space, that creature is also considered a target.\n\n[color=#8e171c]When you target:[/color] you pick where the effect goes, and every creature caught inside it is affected, friend or foe. Example: you cast Bramblesnatch in a 15-foot line from you. The two goblins in that line must make the save, and so must your ally if they’re standing there.\n\n[color=#8e171c]When you are targeted:[/color] a fire blast erupts nearby, and its edge reaches your square."
     }
    ],
-   "tip": true
+   "tip": true,
+   "hideRefs": true
   },
   {
    "n": "Thrown",
