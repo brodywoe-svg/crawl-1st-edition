@@ -169,7 +169,7 @@
   {
    "n": "Enchanted",
    "sec": "Crafting Rules",
-   "lead": "An item with the Enchanted property is a magical item. It counts as magical for the purposes of Detect Magic and similar spells and effects. The Enchanted property itself doesn’t make the item deal magical damage, though some of its enchantments might.\n\nEnchanted is always listed last in an item’s properties, followed by a colon and the item’s enchantments. Example: Longsword (1d8 slashing, Versatile 1d10, Enchanted: Luminous, Ensorcelled)\n\nGrants: Enchanted: Luminous, fills 1 open modifier slot\nGrants: Enchanted: Ensorcelled, fills 1 open modifier slot\n\nSimple Objects: Everyday objects that weren’t made from a recipe, such as boxes, lockets, cups, or tools bought at market, count as Basic items with 1 modifier slot.",
+   "lead": "An item with the Enchanted property is a magical item. It counts as magical for the purposes of Detect Magic and similar spells and effects. The Enchanted property itself doesn’t make the item deal magical damage, though some of its enchantments might.\n\nEnchanted is always listed last in an item’s properties, followed by a colon and the item’s enchantments. Example: Longsword (1d8 slashing, Versatile 1d10, Enchanted: Luminous, Searing 1)\n\nGrants: Enchanted: Luminous, fills 1 open modifier slot\nGrants: Enchanted: Searing 1, fills 1 open modifier slot\n\nSimple Objects: Everyday objects that weren’t made from a recipe, such as boxes, lockets, cups, or tools bought at market, count as Basic items with 1 modifier slot.",
    "fx": [],
    "notes": [],
    "aka": [],
