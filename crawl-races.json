@@ -91,6 +91,26 @@
      "extra": []
     }
    ]
+  },
+  {
+   "id": "race-mv8cd5bkhvv1",
+   "n": "Human",
+   "desc": "Humans are the most common and most diverse tall race in the realm. They are socially multidimensional and highly adaptive. Human's live in nearly every region of the world and Align themselves to unique and personal ideals.",
+   "asi": "+1 to two different ability scores of your choice",
+   "prof": "Choose any three skill proficiencies of your choice",
+   "langs": "Common, One additional Language of your choice",
+   "feats": [
+    {
+     "n": "Human Versitility",
+     "d": "You gain proficiency in simple Blades, Swords, and Polearms and Light Armor."
+    },
+    {
+     "n": "Strong Back",
+     "d": "Your Maximum Carry Weight Capacity increases by 25 lbs."
+    }
+   ],
+   "extra": [],
+   "subs": []
   }
  ]
 }
