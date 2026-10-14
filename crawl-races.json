@@ -5,7 +5,7 @@
    "id": "race-mv8d1mu7xwv2",
    "n": "Dwarf",
    "desc": "Dwarves are the hardy stout folk of the realm who pride themselves on their achievements and craftsmanship while valuing Heritage, Family, and Tradition. There are three different kinds of Dwarves; the Mountain Dwarves who have carved stone hall from the very earth of their great mountains and have even built entire city's within them, They pride themselves on their Craftsmanship and living by their Clan's code above all. The Hill Dwarves, that despite living in the valley value community above all, and often find themselves neighbored with the Halfling folk and have developed a pension for brewing stout ales, living off the land, and cooking bountiful feasts for whichever occasion. The Gold Dwarves, are the most independent of the dwarf race, and can be identified easily by their tan skin as many hail from trade & port city's along the coast. Most of their heritage comes from the Mountain clans but whereas the Mountain dwarves create the the goods, the Gold dwarf clans are the ones who have long left the Mountains in order to sell and distribute them across the land.",
-   "asi": "+1 Strength, +1 Constitution",
+   "asi": "+1 Constitution",
    "prof": "Athletics, One skill proficiency of your choice",
    "langs": "Common, Dwarvish",
    "feats": [
