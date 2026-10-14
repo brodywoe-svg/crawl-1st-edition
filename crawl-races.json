@@ -43,7 +43,11 @@
      "feats": [
       {
        "n": "Gilded Hands",
-       "d": "You learn and know the following crafting recipes: \n[color=#b7791f]Hillbrand Ring[/color]"
+       "d": "You learn and know the following crafting recipes: \n[color=#b7791f]Hillbrand Ring[/color],"
+      },
+      {
+       "n": "Firearm Knowledge",
+       "d": "You gain proficiency in simple and martial Firearms."
       }
      ],
      "extra": []
