@@ -34,6 +34,21 @@
    ],
    "subs": [
     {
+     "id": "sub-mv8gflh8se7f",
+     "n": "Gold Dwarf",
+     "desc": "Gold Dwarves heritage ties back to the mountain clans but has long since branched as policy's and movements have pushed them towards mercantilism. Most of them travel in large Merchant Caravan groups passing through Trade and port cities worth their salt in gold. They pride themselves on individuality and their charisma and wit, to them, a dwarf that can't sell the dagger they made, is a dwarf that didn't deserve to make the dagger in the first place.",
+     "asi": "+1 Charisma",
+     "prof": "Appraisal, Either Goldsmithing or Tinkering",
+     "langs": "Two additional Languages of your choice",
+     "feats": [
+      {
+       "n": "Gilded Hands",
+       "d": "You learn and know the following crafting recipes: \n[color=#b7791f]Hillbrand Ring[/color]"
+      }
+     ],
+     "extra": []
+    },
+    {
      "id": "sub-mv8f4d29c7y1",
      "n": "Mountain Dwarf",
      "desc": "Mountain Dwarves hail from the Gilded halls and stone carved cities build within the mountains themself, each one a craftsmen in their own right.",
