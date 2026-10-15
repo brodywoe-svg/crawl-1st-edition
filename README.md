@@ -109,15 +109,34 @@ box on it can be typed into, and **Print or save as PDF** fits each page on one
 letter page. Characters are saved in the browser, and **Save to file** /
 **Open a character file** moves them between devices.
 
-Signed in as admin, **Edit classes, backgrounds and rules** edits:
+Classes come from the **Classes** page and backgrounds from the **Backgrounds**
+page, so anything added there can be chosen in the creator. In the creator:
 
-- **Classes:** magic source, spellcasting ability, spells at creation, hit die,
-  hit points, saves, proficiencies, features and subclasses.
-- **Backgrounds:** proficiencies, languages, equipment and wealth.
-- **Rules:** standard starting wealth, starting skill rank, highest starting
-  spell rank, passive base and suggested languages.
+- **Skill Points** from the class are spent on skill ranks with − / + buttons.
+- **Equipment** offers the class's loadouts, or its Starting Currency to buy gear
+  instead; a background's gear and wealth are added on top.
+- The sheet fills Max Pool and Action Die from level 1 of the class chart, and
+  lists the class and subclass features gained at level 1.
 
-These save to `crawl-creator.json`.
+Signed in as admin, **Edit creator rules** sets the standard starting wealth,
+starting skill rank, highest starting spell rank, passive base and suggested
+languages. These save to `crawl-creator.json`.
+
+## Classes and Backgrounds
+
+The **Classes** page shows each class with its class chart on the left (Level,
+Max Pool, Action Die, Features) and a scrolling box of its features on the right;
+click a feature in the chart to jump to it. Below that are hit die and hit
+points, Saving Throws, Starting Skill Proficiencies, Skill Points, other
+proficiencies, languages, magic source and Equipment Loadouts with the Starting
+Currency alternative, then subclasses. Signed in as admin: **Add class**,
+**Edit** (with **Fill in levels 1 to 20** for the chart, features with the level
+they're gained, and loadouts built from Items page gear), and **Add a subclass**.
+Saves to `crawl-classes.json`.
+
+The **Backgrounds** page works the same way for backgrounds: skill and other
+proficiencies, languages, starting gear, starting wealth and features. Saves to
+`crawl-backgrounds.json`.
 
 ## Items and Crafting
 
@@ -162,7 +181,11 @@ The spell list lives in [`crawl-spells.json`](crawl-spells.json).
 | `src/catalog.js` | The Items and Crafting pages |
 | `crawl-races.json` | Races and subraces |
 | `src/races.js` | The Races page |
-| `crawl-creator.json` | Character Creator classes, backgrounds and rules |
+| `crawl-creator.json` | Character Creator rules |
+| `crawl-classes.json` | Classes, subclasses, class charts and loadouts |
+| `crawl-backgrounds.json` | Backgrounds |
+| `src/classes.js` | The Classes and Backgrounds pages |
+| `src/crawldata.js` | Class and background data shared by those pages and the creator |
 | `src/creator.js` | The Character Creator page and character sheet |
 | `src/editkit.js` | The Text color sidebar shared by the editing pages |
 | `tools/sitekit.py` | The top navigation bar and the Glossary and Conditions page layouts |

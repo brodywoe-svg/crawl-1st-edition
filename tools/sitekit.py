@@ -11,9 +11,9 @@ import re
 # (label, href or None when the section isn't built yet, dropdown items or "glossary")
 NAV_ITEMS = [
     ("Character Creator", "creator.html", None),
-    ("Classes", None, None),
+    ("Classes", "classes.html", "classes"),
     ("Races", "races.html", "races"),
-    ("Backgrounds", None, None),
+    ("Backgrounds", "backgrounds.html", "backgrounds"),
     ("Spells", "index.html", [("All spells", "index.html?show=all"), ("By magic source", None),
                               ("Arcane", "index.html?source=arcane"), ("Divine", "index.html?source=divine"), ("Primal", "index.html?source=primal"), ("Occult", "index.html?source=occult"),
                               ("By class", None),
@@ -26,7 +26,7 @@ NAV_ITEMS = [
     ("About", None, None),
 ]
 # which nav item each page belongs to
-SECTION = {"creator": "Character Creator", "races": "Races", "spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
+SECTION = {"creator": "Character Creator", "classes": "Classes", "backgrounds": "Backgrounds", "races": "Races", "spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
 
 CARET = '<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 
@@ -46,14 +46,23 @@ def section_href(sec):
     return "conditions.html" if sec == "Conditions" else "glossary.html?s=" + slug(sec)
 
 
-def races_menu(races):
-    """Races menu: each race, with its subraces in a flyout (or indented on phones)."""
-    out = ['<a href="races.html">All races</a>']
-    for r in sorted(races.get("races", []), key=lambda x: x.get("n", "").lower()):
+LIST_MENUS = {
+    # menu kind: (page, data key, "All ..." label)
+    "races": ("races.html", "races", "All races"),
+    "classes": ("classes.html", "classes", "All classes"),
+    "backgrounds": ("backgrounds.html", "backgrounds", "All backgrounds"),
+}
+
+
+def list_menu(kind, data):
+    """Races, Classes and Backgrounds menus: each entry, with its subraces or subclasses in a flyout (or indented on phones)."""
+    page, key, all_label = LIST_MENUS[kind]
+    out = [f'<a href="{page}">{all_label}</a>']
+    for r in sorted((data or {}).get(key, []), key=lambda x: x.get("n", "").lower()):
         subs = sorted(r.get("subs", []), key=lambda x: x.get("n", "").lower())
-        link = f'<a href="races.html#{html.escape(r.get("id", ""))}">{html.escape(r.get("n", ""))}</a>'
+        link = f'<a href="{page}#{html.escape(r.get("id", ""))}">{html.escape(r.get("n", ""))}</a>'
         if subs:
-            fly = "".join(f'<a href="races.html#{html.escape(x.get("id", ""))}">{html.escape(x.get("n", ""))}</a>' for x in subs)
+            fly = "".join(f'<a href="{page}#{html.escape(x.get("id", ""))}">{html.escape(x.get("n", ""))}</a>' for x in subs)
             out.append(f'<div class="navsub">{link.replace("</a>", CARET_R + "</a>")}<div class="navfly">{fly}</div></div>')
         else:
             out.append(link)
@@ -63,8 +72,10 @@ def races_menu(races):
 CARET_R = '<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 
 
-def nav_html(active, controls="", sections=("Conditions",), races=None):
-    """active: the page key. controls: buttons for the right side. sections: Glossary menu entries. races: crawl-races.json data."""
+def nav_html(active, controls="", sections=("Conditions",), races=None, classes=None, backgrounds=None):
+    """active: the page key. controls: buttons for the right side. sections: Glossary menu entries.
+    races, classes, backgrounds: the data behind those menus."""
+    lists = {"races": races, "classes": classes, "backgrounds": backgrounds}
     sec = SECTION.get(active)
     parts = [
         '<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks">',
@@ -77,8 +88,8 @@ def nav_html(active, controls="", sections=("Conditions",), races=None):
         if not menu:
             parts.append(f'<a class="navitem" href="{href}"{cur}>{label}</a>')
             continue
-        if menu == "races":
-            items, menu_id = races_menu(races or {}), ' id="navRaces"'
+        if isinstance(menu, str) and menu in LIST_MENUS:
+            items, menu_id = list_menu(menu, lists[menu]), f' id="nav{menu.capitalize()}"'
         elif menu == "glossary":
             items, menu_id = "".join(f'<a href="{section_href(t)}">{html.escape(t)}</a>' for t in sections), ' id="navGlossary"'
         else:
@@ -163,16 +174,22 @@ NAV_JS = """(function(){
   function href(s){return s==='Conditions'?'conditions.html':'glossary.html?s='+slug(s)}
   function mark(){var here=location.pathname.split('/').pop()+location.search;[].forEach.call(document.querySelectorAll('.navmenu a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
   window.crawlNavMark=mark;
-  var rmenu=document.getElementById('navRaces');
-  window.crawlNavRaces=function(data){
-    if(!rmenu||!data||!data.races)return;
+  /* Races, Classes and Backgrounds menus: rebuilt when the data loads or an admin edits it */
+  var LISTS={races:['races.html','All races'],classes:['classes.html','All classes'],backgrounds:['backgrounds.html','All backgrounds']};
+  window.crawlNavList=function(kind,items){
+    var m=document.getElementById('nav'+kind.charAt(0).toUpperCase()+kind.slice(1)),L=LISTS[kind];
+    if(!m||!L||!items)return;
     var by=function(a,b){return String(a.n||'').toLowerCase().localeCompare(String(b.n||'').toLowerCase())};
-    rmenu.innerHTML='<a href="races.html">All races</a>'+data.races.filter(function(r){return r&&r.n&&!r._new}).slice().sort(by).map(function(r){
-      var subs=(r.subs||[]).filter(function(x){return x&&x.n&&!x._new}).slice().sort(by),link='<a href="races.html#'+esc(r.id)+'">'+esc(r.n);
-      return subs.length?'<div class="navsub">'+link+'<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navfly">'+subs.map(function(x){return '<a href="races.html#'+esc(x.id)+'">'+esc(x.n)+'</a>'}).join('')+'</div></div>':link+'</a>';
+    m.innerHTML='<a href="'+L[0]+'">'+L[1]+'</a>'+items.filter(function(r){return r&&r.n&&!r._new}).slice().sort(by).map(function(r){
+      var subs=(r.subs||[]).filter(function(x){return x&&x.n&&!x._new}).slice().sort(by),link='<a href="'+L[0]+'#'+esc(r.id)+'">'+esc(r.n);
+      return subs.length?'<div class="navsub">'+link+'<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navfly">'+subs.map(function(x){return '<a href="'+L[0]+'#'+esc(x.id)+'">'+esc(x.n)+'</a>'}).join('')+'</div></div>':link+'</a>';
     }).join('');
   };
-  if(window.CRAWL_STATIC&&rmenu)fetch('crawl-races.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j)window.crawlNavRaces(j)}).catch(function(){});
+  window.crawlNavRaces=function(data){if(data)window.crawlNavList('races',data.races)};
+  if(window.CRAWL_STATIC)Object.keys(LISTS).forEach(function(kind){
+    if(!document.getElementById('nav'+kind.charAt(0).toUpperCase()+kind.slice(1)))return;
+    fetch('crawl-'+kind+'.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j[kind])window.crawlNavList(kind,j[kind])}).catch(function(){});
+  });
   window.crawlNavSections=function(list){
     if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
     (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
@@ -246,7 +263,7 @@ def creator_shell(logo_svg, admin_modal):
   <h1>Character Creator</h1>
   <p>Build a Crawl 1st Edition character one step at a time, then play from the finished character sheet.</p>
 </header>
-<div class="cctop"><button type="button" class="btn" id="ccAdminBtn" hidden>Edit classes, backgrounds and rules</button></div>
+<div class="cctop"><button type="button" class="btn" id="ccAdminBtn" hidden>Edit creator rules</button></div>
 <p class="gmsg" id="gmsg" role="status"></p>
 <div id="cchome"></div>
 <div class="ccgame" id="ccgame" hidden>
@@ -262,8 +279,8 @@ def creator_shell(logo_svg, admin_modal):
   <div id="sheetPages"></div>
 </div>
 <div id="ccadmin" hidden>
-  <div class="ccadmintop"><div class="cctabs" id="ccTabs" role="group" aria-label="What to edit"><button type="button" data-tab="classes">Classes</button><button type="button" data-tab="backgrounds">Backgrounds</button><button type="button" data-tab="rules">Rules</button></div><button type="button" class="btn" id="ccAdminDone">Back to the creator</button></div>
-  <p class="ccnote">Races come from the <a href="races.html">Races page</a>, spells from the <a href="index.html">Spells page</a> and gear from the <a href="items.html">Items page</a>. Proficiencies are read from the text: name skills, weapon types, armor and trade skills, write &ldquo;Either Alchemy or Cooking&rdquo; for a choice, or &ldquo;Two skills of your choice&rdquo; for free picks.</p>
+  <div class="ccadmintop"><h2 class="cch2">Character Creator rules</h2><button type="button" class="btn" id="ccAdminDone">Back to the creator</button></div>
+  <p class="ccnote">Classes are edited on the <a href="classes.html">Classes page</a> and backgrounds on the <a href="backgrounds.html">Backgrounds page</a>; races come from the <a href="races.html">Races page</a>, spells from the <a href="index.html">Spells page</a> and gear from the <a href="items.html">Items page</a>. Proficiencies are read from the text: name skills, weapon types, armor and trade skills, write &ldquo;Either Alchemy or Cooking&rdquo; for a choice, or &ldquo;Two skills of your choice&rdquo; for free picks.</p>
   <div id="ccAdminList"></div>
 </div>
 </div>
@@ -275,6 +292,103 @@ def creator_shell(logo_svg, admin_modal):
     <button class="btn solid" id="saveBtn">Save changes</button>
   </div>
 </div>
+"""
+
+
+LIST_PAGES = {
+    "classes": ("Classes", "The classes of Crawl 1st Edition: each one's class chart, features by level, proficiencies, skill points and starting equipment, followed by its subclasses. Everything here can be chosen in the Character Creator.", "Search classes, features and subclasses", "Add class"),
+    "backgrounds": ("Backgrounds", "The backgrounds of Crawl 1st Edition: the life a character lived before adventuring, with the proficiencies, languages and gear it brings. Everything here can be chosen in the Character Creator.", "Search backgrounds", "Add background"),
+}
+
+
+def list_shell(page, logo_svg, admin_modal):
+    title, intro, placeholder, add = LIST_PAGES[page]
+    return f"""
+<div class="wrap condwrap{' clswrap' if page == 'classes' else ''}">
+<header class="intro">
+  {logo_svg}
+  <h1>{title}</h1>
+  <p>{intro}</p>
+</header>
+<div class="cbar">
+  <input id="cq" type="search" placeholder="{placeholder}" aria-label="{placeholder}" autocomplete="off">
+  <span class="ccount" id="ccount"></span>
+  <button type="button" class="btn solid" id="gAdd" hidden>{add}</button>
+</div>
+<p class="gmsg" id="gmsg" role="status"></p>
+<main id="clist"></main>
+<p class="cempty" id="cempty" hidden></p>
+</div>
+{admin_modal}
+<div class="savebar" id="savebar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">You have unsaved changes.</span>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn solid" id="saveBtn">Save changes</button>
+  </div>
+</div>
+"""
+
+
+CLASSES_CSS = """
+:root{--gold:#b7791f}
+:root[data-mode="dark"]{--gold:#e8b350}
+.clswrap{max-width:1100px}
+.clsgrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;margin:4px 0 6px}
+.clschart{border:2px solid var(--ink);border-radius:12px;overflow:hidden;align-self:start}
+.clschart table{width:100%;border-collapse:collapse;font-size:.88rem}
+.clschart th,.clschart td{padding:6px 8px;text-align:center;border-top:1px solid var(--hair)}
+.clschart thead th{background:var(--ink);color:var(--paper);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;border-top:0}
+.clschart tbody th{font-weight:800;width:56px}
+.clschart td:nth-child(2),.clschart td:nth-child(3){width:86px;white-space:nowrap}
+.clschart td:last-child,.clschart thead th:last-child{text-align:left}
+.clschart tbody tr:nth-child(even){background:var(--soft)}
+.flink{font:inherit;font-weight:700;color:var(--red);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2px}
+.clsfeats{position:relative;border:2px solid var(--ink);border-radius:12px;overflow:hidden;min-height:280px;background:var(--page)}
+.cfh{position:absolute;top:0;left:0;right:0;z-index:1;background:var(--ink);color:var(--paper);font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px}
+.cfin{position:absolute;inset:31px 0 0 0;overflow-y:auto;padding:10px 12px 14px;display:grid;gap:10px;align-content:start;scroll-behavior:smooth}
+.cfin:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+.clsf{border-bottom:1px solid var(--hair);padding-bottom:10px;border-radius:6px}
+.clsf:last-child{border-bottom:0}
+.clsf h4{margin:0 0 4px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:.98rem}
+.clsf p{margin:0 0 4px;font-weight:600;font-size:.9rem}
+.clsf.flash{animation:clsflash 1.4s ease-out}
+@keyframes clsflash{0%{background:color-mix(in srgb,var(--gold) 35%,transparent)}100%{background:transparent}}
+.lvtag{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:1px 8px;white-space:nowrap;color:var(--muted)}
+.clsload h3{margin:8px 0 6px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.loadgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.loadc{border:2px solid var(--ink);border-radius:12px;padding:10px 12px;display:grid;gap:4px;align-content:start}
+.loadc.money{border-style:dashed}
+.loadc p{margin:0;font-weight:600}
+.gearl{margin:0;padding:0;list-style:none;display:grid;gap:3px;font-weight:600;font-size:.92rem}
+.gearl li{position:relative;padding-left:16px}
+.gearl li::before{content:"";position:absolute;left:2px;top:.55em;width:6px;height:6px;background:var(--ink);transform:rotate(45deg)}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cform select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
+.frow{grid-template-columns:minmax(120px,200px) 64px 1fr auto}
+.frow .pl,.chrow input,.grow input,.lhead input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.chlist{display:grid;gap:6px;max-height:420px;overflow-y:auto;padding-right:4px}
+.chrow{display:grid;grid-template-columns:70px 1fr 1fr auto;gap:8px;align-items:center}
+.chh{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.llist{display:grid;gap:10px}
+.lrow{border:2px dashed var(--ink);border-radius:12px;padding:10px 12px;display:grid;gap:8px}
+.lrow>.btn{justify-self:start}
+.lhead{display:grid;grid-template-columns:1fr auto;gap:8px}
+.glist{display:grid;gap:6px}
+.grow{display:grid;grid-template-columns:1fr 80px auto;gap:8px;align-items:center}
+.cform>.btn,.cform .gbtns+.btn{justify-self:start}
+@media (max-width:760px){
+  .clsgrid{grid-template-columns:1fr}
+  .clschart th,.clschart td{padding:6px 5px}
+  .clschart tbody th{width:38px}
+  .clschart td:nth-child(2),.clschart td:nth-child(3){width:52px}
+  .clschart thead th{font-size:.62rem;letter-spacing:.04em}
+  .clsfeats{min-height:0;height:340px}
+  .fgrid{grid-template-columns:1fr}
+  .frow{grid-template-columns:1fr 70px}.frow .pd{grid-column:1/-1}.frow .xdel{justify-self:start}
+  .chrow{grid-template-columns:56px 1fr 1fr}.chrow .xdel{grid-column:1/-1;justify-self:start}
+  .frow input,.chrow input,.grow input,.lhead input,.cform select{font-size:16px}
+}
 """
 
 
@@ -570,6 +684,8 @@ CONDITIONS_CSS = """
 
 
 CREATOR_CSS = """
+:root{--gold:#b7791f}
+:root[data-mode="dark"]{--gold:#e8b350}
 .ccwrap{position:relative;max-width:1240px;margin:0 auto;padding:24px 16px 120px}
 .ccintro .logo{width:min(300px,70%)}
 .ccintro h1{margin:0 0 4px}
@@ -687,12 +803,27 @@ body.cc-sheet .ccintro{display:none}
 .ccsk{border:2px solid var(--ink);border-radius:12px;overflow:hidden}
 .ccsk h3{margin:0;display:flex;justify-content:space-between;background:var(--ink);color:var(--paper);font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;padding:7px 12px}
 .ccsk h3 span{letter-spacing:0}
-.ccchk{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;padding:6px 12px;border-top:1px solid var(--hair);cursor:pointer;font-weight:700;font-size:.92rem}
+.ccchk{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:2px 8px;align-items:center;padding:6px 12px;border-top:1px solid var(--hair);font-weight:700;font-size:.92rem}
 .ccchk:first-of-type{border-top:0}
-.ccchk input{width:18px;height:18px;accent-color:var(--red)}
-.ccchk small{grid-column:2;font-size:.72rem;color:var(--muted)}
-.ccchk .ccb{grid-row:1;grid-column:3}
-.ccchk.given{cursor:default}
+.ccchk input{grid-row:1;grid-column:1;width:18px;height:18px;accent-color:var(--gold);cursor:pointer}
+.ccchk label{grid-row:1;grid-column:2;cursor:pointer}
+.ccchk small{grid-row:2;grid-column:2;font-size:.72rem;color:var(--muted)}
+.ccchk .ccstepper{grid-row:1;grid-column:3}
+.ccchk .ccb{grid-row:1;grid-column:4;min-width:2.2em;text-align:right}
+.ccchk.given input{cursor:default}
+.ccchk.given input:checked{appearance:none;width:18px;height:18px;border-radius:4px;background:var(--gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3 7-7' fill='none' stroke='white' stroke-width='2.4'/%3E%3C/svg%3E") center/14px no-repeat}
+.ccstepper{display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:800}
+.ccstepper button{width:24px;height:24px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:800 .9rem/1 var(--font);cursor:pointer;padding:0}
+.ccstepper button[disabled]{opacity:.3;cursor:default}
+.ccstepper span{min-width:2.1em;text-align:center}
+.ccload{border:2px solid var(--ink);border-radius:12px;padding:8px 12px 12px;margin:0 0 10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.ccload legend{font-weight:800;font-size:.85rem;padding:0 6px}
+.ccload label{display:flex;gap:8px;align-items:flex-start;border:2px solid var(--hair);border-radius:10px;padding:8px 10px;cursor:pointer}
+.ccload label.on{border-color:var(--ink);background:var(--soft)}
+.ccload input{margin-top:3px;accent-color:var(--red)}
+.ccload b{display:block}
+.ccload small{display:block;font-size:.76rem;color:var(--muted);font-weight:600}
+.cclinks{margin:0}
 .ccgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:760px){.ccgrid2{grid-template-columns:1fr}}
 .ccsec h3{margin:8px 0 6px;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
@@ -701,7 +832,7 @@ body.cc-sheet .ccintro{display:none}
 .cctiers{display:flex;gap:4px;flex:none}
 .ctier{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:800 .8rem var(--font);cursor:pointer}
 .ctier.on{background:var(--ink);color:var(--paper)}
-.ctier[disabled]{cursor:default;background:var(--red);border-color:var(--red);color:#fff}
+.ctier[disabled]{cursor:default;background:var(--gold);border-color:var(--gold);color:#fff}
 .cclangs{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;align-items:center}
 .cclangs .btn{justify-self:start}
 /* spells and equipment */
@@ -789,28 +920,35 @@ label.ccrow{cursor:pointer}
 .sinit svg{fill:var(--paper)}
 .sinit .sf{width:52px;background:var(--paper);border-radius:6px;text-align:center;font-weight:800}
 .scols{display:grid;grid-template-columns:54% minmax(0,1fr);gap:16px;align-items:start}
-.ssub{display:grid;grid-template-columns:84px 1fr auto 40px;gap:6px;font-size:8.5px;font-weight:800;text-transform:uppercase;text-align:center;margin-bottom:4px;align-items:end}
+.ssub{display:grid;grid-template-columns:84px minmax(0,1fr);font-size:8.5px;font-weight:800;text-transform:uppercase;text-align:center;margin-bottom:3px;align-items:end}
+.srowh{display:grid;grid-template-columns:minmax(0,1fr) 18px 152px 40px;gap:5px;padding:0 3px 0 7px;align-items:end;font-size:8.5px;font-weight:800;text-transform:uppercase;text-align:center}
+.srowh>span:first-child{text-align:left}
+.sscalew{display:grid;gap:1px}
+.sscalew small{font-size:8px;font-weight:800}
+.sscale{display:flex;justify-content:space-between;padding:0 6px}
+.sscale span{width:11px;display:flex;justify-content:center;white-space:nowrap;font-size:7.5px;font-weight:800;letter-spacing:-.03em;text-transform:none}
 .sab{display:grid;grid-template-columns:84px 1fr;margin-bottom:8px}
 .sabox{border:3px solid var(--ink);border-radius:6px 0 0 6px;display:grid;align-content:start;text-align:center;min-height:86px}
 .sabn{background:var(--ink);color:var(--paper);font-size:9px;font-weight:800;text-transform:uppercase;padding:3px 1px}
 .sabs{font-size:26px;font-weight:800;padding-top:6px}
 .sabm{font-size:13px;font-weight:800;border-top:2px solid var(--ink);margin:2px 14px 6px;padding-top:2px}
 .sabrows{display:grid;align-content:start;gap:2px}
-.srow{display:grid;grid-template-columns:minmax(0,1fr) auto 40px;align-items:center;gap:5px;background:var(--ink);color:var(--paper);border-radius:3px 999px 999px 3px;padding:2px 3px 2px 7px;min-height:24px}
+.srow{display:grid;grid-template-columns:minmax(0,1fr) 18px 152px 40px;align-items:center;gap:5px;background:var(--ink);color:var(--paper);border-radius:3px 999px 999px 3px;padding:2px 3px 2px 7px;min-height:24px}
 .srl{font-size:10px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.spips{display:flex;align-items:center;gap:2px;background:var(--paper);border-radius:999px;padding:2px 5px}
+.spips{display:flex;align-items:center;justify-content:space-between;width:152px;background:var(--paper);border-radius:999px;padding:2px 6px}
 .spip{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper);padding:0;cursor:pointer}
 .spip.on{background:var(--ink)}
-.sstar{width:16px;height:16px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center}
-.sstar svg{fill:var(--paper);stroke:var(--ink);stroke-width:1.5}
-.sstar.on svg{fill:var(--red);stroke:var(--red)}
+.sstar{width:18px;height:18px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+.sstar svg{width:18px;height:18px;fill:var(--paper);stroke:var(--paper);stroke-width:1}
+.sstar.on svg{fill:var(--gold);stroke:var(--gold)}
 .spip:focus-visible,.sstar:focus-visible{outline:2px solid var(--red);outline-offset:1px}
 .stot{background:var(--paper);color:var(--ink);border-radius:999px;text-align:center;font-weight:800;font-size:12px;padding:2px 0;min-width:0}
 .stot .sf{text-align:center;padding:0;font-weight:800}
 .stiers{display:flex;gap:2px}
 .stier{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--paper);font-size:8.5px;display:grid;place-items:center;font-weight:800}
 .stier.on{background:var(--paper);color:var(--ink)}
-.sleft .srow:has(.stiers){grid-template-columns:minmax(0,1fr) auto auto 40px}
+.stiers{width:54px;justify-content:center}
+.sleft .srow:has(.stiers),.sprofh{grid-template-columns:minmax(0,1fr) 54px 18px 152px 40px}
 .sgroup{font-weight:800;font-size:12px;border:1px solid var(--ink);padding:2px 6px;margin:6px 0 3px;display:flex;justify-content:space-between;align-items:baseline}
 .sgroup small{font-size:8.5px;text-transform:uppercase}
 .sbox{border:2px solid var(--ink);border-radius:12px;padding:18px 8px 8px;position:relative;margin-top:18px}
@@ -828,8 +966,20 @@ label.ccrow{cursor:pointer}
 .stbl label>span,.sac label>span{padding:3px 6px;text-transform:uppercase;font-weight:700;text-align:center;border-right:1px solid var(--ink)}
 .stbl label>span small{color:var(--muted);font-size:8.5px}
 .stbl .sf,.sac .sf{text-align:center;font-size:11px}
-.sac label:last-child{grid-template-columns:1fr 32px 32px}
-.sac label:last-child .sf+.sf{border-left:1px solid var(--ink)}
+.sac .sacr{display:grid;grid-template-columns:minmax(0,1fr) 50px;align-items:center;border-top:1px solid var(--ink)}
+.sacr>span{padding:3px 6px;text-transform:uppercase;font-weight:700;text-align:center;border-right:1px solid var(--ink)}
+.sac .sach{background:var(--ink);color:var(--paper);border-top:0;font-weight:800;font-size:9.5px}
+.sach>span{border-right:0;padding-block:4px}
+.sacx{grid-template-columns:minmax(0,1fr) 25px 25px!important}
+.sacx .sf{padding-inline:0}
+.sacx .sf+.sf{border-left:1px solid var(--ink)}
+.sduo{grid-template-rows:1fr auto}
+.sduot{display:grid;align-content:start}
+.sduot>span{background:var(--ink);color:var(--paper);font-size:9px;font-weight:800;text-transform:uppercase;text-align:center;padding:4px 2px;line-height:1.15}
+.sduot>.sf{text-align:center;font-size:18px;font-weight:800;padding:10px 2px}
+.sduob{display:grid;border-top:2px solid var(--ink)}
+.sduob>span{font-size:8.5px;font-weight:800;text-transform:uppercase;text-align:center;padding-top:3px}
+.sduob>.sf{text-align:center;font-weight:800;font-size:13px;padding:2px}
 .sdeath{gap:2px;padding-bottom:6px}
 .sdeath>small{justify-content:center;padding:2px 0 0}
 .sdeath>span:not(:first-child){display:flex;justify-content:center;gap:6px}
@@ -852,12 +1002,21 @@ label.ccrow{cursor:pointer}
 .swealth label{grid-template-columns:1fr 1fr 1fr!important}
 .swealth label .sf+.sf{border-left:1px solid var(--ink)}
 .sright .sblock+.sblock{margin-top:14px}
+.ssq{border:2px solid var(--ink)}
+.ssq .sbar{border-radius:0}
+.ssq .srow{border-radius:0;margin:0;box-shadow:inset 0 -1px 0 color-mix(in srgb,var(--paper) 30%,var(--ink))}
+.ssq .sgroup{margin:0;border:0;border-block:2px solid var(--ink);padding:3px 7px}
+.sprofh{background:var(--paper);color:var(--ink);padding-block:3px 2px}
+.ssq .sinv,.ssq .seq{border:0;border-top:1px solid var(--ink)}
+.ssq .sinv:first-of-type,.ssq .seq:first-of-type{border-top:0}
+.seqh{display:grid;grid-template-columns:minmax(0,1fr) 64px 64px;align-items:center}
 .sgrid3{display:grid;grid-template-columns:1fr 64px 64px}
 .seq{display:grid;grid-template-columns:86px minmax(0,1fr) 64px 64px;border:1px solid var(--ink);border-top:0;align-items:stretch}
 .seq .sf{border-left:1px solid var(--ink)}
 .sslot{background:var(--ink);color:var(--paper);font-size:10px;font-weight:800;text-transform:uppercase;display:grid;place-items:center;padding:3px}
-.stot2{border:0}
-.stot2 label{display:grid;border:1px solid var(--ink);border-top:0}
+.ssq .stot2{grid-template-columns:minmax(0,1fr) 64px 64px;border-top:2px solid var(--ink)}
+.stot2 label{display:grid;border-left:1px solid var(--ink)}
+.stotl{display:grid;place-items:center end;padding-right:8px;font-size:9px;font-weight:800;text-transform:uppercase}
 .stot2 label span{background:var(--ink);color:var(--paper);font-size:8.5px;font-weight:800;text-align:center;padding:2px}
 .stot2 .sf{border:0;text-align:center}
 .sgrid4{display:grid;grid-template-columns:minmax(0,1fr) 54px 60px 64px}
@@ -887,10 +1046,10 @@ label.ccrow{cursor:pointer}
   .sf{font-size:16px}
   .scell>.sf{font-size:18px}
   .sheettools .sp{display:none}
-  .srow{grid-template-columns:minmax(0,1fr) 40px;border-radius:6px;row-gap:3px;padding:3px 3px 4px 7px}
-  .srow .spips{grid-row:2;grid-column:1/-1;justify-self:start}
-  .sleft .srow:has(.stiers){grid-template-columns:minmax(0,1fr) auto 40px}
-  .ssub{display:none}
+  .srow,.sleft .srow:has(.stiers){grid-template-columns:18px minmax(0,1fr) auto 40px;border-radius:6px;row-gap:3px;padding:3px 3px 4px 7px}
+  .srow .srl{grid-row:1;grid-column:1/3}.srow .stiers{grid-row:1;grid-column:3}.srow .stot{grid-row:1;grid-column:4}
+  .srow .sstar{grid-row:2;grid-column:1}.srow .spips{grid-row:2;grid-column:2/5;justify-self:start}
+  .ssub,.sprofh{display:none}
 }
 body.cc-printing .spage{border:0;border-radius:0;padding:0;max-width:none;margin:0;font-size:10.5px}
 body.cc-printing .sf{font-size:10.5px;padding:2px 4px}
@@ -898,7 +1057,7 @@ body.cc-printing .satk>div{min-width:0}
 body.cc-printing .snotes textarea,body.cc-printing .sfeat textarea{resize:none}
 @media print{
   @page{size:letter;margin:.3in}
-  :root,:root[data-mode="dark"]{--ink:#000;--paper:#fff;--page:#fff;--muted:#5c5c5c;--soft:#ececec;--hair:#c9c9c9;--placeholder:transparent;--red:#a3141b;color-scheme:light}
+  :root,:root[data-mode="dark"]{--ink:#000;--paper:#fff;--page:#fff;--muted:#5c5c5c;--soft:#ececec;--hair:#c9c9c9;--placeholder:transparent;--red:#a3141b;--gold:#b7791f;color-scheme:light}
   body{background:#fff}
   .sitenav,.ccintro,.cctop,.gmsg,.sheettools,.sheethelp,footer,.savebar,#gside,.gtip,#cchome,#ccgame,#ccadmin{display:none!important}
   .ccwrap{padding:0;max-width:none}

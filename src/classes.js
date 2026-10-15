@@ -1,0 +1,219 @@
+/* Classes page (crawl-classes.json) and Backgrounds page (crawl-backgrounds.json); see src/crawldata.js for the data.
+   The Character Creator reads both files, so whatever is added here can be picked there.
+   Signed in as admin: Add, Edit, Delete; classes also get subclasses, a class chart, features by level and loadouts.
+   Runs after the shared admin code, src/editkit.js and src/crawldata.js. */
+const PAGE = window.GL_PAGE;                       // "classes" or "backgrounds"
+const IS_CLS = PAGE === "classes";
+const FILE = IS_CLS ? "crawl-classes.json" : "crawl-backgrounds.json";
+const WHAT = IS_CLS ? "class" : "background";
+let list = IS_CLS ? normClasses(CLASSES) : normBgs(BACKGROUNDS), original = "", dirty = false;
+const editing = new Set(), drafts = new Map();
+const clean = () => IS_CLS ? cleanClasses(list) : cleanBgs(list);
+function load(j) {
+  const a = IS_CLS ? (j && Array.isArray(j.classes) ? normClasses(j) : null) : (j && Array.isArray(j.backgrounds) ? normBgs(j) : null);
+  if (!a) return false; list = a; original = JSON.stringify(clean()); return true;
+}
+original = JSON.stringify(clean());
+const findPart = id => { for (const p of list) { if (p._id === id) return { part: p, top: p }; const s = (p.subs || []).find(x => x._id === id); if (s) return { part: s, top: p } } return null };
+const say = m => { $("gmsg").textContent = m || "" };
+
+/* ---------------------------------------------------------------- view */
+const query = () => lcs($("cq").value.trim()).replace(/\s+/g, " ");
+const textOf = p => plainText([p.n, p.desc, p.skills, p.prof, p.saves, p.langs, p.hd, p.hp, p.source, p.money, p.wealth, ...(p.feats || []).map(f => f.n + " " + f.d),
+  ...(p.extra || []).map(x => x.k + " " + x.v), ...arr(p.loadouts).map(l => l.n + " " + gearLine(l.gear)), gearLine(p.gear || []), ...arr(p.subs).map(s => s.n)].join(" ")).toLowerCase();
+const gearHTML = g => g.length ? `<ul class="gearl">${g.map(x => `<li>${x.qty > 1 ? `<b>${x.qty}×</b> ` : ""}${x.iid ? `<a class="ilink" href="items.html#${encodeURIComponent(x.iid)}">${esc(x.n)}</a>` : esc(x.n)}</li>`).join("")}</ul>` : `<p class="muted">No gear listed.</p>`;
+const factsHTML = rows => { rows = rows.filter(r => r[1]); return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${richInline(v)}</dd>`).join("")}</dl>` : "" };
+const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => `<p><span class="pdn">${esc(f.n)}</span>${f.lv ? ` <span class="lvtag">Level ${f.lv}</span>` : ""} - ${richInline(f.d)}</p>`).join("")}</div>` : "";
+const featId = (p, i) => `feat-${p.id}-${i}`;
+function chartHTML(k) {
+  const lvls = [...new Set([...k.chart.map(r => r.lv).filter(Boolean), ...k.feats.map(f => f.lv || 1)])].sort((a, b) => a - b);
+  const byLv = new Map(k.chart.map(r => [r.lv, r]));
+  const rows = lvls.map(lv => { const r = byLv.get(lv) || {}, fs = k.feats.map((f, i) => [f, i]).filter(([f]) => (f.lv || 1) === lv);
+    return `<tr><th scope="row">${lv}</th><td>${esc(r.pool || "–")}</td><td>${esc(r.die || "–")}</td><td>${fs.map(([f, i]) => `<button type="button" class="flink" data-feat="${featId(k, i)}">${esc(f.n)}</button>`).join(", ") || "–"}</td></tr>` }).join("");
+  return `<div class="clsgrid"><div class="clschart"><table><thead><tr><th>Level</th><th>Max Pool</th><th>Action Die</th><th>Features</th></tr></thead><tbody>${rows || `<tr><td colspan="4" class="muted">No levels yet.</td></tr>`}</tbody></table></div>
+<div class="clsfeats" aria-label="${esc(k.n)} features"><div class="cfh">Class features</div><div class="cfin" tabindex="0">${k.feats.map((f, i) => [f, i]).sort((a, b) => (a[0].lv || 1) - (b[0].lv || 1)).map(([f, i]) => `<div class="clsf" id="${featId(k, i)}"><h4><span class="pdn">${esc(f.n)}</span><span class="lvtag">Level ${f.lv || 1}</span></h4>${paras(f.d)}</div>`).join("") || `<p class="muted">No features yet.</p>`}</div></div></div>`;
+}
+function classBody(k) {
+  return (k.desc ? `<div class="clead">${paras(k.desc)}</div>` : "") + chartHTML(k) +
+    factsHTML([["Hit die", k.hd], ["Hit points at 1st level", k.hp], ["Saving Throws", k.saves], ["Starting Skill Proficiencies", k.skills], ["Skill Points", k.skillPts], ["Other Proficiencies", k.prof],
+      ["Languages", k.langs], ["Magic source", k.source], ["Spellcasting ability", k.cast && AB[k.cast]], ["Spells at character creation", k.spells], ...k.extra.map(x => [x.k || "Detail", x.v])]) +
+    `<div class="clsload"><h3>Equipment Loadout</h3><div class="loadgrid">${k.loadouts.map(l => `<div class="loadc"><b>${esc(l.n)}</b>${gearHTML(l.gear)}</div>`).join("")}<div class="loadc money"><b>Or buy your own</b><p>Starting Currency: <b>${esc(k.money || "the standard amount")}</b></p></div></div></div>`;
+}
+function bgBody(b) {
+  return (b.desc ? `<div class="clead">${paras(b.desc)}</div>` : "") +
+    factsHTML([["Starting Skill Proficiencies", b.skills], ["Other Proficiencies", b.prof], ["Languages", b.langs], ["Starting wealth", b.wealth], ...b.extra.map(x => [x.k || "Detail", x.v])]) +
+    (b.gear.length ? `<div class="clsload"><h3>Starting equipment</h3>${gearHTML(b.gear)}</div>` : "") + featHTML(b.feats);
+}
+function subHTML(s, k) {
+  if (editing.has(s._id)) return `<div class="subr">${form(s, "sub", k)}</div>`;
+  return `<div class="subr" id="${esc(s.id)}"><div class="subh"><b>${esc(s.n)}</b>${ADMIN ? `<button type="button" class="gedit" data-act="edit" data-id="${s._id}">Edit</button>` : ""}</div>${s.desc ? `<div class="clead">${paras(s.desc)}</div>` : ""}${featHTML(s.feats.slice().sort((a, b) => (a.lv || 1) - (b.lv || 1)))}${s.desc || s.feats.length ? "" : `<p class="muted">No details yet.</p>`}</div>`;
+}
+function cardHTML(p, q) {
+  if (editing.has(p._id)) return `<section class="cond" id="${esc(p.id)}"><div class="chead"><span>${p._new ? "New " + WHAT : "Editing " + esc(p.n)}</span></div><div class="cbody">${form(p, IS_CLS ? "class" : "bg")}</div></section>`;
+  const tag = IS_CLS && p.source ? `<span class="ctag">${esc(p.source)} magic</span>` : "";
+  const subs = !IS_CLS ? [] : q && !textOf({ ...p, subs: [] }).includes(q) ? p.subs.filter(s => editing.has(s._id) || textOf(s).includes(q)) : p.subs;
+  return `<section class="cond" id="${esc(p.id)}"><h2 class="chead"><span>${esc(p.n)}</span><span class="chr">${tag}${ADMIN ? `<button type="button" class="gedit" data-act="edit" data-id="${p._id}">Edit</button>` : ""}</span></h2>
+<div class="cbody">${IS_CLS ? classBody(p) : bgBody(p)}
+${IS_CLS && (subs.length || ADMIN) ? `<div class="subs"><h3>Subclasses</h3>${subs.map(s => subHTML(s, p)).join("") || `<p class="muted">No subclasses yet.</p>`}${ADMIN ? `<button type="button" class="btn addsub" data-act="addsub" data-id="${p._id}">Add a subclass to ${esc(p.n)}</button>` : ""}</div>` : ""}</div></section>`;
+}
+
+/* ---------------------------------------------------------------- forms */
+const ITEM_LIST = () => `<datalist id="itemNames">${GEAR_ITEMS.slice().sort(byName).map(i => `<option value="${esc(i.n)}">`).join("")}</datalist>`;
+const featRow = f => `<div class="prow frow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><input type="number" class="pl" min="1" max="30" value="${esc(f.lv || "")}" placeholder="Lv" aria-label="Level gained" title="Level gained"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
+const bgFeatRow = f => `<div class="prow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
+const extraRow = x => `<div class="xrow"><input type="text" class="xk" value="${esc(x.k)}" placeholder="Label" aria-label="Detail label" autocomplete="off"><input type="text" class="xv" value="${esc(x.v)}" placeholder="Value" aria-label="Detail value" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
+const chartRowHTML = r => `<div class="chrow"><input type="number" class="cl" min="1" max="30" value="${esc(r.lv || "")}" placeholder="Lv" aria-label="Level"><input type="text" class="cp" value="${esc(r.pool)}" placeholder="Max Pool" aria-label="Max Pool" autocomplete="off"><input type="text" class="cd" value="${esc(r.die)}" placeholder="Action Die, e.g. 1d6" aria-label="Action Die" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
+const gearRowHTML = g => `<div class="grow"><input type="text" class="gn" list="itemNames" value="${esc(g.n)}" placeholder="Item, e.g. Leather Jerkin" aria-label="Item" autocomplete="off"><input type="number" class="gq" min="1" max="999" value="${g.qty || 1}" aria-label="How many"><button type="button" class="btn xdel">Remove</button></div>`;
+const loadoutHTML = l => `<div class="lrow"><div class="lhead"><input type="text" class="ln" value="${esc(l.n)}" placeholder="Loadout name, e.g. Loadout A" aria-label="Loadout name" autocomplete="off"><button type="button" class="btn xdel">Remove loadout</button></div><div class="glist">${l.gear.map(gearRowHTML).join("")}</div><button type="button" class="btn" data-act="gadd">Add gear</button></div>`;
+function form(p, kind, parent) {
+  const d = drafts.get(p._id) || p, id = k => `f${k}-${p._id}`;
+  const fld = (k, label, help, inner) => `<label for="${id(k)}">${label}${help ? ` <small>${help}</small>` : ""}${inner}</label>`;
+  const inp = (k, ph) => `<input type="text" id="${id(k)}" data-k="${k}" value="${esc(d[k])}" placeholder="${esc(ph)}" autocomplete="off">`;
+  const sel = (k, opts) => `<select id="${id(k)}" data-k="${k}">${opts.map(([v, l]) => `<option value="${v}"${v === d[k] ? " selected" : ""}>${l}</option>`).join("")}</select>`;
+  const area = k => `<textarea id="${id(k)}" data-k="${k}" rows="3">${esc(d[k])}</textarea>`;
+  const top = `<div class="gbtns gtop">${kind === "sub" ? `<b>${p._new ? `New subclass of ${esc(parent.n)}` : "Editing " + esc(p.n)}</b>` : ""}<span class="sp"></span><button type="button" class="btn" data-act="cancel">Cancel</button><button type="button" class="btn solid" data-act="done">Done</button></div>`;
+  const bottom = `<p class="gerr" role="alert"></p><div class="gbtns"><button type="button" class="btn gdel" data-act="del">${p._new ? "Remove" : "Delete " + (kind === "sub" ? "subclass" : WHAT)}</button><span class="sp"></span><button type="button" class="btn" data-act="cancel">Cancel</button><button type="button" class="btn solid" data-act="done">Done</button></div>`;
+  const feats = (rows, label) => `<div class="glab">${label} <small>The name shows in red. Give each feature the level it's gained at; it appears on that row of the chart.</small></div><div class="plist">${rows.map(featRow).join("")}</div><button type="button" class="btn" data-act="fadd">Add a feature</button>`;
+  const extras = `<div class="glab">More details <small>Anything else, each with its own label.</small></div><div class="xlist">${d.extra.map(extraRow).join("")}</div><button type="button" class="btn" data-act="xadd">Add a detail</button>`;
+  let body = "";
+  if (kind === "sub") body = fld("n", "Subclass name", "", inp("n", "e.g. School of Evocation")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) + feats(d.feats, "Subclass features") + extras;
+  else if (kind === "class") body = fld("n", "Class name", "", inp("n", "e.g. Wizard")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) +
+    `<div class="fgrid">${fld("hd", "Hit die", "", inp("hd", "e.g. 1d8"))}${fld("hp", "Hit points at 1st level", "", inp("hp", "e.g. 8 + Constitution modifier"))}
+${fld("source", "Magic source", "", sel("source", [["", "None"], ...SOURCES.map(s => [s, s])]))}${fld("cast", "Spellcasting ability", "", sel("cast", [["", "None"], ...ABIL]))}
+${fld("spells", "Spells at character creation", "Empty = no limit", inp("spells", "e.g. 4"))}${fld("skillPts", "Skill Points", "Spent on skill ranks in the creator", inp("skillPts", "e.g. 4"))}</div>` +
+    fld("saves", "Saving Throws", "", inp("saves", "e.g. Intelligence, Wisdom")) +
+    fld("skills", "Starting Skill Proficiencies", "Name skills, or write “Two skills of your choice” or “Either Arcane or Lore”.", inp("skills", "e.g. Arcane, Two skills of your choice")) +
+    fld("prof", "Other Proficiencies", "Weapon types, armor and trade skills, e.g. simple Blades, Light Armor, Either Alchemy or Scribing.", inp("prof", "e.g. simple Blades, Light Armor")) +
+    fld("langs", "Languages", "", inp("langs", "e.g. One additional Language of your choice")) +
+    `<div class="glab">Class chart <small>One row per level: its Max Pool and Action Die. Features are added to the right level automatically.</small></div><div class="chlist"><div class="chrow chh"><span>Level</span><span>Max Pool</span><span>Action Die</span><span></span></div>${d.chart.map(chartRowHTML).join("")}</div>
+<div class="gbtns"><button type="button" class="btn" data-act="cadd">Add a level</button><button type="button" class="btn" data-act="cfill">Fill in levels 1 to 20</button></div>` +
+    feats(d.feats, "Class features") +
+    `<div class="glab">Equipment Loadouts <small>Each loadout is a set of gear a player can take. Item names from the Items page link to them.</small></div><div class="llist">${d.loadouts.map(loadoutHTML).join("")}</div><button type="button" class="btn" data-act="ladd">Add a loadout</button>` +
+    fld("money", "Starting Currency", "What a player gets instead of a loadout, to buy their own gear. Empty = the creator's standard amount.", inp("money", "e.g. 40 (G)")) + extras;
+  else body = fld("n", "Background name", "", inp("n", "e.g. Ferryman")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) +
+    fld("skills", "Starting Skill Proficiencies", "", inp("skills", "e.g. Athletics, Either Nature or Survival")) + fld("prof", "Other Proficiencies", "", inp("prof", "e.g. Either Cooking or Woodworking")) +
+    fld("langs", "Languages", "", inp("langs", "e.g. One additional Language of your choice")) +
+    `<div class="glab">Starting equipment <small>Item names from the Items page link to them.</small></div><div class="glist">${d.gear.map(gearRowHTML).join("")}</div><button type="button" class="btn" data-act="gadd">Add gear</button>` +
+    fld("wealth", "Starting wealth", "Added to the player's purse in the creator.", inp("wealth", "e.g. 10 (G)")) +
+    `<div class="glab">Features</div><div class="plist">${d.feats.map(bgFeatRow).join("")}</div><button type="button" class="btn" data-act="fadd">Add a feature</button>` + extras;
+  return `<div class="gediting gform rform cform" data-id="${p._id}" data-kind="${kind}">${top}${body}${bottom}</div>`;
+}
+const own = (f, sel) => [...f.querySelectorAll(sel)].filter(el => el.closest(".rform") === f);
+function readForm(f) {
+  const d = {}; own(f, "[data-k]").forEach(el => { d[el.dataset.k] = el.value });
+  d.feats = own(f, ".prow").map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value, lv: r.querySelector(".pl") ? r.querySelector(".pl").value : "" }));
+  d.extra = own(f, ".xrow").map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
+  d.chart = own(f, ".chrow:not(.chh)").map(r => ({ lv: r.querySelector(".cl").value, pool: r.querySelector(".cp").value, die: r.querySelector(".cd").value }));
+  d.loadouts = own(f, ".lrow").map(l => ({ n: l.querySelector(".ln").value, gear: [...l.querySelectorAll(".grow")].map(g => ({ n: g.querySelector(".gn").value, qty: g.querySelector(".gq").value })) }));
+  d.gear = own(f, ".glist").filter(g => !g.closest(".lrow")).flatMap(g => [...g.querySelectorAll(".grow")].map(r => ({ n: r.querySelector(".gn").value, qty: r.querySelector(".gq").value })));
+  return d;
+}
+function saveDrafts() { document.querySelectorAll(".cform").forEach(f => { const d = readForm(f); drafts.set(+f.dataset.id, { ...findPart(+f.dataset.id).part, ...d, chart: d.chart.map(r => ({ lv: featLv(r.lv), pool: r.pool, die: r.die })), feats: d.feats.map(x => ({ ...x, lv: featLv(x.lv) })), gear: gearOf(d.gear), loadouts: d.loadouts.map(l => ({ n: l.n, gear: gearOf(l.gear) })) }) }) }
+
+/* ---------------------------------------------------------------- page */
+function render() {
+  saveDrafts();
+  if (window.crawlNavList) window.crawlNavList(PAGE, list);
+  const q = query();
+  let shown = list.filter(p => !p._new || editing.has(p._id));
+  if (q) shown = shown.filter(p => editing.has(p._id) || textOf(p).includes(q) || arr(p.subs).some(s => editing.has(s._id)));
+  shown.sort((a, b) => (a._new ? -1 : b._new ? 1 : 0) || byName(a, b));
+  const n = list.filter(p => !p._new).length;
+  $("ccount").textContent = `${n} ${n === 1 ? WHAT : WHAT === "class" ? "classes" : "backgrounds"}`;
+  $("clist").innerHTML = ITEM_LIST() + (shown.length ? `<div class="rlist2">${shown.map(p => cardHTML(p, q)).join("")}</div>` : "");
+  sideShow(editing.size > 0);
+  $("cempty").hidden = shown.length > 0;
+  $("cempty").textContent = n ? "Nothing matches. Try a different word, or clear the search." : `No ${WHAT === "class" ? "classes" : "backgrounds"} yet.` + (ADMIN ? ` Click Add ${WHAT} to create the first one.` : "");
+  $("gAdd").hidden = !ADMIN;
+}
+function markDirty() {
+  dirty = JSON.stringify(clean()) !== original;
+  $("savebar").hidden = !dirty;
+  if (dirty) { $("saveMsg").textContent = `You have unsaved ${WHAT} changes.`; $("saveBtn").disabled = false; $("discardBtn").disabled = false }
+}
+function closeForm(id) {
+  const hit = findPart(id); editing.delete(id); drafts.delete(id); if (!hit || !hit.part._new) return;
+  if (hit.part === hit.top) list = list.filter(p => p !== hit.top); else hit.top.subs = hit.top.subs.filter(s => s !== hit.part);
+}
+function focusForm(id, sel = '[data-k="n"]') { const f = document.querySelector(`.cform[data-id="${id}"]`); if (f) { f.scrollIntoView({ block: "center" }); const el = f.querySelector(sel); if (el) el.focus() } }
+
+$("clist").addEventListener("click", ev => {
+  const fl = ev.target.closest(".flink");
+  if (fl) { const el = document.getElementById(fl.dataset.feat); if (el) { const box = el.closest(".cfin"); box.scrollTo({ top: el.offsetTop - box.offsetTop - 6, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash") } return }
+  const b = ev.target.closest("button"); if (!b) return;
+  const f = b.closest(".rform"), act = b.dataset.act;
+  if (b.classList.contains("xdel")) { b.closest(".lrow>.lhead") ? b.closest(".lrow").remove() : b.closest(".prow,.xrow,.chrow,.grow").remove(); return }
+  const addTo = (box, html, sel) => { box.insertAdjacentHTML("beforeend", html); const el = box.lastElementChild.querySelector(sel); if (el) el.focus() };
+  if (f && act === "fadd") { addTo(own(f, ".plist")[0], f.dataset.kind === "bg" ? bgFeatRow({ n: "", d: "" }) : featRow({ n: "", d: "" }), ".pn"); return }
+  if (f && act === "xadd") { addTo(own(f, ".xlist")[0], extraRow({ k: "", v: "" }), ".xk"); return }
+  if (f && act === "cadd") { const rows = own(f, ".chrow:not(.chh)"), last = rows.length ? parseInt(rows[rows.length - 1].querySelector(".cl").value, 10) || rows.length : 0; addTo(own(f, ".chlist")[0], chartRowHTML({ lv: last + 1, pool: "", die: "" }), ".cp"); return }
+  if (f && act === "cfill") { const box = own(f, ".chlist")[0], have = new Set(own(f, ".chrow:not(.chh)").map(r => parseInt(r.querySelector(".cl").value, 10))); for (let lv = 1; lv <= 20; lv++) if (!have.has(lv)) box.insertAdjacentHTML("beforeend", chartRowHTML({ lv, pool: "", die: "" })); [...box.querySelectorAll(".chrow:not(.chh)")].sort((x, y) => (parseInt(x.querySelector(".cl").value, 10) || 99) - (parseInt(y.querySelector(".cl").value, 10) || 99)).forEach(r => box.appendChild(r)); return }
+  if (f && act === "ladd") { const box = own(f, ".llist")[0]; addTo(box, loadoutHTML({ n: `Loadout ${String.fromCharCode(65 + box.children.length)}`, gear: [] }), ".ln"); return }
+  if (f && act === "gadd") { const box = b.closest(".lrow") ? b.closest(".lrow").querySelector(".glist") : own(f, ".glist").find(g => !g.closest(".lrow")); addTo(box, gearRowHTML({ n: "", qty: 1 }), ".gn"); return }
+  if (act === "edit") { const id = +b.dataset.id; editing.add(id); render(); focusForm(id); return }
+  if (act === "addsub") {
+    const hit = findPart(+b.dataset.id); if (!hit) return;
+    const s = { id: newId("sub"), n: "", desc: "", feats: [], extra: [], _id: ++uid, _new: true }; hit.top.subs.push(s); editing.add(s._id); render(); focusForm(s._id); return;
+  }
+  if (!f) return;
+  const id = +f.dataset.id, hit = findPart(id); if (!hit) return;
+  const p = hit.part, isTop = p === hit.top, err = m => { f.querySelector(".gerr").textContent = m };
+  if (act === "cancel") { closeForm(id); render(); return }
+  if (act === "del") {
+    if (!p._new && !b.dataset.sure) { b.dataset.sure = "1"; b.textContent = isTop && p.subs && p.subs.length ? `Its ${p.subs.length} subclass${p.subs.length === 1 ? "" : "es"} go too. Click again to delete` : "Click again to delete"; return }
+    const wasNew = p._new; closeForm(id);
+    if (!wasNew) { if (isTop) list = list.filter(x => x !== p); else hit.top.subs = hit.top.subs.filter(s => s !== p) }
+    render(); markDirty(); if (!wasNew) say(`Deleted ${p.n}. Click Save changes to keep it deleted.`); return;
+  }
+  if (act === "done") {
+    const d = readForm(f), name = str(d.n).replace(/\s+/g, " ");
+    if (!name) { err(`Give the ${isTop ? WHAT : "subclass"} a name.`); return }
+    const sibs = isTop ? list : hit.top.subs;
+    if (sibs.some(x => x !== p && !x._new && lcs(x.n) === lcs(name))) { err(`There's already one called ${name}.`); return }
+    const lvs = d.chart.map(r => featLv(r.lv)).filter(Boolean);
+    if (new Set(lvs).size !== lvs.length) { err("Two chart rows have the same level."); return }
+    const kind = f.dataset.kind;
+    const keep = kind === "sub" ? normClass({ subs: [{ ...p, ...d, n: name }] }).subs[0] : kind === "class" ? normClass({ ...p, ...d, n: name, subs: p.subs }) : normBg({ ...p, ...d, n: name });
+    if (kind === "class") keep.subs = p.subs;
+    Object.keys(keep).forEach(k => { if (k !== "_id") p[k] = keep[k] });
+    delete p._new; editing.delete(id); drafts.delete(id); render(); markDirty();
+  }
+});
+$("gAdd").addEventListener("click", () => {
+  const p = IS_CLS ? normClass({ n: "" }) : normBg({ n: "" }); p._new = true;
+  list.push(p); editing.add(p._id); $("cq").value = ""; render(); focusForm(p._id);
+});
+$("cq").addEventListener("input", render);
+$("saveBtn").addEventListener("click", async () => {
+  if (editing.size) { $("saveMsg").textContent = "Click Done (or Cancel) on what you're editing first."; return }
+  if (!ADMIN || !GH_KEY) { $("saveMsg").textContent = "Sign in as admin to save."; return }
+  $("saveBtn").disabled = true; $("discardBtn").disabled = true; $("saveMsg").textContent = "Saving to the site…";
+  try {
+    const data = clean();
+    await putFile(FILE, JSON.stringify(data, null, 1) + "\n", `Update ${IS_CLS ? "classes" : "backgrounds"} from the admin page`);
+    original = JSON.stringify(data); dirty = false;
+    $("saveMsg").textContent = "Saved. Everyone sees the changes, in the Character Creator too, in about a minute.";
+    setTimeout(() => { if (!dirty) $("savebar").hidden = true }, 4000);
+  } catch (x) { $("saveMsg").textContent = saveError(x && x.code, IS_CLS ? "classes" : "backgrounds"); $("saveBtn").disabled = false; $("discardBtn").disabled = false }
+});
+$("discardBtn").addEventListener("click", () => { load(JSON.parse(original)); editing.clear(); drafts.clear(); dirty = false; $("savebar").hidden = true; say(""); render() });
+window.addEventListener("beforeunload", ev => { if (dirty || editing.size) { ev.preventDefault(); ev.returnValue = "" } });
+function showHash() { const el = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1))); if (el) el.scrollIntoView({ block: "start" }) }
+window.addEventListener("hashchange", showHash);
+async function refreshFromGitHub() {
+  try {
+    const r = await gh(`/contents/${FILE}?ref=${REPO.branch || "main"}`, { headers: { "Accept": "application/vnd.github.raw+json" } });
+    if (r.ok && !dirty && !editing.size && load(await r.json())) render();
+  } catch (x) { }
+}
+AdminHooks.canSignOut = () => { if (dirty || editing.size) { say("Save or discard your changes before signing out."); return false } return true };
+AdminHooks.signedIn = quiet => { render(); if (!quiet) say(`Signed in as admin. Click Add ${WHAT} or Edit on any ${WHAT}.`); refreshFromGitHub() };
+AdminHooks.signedOut = () => { editing.clear(); drafts.clear(); list = list.filter(p => !p._new); list.forEach(p => { if (p.subs) p.subs = p.subs.filter(s => !s._new) }); render(); say("Signed out.") };
+
+if (STATIC) {
+  $("adminBtn").hidden = false; showAdminBtn();
+  Promise.all([fetch(FILE, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null), fetch("crawl-items.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null)])
+    .then(([j, ij]) => { if (ij && Array.isArray(ij.items)) GEAR_ITEMS = ij.items; if (j && !dirty) load(j) })
+    .finally(() => { render(); showHash(); restoreAdmin() });
+}
+render(); showHash();
