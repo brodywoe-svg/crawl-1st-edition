@@ -830,6 +830,30 @@ body.cc-sheet .ccintro{display:none}
 .ccload b{display:block}
 .ccload small{display:block;font-size:.76rem;color:var(--muted);font-weight:600}
 .cclinks{margin:0}
+.ccsl{display:grid;gap:1px}
+.ccsl small{font-size:.66rem;font-weight:600;opacity:.75;line-height:1.2}
+.cch h2 small{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin-top:2px}
+.ccprof{border:2px solid var(--ink);border-radius:12px;padding:4px 12px 6px;margin-top:12px}
+.ccprof .ccprow{display:grid;grid-template-columns:minmax(0,1fr) auto 186px;gap:12px}
+.ccprof .cchead{border-top:0;align-items:end;padding:6px 0 4px}
+.ccprof .cchead h3{margin:0;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.ccprof .cchead>span:not(.ccscale){font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);width:98px;text-align:center}
+.cclh{margin:16px 0 6px;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase}
+.ccpips,.ccscale{display:grid;grid-template-columns:repeat(10,14px) 1fr;gap:3px;align-items:center}
+.ccscale span{font-size:.56rem;font-weight:800;text-align:center;white-space:nowrap;letter-spacing:-.04em;color:var(--muted)}
+.ccpip{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);padding:0;cursor:pointer}
+.ccpip.on{background:var(--ink)}
+.ccpip:hover:not([disabled]){background:var(--gold);border-color:var(--gold)}
+.ccpip[disabled]{cursor:default}
+.ccpips b{font-size:.8rem;text-align:right}
+.ccpips.off{opacity:.35}
+.ccstepper.off{opacity:.35}
+.ccrow.pinned{outline:3px solid var(--gold);outline-offset:-3px;background:var(--soft)}
+.ccpick{cursor:pointer;border-radius:4px}
+.ccpick:hover{text-decoration:underline;text-underline-offset:3px}
+.ccpick:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.cchw{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.ccprof .ccprow{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}.ccprof .ccprow>.ccpips,.ccprof .cchead>.ccscale{grid-column:1/-1}.ccprof .cchead>span:not(.ccscale){display:none}}
 .ccschools{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:16px}
 .ccschools label{display:grid;gap:5px;font-weight:800;font-size:.85rem;border:2px solid var(--ink);border-radius:12px;padding:10px 12px}
 .ccschools select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}

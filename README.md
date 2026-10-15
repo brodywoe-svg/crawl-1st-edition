@@ -112,7 +112,13 @@ letter page. Characters are saved in the browser, and **Save to file** /
 Classes come from the **Classes** page and backgrounds from the **Backgrounds**
 page, so anything added there can be chosen in the creator. In the creator:
 
-- **Skill Points** from the class are spent on skill ranks with − / + buttons.
+- **Skill Points** from the class are one pool, spent only on things the character is
+  proficient in: skill and saving throw ranks (Skills step), Weapon, Armor and Trade Skill
+  Proficiency ranks (+1 to +10 circles on the Proficiencies step) and spell Ranks (Spells
+  step). Becoming proficient in a saving throw costs 3 skill points (set under Edit
+  creator rules).
+- **Spells:** click a spell's name to keep its description in the right-hand panel until
+  you click another spell or click away.
 - **Equipment** offers the class's loadouts, or its Starting Currency to buy gear
   instead; a background's gear and wealth are added on top.
 - The sheet fills Max Pool and Action Die from level 1 of the class chart, and

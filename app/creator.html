@@ -728,6 +728,30 @@ body.cc-sheet .ccintro{display:none}
 .ccload b{display:block}
 .ccload small{display:block;font-size:.76rem;color:var(--muted);font-weight:600}
 .cclinks{margin:0}
+.ccsl{display:grid;gap:1px}
+.ccsl small{font-size:.66rem;font-weight:600;opacity:.75;line-height:1.2}
+.cch h2 small{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin-top:2px}
+.ccprof{border:2px solid var(--ink);border-radius:12px;padding:4px 12px 6px;margin-top:12px}
+.ccprof .ccprow{display:grid;grid-template-columns:minmax(0,1fr) auto 186px;gap:12px}
+.ccprof .cchead{border-top:0;align-items:end;padding:6px 0 4px}
+.ccprof .cchead h3{margin:0;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.ccprof .cchead>span:not(.ccscale){font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);width:98px;text-align:center}
+.cclh{margin:16px 0 6px;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase}
+.ccpips,.ccscale{display:grid;grid-template-columns:repeat(10,14px) 1fr;gap:3px;align-items:center}
+.ccscale span{font-size:.56rem;font-weight:800;text-align:center;white-space:nowrap;letter-spacing:-.04em;color:var(--muted)}
+.ccpip{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);padding:0;cursor:pointer}
+.ccpip.on{background:var(--ink)}
+.ccpip:hover:not([disabled]){background:var(--gold);border-color:var(--gold)}
+.ccpip[disabled]{cursor:default}
+.ccpips b{font-size:.8rem;text-align:right}
+.ccpips.off{opacity:.35}
+.ccstepper.off{opacity:.35}
+.ccrow.pinned{outline:3px solid var(--gold);outline-offset:-3px;background:var(--soft)}
+.ccpick{cursor:pointer;border-radius:4px}
+.ccpick:hover{text-decoration:underline;text-underline-offset:3px}
+.ccpick:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.cchw{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.ccprof .ccprow{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}.ccprof .ccprow>.ccpips,.ccprof .cchead>.ccscale{grid-column:1/-1}.ccprof .cchead>span:not(.ccscale){display:none}}
 .ccschools{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:16px}
 .ccschools label{display:grid;gap:5px;font-weight:800;font-size:.85rem;border:2px solid var(--ink);border-radius:12px;padding:10px 12px}
 .ccschools select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
@@ -1412,7 +1436,7 @@ function normRaces(j) {
   const part = p => ({ id: str(p.id), n: str(p.n), desc: str(p.desc), asi: str(p.asi), prof: str(p.prof), langs: str(p.langs), feats: featsOf(p.feats), extra: extrasOf(p.extra) });
   return arr(j && j.races).filter(r => r && str(r.n)).map(r => ({ ...part(r), subs: arr(r.subs).filter(s => s && str(s.n)).map(part).sort(byName) })).sort(byName);
 }
-const RULE_DEFAULTS = { wealth: "25 (G)", rank: "1", spellRank: "1", passive: "10", langs: "Common" };
+const RULE_DEFAULTS = { wealth: "25 (G)", rank: "1", spellRank: "1", saveCost: "3", passive: "10", langs: "Common" };
 function normRules(j) {
   if (!j || typeof j !== "object") return null;
   const rules = { ...RULE_DEFAULTS }; for (const k in RULE_DEFAULTS) if (j.rules && j.rules[k] != null) rules[k] = str(j.rules[k]);
@@ -1600,11 +1624,44 @@ const rankCapOf = c => { const k = clsOf(c); const v = k && fml(c, k.rankCap); r
 const spellRankOf = (c, s) => spellStart(c, s) + (c.spellUp[s.n] || 0);
 const spellByName = n => SPELL_LIST.find(x => x.n === n) || null;
 const spellSpent = c => c.spells.reduce((n, nm) => { const s = spellByName(nm); return s ? n + (c.spellUp[nm] || 0) * rankCost(c, s) : n }, 0);
+/* skill points: one pool for skill, saving throw, weapon, armor, trade skill and spell Ranks, plus new saving throw
+   proficiencies. Points only go into things the character is proficient in. */
+const saveCost = () => { const n = parseInt(CR.rules.saveCost, 10); return n >= 0 ? n : 3 };
+function rankables(c, ps) {
+  return [...Object.keys(SKILL_AB).map(s => ["skill:" + s, ps.skill(s), "skills"]), ...ABIL.map(([k]) => ["save:" + k, ps.save(k), "saves"]),
+    ...WEAPONS.map(n => ["w:" + n, ps.tiers("weapon", n).size > 0, "prof"]), ...ARMORS.map(n => ["a:" + n, ps.tiers("armor", n).size > 0, "prof"]), ...TRADES.map(n => ["t:" + n, !!ps.trade(n), "prof"])];
+}
+const isProf = (c, ps, key) => { const r = rankables(c, ps).find(x => x[0] === key); return !!(r && r[1]) };
+function boughtSaves(c, ps) {
+  const manual = ABIL.filter(([k]) => c.prof.save[k] && !ps.given("save", k)).length;
+  return Math.max(0, manual - pickCount(c, ps, "save").allow);
+}
+function spentParts(c, ps) {
+  const out = { skills: 0, saves: 0, prof: 0, spells: spellSpent(c), saveBuy: boughtSaves(c, ps) * saveCost() };
+  rankables(c, ps).forEach(([key, prof, part]) => { const r = c.rank[key]; if (r != null && prof) out[part] += Math.max(0, +r - defRank()) });
+  out.total = out.skills + out.saves + out.prof + out.spells + out.saveBuy;
+  return out;
+}
+const pointsLeft = (c, ps) => skillPoints(c) - spentParts(c, ps).total;
 function pointsLine(c, ps) {
   const pts = skillPoints(c); if (!pts) return "";
-  const sk = skillSpent(c, ps), sp = spellSpent(c), all = sk + sp;
-  return `<p class="cccounter${all >= pts ? " done" : ""}${all > pts ? " over" : ""}">Skill points (${esc(clsOf(c).n)}): <b>${all} of ${pts} spent</b>${sp ? ` <small>(skills ${sk}, spell Ranks ${sp})</small>` : ""}${all > pts ? " · that's more than you have" : ""}</p>`;
+  const s = spentParts(c, ps), all = s.total;
+  const parts = [["skills", s.skills], ["saving throw ranks", s.saves], ["saving throw proficiency", s.saveBuy], ["weapon, armor and trade ranks", s.prof], ["spell Ranks", s.spells]].filter(x => x[1]).map(([l, n]) => `${l} ${n}`);
+  return `<p class="cccounter${all >= pts ? " done" : ""}${all > pts ? " over" : ""}">Skill points (${esc(clsOf(c).n)}): <b>${all} of ${pts} spent</b>${parts.length ? ` <small>(${parts.join(", ")})</small>` : ""}${all > pts ? " · that's more than you have" : ""}</p>`;
 }
+/* set a proficiency's rank, paying the difference in skill points */
+function setRank(c, key, v) {
+  const ps = profState(c), base = defRank(), cur = rankOf(c, key, isProf(c, ps, key));
+  if (!isProf(c, ps, key)) { say("Skill points can only be spent on things you're proficient in."); return false }
+  v = Math.min(10, Math.max(base, v));
+  if (v - cur > pointsLeft(c, ps)) { say(skillPoints(c) ? "Not enough skill points left." : "Your class doesn't give skill points."); return false }
+  c.rank[key] = v; say(""); return true;
+}
+function rankBar(c, ps, key, label) {
+  const prof = isProf(c, ps, key), r = rankOf(c, key, prof), pts = skillPoints(c);
+  return `<span class="ccpips${prof ? "" : " off"}" role="group" aria-label="${esc(label)} rank">${Array.from({ length: 10 }, (_, i) => `<button type="button" class="ccpip${i < r ? " on" : ""}" data-rv="${esc(key)}" data-v="${i + 1}" aria-label="${esc(label)} rank +${i + 1}" aria-pressed="${i < r}"${!prof || !pts ? " disabled" : ""}></button>`).join("")}<b>+${r}</b></span>`;
+}
+const RANK_HEAD = `<span class="ccscale" aria-hidden="true">${Array.from({ length: 10 }, (_, i) => `<span>+${i + 1}</span>`).join("")}<b></b></span>`;
 /* starting currency: a fixed amount, a roll made when the player reaches Equipment, or both added together */
 function ensureMoneyRoll(c) {
   const k = clsOf(c), d = k && parseDice(k.moneyRoll);
@@ -1612,7 +1669,7 @@ function ensureMoneyRoll(c) {
   if (c.moneyRoll && c.moneyRoll.cls === k.id && c.moneyRoll.expr === k.moneyRoll) return false;
   const r = rollDice(d); c.moneyRoll = { cls: k.id, expr: k.moneyRoll, dice: r.dice, total: r.total, coins: r.coins, unit: d.unit, add: d.add, times: d.times }; touch(); return true;
 }
-function skillSpent(c, ps) { return Object.keys(SKILL_AB).reduce((n, s) => { const r = c.rank["skill:" + s]; return r == null ? n : n + Math.max(0, +r - (ps.skill(s) ? defRank() : 0)) }, 0) }
+const skillSpent = (c, ps) => spentParts(c, ps).total;
 const spentC = c => c.inv.reduce((n, x) => n + (x.paid || 0) * (x.qty || 1), 0);
 const itemById = id => ITEMS.find(i => i.id === id) || null;
 const invName = x => { const it = x.iid && itemById(x.iid); return it ? it.n : str(x.n) };
@@ -1684,7 +1741,7 @@ function itemInfo(it) {
 /* ---------------------------------------------------------------- steps */
 const STEPS = [
   ["race", "Race", "Choose your race"], ["class", "Class", "Choose your class"], ["bg", "Background", "Choose your background"],
-  ["abil", "Abilities", "Roll your ability scores"], ["skills", "Skills", "Choose your skills"], ["prof", "Proficiencies", "Weapons, armor, trades and languages"],
+  ["abil", "Abilities", "Roll your ability scores"], ["skills", "Skills", "Choose your skills"], ["prof", "Proficiencies", "Proficiencies", "Weapons, armor, trades and languages"],
   ["spells", "Spells", "Choose your spells"], ["equip", "Equipment", "Gear up"], ["look", "Appearance", "Appearance and story"], ["name", "Name", "Name your character"]
 ];
 function stepOk(c, k) {
@@ -1703,16 +1760,19 @@ function stepOk(c, k) {
   }
   return false;
 }
-let infoDefault = "", infoMap = new Map();
-function setInfo(html) { $("ccinfo").innerHTML = html || infoDefault }
+let infoDefault = "", infoMap = new Map(), pinIk = "";
+/* the info panel: shows what's hovered, or a clicked (pinned) row until something else is clicked */
+function setInfo(html) { $("ccinfo").innerHTML = html || (pinIk && infoMap.get(pinIk)) || infoDefault }
+function markPin() { document.querySelectorAll("#ccmain .pinned").forEach(x => x.classList.remove("pinned")); if (pinIk) { const r = document.querySelector(`#ccmain .ccrow[data-ik="${CSS.escape(pinIk)}"]`); if (r) r.classList.add("pinned"); else pinIk = "" } }
 function renderCreate() {
-  const c = cur, i = Math.min(Math.max(0, c.step | 0), STEPS.length - 1), [k, , title] = STEPS[i];
-  $("ccsteps").innerHTML = STEPS.map(([sk, t], j) => `<button type="button" class="ccstep${j === i ? " on" : ""}${stepOk(c, sk) ? " ok" : ""}" data-step="${j}"${j === i ? ' aria-current="step"' : ""}><span class="ccn">${stepOk(c, sk) ? "✓" : j + 1}</span>${esc(t)}</button>`).join("");
+  const c = cur, i = Math.min(Math.max(0, c.step | 0), STEPS.length - 1), [k, , title, sub] = STEPS[i];
+  $("ccsteps").innerHTML = STEPS.map(([sk, t, , s2], j) => `<button type="button" class="ccstep${j === i ? " on" : ""}${stepOk(c, sk) ? " ok" : ""}" data-step="${j}"${j === i ? ' aria-current="step"' : ""}><span class="ccn">${stepOk(c, sk) ? "✓" : j + 1}</span><span class="ccsl">${esc(t)}${s2 ? `<small>${esc(s2)}</small>` : ""}</span></button>`).join("");
   infoMap = new Map(); infoDefault = "";
   const rolled = k === "equip" && ensureMoneyRoll(c);
   const body = (STEP_VIEWS[k] || (() => ""))(c);
-  $("ccmain").innerHTML = `<div class="cch"><h2>${esc(title)}</h2><span class="ccof">Step ${i + 1} of ${STEPS.length}</span></div><div class="ccbody" data-k="${k}">${body}</div>`;
-  setInfo();
+  $("ccmain").innerHTML = `<div class="cch"><h2>${esc(title)}${sub ? `<small>${esc(sub)}</small>` : ""}</h2><span class="ccof">Step ${i + 1} of ${STEPS.length}</span></div><div class="ccbody" data-k="${k}">${body}</div>`;
+  if (pinIk && !infoMap.has(pinIk)) pinIk = "";
+  markPin(); setInfo();
   if (rolled && !RM.matches) spinDice(document.querySelectorAll(".ccmoney .die"));
   $("ccBack").disabled = i === 0;
   $("ccNext").textContent = i === STEPS.length - 1 ? "Finish" : "Next";
@@ -1779,13 +1839,16 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
   },
   skills(c) {
     const ps = profState(c), sk = pickCount(c, ps, "skill"), sv = pickCount(c, ps, "save"), pts = skillPoints(c), spent = skillSpent(c, ps);
-    infoDefault = infoBox("Skills and saving throws", "", `<p>Tick the skills you're proficient in. Skills given by your race, class or background are already ticked.</p><p>A proficient skill starts at rank +${defRank()}. Its bonus is the ability modifier plus its rank.</p>${pts ? `<p>Your class gives you <b>${pts} skill point${pts === 1 ? "" : "s"}</b>. Each point raises a skill's rank by 1; use the − and + buttons.</p>` : ""}`);
+    const left = pointsLeft(c, ps), sc = saveCost(), svAllow = sv.allow - Math.min(sv.allow, ABIL.filter(([k]) => c.prof.save[k] && !ps.given("save", k)).length);
+    infoDefault = infoBox("Skills and saving throws", "", `<p>Tick the skills you're proficient in. Skills given by your race, class or background are already ticked.</p><p>A proficient skill starts at rank +${defRank()}. Its bonus is the ability modifier plus its rank.</p>${pts ? `<p>Your class gives you <b>${pts} skill point${pts === 1 ? "" : "s"}</b>. Each point raises the rank of something you're proficient in by 1. They're shared with weapon, armor, trade skill and spell Ranks.</p>` : ""}<p>Becoming proficient in a saving throw costs <b>${sc} skill points</b>.</p>`);
     const either = eitherHTML(c, ps, p => p.cat === "skill");
     const row = (cat, key, label) => {
       const g = ps.given(cat, key), on = cat === "skill" ? ps.skill(key) : ps.save(key);
       const tot = cat === "skill" ? skillTotal(c, key, ps) : saveTotal(c, key, ps), r = rankOf(c, cat + ":" + key, on);
-      const step = pts && cat === "skill" ? `<span class="ccstepper"><button type="button" data-pt="-1" data-n="${esc(key)}" aria-label="Lower ${esc(label)} rank"${r <= (on ? defRank() : 0) ? " disabled" : ""}>−</button><span title="Rank">+${r}</span><button type="button" data-pt="1" data-n="${esc(key)}" aria-label="Raise ${esc(label)} rank"${r >= 10 ? " disabled" : ""}>+</button></span>` : "";
-      return `<div class="ccchk${g ? " given" : ""}"><input type="checkbox" id="ck-${cat}-${esc(slugOf(key))}" data-f="${cat}" data-n="${esc(key)}"${on ? " checked" : ""}${g ? " disabled" : ""}><label for="ck-${cat}-${esc(slugOf(key))}">${esc(label)}</label>${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}${step}<b class="ccb">${sign(tot)}</b></div>`;
+      const rk = cat + ":" + key, step = pts ? `<span class="ccstepper${on ? "" : " off"}"><button type="button" data-rk="${esc(rk)}" data-d="-1" aria-label="Lower ${esc(label)} rank"${!on || r <= defRank() ? " disabled" : ""}>−</button><span title="Rank">+${r}</span><button type="button" data-rk="${esc(rk)}" data-d="1" aria-label="Raise ${esc(label)} rank"${!on || r >= 10 || left < 1 ? ` disabled${!on ? ' title="Not proficient"' : ""}` : ""}>+</button></span>` : "";
+      const buy = cat === "save" && !g && !on && !svAllow, cant = buy && left < sc;
+      const note = g ? `<small>${esc(g.src.join(", "))}</small>` : cat === "save" && !g ? `<small>${on ? (sv.allow ? "Your choice" : `Bought for ${sc} skill points`) : buy ? `Costs ${sc} skill points` : "Free choice"}</small>` : "";
+      return `<div class="ccchk${g ? " given" : ""}"><input type="checkbox" id="ck-${cat}-${esc(slugOf(key))}" data-f="${cat}" data-n="${esc(key)}"${on ? " checked" : ""}${g || cant ? " disabled" : ""}${cant ? ` title="Needs ${sc} skill points"` : ""}><label for="ck-${cat}-${esc(slugOf(key))}">${esc(label)}</label>${note}${step}<b class="ccb">${sign(tot)}</b></div>`;
     };
     const ptsLine = pointsLine(c, ps);
     return either + counter("skill", sk, "skill") + counter("save", sv, "saving throw") + ptsLine +
@@ -1793,16 +1856,19 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
   },
   prof(c) {
     const ps = profState(c), lg = langGrants(c);
-    infoDefault = infoBox("Proficiencies", "", `<p><b>Weapons and armor</b> have three types: S (Simple), M (Martial) and E (Exotic).</p><p><b>Trade skills</b> have three tiers: B, A and M. They decide which crafting recipes you can make.</p><p>Anything given by your race, class or background is already marked.</p>`);
-    const tierRow = (cat, n, tiers) => { const t = ps.tiers(cat, n), g = ps.given(cat, n); return `<div class="ccprow"><span>${esc(n)}${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}</span><span class="cctiers">${tiers.map(([x, l]) => { const lock = g && g.tiers.has(x); return `<button type="button" class="ctier${t.has(x) ? " on" : ""}" data-f="${cat}" data-n="${esc(n)}" data-t="${x}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${t.has(x)}"${lock ? " disabled" : ""}>${x}</button>` }).join("")}</span></div>` };
-    const tradeRow = n => { const t = ps.trade(n), g = ps.given("trade", n); return `<div class="ccprow"><span><a class="ilink" href="crafting.html?p=${encodeURIComponent(lcs(n))}" target="_blank" rel="noopener">${esc(n)}</a>${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}</span><span class="cctiers">${TTIERS.map(([x, l]) => `<button type="button" class="ctier${t === x ? " on" : ""}" data-f="trade" data-n="${esc(n)}" data-t="${x}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${t === x}"${g && [...g.tiers].includes(x) ? " disabled" : ""}>${x}</button>`).join("")}</span></div>` };
+    const pts = skillPoints(c);
+    infoDefault = infoBox("Proficiencies", "", `<p><b>Weapon and Armor Proficiencies</b> have three types: S (Simple), M (Martial) and E (Exotic).</p><p><b>Trade Skill Proficiencies</b> have three tiers: B, A and M. They decide which crafting recipes you can make.</p><p>Anything given by your race, class or background is already marked.</p>${pts ? `<p>Click the circles to raise the rank (+1 to +10) of anything you're proficient in. Each rank costs 1 skill point from the same pool as your skills.</p>` : ""}`);
+    const head = (h, typeLabel) => `<div class="ccprow cchead"><h3>${h}</h3><span>${typeLabel}</span>${RANK_HEAD}</div>`;
+    const tierRow = (cat, n, tiers) => { const t = ps.tiers(cat, n), g = ps.given(cat, n); return `<div class="ccprow"><span>${esc(n)}${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}</span><span class="cctiers">${tiers.map(([x, l]) => { const lock = g && g.tiers.has(x); return `<button type="button" class="ctier${t.has(x) ? " on" : ""}" data-f="${cat}" data-n="${esc(n)}" data-t="${x}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${t.has(x)}"${lock ? " disabled" : ""}>${x}</button>` }).join("")}</span>${rankBar(c, ps, (cat === "weapon" ? "w:" : "a:") + n, n)}</div>` };
+    const tradeRow = n => { const t = ps.trade(n), g = ps.given("trade", n); return `<div class="ccprow"><span><a class="ilink" href="crafting.html?p=${encodeURIComponent(lcs(n))}" target="_blank" rel="noopener">${esc(n)}</a>${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}</span><span class="cctiers">${TTIERS.map(([x, l]) => `<button type="button" class="ctier${t === x ? " on" : ""}" data-f="trade" data-n="${esc(n)}" data-t="${x}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${t === x}"${g && [...g.tiers].includes(x) ? " disabled" : ""}>${x}</button>`).join("")}</span>${rankBar(c, ps, "t:" + n, n)}</div>` };
     const known = [...new Set([...splitList(CR.rules.langs), ...RACE_LIST.flatMap(r => [r, ...r.subs]).flatMap(p => parseLangs(p.langs).fixed.map(f => f.name))])].sort();
     const nLang = Math.max(lg.picks, c.langs.length);
-    const langs = `<div class="ccsec"><h3>Languages</h3><p class="ccnote">${lg.fixed.length ? "You speak " + esc(lg.fixed.map(f => f.name).join(", ")) + "." : "No languages given yet."}${lg.picks ? ` Choose ${lg.picks} more (${esc(lg.from.join(", "))}).` : ""}</p>
+    const langs = `<div class="ccsec"><h3 class="cclh">Language Proficiencies</h3><p class="ccnote">${lg.fixed.length ? "You speak " + esc(lg.fixed.map(f => f.name).join(", ")) + "." : "No languages given yet."}${lg.picks ? ` Choose ${lg.picks} more (${esc(lg.from.join(", "))}).` : ""}</p>
 <datalist id="cclangs">${known.map(l => `<option value="${esc(l)}">`).join("")}</datalist><div class="cclangs">${Array.from({ length: nLang }, (_, i) => `<input type="text" list="cclangs" data-f="lang" data-i="${i}" value="${esc(c.langs[i] || "")}" placeholder="Language" aria-label="Language ${i + 1}" autocomplete="off">`).join("")}<button type="button" class="btn" data-act="addlang">Add a language</button></div></div>`;
-    return eitherHTML(c, ps, p => p.cat !== "skill") + counter("weapon", pickCount(c, ps, "weapon"), "weapon proficiency", "weapon proficiencies") + counter("armor", pickCount(c, ps, "armor"), "armor proficiency", "armor proficiencies") + counter("trade", pickCount(c, ps, "trade"), "trade skill") +
-      `<div class="ccgrid2"><div class="ccsec"><h3>Weapons</h3>${WEAPONS.map(n => tierRow("weapon", n, WTIERS)).join("")}<h3>Armor</h3>${ARMORS.map(n => tierRow("armor", n, WTIERS)).join("")}</div>
-<div class="ccsec"><h3>Trade skills</h3>${TRADES.map(tradeRow).join("")}</div></div>${langs}`;
+    return eitherHTML(c, ps, p => p.cat !== "skill") + counter("weapon", pickCount(c, ps, "weapon"), "weapon proficiency", "weapon proficiencies") + counter("armor", pickCount(c, ps, "armor"), "armor proficiency", "armor proficiencies") + counter("trade", pickCount(c, ps, "trade"), "trade skill") + pointsLine(c, ps) +
+      `<div class="ccsec ccprof">${head("Weapon Proficiencies", "Type")}${WEAPONS.map(n => tierRow("weapon", n, WTIERS)).join("")}</div>
+<div class="ccsec ccprof">${head("Armor Proficiencies", "Type")}${ARMORS.map(n => tierRow("armor", n, WTIERS)).join("")}</div>
+<div class="ccsec ccprof">${head("Trade Skill Proficiencies", "Tier")}${TRADES.map(tradeRow).join("")}</div>${langs}`;
   },
   spells(c) {
     const k = clsOf(c);
@@ -1817,10 +1883,11 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
     infoDefault = infoBox("Spells", `${k.source} magic`, `<p>${esc(k.n)}s cast ${esc(k.source)} spells. At character creation you can choose spells up to level ${max}.</p>${lim ? `<p>Choose <b>${lim}</b>.</p>` : ""}${k.cast ? `<p>Your spellcasting ability is <b>${AB[k.cast]}</b> (${sign(mod(c, k.cast))}).</p>` : ""}${prep != null ? `<p>You can prepare <b>${prep}</b> spell${prep === 1 ? "" : "s"}.</p>` : ""}
 <p>Spells start at Rank +${+k.startRank || 0}${c.major ? `; spells from your Major (<b>${esc(c.major)}</b>)${c.minor ? ` or Minor (<b>${esc(c.minor)}</b>)` : ""} start at +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}` : ""}.${k.rankCap ? ` The highest Rank at level ${LEVEL} is +${cap}.` : ""}</p>${pts ? `<p>Skill points can raise a chosen spell's Rank: 1 point per Rank${opp ? `, ${+k.oppCost || 2} for your Opposing School (<b>${esc(opp)}</b>)` : ""}.</p>` : ""}`);
     const tag = s => { const sch = schoolOf(s); if (!sch) return ""; const l = lcs(sch); return l === lcs(c.major) ? `<span class="sctag mj">Major</span>` : l === lcs(c.minor) ? `<span class="sctag mj">Minor</span>` : l === lcs(opp) ? `<span class="sctag op">Opposing</span>` : "" };
+    const spLeft = pointsLeft(c, profState(c));
     const row = s => {
       const on = c.spells.includes(s.n), r = spellRankOf(c, s), up = c.spellUp[s.n] || 0, id = "sp-" + slugOf(s.n);
-      const step = on && pts ? `<span class="ccstepper"><button type="button" data-sr="-1" data-n="${esc(s.n)}" aria-label="Lower ${esc(s.n)} Rank"${up <= 0 ? " disabled" : ""}>−</button><span title="Rank">+${r}</span><button type="button" data-sr="1" data-n="${esc(s.n)}" aria-label="Raise ${esc(s.n)} Rank"${r >= cap ? ` disabled title="Highest Rank at level ${LEVEL}"` : ""}>+</button></span>` : `<span class="ccrm" title="Rank">Rank +${r}</span>`;
-      return `<div class="ccrow ccsp${on ? " on" : ""}" data-ik="spell:${esc(s.n)}"><input type="checkbox" id="${id}" data-f="spell" data-n="${esc(s.n)}"${on ? " checked" : ""}${!on && lim && c.spells.length >= lim ? " disabled" : ""}><label class="ccrn" for="${id}">${esc(s.n)}<small>${esc(schoolOf(s) || "No school")} ${tag(s)}</small></label><span class="ccrm">Lv ${s.lv || "?"}</span><span class="ccrm">${esc(str(s.f && s.f.cost))}</span>${step}</div>`;
+      const step = on && pts ? `<span class="ccstepper"><button type="button" data-sr="-1" data-n="${esc(s.n)}" aria-label="Lower ${esc(s.n)} Rank"${up <= 0 ? " disabled" : ""}>−</button><span title="Rank">+${r}</span><button type="button" data-sr="1" data-n="${esc(s.n)}" aria-label="Raise ${esc(s.n)} Rank"${r >= cap ? ` disabled title="Highest Rank at level ${LEVEL}"` : rankCost(c, s) > spLeft ? ' disabled title="Not enough skill points"' : ""}>+</button></span>` : `<span class="ccrm" title="Rank">Rank +${r}</span>`;
+      return `<div class="ccrow ccsp${on ? " on" : ""}" data-ik="spell:${esc(s.n)}"><input type="checkbox" id="${id}" aria-label="Choose ${esc(s.n)}" data-f="spell" data-n="${esc(s.n)}"${on ? " checked" : ""}${!on && lim && c.spells.length >= lim ? " disabled" : ""}><span class="ccrn ccpick" tabindex="0" role="button" aria-label="Show ${esc(s.n)}">${esc(s.n)}<small>${esc(schoolOf(s) || "No school")} ${tag(s)}</small></span><span class="ccrm">Lv ${s.lv || "?"}</span><span class="ccrm">${esc(str(s.f && s.f.cost))}</span>${step}</div>`;
     };
     return `${pointsLine(c, profState(c))}<div class="cctool"><input type="search" id="ccSpellQ" value="${esc(spellQ)}" placeholder="Search ${esc(k.source)} spells" aria-label="Search spells" autocomplete="off"><select id="ccSpellSch" aria-label="School"><option value="">All schools</option>${schools.map(x => `<option${spellSch === x ? " selected" : ""}>${esc(x)}</option>`).join("")}<option value="-"${spellSch === "-" ? " selected" : ""}>No school</option></select><span class="cccount">${c.spells.length}${lim ? " of " + lim : ""} chosen</span></div>
 <div class="cclist">${list.map(row).join("") || `<p class="cempty">No spells match.</p>`}</div>`;
@@ -1848,7 +1915,7 @@ ${b && b.gear && b.gear.length ? `<p class="ccnote">${esc(b.n)} gear: ${esc(gear
     const d = c.details;
     infoDefault = infoBox("Appearance", "", `<p>A portrait shows on your character list and your sheet. It stays in this browser and in files you save.</p>`);
     return `<div class="cclook"><div class="ccportrait">${d.portrait ? `<img src="${esc(d.portrait)}" alt="Portrait">` : `<span>No portrait</span>`}<label class="btn">Choose a picture<input type="file" accept="image/*" id="ccPic" hidden></label>${d.portrait ? `<button type="button" class="btn" data-act="nopic">Remove</button>` : ""}</div>
-<div class="ccform"><label>Height and weight<input type="text" data-f="d" data-k="hw" value="${esc(d.hw || "")}" placeholder="e.g. 4 ft 6 in, 180 lbs" autocomplete="off"></label>
+<div class="ccform"><div class="cchw"><label>Height<input type="text" data-f="d" data-k="height" value="${esc(d.height ?? d.hw ?? "")}" placeholder="e.g. 4 ft 6 in" autocomplete="off"></label><label>Weight<input type="text" data-f="d" data-k="weight" value="${esc(d.weight || "")}" placeholder="e.g. 180 lbs" autocomplete="off"></label></div>
 <label>Age<input type="text" data-f="d" data-k="age" value="${esc(d.age || "")}" autocomplete="off"></label>
 <label>Pronouns<input type="text" data-f="d" data-k="pron" value="${esc(d.pron || "")}" autocomplete="off"></label>
 <label>Appearance<textarea data-f="d" data-k="looks" rows="3" placeholder="Eyes, hair, scars, the way they carry themselves…">${esc(d.looks || "")}</textarea></label>
@@ -1916,8 +1983,16 @@ function rollAll() {
 }
 
 /* ---------------------------------------------------------------- events in the creator */
-$("ccmain").addEventListener("pointerover", ev => { const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) setInfo(infoMap.get(o.dataset.ik)) });
-$("ccmain").addEventListener("focusin", ev => { const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) setInfo(infoMap.get(o.dataset.ik)) });
+$("ccmain").addEventListener("pointerover", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) setInfo(infoMap.get(o.dataset.ik)) });
+$("ccmain").addEventListener("focusin", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) setInfo(infoMap.get(o.dataset.ik)) });
+document.addEventListener("click", ev => {
+  if (view !== "create") return;
+  const row = ev.target.closest("#ccmain .ccrow[data-ik]");
+  if (row && !ev.target.closest("input,button,select,a,textarea")) { pinIk = row.dataset.ik; markPin(); setInfo(); return }
+  if (row || ev.target.closest("#ccinfo")) return;
+  if (pinIk) { pinIk = ""; markPin(); setInfo() }
+});
+$("ccmain").addEventListener("keydown", ev => { const p = ev.target.closest(".ccpick"); if (p && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); p.click() } });
 $("ccmain").addEventListener("pointerleave", () => setInfo());
 $("ccmain").addEventListener("click", ev => {
   const c = cur; if (!c) return;
@@ -1937,11 +2012,16 @@ $("ccmain").addEventListener("click", ev => {
     const n = b.dataset.n, s = spellByName(n); if (!s) return;
     const up = Math.max(0, (c.spellUp[n] || 0) + +b.dataset.sr);
     if (spellStart(c, s) + up > rankCapOf(c)) return;
+    if (+b.dataset.sr > 0 && rankCost(c, s) > pointsLeft(c, profState(c))) { say("Not enough skill points left."); return }
     c.spellUp[n] = up; touch(); renderCreate(); focusSel(`[data-sr="${b.dataset.sr}"][data-n="${CSS.escape(n)}"]`); return;
   }
-  if (b.dataset.pt) {
-    const n = b.dataset.n, ps = profState(c), key = "skill:" + n, r = rankOf(c, key, ps.skill(n)) + +b.dataset.pt;
-    c.rank[key] = Math.min(10, Math.max(ps.skill(n) ? defRank() : 0, r)); touch(); renderCreate(); focusSel(`[data-pt="${b.dataset.pt}"][data-n="${CSS.escape(n)}"]`); return;
+  if (b.dataset.rk) {
+    const key = b.dataset.rk, ps = profState(c);
+    if (setRank(c, key, rankOf(c, key, isProf(c, ps, key)) + +b.dataset.d)) { touch(); renderCreate(); focusSel(`[data-rk="${CSS.escape(key)}"][data-d="${b.dataset.d}"]`) } return;
+  }
+  if (b.dataset.rv) {
+    const key = b.dataset.rv, v = +b.dataset.v, ps = profState(c), cur2 = rankOf(c, key, isProf(c, ps, key));
+    if (setRank(c, key, cur2 === v ? v - 1 : v)) { touch(); renderCreate(); focusSel(`[data-rv="${CSS.escape(key)}"][data-v="${v}"]`) } return;
   }
   if (b.dataset.meth) { c.method = b.dataset.meth; swapSel = ""; touch(); renderCreate(); return }
   if (b.dataset.swap) {
@@ -1955,6 +2035,7 @@ $("ccmain").addEventListener("click", ev => {
     const cat = b.dataset.f, n = b.dataset.n, t = b.dataset.t;
     if (cat === "trade") c.prof.trade[n] = c.prof.trade[n] === t ? "" : t;
     else { const o2 = c.prof[cat][n] = { ...(c.prof[cat][n] || {}) }; o2[t] = !o2[t] }
+    { const key = (cat === "weapon" ? "w:" : cat === "armor" ? "a:" : "t:") + n; if (!isProf(c, profState(c), key)) delete c.rank[key] }
     touch(); renderCreate(); const f = document.querySelector(`.ctier[data-f="${cat}"][data-n="${CSS.escape(n)}"][data-t="${t}"]`); if (f) f.focus(); return;
   }
   if (act === "reroll") { rollAll(); return }
@@ -1992,7 +2073,10 @@ $("ccmain").addEventListener("change", ev => {
   if (t.id === "ccPic") { loadPortrait(t.files && t.files[0]); return }
   if (!f) return;
   if (f === "asi") { c.asi[+t.dataset.i] = t.value; touch(); renderCreate(); return }
-  if (f === "skill" || f === "save") { c.prof[f][t.dataset.n] = t.checked; touch(); renderCreate(); const x = document.querySelector(`[data-f="${f}"][data-n="${CSS.escape(t.dataset.n)}"]`); if (x) x.focus(); return }
+  if (f === "skill" || f === "save") {
+    const ps0 = profState(c);
+    if (f === "save" && t.checked && !ps0.given("save", t.dataset.n) && pickCount(c, ps0, "save").allow <= ABIL.filter(([k]) => c.prof.save[k] && !ps0.given("save", k)).length && pointsLeft(c, ps0) < saveCost()) { t.checked = false; say(`A saving throw proficiency costs ${saveCost()} skill points.`); return }
+    c.prof[f][t.dataset.n] = t.checked; if (!t.checked) delete c.rank[f + ":" + t.dataset.n]; touch(); renderCreate(); const x = document.querySelector(`[data-f="${f}"][data-n="${CSS.escape(t.dataset.n)}"]`); if (x) x.focus(); return }
   if (f === "choice") { c.choice[t.dataset.k] = t.value; touch(); renderCreate(); return }
   if (f === "loadout") { setLoadout(c, t.value); touch(); renderCreate(); const x = document.querySelector(`[data-f="loadout"][value="${t.value}"]`); if (x) x.focus(); return }
   if (f === "spell") { const n = t.dataset.n; c.spells = t.checked ? [...new Set([...c.spells, n])] : c.spells.filter(x => x !== n); if (!t.checked) delete c.spellUp[n]; touch(); renderCreate(); const x = document.querySelector(`[data-f="spell"][data-n="${CSS.escape(n)}"]`); if (x) x.focus(); return }
@@ -2019,7 +2103,7 @@ function loadPortrait(file) {
   img.src = url;
 }
 function goStep(i) {
-  const c = cur, k = STEPS[c.step | 0][0];
+  const c = cur, k = STEPS[c.step | 0][0]; pinIk = "";
   c.seen[k] = true; if (k === "spells" || k === "skills" || k === "prof") c.seen[k] = true;
   c.step = Math.min(Math.max(0, i), STEPS.length - 1); swapSel = ""; touch(); renderCreate(); say("");
   $("ccgame").scrollIntoView({ block: "start", behavior: RM.matches ? "auto" : "smooth" });
@@ -2092,7 +2176,7 @@ function renderSheet() {
   const lines = (key, n, dflt) => Array.from({ length: n }, (_, i) => sf(c, key + i, dflt ? dflt[i] : "", "sline", "", key + " line " + (i + 1))).join("");
   const page1 = `<section class="spage">
 <div class="shead"><div class="slogo">${$("ccLogo").innerHTML}${c.details.portrait ? `<img class="sportrait" src="${esc(c.details.portrait)}" alt="">` : ""}</div>
-<div class="sid">${[["Character name", "name", c.name], ["Class & subclass", "cls", [k && k.n, sk && sk.n].filter(Boolean).join(" / ")], ["Race & subrace", "race", [r && r.n, s && s.n].filter(Boolean).join(" / ")], ["Background", "bg", b ? b.n : ""], ["Height & weight", "hw", c.details.hw || ""], ["Experience", "xp", ""]].map(([l, key, v]) => `<label><span>${l}</span>${key === "name" ? `<input type="text" class="sf" data-name="1" value="${esc(c.name)}" aria-label="Character name">` : sf(c, "id:" + key, v, "", "", l)}</label>`).join("")}</div></div>
+<div class="sid">${[["Character name", "name", c.name], ["Class & subclass", "cls", [k && k.n, sk && sk.n].filter(Boolean).join(" / ")], ["Race & subrace", "race", [r && r.n, s && s.n].filter(Boolean).join(" / ")], ["Background", "bg", b ? b.n : ""], ["Height & weight", "hw", [c.details.height ?? c.details.hw, c.details.weight].filter(x => str(x)).join(", ")], ["Experience", "xp", ""]].map(([l, key, v]) => `<label><span>${l}</span>${key === "name" ? `<input type="text" class="sf" data-name="1" value="${esc(c.name)}" aria-label="Character name">` : sf(c, "id:" + key, v, "", "", l)}</label>`).join("")}</div></div>
 <div class="sblock satk"><div class="sbar sgrid9"><span>Weapon / Spell / Actions</span><span>Action cost</span><span>Range</span><span>Mod / DC</span><span>Skill / Spell rank</span><span>Ability modifier</span><span>Damage</span><span>Damage type</span><span>Critical multiplier</span></div>
 ${Array.from({ length: atkN }, (_, i) => { const a = atk[i] || {}; return `<div class="sgrid9 satr">${[["n", a.n], ["cost", a.cost], ["range", a.range], ["dc", a.spell && castMod != null ? 8 + castMod + a.rank : ""], ["rank", a.spell ? "+" + a.rank : ""], ["ab", a.ab], ["dmg", a.dmg], ["type", ""], ["crit", ""]].map(([col, v]) => sf(c, `atk${i}:${col}`, v || "", "", "", `Attack row ${i + 1} ${col}`)).join("")}</div>` }).join("")}</div>
 <div class="sbar sinit"><span>${STAR} Initiative ${sf(c, "init", sign(mod(c, "dex")), "sq", "", "Initiative")}</span><span>${STAR} Concentration ${sf(c, "conc", "", "sq", "", "Concentration")}</span></div>
@@ -2235,7 +2319,7 @@ function show(v, quiet) {
 
 /* ---------------------------------------------------------------- admin: rules (classes and backgrounds have their own pages) */
 const adminDirty = () => JSON.stringify(cleanCreator()) !== RULES_ORIG;
-const RULE_FIELDS = [["wealth", "Standard starting wealth", "Used when a class doesn't set its own Starting Currency, e.g. 25 (G)"], ["rank", "Starting rank for a proficient skill", "e.g. 1"], ["spellRank", "Highest spell level at character creation", "e.g. 1"],
+const RULE_FIELDS = [["wealth", "Standard starting wealth", "Used when a class doesn't set its own Starting Currency, e.g. 25 (G)"], ["rank", "Starting rank for a proficient skill", "e.g. 1"], ["spellRank", "Highest spell level at character creation", "e.g. 1"], ["saveCost", "Skill points to become proficient in a saving throw", "e.g. 3"],
   ["passive", "Passive skill base", "Passive DC = this + the skill's bonus, e.g. 10"], ["langs", "Languages to suggest", "Comma separated. Languages written on races are added automatically."]];
 function fieldHTML(d, [k, label, help], id) {
   const ph = /^e\.g\./.test(help) ? help : "", h = ph ? "" : help;
