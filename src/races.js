@@ -84,6 +84,7 @@ function saveDrafts() { document.querySelectorAll(".rform").forEach(f => drafts.
 /* ---------------------------------------------------------------- page */
 function render() {
   saveDrafts();
+  if (window.crawlNavRaces) window.crawlNavRaces({ races });
   const q = query();
   let list = races.filter(r => !r._new || editing.has(r._id));
   if (q) list = list.filter(r => editing.has(r._id) || textOf(r).includes(q) || r.subs.some(s => editing.has(s._id) || textOf(s).includes(q)));

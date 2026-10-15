@@ -1,7 +1,8 @@
 /* Shared editing tools for the Glossary, Items and Crafting pages:
    the Text color sidebar (shown while something is being edited) and the save bar spacing.
    Text inputs and textareas inside an element with class "gediting" can be colored. */
-const SWATCHES = [["Crawl red", "#8e171c"], ["Blue", "#1f5fbf"], ["Green", "#2e7d32"], ["Purple", "#6a1b9a"], ["Gold", "#b7791f"]];
+const SWATCHES = [["Crawl red", "#8e171c"], ["Blue", "#1f5fbf"], ["Green", "#2e7d32"], ["Purple", "#6a1b9a"], ["Gold", "#b7791f"],
+  ["Orange", "#c2410c"], ["Teal", "#0f766e"], ["Pink", "#be185d"], ["Brown", "#7c4a1e"], ["Slate", "#475569"]];
 let lastBox = null;
 document.body.insertAdjacentHTML("beforeend", `<aside class="gside" id="gside" hidden aria-label="Text color">
 <div class="gsh">Text color</div>

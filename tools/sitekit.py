@@ -12,7 +12,7 @@ import re
 NAV_ITEMS = [
     ("Character Creator", None, None),
     ("Classes", None, None),
-    ("Races", "races.html", None),
+    ("Races", "races.html", "races"),
     ("Backgrounds", None, None),
     ("Spells", "index.html", [("All spells", "index.html?show=all"), ("By magic source", None),
                               ("Arcane", "index.html?source=arcane"), ("Divine", "index.html?source=divine"), ("Primal", "index.html?source=primal"), ("Occult", "index.html?source=occult"),
@@ -46,8 +46,25 @@ def section_href(sec):
     return "conditions.html" if sec == "Conditions" else "glossary.html?s=" + slug(sec)
 
 
-def nav_html(active, controls="", sections=("Conditions",)):
-    """active: the page key. controls: buttons for the right side. sections: Glossary menu entries."""
+def races_menu(races):
+    """Races menu: each race, with its subraces in a flyout (or indented on phones)."""
+    out = ['<a href="races.html">All races</a>']
+    for r in sorted(races.get("races", []), key=lambda x: x.get("n", "").lower()):
+        subs = sorted(r.get("subs", []), key=lambda x: x.get("n", "").lower())
+        link = f'<a href="races.html#{html.escape(r.get("id", ""))}">{html.escape(r.get("n", ""))}</a>'
+        if subs:
+            fly = "".join(f'<a href="races.html#{html.escape(x.get("id", ""))}">{html.escape(x.get("n", ""))}</a>' for x in subs)
+            out.append(f'<div class="navsub">{link.replace("</a>", CARET_R + "</a>")}<div class="navfly">{fly}</div></div>')
+        else:
+            out.append(link)
+    return "".join(out)
+
+
+CARET_R = '<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
+
+
+def nav_html(active, controls="", sections=("Conditions",), races=None):
+    """active: the page key. controls: buttons for the right side. sections: Glossary menu entries. races: crawl-races.json data."""
     sec = SECTION.get(active)
     parts = [
         '<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks">',
@@ -60,7 +77,9 @@ def nav_html(active, controls="", sections=("Conditions",)):
         if not menu:
             parts.append(f'<a class="navitem" href="{href}"{cur}>{label}</a>')
             continue
-        if menu == "glossary":
+        if menu == "races":
+            items, menu_id = races_menu(races or {}), ' id="navRaces"'
+        elif menu == "glossary":
             items, menu_id = "".join(f'<a href="{section_href(t)}">{html.escape(t)}</a>' for t in sections), ' id="navGlossary"'
         else:
             items, menu_id = "".join(f'<a href="{h}">{html.escape(t)}</a>' if h else f'<span class="navmenuh">{html.escape(t)}</span>' for t, h in menu), ""
@@ -96,6 +115,12 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 @media (hover:none){.navdrop:hover .navmenu{display:none}}
 .navmenu a{display:block;padding:10px 12px;border-radius:8px;font:700 .92rem var(--font);color:var(--ink);text-decoration:none}
 .navmenu a:hover,.navmenu a:focus-visible{background:var(--soft);outline:none}
+.navsub{position:relative}
+.navsub>a{display:flex!important;align-items:center;justify-content:space-between;gap:10px}
+.caretr{width:6px;height:10px;flex:none}
+.navfly{display:none;position:absolute;left:100%;top:-8px;min-width:190px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22);margin-left:4px}
+.navsub:hover>.navfly,.navsub:focus-within>.navfly{display:grid}
+@media (hover:none),(max-width:700px){.navfly{display:grid;position:static;border:0;box-shadow:none;padding:0 0 0 14px;margin:0;min-width:0}.caretr{display:none}}
 .navmenuh{display:block;padding:8px 12px 2px;font:800 .62rem var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .navmenu a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 /* NAV_JS steps through these until the links fit on one row beside the buttons */
@@ -138,6 +163,16 @@ NAV_JS = """(function(){
   function href(s){return s==='Conditions'?'conditions.html':'glossary.html?s='+slug(s)}
   function mark(){var here=location.pathname.split('/').pop()+location.search;[].forEach.call(document.querySelectorAll('.navmenu a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
   window.crawlNavMark=mark;
+  var rmenu=document.getElementById('navRaces');
+  window.crawlNavRaces=function(data){
+    if(!rmenu||!data||!data.races)return;
+    var by=function(a,b){return String(a.n||'').toLowerCase().localeCompare(String(b.n||'').toLowerCase())};
+    rmenu.innerHTML='<a href="races.html">All races</a>'+data.races.filter(function(r){return r&&r.n&&!r._new}).slice().sort(by).map(function(r){
+      var subs=(r.subs||[]).filter(function(x){return x&&x.n&&!x._new}).slice().sort(by),link='<a href="races.html#'+esc(r.id)+'">'+esc(r.n);
+      return subs.length?'<div class="navsub">'+link+'<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navfly">'+subs.map(function(x){return '<a href="races.html#'+esc(x.id)+'">'+esc(x.n)+'</a>'}).join('')+'</div></div>':link+'</a>';
+    }).join('');
+  };
+  if(window.CRAWL_STATIC&&rmenu)fetch('crawl-races.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j)window.crawlNavRaces(j)}).catch(function(){});
   window.crawlNavSections=function(list){
     if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
     (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
@@ -469,7 +504,7 @@ CONDITIONS_CSS = """
 .rlist2{display:grid;gap:14px}
 .subs{display:grid;gap:10px;margin-top:6px}
 .subs>h3{margin:4px 0 0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.subr{border:2px solid var(--ink);border-radius:12px;padding:10px 14px;display:grid;gap:6px;background:var(--page)}
+.subr{scroll-margin-top:calc(var(--navh,0px) + 80px);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;display:grid;gap:6px;background:var(--page)}
 .subh{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .subh b{font-size:1.02rem;font-weight:800}
 .subr .gedit,.rbtn{color:var(--ink);border-color:var(--ink);padding:2px 10px;font-size:.72rem}

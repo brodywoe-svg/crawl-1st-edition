@@ -62,7 +62,7 @@ def page_body(template, spells):
     # the glossary goes in first: the TPL copy of the template also contains its placeholder
     body = template.replace("/*@GLOSSARY@*/null", as_js(read_glossary()), 1)
     body = body.replace("/*@DATA@*/", as_js(spells), 1).replace("/*@TPL@*/", as_js(template), 1)
-    body = body.replace("<!--@NAV@-->", crawlsite.nav_html("spells", sections=crawlsite.glossary_sections(read_glossary())), 1)
+    body = body.replace("<!--@NAV@-->", crawlsite.nav_html("spells", sections=crawlsite.glossary_sections(read_glossary()), races=read_races()), 1)
     return body.replace("/*@NAVCSS@*/", crawlsite.NAV_CSS, 1)
 
 
@@ -122,7 +122,7 @@ def glossary_page(template, glossary, name):
     return (
         f"<title>{title}</title>" + links + mode_init
         + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}</style>"
-        + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections)
+        + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections, races=read_races())
         + (crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.glossary_shell(page, logo, modal))
         + f"<script>{mode_js}</script><script>{prelude}{shared}{script}</script>"
     )

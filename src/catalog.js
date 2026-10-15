@@ -258,7 +258,7 @@ const formEnd = (x, what) => `
 ${KIND === "recipes" ? `<div class="gprev"><span class="glab">Preview</span><div class="gprevbody"></div></div>` : ""}
 <p class="gerr" role="alert"></p>
 <div class="gbtns"><button type="button" class="btn gdel">${x._new ? "Remove" : "Delete " + what}</button><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>`;
-const NAME_COLORS = [["", "No color"], ["#8e171c", "Crawl red"], ["#1f5fbf", "Blue"], ["#2e7d32", "Green"], ["#6a1b9a", "Purple"], ["#b7791f", "Gold"]];
+const NAME_COLORS = [["", "No color"], ["#8e171c", "Crawl red"], ["#1f5fbf", "Blue"], ["#2e7d32", "Green"], ["#6a1b9a", "Purple"], ["#b7791f", "Gold"], ["#c2410c", "Orange"], ["#0f766e", "Teal"], ["#be185d", "Pink"], ["#7c4a1e", "Brown"], ["#475569", "Slate"]];
 function nameColorPicker(nc) {
   return `<div class="ncolor" role="radiogroup" aria-label="Name color"><span class="glab">Name color</span>` +
     NAME_COLORS.map(([c, n]) => `<button type="button" class="ncsw${c === nc ? " on" : ""}" data-nc="${c}" style="--c:${c || "transparent"}" title="${n}" aria-label="${n}" aria-pressed="${c === nc}">${c ? "" : "✕"}</button>`).join("") +
