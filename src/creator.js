@@ -31,7 +31,7 @@ function normRaces(j) {
   const part = p => ({ id: str(p.id), n: str(p.n), desc: str(p.desc), asi: str(p.asi), prof: str(p.prof), langs: str(p.langs), feats: featsOf(p.feats), extra: extrasOf(p.extra) });
   return arr(j && j.races).filter(r => r && str(r.n)).map(r => ({ ...part(r), subs: arr(r.subs).filter(s => s && str(s.n)).map(part).sort(byName) })).sort(byName);
 }
-const RULE_DEFAULTS = { wealth: "25 (G)", rank: "1", spellRank: "1", saveCost: "3", passive: "10", langs: "Common" };
+const RULE_DEFAULTS = { wealth: "25 (G)", rank: "1", spellRank: "1", saveCost: "3", tierCost: "3", passive: "10", langs: "Common" };
 function normRules(j) {
   if (!j || typeof j !== "object") return null;
   const rules = { ...RULE_DEFAULTS }; for (const k in RULE_DEFAULTS) if (j.rules && j.rules[k] != null) rules[k] = str(j.rules[k]);
@@ -128,7 +128,13 @@ function grants(c) {
   const fixed = new Map(), picks = [];
   const add = (f, src) => { const k = f.cat + "|" + f.name; const g = fixed.get(k) || { cat: f.cat, name: f.name, tiers: new Set(), src: [] }; f.tiers.forEach(t => g.tiers.add(t)); if (!g.src.includes(src)) g.src.push(src); fixed.set(k, g) };
   for (const s of sources(c)) {
-    const parts = [parseProf(s.p.skills || "", s.label, s.kind + ":s"), parseProf(s.p.prof || "", s.label, s.kind + ":p")];
+    const parts = [["skills", "s"], ["weapons", "w"], ["armor", "a"], ["trades", "t"], ["prof", "p"]].map(([f, k]) => parseProf(s.p[f] || "", s.label, s.kind + ":" + k));
+    arr(s.p.choices).forEach((ch, i) => {
+      if (ch.cat === "lang") return;
+      const key = s.kind + ":c" + i, pick = { key, cat: ch.cat, n: ch.n, opts: ch.opts, src: s.label, multi: true };
+      chosenOf(c, pick).forEach(o => add({ cat: ch.cat, name: ch.cat === "save" ? lcs(o).slice(0, 3) : o, tiers: ch.cat === "trade" ? ["B"] : ch.cat === "weapon" || ch.cat === "armor" ? ["S"] : [] }, s.label + " (your choice)"));
+      picks.push(pick);
+    });
     s.feats.forEach((f, i) => { const m = f.d.match(/proficien\w*\s+(?:in|with)\s+([^.]+)/i); if (m) parts.push(parseProf(m[1], `${s.label} (${f.n})`, s.kind + ":f" + i)) });
     if (s.kind === "class") abilsIn(s.p.saves).forEach(k => add({ cat: "save", name: k, tiers: [] }, s.label));
     for (const pr of parts) {
@@ -141,10 +147,14 @@ function grants(c) {
   }
   return { fixed, picks };
 }
+const chosenOf = (c, p) => arr(Array.isArray(c.choice[p.key]) ? c.choice[p.key] : c.choice[p.key] ? [c.choice[p.key]] : []).filter(o => p.opts.includes(o)).slice(0, p.n);
 function langGrants(c) {
-  const fixed = new Map(); let picks = 0, from = [];
-  for (const s of sources(c)) { const l = parseLangs(s.p.langs || "", s.label); l.fixed.forEach(f => { if (!fixed.has(lcs(f.name))) fixed.set(lcs(f.name), f) }); if (l.picks) { picks += l.picks; from.push(`${s.label} ${l.picks}`) } }
-  return { fixed: [...fixed.values()], picks, from };
+  const fixed = new Map(), choices = []; let picks = 0, from = [];
+  for (const s of sources(c)) {
+    const l = parseLangs(s.p.langs || "", s.label); l.fixed.forEach(f => { if (!fixed.has(lcs(f.name))) fixed.set(lcs(f.name), f) }); if (l.picks) { picks += l.picks; from.push(`${s.label} ${l.picks}`) }
+    arr(s.p.choices).forEach((ch, i) => { if (ch.cat !== "lang") return; const p = { key: s.kind + ":c" + i, cat: "lang", n: ch.n, opts: ch.opts, src: s.label, multi: true }; choices.push(p); chosenOf(c, p).forEach(o => { if (!fixed.has(lcs(o))) fixed.set(lcs(o), { name: o, src: s.label }) }) });
+  }
+  return { fixed: [...fixed.values()], picks, from, choices };
 }
 function asiInfo(c) {
   const fixed = {}, picks = [], from = [];
@@ -176,7 +186,18 @@ function profState(c, g = grants(c)) {
   };
 }
 const defRank = () => Math.max(0, parseInt(CR.rules.rank, 10) || 0);
-const rankOf = (c, key, prof) => c.rank[key] != null ? +c.rank[key] : prof ? defRank() : 0;
+/* given proficiencies start at the starting rank; weapon and armor proficiency bought with skill points starts at +0 */
+function baseRank(c, key, ps) {
+  if (!/^[wa]:/.test(key)) return defRank();
+  ps = ps || profState(c); return ps.given(key[0] === "w" ? "weapon" : "armor", key.slice(2)) ? defRank() : 0;
+}
+const rankOf = (c, key, prof) => c.rank[key] != null ? +c.rank[key] : prof ? baseRank(c, key) : 0;
+const tierCost = () => { const n = parseInt(CR.rules.tierCost, 10); return n >= 0 ? n : 3 };
+const TIER_ORDER = ["S", "M", "E"], TIER_NAME = { S: "Simple", M: "Martial", E: "Exotic" };
+function manualTiers(c, ps, cat) {
+  let n = 0; for (const name in c.prof[cat] || {}) { const g = ps.given(cat, name); for (const x in c.prof[cat][name]) if (c.prof[cat][name][x] && !(g && g.tiers.has(x))) n++ } return n;
+}
+const boughtTiers = (c, ps) => ["weapon", "armor"].reduce((n, cat) => n + Math.max(0, manualTiers(c, ps, cat) - pickCount(c, ps, cat).allow), 0);
 const skillTotal = (c, n, ps) => mod(c, SKILL_AB[n]) + rankOf(c, "skill:" + n, ps.skill(n));
 const saveTotal = (c, k, ps) => mod(c, k) + rankOf(c, "save:" + k, ps.save(k));
 function pickCount(c, ps, cat) {
@@ -185,7 +206,7 @@ function pickCount(c, ps, cat) {
   if (cat === "skill") chosen = Object.keys(c.prof.skill).filter(n => c.prof.skill[n] && !ps.given("skill", n)).length;
   else if (cat === "save") chosen = Object.keys(c.prof.save).filter(k => c.prof.save[k] && !ps.given("save", k)).length;
   else if (cat === "trade") chosen = Object.keys(c.prof.trade).filter(n => c.prof.trade[n] && !ps.given("trade", n)).length;
-  else chosen = Object.keys(c.prof[cat]).filter(n => !ps.given(cat, n) && Object.values(c.prof[cat][n] || {}).some(Boolean)).length;
+  else chosen = manualTiers(c, ps, cat);
   return { allow, chosen, from: ps.g.picks.filter(p => p.cat === cat && !p.opts).map(p => `${p.src} ${p.n}`) };
 }
 function hpOf(c) {
@@ -215,7 +236,7 @@ function spellStart(c, s) {
 }
 const isOpp = (c, s) => { const k = clsOf(c); return !!(k && c.major && schoolOf(s) && lcs(oppOf(k, c.major)) === lcs(schoolOf(s))) };
 const rankCost = (c, s) => isOpp(c, s) ? (+clsOf(c).oppCost || 2) : 1;
-const rankCapOf = c => { const k = clsOf(c); const v = k && fml(c, k.rankCap); return v == null ? 10 : Math.max(0, v) };
+const rankCapOf = () => 10;
 const spellRankOf = (c, s) => spellStart(c, s) + (c.spellUp[s.n] || 0);
 const spellByName = n => SPELL_LIST.find(x => x.n === n) || null;
 const spellSpent = c => c.spells.reduce((n, nm) => { const s = spellByName(nm); return s ? n + (c.spellUp[nm] || 0) * rankCost(c, s) : n }, 0);
@@ -232,21 +253,21 @@ function boughtSaves(c, ps) {
   return Math.max(0, manual - pickCount(c, ps, "save").allow);
 }
 function spentParts(c, ps) {
-  const out = { skills: 0, saves: 0, prof: 0, spells: spellSpent(c), saveBuy: boughtSaves(c, ps) * saveCost() };
-  rankables(c, ps).forEach(([key, prof, part]) => { const r = c.rank[key]; if (r != null && prof) out[part] += Math.max(0, +r - defRank()) });
-  out.total = out.skills + out.saves + out.prof + out.spells + out.saveBuy;
+  const out = { skills: 0, saves: 0, prof: 0, spells: spellSpent(c), saveBuy: boughtSaves(c, ps) * saveCost(), tierBuy: boughtTiers(c, ps) * tierCost() };
+  rankables(c, ps).forEach(([key, prof, part]) => { const r = c.rank[key]; if (r != null && prof) out[part] += Math.max(0, +r - baseRank(c, key, ps)) });
+  out.total = out.skills + out.saves + out.prof + out.spells + out.saveBuy + out.tierBuy;
   return out;
 }
 const pointsLeft = (c, ps) => skillPoints(c) - spentParts(c, ps).total;
 function pointsLine(c, ps) {
   const pts = skillPoints(c); if (!pts) return "";
   const s = spentParts(c, ps), all = s.total;
-  const parts = [["skills", s.skills], ["saving throw ranks", s.saves], ["saving throw proficiency", s.saveBuy], ["weapon, armor and trade ranks", s.prof], ["spell Ranks", s.spells]].filter(x => x[1]).map(([l, n]) => `${l} ${n}`);
+  const parts = [["skills", s.skills], ["saving throw ranks", s.saves], ["saving throw proficiency", s.saveBuy], ["weapon and armor proficiency", s.tierBuy], ["weapon, armor and trade ranks", s.prof], ["spell Ranks", s.spells]].filter(x => x[1]).map(([l, n]) => `${l} ${n}`);
   return `<p class="cccounter${all >= pts ? " done" : ""}${all > pts ? " over" : ""}">Skill points (${esc(clsOf(c).n)}): <b>${all} of ${pts} spent</b>${parts.length ? ` <small>(${parts.join(", ")})</small>` : ""}${all > pts ? " · that's more than you have" : ""}</p>`;
 }
 /* set a proficiency's rank, paying the difference in skill points */
 function setRank(c, key, v) {
-  const ps = profState(c), base = defRank(), cur = rankOf(c, key, isProf(c, ps, key));
+  const ps = profState(c), base = baseRank(c, key, ps), cur = rankOf(c, key, isProf(c, ps, key));
   if (!isProf(c, ps, key)) { say("Skill points can only be spent on things you're proficient in."); return false }
   v = Math.min(10, Math.max(base, v));
   if (v - cur > pointsLeft(c, ps)) { say(skillPoints(c) ? "Not enough skill points left." : "Your class doesn't give skill points."); return false }
@@ -317,8 +338,8 @@ function partInfo(p, tag, link, feats) {
   const row1 = p.chart && p.chart.filter(r => (r.lv || 1) <= LEVEL).pop();
   return infoBox(p.n, tag, (p.desc ? `<div class="clead">${richParas(p.desc)}</div>` : "") +
     factsHTML([["Ability Score Increases", p.asi], ["Magic source", p.source], ["Spellcasting ability", p.cast && AB[p.cast]], ["Hit die", p.hd], ["Hit points at 1st level", p.hp],
-      ["Max Pool at 1st level", row1 && row1.pool], ["Action Die at 1st level", row1 && row1.die], ["Saving throws", p.saves], ["Starting Skill Proficiencies", p.skills], ["Skill points", p.skillPts],
-      [p.skills != null ? "Other proficiencies" : "Starting Proficiencies", p.prof], ["Languages", p.langs], ["Prepared spells", p.prepared],
+      ["Max Pool at 1st level", row1 && row1.pool], ["Action Die at 1st level", row1 && row1.die], ["Saving throws", p.saves], [p.weapons != null ? "Skill Proficiencies" : "Starting Skill Proficiencies", p.skills], ["Weapon Proficiencies", p.weapons], ["Armor Proficiencies", p.armor], ["Trade Skill Proficiencies", p.trades], ["Skill points", p.skillPts],
+      [p.skills != null ? "Other proficiencies" : "Starting Proficiencies", p.prof], [p.weapons != null ? "Language Proficiencies" : "Languages", p.langs], ...arr(p.choices).map(ch => ["Proficiency choice", choiceText(ch)]), ["Prepared spells", p.prepared],
       ["Major school", +p.majorLv ? `chosen at level ${p.majorLv}` : ""], ["Minor school", +p.minorLv ? `chosen at level ${p.minorLv}` : ""],
       ...arr(p.loadouts).map(l => [l.n, gearLine(l.gear)]), ["Starting Currency", [p.money, p.moneyRoll && "roll " + p.moneyRoll].filter(Boolean).join(" + ")], ["Starting equipment", p.gear && gearLine(p.gear)], ["Starting wealth", p.wealth],
       ...p.extra.map(x => [x.k || "Detail", x.v])]) + featHTML(feats || p.feats), link);
@@ -352,8 +373,8 @@ function stepOk(c, k) {
     case "class": { const k2 = clsOf(c); return !!k2 && (!k2.subs.length || !!subclsOf(c)) && (!hasMajor(k2) || !!c.major) && (!hasMinor(k2) || !!c.minor) }
     case "bg": return !!bgOf(c) || (!CR.backgrounds.length && !!c.seen.bg);
     case "abil": return ABIL.every(([a]) => baseOf(c, a) != null) && asiInfo(c).picks.every((p, i) => !!AB[c.asi[i]]);
-    case "skills": return !!c.seen.skills && ps.g.picks.filter(p => p.opts && p.cat === "skill").every(p => c.choice[p.key]) && ["skill", "save"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow });
-    case "prof": return !!c.seen.prof && ps.g.picks.filter(p => p.opts && p.cat !== "skill").every(p => c.choice[p.key]) && ["weapon", "armor", "trade"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow }) && c.langs.filter(Boolean).length >= langGrants(c).picks;
+    case "skills": return !!c.seen.skills && ps.g.picks.filter(p => p.opts && (p.cat === "skill" || p.cat === "save")).every(p => pickDone(c, p)) && ["skill", "save"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow });
+    case "prof": return !!c.seen.prof && ps.g.picks.filter(p => p.opts && p.cat !== "skill" && p.cat !== "save").every(p => pickDone(c, p)) && langGrants(c).choices.every(p => pickDone(c, p)) && ["weapon", "armor", "trade"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow }) && c.langs.filter(Boolean).length >= langGrants(c).picks;
     case "spells": { const k2 = clsOf(c); if (k2 && !k2.source) return !!k2; const lim = spellLimit(c); return !!c.seen.spells && (!lim || c.spells.length >= lim) }
     case "equip": { const k2 = clsOf(c); return !!c.seen.equip && (!k2 || !k2.loadouts.length || c.loadout !== "") }
     case "look": return !!c.seen[k];
@@ -389,7 +410,7 @@ function schoolPicks(c, k) {
   if (majorFeat) infoMap.set("major", partInfo({ ...majorFeat, desc: majorFeat.d, feats: [], extra: [] }, `${k.n} · Level ${majorFeat.lv || 1}`));
   if (minorFeat) infoMap.set("minor", partInfo({ ...minorFeat, desc: minorFeat.d, feats: [], extra: [] }, `${k.n} · Level ${minorFeat.lv || 1}`));
   const opts = (cur, skip) => `<option value="">Choose a school</option>` + k.schools.map(r => `<option${lcs(r.s) === lcs(cur) ? " selected" : ""}${skip(r.s) ? " disabled" : ""}>${esc(r.s)}</option>`).join("");
-  return `<div class="ccschools"><label data-ik="major"><span>${src} Major</span><select data-f="major">${opts(c.major, () => false)}</select>${opp ? `<small>Opposing School: <b>${esc(opp)}</b>. Its spells cost ${+k.oppCost || 2} skill points per Rank.</small>` : `<small>The school you've studied most. Its spells start at Rank +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}.</small>`}</label>` +
+  return `<div class="ccschools"><label data-ik="major"${opp ? "" : ' class="solo"'}><span>${src} Major</span><select data-f="major">${opts(c.major, () => false)}</select><small>The school you've studied most. Its spells start at Rank +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}.</small></label>${opp ? `<div class="ccopp" role="status"><span class="ccoppt">Opposing School</span><b>${esc(opp)}</b><p>The opposite of your Major. Raising the Rank of ${/^[aeiou]/i.test(opp) ? "an" : "a"} ${esc(opp)} spell costs <b>${+k.oppCost || 2} skill points</b> per Rank instead of 1.</p></div>` : ""}` +
     (hasMinor(k) ? `<label data-ik="minor"><span>${src} Minor</span><select data-f="minor">${opts(c.minor, s => lcs(s) === lcs(c.major) || lcs(s) === lcs(opp))}</select><small>Can't be your Major or your Opposing School.</small></label>` : (+k.minorLv ? `<p class="ccnote">You choose your ${src} Minor at level ${+k.minorLv}.</p>` : "")) + `</div>`;
 }
 const STEP_VIEWS = {
@@ -443,7 +464,7 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
     const ps = profState(c), sk = pickCount(c, ps, "skill"), sv = pickCount(c, ps, "save"), pts = skillPoints(c), spent = skillSpent(c, ps);
     const left = pointsLeft(c, ps), sc = saveCost(), svAllow = sv.allow - Math.min(sv.allow, ABIL.filter(([k]) => c.prof.save[k] && !ps.given("save", k)).length);
     infoDefault = infoBox("Skills and saving throws", "", `<p>Tick the skills you're proficient in. Skills given by your race, class or background are already ticked.</p><p>A proficient skill starts at rank +${defRank()}. Its bonus is the ability modifier plus its rank.</p>${pts ? `<p>Your class gives you <b>${pts} skill point${pts === 1 ? "" : "s"}</b>. Each point raises the rank of something you're proficient in by 1. They're shared with weapon, armor, trade skill and spell Ranks.</p>` : ""}`);
-    const either = eitherHTML(c, ps, p => p.cat === "skill");
+    const either = eitherHTML(c, ps, p => p.cat === "skill" || p.cat === "save");
     const row = (cat, key, label) => {
       const g = ps.given(cat, key), on = cat === "skill" ? ps.skill(key) : ps.save(key);
       const tot = cat === "skill" ? skillTotal(c, key, ps) : saveTotal(c, key, ps), r = rankOf(c, cat + ":" + key, on);
@@ -458,16 +479,16 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
   prof(c) {
     const ps = profState(c), lg = langGrants(c);
     const pts = skillPoints(c);
-    infoDefault = infoBox("Proficiencies", "", `<p><b>Weapon and Armor Proficiencies</b> have three types: S (Simple), M (Martial) and E (Exotic).</p><p><b>Trade Skill Proficiencies</b> have three tiers: B, A and M. They decide which crafting recipes you can make.</p><p>The gold star means you're proficient. The letters show exactly what in: S (Simple), M (Martial) or E (Exotic), or the trade tier.</p><p>Anything given by your race, class or background is already marked.</p>${pts ? `<p>Click the circles to raise the rank (+1 to +10) of anything you're proficient in. Each rank costs 1 skill point from the same pool as your skills.</p>` : ""}`);
+    infoDefault = infoBox("Proficiencies", "", `<p><b>Weapon and Armor Proficiencies</b> have three types: S (Simple), M (Martial) and E (Exotic).</p><p><b>Trade Skill Proficiencies</b> have three tiers: B, A and M. They decide which crafting recipes you can make.</p><p>The gold star means you're proficient. The letters show exactly what in: S (Simple), M (Martial) or E (Exotic), or the trade tier.</p><p>You can buy weapon and armor proficiency for <b>${tierCost()} skill points</b> each: Simple first, then Martial, then Exotic. Bought proficiency starts at rank +0.</p><p>Anything given by your race, class or background is already marked.</p>${pts ? `<p>Click the circles to raise the rank (+1 to +10) of anything you're proficient in. Each rank costs 1 skill point from the same pool as your skills.</p>` : ""}`);
     const head = (h, typeLabel) => `<div class="ccprow cchead"><h3>${h}</h3><span class="ccbh">Prof.</span><span>${typeLabel}</span>${RANK_HEAD}</div>`;
     const badge = (cat, n, on, g) => `<button type="button" class="cbadge${on ? " on" : ""}${g ? " given" : ""}" data-badge="${cat}" data-n="${esc(n)}" aria-pressed="${on}" aria-label="Proficient in ${esc(n)}" title="${on ? (g ? "Proficient (from " + esc(g.src.join(", ")) + ")" : "Proficient. Click to remove") : "Not proficient. Click to become proficient"}">${STAR}</button>`;
     const tierRow = (cat, n, tiers) => { const t = ps.tiers(cat, n), g = ps.given(cat, n); return `<div class="ccprow"><span>${esc(n)}${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}</span>${badge(cat, n, t.size > 0, g)}<span class="cctiers">${tiers.map(([x, l]) => { const lock = g && g.tiers.has(x); return `<button type="button" class="ctier${t.has(x) ? " on" : ""}" data-f="${cat}" data-n="${esc(n)}" data-t="${x}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${t.has(x)}"${lock ? " disabled" : ""}>${x}</button>` }).join("")}</span>${rankBar(c, ps, (cat === "weapon" ? "w:" : "a:") + n, n)}</div>` };
     const tradeRow = n => { const t = ps.trade(n), g = ps.given("trade", n); return `<div class="ccprow"><span><a class="ilink" href="crafting.html?p=${encodeURIComponent(lcs(n))}" target="_blank" rel="noopener">${esc(n)}</a>${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}</span>${badge("trade", n, !!t, g)}<span class="cctiers">${TTIERS.map(([x, l]) => `<button type="button" class="ctier${t === x ? " on" : ""}" data-f="trade" data-n="${esc(n)}" data-t="${x}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${t === x}"${g && [...g.tiers].includes(x) ? " disabled" : ""}>${x}</button>`).join("")}</span>${rankBar(c, ps, "t:" + n, n)}</div>` };
     const known = [...new Set([...splitList(CR.rules.langs), ...RACE_LIST.flatMap(r => [r, ...r.subs]).flatMap(p => parseLangs(p.langs).fixed.map(f => f.name))])].sort();
     const nLang = Math.max(lg.picks, c.langs.length);
-    const langs = `<div class="ccsec"><h3 class="cclh">Language Proficiencies</h3><p class="ccnote">${lg.fixed.length ? "You speak " + esc(lg.fixed.map(f => f.name).join(", ")) + "." : "No languages given yet."}${lg.picks ? ` Choose ${lg.picks} more (${esc(lg.from.join(", "))}).` : ""}</p>
+    const langs = `<div class="ccsec"><h3 class="cclh">Language Proficiencies</h3>${lg.choices.map(p => choiceSet(c, p)).join("")}<p class="ccnote">${lg.fixed.length ? "You speak " + esc(lg.fixed.map(f => f.name).join(", ")) + "." : "No languages given yet."}${lg.picks ? ` Choose ${lg.picks} more (${esc(lg.from.join(", "))}).` : ""}</p>
 <datalist id="cclangs">${known.map(l => `<option value="${esc(l)}">`).join("")}</datalist><div class="cclangs">${Array.from({ length: nLang }, (_, i) => `<input type="text" list="cclangs" data-f="lang" data-i="${i}" value="${esc(c.langs[i] || "")}" placeholder="Language" aria-label="Language ${i + 1}" autocomplete="off">`).join("")}<button type="button" class="btn" data-act="addlang">Add a language</button></div></div>`;
-    return eitherHTML(c, ps, p => p.cat !== "skill") + counter("weapon", pickCount(c, ps, "weapon"), "weapon proficiency", "weapon proficiencies") + counter("armor", pickCount(c, ps, "armor"), "armor proficiency", "armor proficiencies") + counter("trade", pickCount(c, ps, "trade"), "trade skill") + pointsLine(c, ps) +
+    return eitherHTML(c, ps, p => p.cat !== "skill" && p.cat !== "save") + counter("weapon", pickCount(c, ps, "weapon"), "weapon proficiency", "weapon proficiencies") + counter("armor", pickCount(c, ps, "armor"), "armor proficiency", "armor proficiencies") + counter("trade", pickCount(c, ps, "trade"), "trade skill") + pointsLine(c, ps) +
       `<div class="ccsec ccprof">${head("Weapon Proficiencies", "Type")}${WEAPONS.map(n => tierRow("weapon", n, WTIERS)).join("")}</div>
 <div class="ccsec ccprof">${head("Armor Proficiencies", "Type")}${ARMORS.map(n => tierRow("armor", n, WTIERS)).join("")}</div>
 <div class="ccsec ccprof">${head("Trade Skill Proficiencies", "Tier")}${TRADES.map(tradeRow).join("")}</div>${langs}`;
@@ -483,7 +504,7 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
     list.forEach(s => infoMap.set("spell:" + s.n, spellInfo(s)));
     const opp = c.major ? oppOf(k, c.major) : "";
     infoDefault = infoBox("Spells", `${k.source} magic`, `<p>${esc(k.n)}s cast ${esc(k.source)} spells. At character creation you can choose spells up to level ${max}.</p>${lim ? `<p>Choose <b>${lim}</b>.</p>` : ""}${k.cast ? `<p>Your spellcasting ability is <b>${AB[k.cast]}</b> (${sign(mod(c, k.cast))}).</p>` : ""}${prep != null ? `<p>You can prepare <b>${prep}</b> spell${prep === 1 ? "" : "s"}.</p>` : ""}
-<p>Spells start at Rank +${+k.startRank || 0}${c.major ? `; spells from your Major (<b>${esc(c.major)}</b>)${c.minor ? ` or Minor (<b>${esc(c.minor)}</b>)` : ""} start at +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}` : ""}.${k.rankCap ? ` The highest Rank at level ${LEVEL} is +${cap}.` : ""}</p>${pts ? `<p>Skill points can raise a chosen spell's Rank: 1 point per Rank${opp ? `, ${+k.oppCost || 2} for your Opposing School (<b>${esc(opp)}</b>)` : ""}.</p>` : ""}`);
+<p>Spells start at Rank +${+k.startRank || 0}${c.major ? `; spells from your Major (<b>${esc(c.major)}</b>)${c.minor ? ` or Minor (<b>${esc(c.minor)}</b>)` : ""} start at +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}` : ""}.</p>${pts ? `<p>Skill points can raise a chosen spell's Rank: 1 point per Rank${opp ? `, ${+k.oppCost || 2} for your Opposing School (<b>${esc(opp)}</b>)` : ""}.</p>` : ""}`);
     const tag = s => { const sch = schoolOf(s); if (!sch) return ""; const l = lcs(sch); return l === lcs(c.major) ? `<span class="sctag mj">Major</span>` : l === lcs(c.minor) ? `<span class="sctag mj">Minor</span>` : l === lcs(opp) ? `<span class="sctag op">Opposing</span>` : "" };
     const spLeft = pointsLeft(c, profState(c));
     const row = s => {
@@ -493,8 +514,7 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
       return `<div class="ccrow ccsp${on ? " on" : ""}" data-ik="spell:${esc(s.n)}"><input type="checkbox" id="${id}" aria-label="Choose ${esc(s.n)}" data-f="spell" data-n="${esc(s.n)}"${on ? " checked" : ""}${!on && lim && c.spells.length >= lim ? " disabled" : ""}><span class="ccrn ccpick" tabindex="0" role="button" aria-label="Show ${esc(s.n)}">${esc(s.n)}<small>${esc(schoolOf(s) || "No school")} ${tag(s)}</small></span><span class="ccrm">Lv ${s.lv || "?"}</span><span class="ccrm">${esc(str(s.f && s.f.cost))}</span>${step}</div>`;
     };
     return `${pointsLine(c, profState(c))}<div class="cctool"><input type="search" id="ccSpellQ" value="${esc(spellQ)}" placeholder="Search ${esc(k.source)} spells" aria-label="Search spells" autocomplete="off"><select id="ccSpellSch" aria-label="School"><option value="">All schools</option>${schools.map(x => `<option${spellSch === x ? " selected" : ""}>${esc(x)}</option>`).join("")}<option value="-"${spellSch === "-" ? " selected" : ""}>No school</option></select><span class="cccount">${c.spells.length}${lim ? " of " + lim : ""} chosen</span></div>
-<div class="cclist"><div class="ccrow ccsp ccsph" aria-hidden="true"><span></span><span>Spell</span><span>Level</span><span>Cost</span>${RANK_HEAD}</div>${list.map(row).join("") || `<p class="cempty">No spells match.</p>`}</div>
-${k.rankCap ? `<p class="ccnote">At level ${LEVEL} a spell's Rank can go up to <b>+${cap}</b> (Highest spell Rank: ${esc(k.rankCap)}). Grey circles are above that limit.</p>` : ""}`;
+<div class="cclist"><div class="ccrow ccsp ccsph" aria-hidden="true"><span></span><span>Spell</span><span>Level</span><span>Cost</span>${RANK_HEAD}</div>${list.map(row).join("") || `<p class="cempty">No spells match.</p>`}</div>`;
   },
   equip(c) {
     const start = startingWealth(c), spent = spentC(c), left = start - spent, b = bgOf(c);
@@ -543,10 +563,13 @@ function counter(cat, n, one, many) {
   const over = n.chosen > n.allow;
   return `<p class="cccounter${n.chosen >= n.allow ? " done" : ""}${over ? " over" : ""}">Choose ${n.allow} ${n.allow === 1 ? one : (many || one + "s")} (${esc(n.from.join(", "))}): <b>${n.chosen} of ${n.allow}</b>${over ? " · that's more than you're given" : ""}</p>`;
 }
-function eitherHTML(c, ps, keep) {
-  const ps2 = ps.g.picks.filter(p => p.opts && keep(p));
-  return ps2.map(p => `<fieldset class="cceither"><legend>${esc(p.src)}: choose one</legend>${p.opts.map(o => `<label><input type="radio" name="ch-${esc(p.key)}" data-f="choice" data-k="${esc(p.key)}" value="${esc(o)}"${c.choice[p.key] === o ? " checked" : ""}> ${esc(o)}</label>`).join("")}</fieldset>`).join("");
+function choiceSet(c, p) {
+  const words = ["", "one", "two", "three", "four", "five", "six"], got = chosenOf(c, p), full = got.length >= p.n;
+  if (p.n <= 1) return `<fieldset class="cceither"><legend>${esc(p.src)}: choose one</legend>${p.opts.map(o => `<label><input type="radio" name="ch-${esc(p.key)}" data-f="choice" data-k="${esc(p.key)}" value="${esc(o)}"${got.includes(o) ? " checked" : ""}> ${esc(o)}</label>`).join("")}</fieldset>`;
+  return `<fieldset class="cceither"><legend>${esc(p.src)}: choose ${words[p.n] || p.n} <small>${got.length} of ${p.n}</small></legend>${p.opts.map(o => `<label><input type="checkbox" data-f="choicem" data-k="${esc(p.key)}" value="${esc(o)}"${got.includes(o) ? " checked" : full ? " disabled" : ""}> ${esc(o)}</label>`).join("")}</fieldset>`;
 }
+const pickDone = (c, p) => chosenOf(c, p).length >= Math.min(p.n || 1, p.opts.length);
+function eitherHTML(c, ps, keep) { return ps.g.picks.filter(p => p.opts && keep(p)).map(p => choiceSet(c, p)).join("") }
 /* a loadout picked before its gear was set up (or since changed) gets the class's current gear */
 function syncLoadout(c) {
   if (c.loadout === "" || c.loadout === "buy") return;
@@ -625,7 +648,6 @@ $("ccmain").addEventListener("click", ev => {
   if (b.dataset.spr) {
     const n = b.dataset.spr, s = spellByName(n); if (!s) return;
     const start = spellStart(c, s), cap = rankCapOf(c), v = +b.dataset.v, curR = spellRankOf(c, s);
-    if (v > cap) { say(`At level ${LEVEL} a spell's Rank can't go above +${cap}. Change "Highest spell Rank" on the Classes page to allow more.`); return }
     const want = curR === v ? v - 1 : v, delta = Math.max(start, want) - curR;
     if (delta > 0 && delta * rankCost(c, s) > pointsLeft(c, profState(c))) { say("Not enough skill points left."); return }
     c.spellUp[n] = Math.max(0, Math.max(start, want) - start); say(""); touch(); renderCreate(); focusSel(`[data-spr="${CSS.escape(n)}"][data-v="${v}"]`); return;
@@ -653,6 +675,12 @@ $("ccmain").addEventListener("click", ev => {
     else { [c.base[k], c.base[swapSel]] = [c.base[swapSel], c.base[k]]; [c.dice[k], c.dice[swapSel]] = [c.dice[swapSel], c.dice[k]]; swapSel = ""; touch() }
     renderCreate(); const f = document.querySelector(`[data-swap="${k}"]`); if (f) f.focus(); return;
   }
+  if (b.dataset.badge && (b.dataset.badge === "weapon" || b.dataset.badge === "armor")) {
+    const cat = b.dataset.badge, n = b.dataset.n, ps = profState(c), g = ps.given(cat, n);
+    if (g) { say(`${n} comes from your ${g.src.join(", ")}.`); return }
+    if (ps.tiers(cat, n).size) { c.prof[cat][n] = {}; delete c.rank[(cat === "weapon" ? "w:" : "a:") + n]; touch(); renderCreate(); focusSel(`[data-badge="${cat}"][data-n="${CSS.escape(n)}"]`); return }
+    buyTier(c, cat, n, "S", `[data-badge="${cat}"][data-n="${CSS.escape(n)}"]`); return;
+  }
   if (b.dataset.badge) {
     const cat = b.dataset.badge, n = b.dataset.n, ps = profState(c), g = ps.given(cat, n), key = (cat === "weapon" ? "w:" : cat === "armor" ? "a:" : "t:") + n;
     if (g) { say(`${n} comes from your ${g.src.join(", ")}.`); return }
@@ -660,6 +688,17 @@ $("ccmain").addEventListener("click", ev => {
     else c.prof[cat][n] = Object.values(c.prof[cat][n] || {}).some(Boolean) ? {} : { S: true };
     if (!isProf(c, profState(c), key)) delete c.rank[key];
     touch(); renderCreate(); focusSel(`[data-badge="${cat}"][data-n="${CSS.escape(n)}"]`); return;
+  }
+  if (b.classList.contains("ctier") && (b.dataset.f === "weapon" || b.dataset.f === "armor")) {
+    const cat = b.dataset.f, n = b.dataset.n, t = b.dataset.t, sel = `.ctier[data-f="${cat}"][data-n="${CSS.escape(n)}"][data-t="${t}"]`;
+    if (c.prof[cat][n] && c.prof[cat][n][t]) {
+      /* removing a type also removes the ones above it that were bought */
+      const man = { ...c.prof[cat][n] }, g = profState(c).given(cat, n);
+      TIER_ORDER.slice(TIER_ORDER.indexOf(t)).forEach(x => { if (!(g && g.tiers.has(x))) delete man[x] });
+      c.prof[cat][n] = man; const key = (cat === "weapon" ? "w:" : "a:") + n; if (!isProf(c, profState(c), key)) delete c.rank[key];
+      touch(); renderCreate(); focusSel(sel); return;
+    }
+    buyTier(c, cat, n, t, sel); return;
   }
   if (b.classList.contains("ctier")) {
     const cat = b.dataset.f, n = b.dataset.n, t = b.dataset.t;
@@ -713,6 +752,7 @@ $("ccmain").addEventListener("change", ev => {
     }
     c.prof[f][t.dataset.n] = t.checked; if (!t.checked) delete c.rank[f + ":" + t.dataset.n]; touch(); renderCreate(); const x = document.querySelector(`[data-f="${f}"][data-n="${CSS.escape(t.dataset.n)}"]`); if (x) x.focus(); return }
   if (f === "choice") { c.choice[t.dataset.k] = t.value; touch(); renderCreate(); return }
+  if (f === "choicem") { const k = t.dataset.k, cur2 = arr(c.choice[k]).filter(x => x !== t.value); c.choice[k] = t.checked ? [...cur2, t.value] : cur2; touch(); renderCreate(); focusSel(`[data-f="choicem"][data-k="${CSS.escape(k)}"][value="${CSS.escape(t.value)}"]`); return }
   if (f === "loadout") { setLoadout(c, t.value); touch(); renderCreate(); const x = document.querySelector(`[data-f="loadout"][value="${t.value}"]`); if (x) x.focus(); return }
   if (f === "spell") { const n = t.dataset.n; c.spells = t.checked ? [...new Set([...c.spells, n])] : c.spells.filter(x => x !== n); if (!t.checked) delete c.spellUp[n]; touch(); renderCreate(); const x = document.querySelector(`[data-f="spell"][data-n="${CSS.escape(n)}"]`); if (x) x.focus(); return }
   if (f === "slot") { const x = c.inv[+t.dataset.i]; x.slot = t.value; if (t.value) c.inv.forEach(y => { if (y !== x && y.slot === t.value) y.slot = "" }); touch(); renderCreate(); return }
@@ -736,6 +776,17 @@ function loadPortrait(file) {
   };
   img.onerror = () => { URL.revokeObjectURL(url); say("That picture couldn't be opened. Try a JPG or PNG.") };
   img.src = url;
+}
+/* weapon and armor proficiency: Simple first, then Martial, then Exotic; each costs skill points unless a free pick covers it */
+function buyTier(c, cat, n, t, sel) {
+  const ps = profState(c), have = ps.tiers(cat, n), need = TIER_ORDER[TIER_ORDER.indexOf(t) - 1];
+  if (have.has(t)) return;
+  if (need && !have.has(need)) { popup("Not yet", `You need <b>${TIER_NAME[need]}</b> proficiency in ${esc(n)} before ${TIER_NAME[t]}.`, "", "OK"); return }
+  const apply = () => { c.prof[cat][n] = { ...(c.prof[cat][n] || {}), [t]: true }; touch(); renderCreate(); focusSel(sel) };
+  if (manualTiers(c, ps, cat) < pickCount(c, ps, cat).allow) { apply(); return }
+  const cost = tierCost(), left = pointsLeft(c, ps);
+  if (left < cost) { popup("Not enough skill points", `${TIER_NAME[t]} proficiency in ${esc(n)} costs <b>${cost} skill points</b>. You have ${Math.max(0, left)} left.`, "", "OK"); return }
+  popup(`${TIER_NAME[t]} proficiency`, `${TIER_NAME[t]} proficiency in ${esc(n)} costs <b>${cost} skill points</b>. You have ${left} left. It starts at rank +0; you can raise its rank once you're proficient.`, `Spend ${cost} points`, "Cancel").then(ok => { if (ok) apply() });
 }
 /* a small in-page popup; resolves true when the main button is clicked */
 function popup(title, html, okLabel, cancelLabel) {
@@ -965,7 +1016,7 @@ function show(v, quiet) {
 
 /* ---------------------------------------------------------------- admin: rules (classes and backgrounds have their own pages) */
 const adminDirty = () => JSON.stringify(cleanCreator()) !== RULES_ORIG;
-const RULE_FIELDS = [["wealth", "Standard starting wealth", "Used when a class doesn't set its own Starting Currency, e.g. 25 (G)"], ["rank", "Starting rank for a proficient skill", "e.g. 1"], ["spellRank", "Highest spell level at character creation", "e.g. 1"], ["saveCost", "Skill points to become proficient in a saving throw", "e.g. 3"],
+const RULE_FIELDS = [["wealth", "Standard starting wealth", "Used when a class doesn't set its own Starting Currency, e.g. 25 (G)"], ["rank", "Starting rank for a proficient skill", "e.g. 1"], ["spellRank", "Highest spell level at character creation", "e.g. 1"], ["saveCost", "Skill points to become proficient in a saving throw", "e.g. 3"], ["tierCost", "Skill points for each weapon or armor proficiency type (Simple, Martial, Exotic)", "e.g. 3"],
   ["passive", "Passive skill base", "Passive DC = this + the skill's bonus, e.g. 10"], ["langs", "Languages to suggest", "Comma separated. Languages written on races are added automatically."]];
 function fieldHTML(d, [k, label, help], id) {
   const ph = /^e\.g\./.test(help) ? help : "", h = ph ? "" : help;

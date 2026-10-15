@@ -376,6 +376,18 @@ CLASSES_CSS = """
 .lhead{display:grid;grid-template-columns:1fr auto;gap:8px}
 .glist{display:grid;gap:6px}
 .schlist{display:grid;gap:6px}
+.chlist2{display:grid;gap:10px}
+.choicerow{border:2px dashed var(--ink);border-radius:12px;padding:10px 12px;display:grid;gap:8px}
+.chtop{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-weight:800;font-size:.9rem}
+.chtop .xdel{margin-left:auto}
+.chtop input,.chtop select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:6px 8px}
+.chtop input{width:70px}
+.chtop select{width:auto}
+.chopts{display:flex;flex-wrap:wrap;gap:6px}
+.chopt{display:inline-flex!important;align-items:center;gap:6px;border:2px solid var(--hair);border-radius:999px;padding:3px 10px 3px 6px;font-size:.85rem!important;cursor:pointer}
+.chopt:has(input:checked){border-color:var(--ink);background:var(--soft)}
+.chopt input{width:16px!important;height:16px;accent-color:var(--ink)}
+.chopts .chtext{width:100%}
 .schrow{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}
 .schrow input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
 .grow{display:grid;grid-template-columns:1fr 80px auto;gap:8px;align-items:center}
@@ -813,6 +825,8 @@ body.cc-sheet .ccintro{display:none}
 .cccounter.over{border-color:var(--red)}
 .cceither{border:2px solid var(--red);border-radius:12px;padding:8px 14px 10px;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px 18px}
 .cceither legend{font-weight:800;font-size:.85rem;padding:0 6px}
+.cceither legend small{font-weight:700;color:var(--muted);margin-left:6px}
+.cceither input[type=checkbox]{accent-color:var(--gold);width:16px;height:16px}
 .cceither label{display:flex;gap:6px;align-items:center;font-weight:700;cursor:pointer}
 .ccskills{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;align-items:start}
 .ccsk{border:2px solid var(--ink);border-radius:12px;overflow:hidden}
@@ -880,7 +894,16 @@ body.cc-sheet .ccintro{display:none}
 .ccpick:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .cchw{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:640px){.ccprof .ccprow{grid-template-columns:minmax(0,1fr) 24px auto;row-gap:4px}.cclist .ccsph{display:none}.ccsp .sprank{grid-column:2/-1}.ccprof .ccprow>.ccpips,.ccprof .cchead>.ccscale{grid-column:1/-1}.ccprof .cchead>span:not(.ccscale){display:none}}
-.ccschools{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:16px}
+.ccschools{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:16px;align-items:stretch}
+.ccschools>label[data-ik="major"]{grid-column:1}
+.ccschools>label.solo{grid-column:1/-1}
+.ccschools>.ccnote{grid-column:1/-1}
+.ccopp{border:3px solid var(--red);border-radius:12px;padding:10px 14px;display:grid;gap:3px;align-content:center;background:color-mix(in srgb,var(--red) 7%,var(--paper))}
+.ccoppt{font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.ccopp>b{font-size:1.25rem;color:var(--red)}
+.ccopp p{margin:0;font-size:.82rem;font-weight:600}
+.ccschools>label[data-ik="minor"]{grid-column:1/-1}
+@media (max-width:640px){.ccschools{grid-template-columns:1fr}.ccschools>*{grid-column:1/-1!important}}
 .ccschools label{display:grid;gap:5px;font-weight:800;font-size:.85rem;border:2px solid var(--ink);border-radius:12px;padding:10px 12px}
 .ccschools select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
 .ccschools small{font-weight:600;color:var(--muted);font-size:.78rem}

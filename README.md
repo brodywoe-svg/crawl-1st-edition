@@ -151,6 +151,15 @@ Schools. The creator uses these to ask for the Major (and Minor), tag spells as
 Major / Minor / Opposing, let skill points raise spell Ranks, and fill Prepared
 spells, Arcane Major/Minor and spell Ranks, DCs and attack bonuses on the sheet.
 
+**Backgrounds** have separate Skill, Weapon, Armor, Trade Skill and Language
+Proficiency fields, and both classes and backgrounds have **Proficiency choices**:
+"Choose N skills / saving throws / weapon or armor proficiencies / trade skills /
+languages from" a group you tick. The creator shows these as pick-lists.
+
+In the creator, **weapon and armor proficiency** can be bought for 3 skill points per
+type (Simple, then Martial, then Exotic; set under Edit creator rules). Bought
+proficiency starts at rank +0 and can then be raised with skill points.
+
 **Charts in descriptions:** while editing, the sidebar's **Insert a chart** button
 adds a small chart: `[table]` … `[/table]`, one row per line, cells split by `|`,
 the first row is the heading. Select tab-separated lines first to turn them into

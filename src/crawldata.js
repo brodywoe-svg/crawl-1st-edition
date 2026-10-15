@@ -2,10 +2,11 @@
    crawl-classes.json     = {v:1, classes:[cls]}
      cls  = {id, n, desc, source, cast, spells, hd, hp, saves, skills, skillPts, prof, langs,
              chart:[{lv, pool, die}], feats:[{n, d, lv}], loadouts:[{n, gear:[gear]}], money, moneyRoll, extra:[{k,v}],
-             prepared, rankCap (formulas), startRank, schoolStart, oppCost, majorLv, minorLv, schools:[{s, opp}],
+             prepared (formula), startRank, schoolStart, oppCost, majorLv, minorLv, schools:[{s, opp}],
              subs:[{id, n, desc, feats:[{n, d, lv}], extra}]}
    crawl-backgrounds.json = {v:1, backgrounds:[bg]}
-     bg   = {id, n, desc, skills, prof, langs, gear:[gear], wealth, feats:[{n, d}], extra}
+     bg   = {id, n, desc, skills, weapons, armor, trades, prof, langs, choices:[choice], gear:[gear], wealth, feats:[{n, d}], extra}
+   choice = {n, cat, opts:[names]}: "Choose n <cat> from opts"; cat is skill, save, weapon, armor, trade or lang (classes have choices too)
    gear   = {n, qty, iid}  (iid links to an item on the Items page when the name matches one)
    crawl-creator.json     = {v:1, rules:{wealth, rank, spellRank, passive, langs}} */
 const str = x => String(x ?? "").trim();
@@ -47,15 +48,31 @@ function normClass(p) {
   return { id: str(p.id) || newId("class"), n: str(p.n), desc: str(p.desc), source: SOURCES.includes(str(p.source)) ? str(p.source) : "", cast: AB[str(p.cast)] ? str(p.cast) : "",
     spells: str(p.spells), hd: str(p.hd), hp: str(p.hp), saves: str(p.saves), skills: str(p.skills), skillPts: str(p.skillPts), prof: str(p.prof), langs: str(p.langs),
     chart: chartOf(p.chart), feats: featsOf(p.feats), loadouts: arr(p.loadouts).map((l, i) => ({ n: str(l && l.n) || `Loadout ${i + 1}`, gear: gearOf(l && l.gear) })).filter(l => l.gear.length || l.n),
-    money: str(p.money), moneyRoll: str(p.moneyRoll), extra: extrasOf(p.extra),
-    prepared: str(p.prepared), rankCap: str(p.rankCap), startRank: str(p.startRank), schoolStart: str(p.schoolStart), oppCost: str(p.oppCost), majorLv: str(p.majorLv), minorLv: str(p.minorLv),
+    money: str(p.money), moneyRoll: str(p.moneyRoll), extra: extrasOf(p.extra), choices: choicesOf(p.choices),
+    prepared: str(p.prepared), startRank: str(p.startRank), schoolStart: str(p.schoolStart), oppCost: str(p.oppCost), majorLv: str(p.majorLv), minorLv: str(p.minorLv),
     schools: arr(p.schools).map(r => ({ s: str(r && r.s), opp: str(r && r.opp) })).filter(r => r.s),
     subs: arr(p.subs).filter(s => s && str(s.n)).map(s => ({ id: str(s.id) || newId("sub"), n: str(s.n), desc: str(s.desc), feats: featsOf(s.feats), extra: extrasOf(s.extra), _id: ++uid })).sort(byName), _id: ++uid };
 }
 function normBg(p) {
   p = p || {};
-  return { id: str(p.id) || newId("bg"), n: str(p.n), desc: str(p.desc), skills: str(p.skills), prof: str(p.prof), langs: str(p.langs),
+  return { id: str(p.id) || newId("bg"), n: str(p.n), desc: str(p.desc), skills: str(p.skills), weapons: str(p.weapons), armor: str(p.armor), trades: str(p.trades), prof: str(p.prof), langs: str(p.langs), choices: choicesOf(p.choices),
     gear: gearOf(p.gear).concat(p.equip && !arr(p.gear).length ? gearOf(String(p.equip).split(/[,;\n]+/)) : []), wealth: str(p.wealth), feats: featsOf(p.feats), extra: extrasOf(p.extra), _id: ++uid };
+}
+/* "choose from" groups: the player picks n of the listed options */
+const CHOICE_KINDS = [["skill", "skill", "skills"], ["save", "saving throw", "saving throws"], ["weapon", "weapon proficiency", "weapon proficiencies"], ["armor", "armor proficiency", "armor proficiencies"], ["trade", "trade skill", "trade skills"], ["lang", "language", "languages"]];
+function choiceOptions(cat) {
+  if (cat === "skill") return ["Acrobatics", "Animal Handling", "Appraisal", "Arcane", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Lore", "Medicine", "Nature", "Occult", "Perception", "Performance", "Persuasion", "Religion", "Stealth", "Thievery"];
+  if (cat === "save") return ABIL.map(a => a[1]);
+  if (cat === "weapon") return ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Special", "Miscellaneous"];
+  if (cat === "armor") return ["Light Armor", "Medium Armor", "Heavy Armor", "Shields"];
+  if (cat === "trade") return [...new Set(["Alchemy", "Blacksmithing", "Cooking", "Enchanting", "Goldsmithing", "Leatherworking", "Scribing", "Tailoring", "Tinkering", "Woodworking", ...arr(typeof CATALOG !== "undefined" && CATALOG ? CATALOG.recipes : []).map(r => str(r && r.prof))].filter(Boolean))].sort();
+  return [];
+}
+const choicesOf = x => arr(x).map(ch => ({ n: Math.max(1, Math.min(20, parseInt(ch && ch.n, 10) || 1)), cat: CHOICE_KINDS.some(k => k[0] === (ch && ch.cat)) ? ch.cat : "skill", opts: [...new Set(arr(ch && ch.opts).map(str).filter(Boolean))] })).filter(ch => ch.opts.length);
+function choiceText(ch) {
+  const k = CHOICE_KINDS.find(x => x[0] === ch.cat) || CHOICE_KINDS[0], words = ["", "one", "two", "three", "four", "five", "six"];
+  const list = ch.opts.length > 1 ? ch.opts.slice(0, -1).join(", ") + " or " + ch.opts[ch.opts.length - 1] : ch.opts[0];
+  return `Choose ${words[ch.n] || ch.n} ${ch.n === 1 ? k[1] : k[2]} from ${list}`;
 }
 const normClasses = j => arr(j && j.classes).filter(c => c && str(c.n)).map(normClass).sort(byName);
 const normBgs = j => arr(j && j.backgrounds).filter(b => b && str(b.n)).map(normBg).sort(byName);

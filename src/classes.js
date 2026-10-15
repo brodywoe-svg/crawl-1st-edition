@@ -19,7 +19,7 @@ const say = m => { $("gmsg").textContent = m || "" };
 
 /* ---------------------------------------------------------------- view */
 const query = () => lcs($("cq").value.trim()).replace(/\s+/g, " ");
-const textOf = p => plainText([p.n, p.desc, p.skills, p.prof, p.saves, p.langs, p.hd, p.hp, p.source, p.money, p.wealth, ...(p.feats || []).map(f => f.n + " " + f.d),
+const textOf = p => plainText([p.n, p.desc, p.skills, p.weapons, p.armor, p.trades, ...arr(p.choices).map(choiceText), p.prof, p.saves, p.langs, p.hd, p.hp, p.source, p.money, p.wealth, ...(p.feats || []).map(f => f.n + " " + f.d),
   ...(p.extra || []).map(x => x.k + " " + x.v), ...arr(p.loadouts).map(l => l.n + " " + gearLine(l.gear)), gearLine(p.gear || []), ...arr(p.subs).map(s => s.n)].join(" ")).toLowerCase();
 const gearHTML = g => g.length ? `<ul class="gearl">${g.map(x => `<li>${x.qty > 1 ? `<b>${x.qty}×</b> ` : ""}${x.iid ? `<a class="ilink" href="items.html#${encodeURIComponent(x.iid)}">${esc(x.n)}</a>` : esc(x.n)}</li>`).join("")}</ul>` : `<p class="muted">No gear listed.</p>`;
 const factsHTML = rows => { rows = rows.filter(r => r[1]); return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${richInline(v)}</dd>`).join("")}</dl>` : "" };
@@ -35,7 +35,7 @@ function chartHTML(k) {
 }
 function classBody(k) {
   return (k.desc ? `<div class="clead">${paras(k.desc)}</div>` : "") + chartHTML(k) +
-    factsHTML([["Hit die", k.hd], ["Hit points at 1st level", k.hp], ["Saving Throws", k.saves], ["Starting Skill Proficiencies", k.skills], ["Skill Points", k.skillPts], ["Other Proficiencies", k.prof],
+    factsHTML([["Hit die", k.hd], ["Hit points at 1st level", k.hp], ["Saving Throws", k.saves], ["Starting Skill Proficiencies", k.skills], ["Skill Points", k.skillPts], ["Other Proficiencies", k.prof], ...k.choices.map(ch => ["Proficiency choice", choiceText(ch)]),
       ["Languages", k.langs], ["Magic source", k.source], ["Spellcasting ability", k.cast && AB[k.cast]], ["Spells at character creation", k.spells], ["Prepared spells", k.prepared], ...spellRankFacts(k), ...k.extra.map(x => [x.k || "Detail", x.v])]) +
     `<div class="clsload"><h3>Equipment Loadout</h3><div class="loadgrid">${k.loadouts.map(l => `<div class="loadc"><b>${esc(l.n)}</b>${gearHTML(l.gear)}</div>`).join("")}<div class="loadc money"><b>Or buy your own</b><p>Starting Currency: <b>${esc(moneyText(k))}</b></p></div></div></div>`;
 }
@@ -43,12 +43,13 @@ const moneyText = k => [k.money, k.moneyRoll && "roll " + k.moneyRoll].filter(Bo
 function spellRankFacts(k) {
   if (!k.source) return [];
   const sch = (k.majorLv || k.minorLv) ? [k.majorLv && `Major chosen at level ${k.majorLv}`, k.minorLv && `Minor chosen at level ${k.minorLv}`].filter(Boolean).join(", ") : "";
-  const ranks = [`Spells start at Rank +${+k.startRank || 0}`, sch && `Major and Minor spells start at Rank +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}`, sch && `raising an Opposing School spell costs ${+k.oppCost || 2} skill points per Rank`, k.rankCap && `highest Rank: ${k.rankCap}`].filter(Boolean).join("; ");
+  const ranks = [`Spells start at Rank +${+k.startRank || 0}`, sch && `Major and Minor spells start at Rank +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}`, sch && `raising an Opposing School spell costs ${+k.oppCost || 2} skill points per Rank`].filter(Boolean).join("; ");
   return [["Schools", sch], ["Spell Ranks", ranks]];
 }
 function bgBody(b) {
   return (b.desc ? `<div class="clead">${paras(b.desc)}</div>` : "") +
-    factsHTML([["Starting Skill Proficiencies", b.skills], ["Other Proficiencies", b.prof], ["Languages", b.langs], ["Starting wealth", b.wealth], ...b.extra.map(x => [x.k || "Detail", x.v])]) +
+    factsHTML([["Skill Proficiencies", b.skills], ["Weapon Proficiencies", b.weapons], ["Armor Proficiencies", b.armor], ["Trade Skill Proficiencies", b.trades], ["Other Proficiencies", b.prof], ["Language Proficiencies", b.langs],
+      ...b.choices.map(ch => ["Proficiency choice", choiceText(ch)]), ["Starting wealth", b.wealth], ...b.extra.map(x => [x.k || "Detail", x.v])]) +
     (b.gear.length ? `<div class="clsload"><h3>Starting equipment</h3>${gearHTML(b.gear)}</div>` : "") + featHTML(b.feats);
 }
 function subHTML(s, k) {
@@ -70,6 +71,11 @@ const featRow = f => `<div class="prow frow"><input type="text" class="pn" value
 const bgFeatRow = f => `<div class="prow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
 const extraRow = x => `<div class="xrow"><input type="text" class="xk" value="${esc(x.k)}" placeholder="Label" aria-label="Detail label" autocomplete="off"><input type="text" class="xv" value="${esc(x.v)}" placeholder="Value" aria-label="Detail value" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
 const chartRowHTML = r => `<div class="chrow"><input type="number" class="cl" min="1" max="30" value="${esc(r.lv || "")}" placeholder="Lv" aria-label="Level"><input type="text" class="cp" value="${esc(r.pool)}" placeholder="Max Pool" aria-label="Max Pool" autocomplete="off"><input type="text" class="cd" value="${esc(r.die)}" placeholder="Action Die, e.g. 1d6" aria-label="Action Die" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
+const kindSelect = cat => `<select class="chk" aria-label="What to choose">${CHOICE_KINDS.map(([v, one, many]) => `<option value="${v}"${v === cat ? " selected" : ""}>${many}</option>`).join("")}</select>`;
+const choiceOptsHTML = (cat, opts) => cat === "lang" ? `<input type="text" class="chtext" value="${esc(opts.join(", "))}" placeholder="Languages, comma separated, e.g. Dwarvish, Elvish, Gnomish" aria-label="Languages to choose from" autocomplete="off">`
+  : choiceOptions(cat).map(o => `<label class="chopt"><input type="checkbox" value="${esc(o)}"${opts.includes(o) ? " checked" : ""}><span>${esc(o)}</span></label>`).join("");
+const choiceRowHTML = ch => `<div class="choicerow"><div class="chtop"><span>Choose</span><input type="number" class="chn" min="1" max="20" value="${ch.n || 1}" aria-label="How many"><span class="chk-wrap">${kindSelect(ch.cat)}</span><span>from:</span><button type="button" class="btn xdel">Remove</button></div><div class="chopts">${choiceOptsHTML(ch.cat, ch.opts || [])}</div></div>`;
+const choicesEditor = d => `<div class="glab">Proficiency choices <small>Let the player pick from a group you set, e.g. choose 1 skill from Athletics, Thievery, Lore or Occult.</small></div><div class="chlist2">${arr(d.choices).map(choiceRowHTML).join("")}</div><button type="button" class="btn" data-act="chadd">Add a choice</button>`;
 const schoolRowHTML = r => `<div class="schrow"><input type="text" class="ss" list="schoolNames" value="${esc(r.s)}" placeholder="School, e.g. Abjuration" aria-label="School" autocomplete="off"><input type="text" class="so" list="schoolNames" value="${esc(r.opp)}" placeholder="Its Opposing School" aria-label="Opposing School" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
 const gearRowHTML = g => `<div class="grow"><input type="text" class="gn" list="itemNames" value="${esc(g.n)}" placeholder="Item, e.g. Leather Jerkin" aria-label="Item" autocomplete="off"><input type="number" class="gq" min="1" max="999" value="${g.qty || 1}" aria-label="How many"><button type="button" class="btn xdel">Remove</button></div>`;
 const loadoutHTML = l => `<div class="lrow"><div class="lhead"><input type="text" class="ln" value="${esc(l.n)}" placeholder="Loadout name, e.g. Loadout A" aria-label="Loadout name" autocomplete="off"><button type="button" class="btn xdel">Remove loadout</button></div><div class="glist">${l.gear.map(gearRowHTML).join("")}</div><button type="button" class="btn" data-act="gadd">Add gear</button></div>`;
@@ -92,22 +98,24 @@ ${fld("spells", "Spells at character creation", "Empty = no limit", inp("spells"
     fld("saves", "Saving Throws", "", inp("saves", "e.g. Intelligence, Wisdom")) +
     fld("skills", "Starting Skill Proficiencies", "Name skills, or write “Two skills of your choice” or “Either Arcane or Lore”.", inp("skills", "e.g. Arcane, Two skills of your choice")) +
     fld("prof", "Other Proficiencies", "Weapon types, armor and trade skills, e.g. simple Blades, Light Armor, Either Alchemy or Scribing.", inp("prof", "e.g. simple Blades, Light Armor")) +
-    fld("langs", "Languages", "", inp("langs", "e.g. One additional Language of your choice")) +
+    fld("langs", "Languages", "", inp("langs", "e.g. One additional Language of your choice")) + choicesEditor(d) +
     `<div class="glab">Class chart <small>One row per level: its Max Pool and Action Die. Features are added to the right level automatically.</small></div><div class="chlist"><div class="chrow chh"><span>Level</span><span>Max Pool</span><span>Action Die</span><span></span></div>${d.chart.map(chartRowHTML).join("")}</div>
 <div class="gbtns"><button type="button" class="btn" data-act="cadd">Add a level</button><button type="button" class="btn" data-act="cfill">Fill in levels 1 to 20</button></div>` +
     feats(d.feats, "Class features") +
     `<div class="glab">Equipment Loadouts <small>Each loadout is a set of gear a player can take. Item names from the Items page link to them.</small></div><div class="llist">${d.loadouts.map(loadoutHTML).join("")}</div><button type="button" class="btn" data-act="ladd">Add a loadout</button>` +
     `<div class="fgrid">${fld("money", "Starting Currency", "What a player gets instead of a loadout, to buy their own gear. Empty = the creator's standard amount.", inp("money", "e.g. 25 (G)"))}${fld("moneyRoll", "Roll for Starting Currency", "Rolled when the player reaches Equipment in the Character Creator and added to the Starting Currency.", inp("moneyRoll", "e.g. 4d8 (G) or 2d4 x 10 (S)"))}</div>` +
     `<div class="glab">Spellcasting details <small>Used by the Character Creator and the character sheet. Formulas can use STR, DEX, CON, INT, WIS, CHA (their modifiers), level, +, −, *, /, floor(), ceil(), max() and min().</small></div>
-<div class="fgrid">${fld("prepared", "Prepared spells", "Formula", inp("prepared", "e.g. max(1, INT + floor(level / 2))"))}${fld("rankCap", "Highest spell Rank", "Formula", inp("rankCap", "e.g. ceil(level / 2)"))}
+<div class="fgrid">${fld("prepared", "Prepared spells", "Formula", inp("prepared", "e.g. max(1, INT + floor(level / 2))"))}
 ${fld("startRank", "Spells start at Rank", "", inp("startRank", "e.g. 0"))}${fld("schoolStart", "Major and Minor spells start at Rank", "", inp("schoolStart", "e.g. 1"))}
 ${fld("majorLv", "Major school chosen at level", "Empty = no Major", inp("majorLv", "e.g. 1"))}${fld("minorLv", "Minor school chosen at level", "Empty = no Minor", inp("minorLv", "e.g. 3"))}
 ${fld("oppCost", "Skill points per Rank for an Opposing School spell", "", inp("oppCost", "e.g. 2"))}</div>
 <div class="glab">Schools and their Opposing Schools <small>The schools a player can pick as their Major or Minor.</small></div><datalist id="schoolNames">${SCHOOLS.map(s => `<option value="${esc(s)}">`).join("")}</datalist><div class="schlist">${d.schools.map(schoolRowHTML).join("")}</div>
 <div class="gbtns"><button type="button" class="btn" data-act="sadd">Add a school</button><button type="button" class="btn" data-act="sfill">Add the schools from the spell list</button></div>` + extras;
   else body = fld("n", "Background name", "", inp("n", "e.g. Ferryman")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) +
-    fld("skills", "Starting Skill Proficiencies", "", inp("skills", "e.g. Athletics, Either Nature or Survival")) + fld("prof", "Other Proficiencies", "", inp("prof", "e.g. Either Cooking or Woodworking")) +
-    fld("langs", "Languages", "", inp("langs", "e.g. One additional Language of your choice")) +
+    `<div class="glab">Starting proficiencies <small>Name what the background gives. Write "Either Lore or Occult" for a pick of one, or "Two skills of your choice" for free picks. Use Proficiency choices below to let the player pick from a group you set.</small></div>
+<div class="fgrid">${fld("skills", "Skill Proficiencies", "", inp("skills", "e.g. Persuasion, Appraisal"))}${fld("weapons", "Weapon Proficiencies", "", inp("weapons", "e.g. Simple and Martial Swords"))}
+${fld("armor", "Armor Proficiencies", "", inp("armor", "e.g. Light Armor"))}${fld("trades", "Trade Skill Proficiencies", "", inp("trades", "e.g. Cooking"))}</div>
+${fld("langs", "Language Proficiencies", "", inp("langs", "e.g. One additional Language of your choice"))}${d.prof ? fld("prof", "Other Proficiencies", "", inp("prof", "")) : ""}` + choicesEditor(d) +
     `<div class="glab">Starting equipment <small>Item names from the Items page link to them.</small></div><div class="glist">${d.gear.map(gearRowHTML).join("")}</div><button type="button" class="btn" data-act="gadd">Add gear</button>` +
     fld("wealth", "Starting wealth", "Added to the player's purse in the creator.", inp("wealth", "e.g. 10 (G)")) +
     `<div class="glab">Features</div><div class="plist">${d.feats.map(bgFeatRow).join("")}</div><button type="button" class="btn" data-act="fadd">Add a feature</button>` + extras;
@@ -120,6 +128,7 @@ function readForm(f) {
   d.extra = own(f, ".xrow").map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
   d.chart = own(f, ".chrow:not(.chh)").map(r => ({ lv: r.querySelector(".cl").value, pool: r.querySelector(".cp").value, die: r.querySelector(".cd").value }));
   d.loadouts = own(f, ".lrow").map(l => ({ n: l.querySelector(".ln").value, gear: [...l.querySelectorAll(".grow")].map(g => ({ n: g.querySelector(".gn").value, qty: g.querySelector(".gq").value })) }));
+  d.choices = own(f, ".choicerow").map(r => { const cat = r.querySelector(".chk").value; return { n: r.querySelector(".chn").value, cat, opts: cat === "lang" ? (r.querySelector(".chtext") ? r.querySelector(".chtext").value.split(/[,;]+/).map(s => s.trim()).filter(Boolean) : []) : [...r.querySelectorAll(".chopt input:checked")].map(i => i.value) } });
   d.schools = own(f, ".schrow").map(r => ({ s: r.querySelector(".ss").value, opp: r.querySelector(".so").value }));
   d.gear = own(f, ".glist").filter(g => !g.closest(".lrow")).flatMap(g => [...g.querySelectorAll(".grow")].map(r => ({ n: r.querySelector(".gn").value, qty: r.querySelector(".gq").value })));
   return d;
@@ -158,12 +167,13 @@ $("clist").addEventListener("click", ev => {
   if (fl) { const el = document.getElementById(fl.dataset.feat); if (el) { const box = el.closest(".cfin"); box.scrollTo({ top: el.offsetTop - box.offsetTop - 6, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash") } return }
   const b = ev.target.closest("button"); if (!b) return;
   const f = b.closest(".rform"), act = b.dataset.act;
-  if (b.classList.contains("xdel")) { b.closest(".lrow>.lhead") ? b.closest(".lrow").remove() : b.closest(".prow,.xrow,.chrow,.grow,.schrow").remove(); return }
+  if (b.classList.contains("xdel")) { b.closest(".lrow>.lhead") ? b.closest(".lrow").remove() : b.closest(".prow,.xrow,.chrow,.grow,.schrow,.choicerow").remove(); return }
   const addTo = (box, html, sel) => { box.insertAdjacentHTML("beforeend", html); const el = box.lastElementChild.querySelector(sel); if (el) el.focus() };
   if (f && act === "fadd") { addTo(own(f, ".plist")[0], f.dataset.kind === "bg" ? bgFeatRow({ n: "", d: "" }) : featRow({ n: "", d: "" }), ".pn"); return }
   if (f && act === "xadd") { addTo(own(f, ".xlist")[0], extraRow({ k: "", v: "" }), ".xk"); return }
   if (f && act === "cadd") { const rows = own(f, ".chrow:not(.chh)"), last = rows.length ? parseInt(rows[rows.length - 1].querySelector(".cl").value, 10) || rows.length : 0; addTo(own(f, ".chlist")[0], chartRowHTML({ lv: last + 1, pool: "", die: "" }), ".cp"); return }
   if (f && act === "cfill") { const box = own(f, ".chlist")[0], have = new Set(own(f, ".chrow:not(.chh)").map(r => parseInt(r.querySelector(".cl").value, 10))); for (let lv = 1; lv <= 20; lv++) if (!have.has(lv)) box.insertAdjacentHTML("beforeend", chartRowHTML({ lv, pool: "", die: "" })); [...box.querySelectorAll(".chrow:not(.chh)")].sort((x, y) => (parseInt(x.querySelector(".cl").value, 10) || 99) - (parseInt(y.querySelector(".cl").value, 10) || 99)).forEach(r => box.appendChild(r)); return }
+  if (f && act === "chadd") { addTo(own(f, ".chlist2")[0], choiceRowHTML({ n: 1, cat: "skill", opts: [] }), ".chn"); return }
   if (f && act === "sadd") { addTo(own(f, ".schlist")[0], schoolRowHTML({ s: "", opp: "" }), ".ss"); return }
   if (f && act === "sfill") { const box = own(f, ".schlist")[0], have = new Set(own(f, ".schrow").map(r => lcs(r.querySelector(".ss").value.trim()))); SCHOOLS.filter(s => !have.has(lcs(s))).forEach(s => box.insertAdjacentHTML("beforeend", schoolRowHTML({ s, opp: "" }))); return }
   if (f && act === "ladd") { const box = own(f, ".llist")[0]; addTo(box, loadoutHTML({ n: `Loadout ${String.fromCharCode(65 + box.children.length)}`, gear: [] }), ".ln"); return }
@@ -196,6 +206,10 @@ $("clist").addEventListener("click", ev => {
     Object.keys(keep).forEach(k => { if (k !== "_id") p[k] = keep[k] });
     delete p._new; editing.delete(id); drafts.delete(id); render(); markDirty();
   }
+});
+$("clist").addEventListener("change", ev => {
+  const s = ev.target.closest(".chk"); if (!s) return;
+  const row = s.closest(".choicerow"); row.querySelector(".chopts").innerHTML = choiceOptsHTML(s.value, []);
 });
 $("gAdd").addEventListener("click", () => {
   const p = IS_CLS ? normClass({ n: "" }) : normBg({ n: "" }); p._new = true;
