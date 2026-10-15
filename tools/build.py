@@ -91,6 +91,12 @@ def read_json(path, empty):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def spell_schools():
+    """The schools of magic named on spells (their Category), without notes such as (Ritual)."""
+    spells = json.loads(SPELLS.read_text(encoding="utf-8"))
+    return sorted({re.sub(r"\s*\(.*?\)", "", str(s.get("f", {}).get("cat", ""))).strip() for s in spells} - {""})
+
+
 def read_classes():
     return read_json(CLASSES, '{\n "v": 1,\n "classes": []\n}\n')
 
@@ -143,7 +149,7 @@ def glossary_page(template, glossary, name):
         + f"const CATALOG={as_js(read_catalog())};"
         + (f"const RACES={as_js(read_races())};" if page in ("races", "creator") else "")
         + (f"const CREATOR={as_js(read_creator())};const SPELLS={as_js(json.loads(SPELLS.read_text(encoding='utf-8')))};" if page == "creator" else "")
-        + (f"const CLASSES={as_js(read_classes())};const BACKGROUNDS={as_js(read_backgrounds())};" if page in ("creator", "classes", "backgrounds") else "") + "\n"
+        + (f"const CLASSES={as_js(read_classes())};const BACKGROUNDS={as_js(read_backgrounds())};const SCHOOLS={as_js(spell_schools())};" if page in ("creator", "classes", "backgrounds") else "") + "\n"
     )
     shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")
     page_js = "catalog.js" if catalog else "races.js" if page == "races" else "creator.js" if page == "creator" else "classes.js" if page in ("classes", "backgrounds") else "glossary.js"

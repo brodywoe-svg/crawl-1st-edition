@@ -35,7 +35,7 @@ function bodyHTML(p) {
   const facts = [["Ability Score Increases", p.asi], ["Starting Proficiencies", p.prof], ["Languages", p.langs], ...p.extra.map(x => [x.k || "Detail", x.v])].filter(f => f[1]);
   return (p.desc ? `<div class="clead">${paras(p.desc)}</div>` : "") +
     (facts.length ? `<dl class="gfacts">${facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${richInline(v)}</dd>`).join("")}</dl>` : "") +
-    (p.feats.length ? `<div class="rfeats">${p.feats.map(f => `<p>${f.n ? `<span class="pdn">${esc(f.n)}</span> - ` : ""}${richInline(f.d)}</p>`).join("")}</div>` : "");
+    (p.feats.length ? `<div class="rfeats">${p.feats.map(f => featBlock(f.n, f.d)).join("")}</div>` : "");
 }
 function subHTML(s, r) {
   if (editing.has(s._id)) return partForm(s, "sub", r);

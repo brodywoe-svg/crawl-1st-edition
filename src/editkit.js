@@ -12,6 +12,11 @@ document.body.insertAdjacentHTML("beforeend", `<aside class="gside" id="gside" h
 <button type="button" class="btn solid gapply">Color selected text</button>
 <button type="button" class="btn gclear">Remove color</button>
 <p class="ghelp" id="gsideMsg">Select text in any box, then pick a color.</p>
+</div>
+<div class="gsh">Chart</div>
+<div class="gsb">
+<button type="button" class="btn gchart">Insert a chart</button>
+<p class="ghelp">Adds a small chart where the cursor is in a description. Each line is a row and | splits the columns; the first row is the heading. Select lines separated by tabs first to turn them into a chart.</p>
 </div></aside>`);
 const side = $("gside"), sideMsg = (m, bad) => { $("gsideMsg").textContent = m || "Select text in any box, then pick a color."; $("gsideMsg").classList.toggle("bad", !!bad) };
 function sideShow(on) { side.hidden = !on; document.body.classList.toggle("gside-on", !!on) }
@@ -33,7 +38,19 @@ side.addEventListener("click", ev => {
   const sw = ev.target.closest(".gsw"); if (sw) { $("gpick").value = sw.dataset.c; colorSel(sw.dataset.c); return }
   if (ev.target.closest(".gapply")) { colorSel($("gpick").value); return }
   if (ev.target.closest(".gclear")) colorSel("");
+  if (ev.target.closest(".gchart")) insertChart();
 });
+function insertChart() {
+  const ta = lastBox && lastBox.isConnected && lastBox.tagName === "TEXTAREA" ? lastBox : null;
+  if (!ta) { sideMsg("Click into a description box first, then Insert a chart.", true); return }
+  const a = ta.selectionStart, b = ta.selectionEnd, sel = ta.value.slice(a, b);
+  const rows = sel.trim() ? sel.split("\n").map(l => l.replace(/\[\/?table\]/gi, "").trim()).filter(Boolean).map(l => l.split(/\t+|\s{2,}|\s*\|\s*/).map(c => c.trim()).filter(Boolean).join(" | ")) : ["Heading | Heading", "Cell | Cell", "Cell | Cell"];
+  const before = a && ta.value[a - 1] !== "\n" ? "\n\n" : a && ta.value.slice(a - 2, a) !== "\n\n" ? "\n" : "";
+  const text = `${before}[table]\n${rows.join("\n")}\n[/table]\n`;
+  ta.focus(); ta.setSelectionRange(a, b);
+  if (!document.execCommand || !document.execCommand("insertText", false, text)) { ta.setRangeText(text, a, b, "end"); ta.dispatchEvent(new Event("input", { bubbles: true })) }
+  sideMsg(sel.trim() ? "Turned the selection into a chart." : "Chart added. Replace the headings and cells, one row per line.");
+}
 $("gpick").addEventListener("change", () => { if (lastBox && lastBox.isConnected && lastBox.selectionStart !== lastBox.selectionEnd) colorSel($("gpick").value) });
 /* keep the sidebar clear of the save bar on small screens */
 new MutationObserver(() => document.documentElement.style.setProperty("--sbh", $("savebar").hidden ? "0px" : $("savebar").offsetHeight + "px"))

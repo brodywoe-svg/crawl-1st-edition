@@ -287,6 +287,13 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .savebar .btn[disabled]{opacity:.5;cursor:default}
 @media (prefers-reduced-motion:no-preference){.spell>summary{transition:background .12s}}
 /* glossary terms in spell text: red underline, rounded popup on hover or tap */
+.rtablew{overflow-x:auto;margin:2px 0}
+.rtable{border-collapse:collapse;font-size:.88em;min-width:min(100%,320px);border:2px solid var(--ink)}
+.rtable th{background:var(--ink);color:var(--paper);font-weight:800;text-align:left;padding:5px 10px}
+.rtable td{padding:4px 10px;border-top:1px solid var(--hair);font-weight:600}
+.rtable tbody tr:nth-child(even){background:var(--soft)}
+.featb{display:grid;gap:6px}
+.featb p{margin:0}
 .gl{color:var(--red);text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px;cursor:help;border-radius:3px}
 .gl:hover,.gl.on{background:var(--soft)}
 .gl:focus-visible{outline:2px solid var(--red);outline-offset:1px}
@@ -660,8 +667,26 @@ function normGlossary(j){
 const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;
 const LINK_RE=/\[link=([a-z-]+\.html(?:\?[\w=&-]*)?(?:#[\w-]*)?)\]([\s\S]*?)\[\/link\]/gi;
 function richInline(t){return esc(t).replace(COLOR_RE,(m,c,x)=>`<span class="tc" style="--c:${c}">${x}</span>`).replace(LINK_RE,(m,u,x)=>`<a class="ilink" href="${u}">${x}</a>`).replace(/\n/g,"<br>")}
-function paras(t,cls){return String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p${cls?` class="${cls}"`:""}>${richInline(x)}</p>`).join("")}
-const plainText=t=>String(t||"").replace(/\[\/?(?:color|link)[^\]]*\]/gi,"");
+/* small charts: [table] one row per line, cells split by | (or tabs), first row is the heading [/table] */
+const TABLE_RE=/\[table\]([\s\S]*?)\[\/table\]/gi;
+function tableHTML(src,fn){
+  const rows=String(src).split("\n").map(r=>r.trim()).filter(Boolean).map(r=>r.split(r.includes("|")?"|":/\t+/).map(c=>c.trim()));
+  if(!rows.length)return"";const n=Math.max(...rows.map(r=>r.length)),pad=r=>r.concat(Array(n-r.length).fill(""));
+  return `<div class="rtablew"><table class="rtable"><thead><tr>${pad(rows[0]).map(c=>`<th>${fn(c)}</th>`).join("")}</tr></thead><tbody>${rows.slice(1).map(r=>`<tr>${pad(r).map(c=>`<td>${fn(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+/* paragraphs and charts; fn renders the text inside them (richInline by default) */
+function blocks(t,fn,cls){
+  fn=fn||richInline;const tabs=[];
+  t=String(t||"").replace(TABLE_RE,(m,x)=>{tabs.push(x);return`\n\n\u0001${tabs.length-1}\u0001\n\n`});
+  return t.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^\u0001(\d+)\u0001$/);return m?tableHTML(tabs[+m[1]],fn):`<p${cls?` class="${cls}"`:""}>${fn(x)}</p>`}).join("");
+}
+function paras(t,cls){return blocks(t,richInline,cls)}
+/* a feature: its red name, then its text; the first paragraph runs on after the name */
+function featBlock(name,desc,fn,tag){
+  fn=fn||richInline;const h=blocks(desc,fn),head=`<span class="pdn">${esc(name)}</span>${tag||""}`;
+  return `<div class="featb">${h.startsWith("<p>")?h.replace("<p>",`<p>${name?head+" - ":""}`):(name?`<p>${head}</p>`:"")+h}</div>`;
+}
+const plainText=t=>String(t||"").replace(/\[\/?(?:color|link|table)[^\]]*\]/gi,"");
 const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
 /*@GLCORE-END@*/
 /* glossary terms in spell text: red underline, with the entry in a popup on hover, focus or tap */

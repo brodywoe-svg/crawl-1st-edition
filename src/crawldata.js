@@ -1,7 +1,8 @@
 /* Shared by the Character Creator, Classes and Backgrounds pages.
    crawl-classes.json     = {v:1, classes:[cls]}
      cls  = {id, n, desc, source, cast, spells, hd, hp, saves, skills, skillPts, prof, langs,
-             chart:[{lv, pool, die}], feats:[{n, d, lv}], loadouts:[{n, gear:[gear]}], money, extra:[{k,v}],
+             chart:[{lv, pool, die}], feats:[{n, d, lv}], loadouts:[{n, gear:[gear]}], money, moneyRoll, extra:[{k,v}],
+             prepared, rankCap (formulas), startRank, schoolStart, oppCost, majorLv, minorLv, schools:[{s, opp}],
              subs:[{id, n, desc, feats:[{n, d, lv}], extra}]}
    crawl-backgrounds.json = {v:1, backgrounds:[bg]}
      bg   = {id, n, desc, skills, prof, langs, gear:[gear], wealth, feats:[{n, d}], extra}
@@ -46,7 +47,9 @@ function normClass(p) {
   return { id: str(p.id) || newId("class"), n: str(p.n), desc: str(p.desc), source: SOURCES.includes(str(p.source)) ? str(p.source) : "", cast: AB[str(p.cast)] ? str(p.cast) : "",
     spells: str(p.spells), hd: str(p.hd), hp: str(p.hp), saves: str(p.saves), skills: str(p.skills), skillPts: str(p.skillPts), prof: str(p.prof), langs: str(p.langs),
     chart: chartOf(p.chart), feats: featsOf(p.feats), loadouts: arr(p.loadouts).map((l, i) => ({ n: str(l && l.n) || `Loadout ${i + 1}`, gear: gearOf(l && l.gear) })).filter(l => l.gear.length || l.n),
-    money: str(p.money), extra: extrasOf(p.extra),
+    money: str(p.money), moneyRoll: str(p.moneyRoll), extra: extrasOf(p.extra),
+    prepared: str(p.prepared), rankCap: str(p.rankCap), startRank: str(p.startRank), schoolStart: str(p.schoolStart), oppCost: str(p.oppCost), majorLv: str(p.majorLv), minorLv: str(p.minorLv),
+    schools: arr(p.schools).map(r => ({ s: str(r && r.s), opp: str(r && r.opp) })).filter(r => r.s),
     subs: arr(p.subs).filter(s => s && str(s.n)).map(s => ({ id: str(s.id) || newId("sub"), n: str(s.n), desc: str(s.desc), feats: featsOf(s.feats), extra: extrasOf(s.extra), _id: ++uid })).sort(byName), _id: ++uid };
 }
 function normBg(p) {
@@ -62,3 +65,24 @@ const cleanBgs = list => ({ v: 1, backgrounds: list.filter(b => !b._new).map(str
 /* features a class has by a given level; features without a level count as 1st level */
 const featsAt = (fs, lv) => fs.filter(f => (f.lv || 1) <= lv);
 const gearLine = g => g.map(x => (x.qty > 1 ? x.qty + "× " : "") + x.n).join(", ");
+
+/* dice: "4d8 (G)", "2d6 x 10 (S)", "3d4 + 2 (G)"; amounts are in coins of the unit given (gold when none is given) */
+const DICE_RE = /(\d*)\s*d\s*(\d+)\s*(?:([+-])\s*(\d+))?\s*(?:[x×*]\s*(\d+))?\s*(?:\(?\s*([CSGP])\b\s*\)?)?/i;
+function parseDice(t) {
+  const m = String(t || "").match(DICE_RE); if (!m) return null;
+  return { n: Math.min(50, +m[1] || 1), sides: +m[2], add: m[3] ? (m[3] === "-" ? -1 : 1) * +m[4] : 0, times: +m[5] || 1, unit: (m[6] || "G").toUpperCase(), text: m[0].trim() };
+}
+function rollDice(d) {
+  const a = new Uint32Array(d.n); crypto.getRandomValues(a);
+  const dice = [...a].map(x => x % d.sides + 1), total = Math.max(0, (dice.reduce((s, x) => s + x, 0) + d.add) * d.times);
+  return { dice, total, coins: total * COIN[d.unit] };
+}
+/* formulas such as "max(1, INT + floor(level / 2))": ability names become modifiers, level the character's level */
+function formula(expr, abilityMod, level) {
+  if (!str(expr)) return null;
+  let e = lcs(expr).replace(/\b(strength|dexterity|constitution|intelligence|wisdom|charisma|str|dex|con|int|wis|cha)(?:\s+modifier)?\b/g, m => "(" + abilityMod(m.slice(0, 3)) + ")")
+    .replace(/\b(?:level|lvl)\b/g, "(" + level + ")").replace(/\b(floor|ceil|max|min|round)\b/g, "Math.$1");
+  if (/[^0-9+\-*/().,\s]/.test(e.replace(/Math\.(floor|ceil|max|min|round)/g, ""))) return null;
+  try { const v = Function('"use strict";return (' + e + ")")(); return Number.isFinite(v) ? Math.floor(v) : null } catch (x) { return null }
+}
+const schoolOf = s => str(s && s.f && s.f.cat).replace(/\s*\(.*?\)\s*/g, "").trim();

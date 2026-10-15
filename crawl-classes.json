@@ -251,7 +251,7 @@
     },
     {
      "n": "Arcane Major",
-     "d": "Choose one school of magic to be your Major. This is the school your wizard has studied most deeply.\n\n[color=#8e171c]Major Spells.[/color] When you learn a spell from your Major, it starts at Rank +1 instead of Rank 0.\n\n[color=#8e171c]Opposing School.[/color] Each school has an opposite, shown in the table below. \nThe opposite of your Major is your Opposing School. Raising the Rank of a spell from your Opposing School costs 2 skill points per Rank instead of 1.\n\n[color=#8e171c]School[/color]\t                [color=#8e171c]Opposing School[/color]\nAbjuration\tEvocation\nConjuration\tNecromancy\nDivination\tIllusion\nEnchantment\tTransmutation\nEvocation\tAbjuration\nIllusion\t                Divination\nNecromancy\tConjuration\nTransmutation\tEnchantment",
+     "d": "Choose one school of magic to be your Major. This is the school your wizard has studied most deeply.\n\n[color=#8e171c]Major Spells.[/color] When you learn a spell from your Major, it starts at Rank +1 instead of Rank 0.\n\n[color=#8e171c]Opposing School.[/color] Each school has an opposite, shown in the table below. \nThe opposite of your Major is your Opposing School. Raising the Rank of a spell from your Opposing School costs 2 skill points per Rank instead of 1.\n\n[table]\nSchool | Opposing School\nAbjuration | Evocation\nConjuration | Necromancy\nDivination | Illusion\nEnchantment | Transmutation\nEvocation | Abjuration\nIllusion | Divination\nNecromancy | Conjuration\nTransmutation | Enchantment\n[/table]",
      "lv": 1
     },
     {
@@ -276,9 +276,51 @@
      "gear": []
     }
    ],
-   "money": "25 (G) 4d8",
+   "money": "25 (G)",
    "extra": [],
-   "subs": []
+   "subs": [],
+   "schools": [
+    {
+     "s": "Abjuration",
+     "opp": "Evocation"
+    },
+    {
+     "s": "Conjuration",
+     "opp": "Necromancy"
+    },
+    {
+     "s": "Divination",
+     "opp": "Illusion"
+    },
+    {
+     "s": "Enchantment",
+     "opp": "Transmutation"
+    },
+    {
+     "s": "Evocation",
+     "opp": "Abjuration"
+    },
+    {
+     "s": "Illusion",
+     "opp": "Divination"
+    },
+    {
+     "s": "Necromancy",
+     "opp": "Conjuration"
+    },
+    {
+     "s": "Transmutation",
+     "opp": "Enchantment"
+    }
+   ],
+   "moneyRoll": "4d8 (G)",
+   "prepared": "max(1, INT + floor(level / 2))",
+   "rankCap": "ceil(level / 2)",
+   "startRank": "0",
+   "schoolStart": "1",
+   "oppCost": "2",
+   "majorLv": "1",
+   "minorLv": "3"
   }
  ]
 }

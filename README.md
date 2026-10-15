@@ -134,6 +134,22 @@ Currency alternative, then subclasses. Signed in as admin: **Add class**,
 they're gained, and loadouts built from Items page gear), and **Add a subclass**.
 Saves to `crawl-classes.json`.
 
+Each class also has **Roll for Starting Currency** (for example `4d8 (G)`), rolled
+when a player reaches Equipment in the creator and added to the Starting Currency,
+and **Spellcasting details** for casters: a Prepared spells formula, the highest
+spell Rank formula (formulas can use STR…CHA modifiers, `level`, `floor()`,
+`ceil()`, `max()`, `min()`), the Rank spells start at, the Rank Major and Minor
+spells start at, the levels the Major and Minor are chosen, the skill-point cost
+per Rank for the Opposing School, and the list of schools with their Opposing
+Schools. The creator uses these to ask for the Major (and Minor), tag spells as
+Major / Minor / Opposing, let skill points raise spell Ranks, and fill Prepared
+spells, Arcane Major/Minor and spell Ranks, DCs and attack bonuses on the sheet.
+
+**Charts in descriptions:** while editing, the sidebar's **Insert a chart** button
+adds a small chart: `[table]` … `[/table]`, one row per line, cells split by `|`,
+the first row is the heading. Select tab-separated lines first to turn them into
+a chart. Charts work in any description on the site.
+
 The **Backgrounds** page works the same way for backgrounds: skill and other
 proficiencies, languages, starting gear, starting wealth and features. Saves to
 `crawl-backgrounds.json`.

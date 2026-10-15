@@ -283,6 +283,13 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .savebar .btn[disabled]{opacity:.5;cursor:default}
 @media (prefers-reduced-motion:no-preference){.spell>summary{transition:background .12s}}
 /* glossary terms in spell text: red underline, rounded popup on hover or tap */
+.rtablew{overflow-x:auto;margin:2px 0}
+.rtable{border-collapse:collapse;font-size:.88em;min-width:min(100%,320px);border:2px solid var(--ink)}
+.rtable th{background:var(--ink);color:var(--paper);font-weight:800;text-align:left;padding:5px 10px}
+.rtable td{padding:4px 10px;border-top:1px solid var(--hair);font-weight:600}
+.rtable tbody tr:nth-child(even){background:var(--soft)}
+.featb{display:grid;gap:6px}
+.featb p{margin:0}
 .gl{color:var(--red);text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px;cursor:help;border-radius:3px}
 .gl:hover,.gl.on{background:var(--soft)}
 .gl:focus-visible{outline:2px solid var(--red);outline-offset:1px}
@@ -414,6 +421,7 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .gside .btn{padding:6px 10px;font-size:.8rem;width:100%}
 .ghelp{margin:0;font-weight:600;color:var(--muted);font-size:.76rem;line-height:1.35}
 .ghelp.bad{color:var(--red)}
+.gsb:not(:last-child){border-radius:0;border-bottom:2px solid var(--ink)}
 /* between 1000 and 1320px wide, make room for the sidebar beside the entries */
 @media (min-width:1000px) and (max-width:1319px){
   body.gside-on .condwrap{max-width:1132px;padding-right:232px}
@@ -424,7 +432,9 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
   .gsb{border-radius:12px;grid-template-columns:auto auto 1fr 1fr;align-items:center}
   .gside .btn{width:auto}
   .ghelp{grid-column:1/-1}
-  body.gside-on .condwrap{padding-bottom:220px}
+  body.gside-on .condwrap{padding-bottom:270px}
+  .gsb:last-child{grid-template-columns:auto 1fr}
+  .gsb:last-child .ghelp{grid-column:auto}
 }
 @media (max-width:640px){.gsb{grid-template-columns:1fr 1fr}.gsws{grid-column:1/-1}}
 /* items and crafting */
@@ -690,8 +700,26 @@ function normGlossary(j){
 const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;
 const LINK_RE=/\[link=([a-z-]+\.html(?:\?[\w=&-]*)?(?:#[\w-]*)?)\]([\s\S]*?)\[\/link\]/gi;
 function richInline(t){return esc(t).replace(COLOR_RE,(m,c,x)=>`<span class="tc" style="--c:${c}">${x}</span>`).replace(LINK_RE,(m,u,x)=>`<a class="ilink" href="${u}">${x}</a>`).replace(/\n/g,"<br>")}
-function paras(t,cls){return String(t||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p${cls?` class="${cls}"`:""}>${richInline(x)}</p>`).join("")}
-const plainText=t=>String(t||"").replace(/\[\/?(?:color|link)[^\]]*\]/gi,"");
+/* small charts: [table] one row per line, cells split by | (or tabs), first row is the heading [/table] */
+const TABLE_RE=/\[table\]([\s\S]*?)\[\/table\]/gi;
+function tableHTML(src,fn){
+  const rows=String(src).split("\n").map(r=>r.trim()).filter(Boolean).map(r=>r.split(r.includes("|")?"|":/\t+/).map(c=>c.trim()));
+  if(!rows.length)return"";const n=Math.max(...rows.map(r=>r.length)),pad=r=>r.concat(Array(n-r.length).fill(""));
+  return `<div class="rtablew"><table class="rtable"><thead><tr>${pad(rows[0]).map(c=>`<th>${fn(c)}</th>`).join("")}</tr></thead><tbody>${rows.slice(1).map(r=>`<tr>${pad(r).map(c=>`<td>${fn(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+/* paragraphs and charts; fn renders the text inside them (richInline by default) */
+function blocks(t,fn,cls){
+  fn=fn||richInline;const tabs=[];
+  t=String(t||"").replace(TABLE_RE,(m,x)=>{tabs.push(x);return`\n\n\u0001${tabs.length-1}\u0001\n\n`});
+  return t.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^\u0001(\d+)\u0001$/);return m?tableHTML(tabs[+m[1]],fn):`<p${cls?` class="${cls}"`:""}>${fn(x)}</p>`}).join("");
+}
+function paras(t,cls){return blocks(t,richInline,cls)}
+/* a feature: its red name, then its text; the first paragraph runs on after the name */
+function featBlock(name,desc,fn,tag){
+  fn=fn||richInline;const h=blocks(desc,fn),head=`<span class="pdn">${esc(name)}</span>${tag||""}`;
+  return `<div class="featb">${h.startsWith("<p>")?h.replace("<p>",`<p>${name?head+" - ":""}`):(name?`<p>${head}</p>`:"")+h}</div>`;
+}
+const plainText=t=>String(t||"").replace(/\[\/?(?:color|link|table)[^\]]*\]/gi,"");
 const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
 
 /* admin sign-in, shared by every page of the GitHub Pages site. The unlocked key is kept
@@ -806,6 +834,11 @@ document.body.insertAdjacentHTML("beforeend", `<aside class="gside" id="gside" h
 <button type="button" class="btn solid gapply">Color selected text</button>
 <button type="button" class="btn gclear">Remove color</button>
 <p class="ghelp" id="gsideMsg">Select text in any box, then pick a color.</p>
+</div>
+<div class="gsh">Chart</div>
+<div class="gsb">
+<button type="button" class="btn gchart">Insert a chart</button>
+<p class="ghelp">Adds a small chart where the cursor is in a description. Each line is a row and | splits the columns; the first row is the heading. Select lines separated by tabs first to turn them into a chart.</p>
 </div></aside>`);
 const side = $("gside"), sideMsg = (m, bad) => { $("gsideMsg").textContent = m || "Select text in any box, then pick a color."; $("gsideMsg").classList.toggle("bad", !!bad) };
 function sideShow(on) { side.hidden = !on; document.body.classList.toggle("gside-on", !!on) }
@@ -827,7 +860,19 @@ side.addEventListener("click", ev => {
   const sw = ev.target.closest(".gsw"); if (sw) { $("gpick").value = sw.dataset.c; colorSel(sw.dataset.c); return }
   if (ev.target.closest(".gapply")) { colorSel($("gpick").value); return }
   if (ev.target.closest(".gclear")) colorSel("");
+  if (ev.target.closest(".gchart")) insertChart();
 });
+function insertChart() {
+  const ta = lastBox && lastBox.isConnected && lastBox.tagName === "TEXTAREA" ? lastBox : null;
+  if (!ta) { sideMsg("Click into a description box first, then Insert a chart.", true); return }
+  const a = ta.selectionStart, b = ta.selectionEnd, sel = ta.value.slice(a, b);
+  const rows = sel.trim() ? sel.split("\n").map(l => l.replace(/\[\/?table\]/gi, "").trim()).filter(Boolean).map(l => l.split(/\t+|\s{2,}|\s*\|\s*/).map(c => c.trim()).filter(Boolean).join(" | ")) : ["Heading | Heading", "Cell | Cell", "Cell | Cell"];
+  const before = a && ta.value[a - 1] !== "\n" ? "\n\n" : a && ta.value.slice(a - 2, a) !== "\n\n" ? "\n" : "";
+  const text = `${before}[table]\n${rows.join("\n")}\n[/table]\n`;
+  ta.focus(); ta.setSelectionRange(a, b);
+  if (!document.execCommand || !document.execCommand("insertText", false, text)) { ta.setRangeText(text, a, b, "end"); ta.dispatchEvent(new Event("input", { bubbles: true })) }
+  sideMsg(sel.trim() ? "Turned the selection into a chart." : "Chart added. Replace the headings and cells, one row per line.");
+}
 $("gpick").addEventListener("change", () => { if (lastBox && lastBox.isConnected && lastBox.selectionStart !== lastBox.selectionEnd) colorSel($("gpick").value) });
 /* keep the sidebar clear of the save bar on small screens */
 new MutationObserver(() => document.documentElement.style.setProperty("--sbh", $("savebar").hidden ? "0px" : $("savebar").offsetHeight + "px"))
@@ -871,7 +916,7 @@ function bodyHTML(p) {
   const facts = [["Ability Score Increases", p.asi], ["Starting Proficiencies", p.prof], ["Languages", p.langs], ...p.extra.map(x => [x.k || "Detail", x.v])].filter(f => f[1]);
   return (p.desc ? `<div class="clead">${paras(p.desc)}</div>` : "") +
     (facts.length ? `<dl class="gfacts">${facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${richInline(v)}</dd>`).join("")}</dl>` : "") +
-    (p.feats.length ? `<div class="rfeats">${p.feats.map(f => `<p>${f.n ? `<span class="pdn">${esc(f.n)}</span> - ` : ""}${richInline(f.d)}</p>`).join("")}</div>` : "");
+    (p.feats.length ? `<div class="rfeats">${p.feats.map(f => featBlock(f.n, f.d)).join("")}</div>` : "");
 }
 function subHTML(s, r) {
   if (editing.has(s._id)) return partForm(s, "sub", r);

@@ -375,6 +375,9 @@ CLASSES_CSS = """
 .lrow>.btn{justify-self:start}
 .lhead{display:grid;grid-template-columns:1fr auto;gap:8px}
 .glist{display:grid;gap:6px}
+.schlist{display:grid;gap:6px}
+.schrow{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}
+.schrow input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
 .grow{display:grid;grid-template-columns:1fr 80px auto;gap:8px;align-items:center}
 .cform>.btn,.cform .gbtns+.btn{justify-self:start}
 @media (max-width:760px){
@@ -517,6 +520,7 @@ CONDITIONS_CSS = """
 .gside .btn{padding:6px 10px;font-size:.8rem;width:100%}
 .ghelp{margin:0;font-weight:600;color:var(--muted);font-size:.76rem;line-height:1.35}
 .ghelp.bad{color:var(--red)}
+.gsb:not(:last-child){border-radius:0;border-bottom:2px solid var(--ink)}
 /* between 1000 and 1320px wide, make room for the sidebar beside the entries */
 @media (min-width:1000px) and (max-width:1319px){
   body.gside-on .condwrap{max-width:1132px;padding-right:232px}
@@ -527,7 +531,9 @@ CONDITIONS_CSS = """
   .gsb{border-radius:12px;grid-template-columns:auto auto 1fr 1fr;align-items:center}
   .gside .btn{width:auto}
   .ghelp{grid-column:1/-1}
-  body.gside-on .condwrap{padding-bottom:220px}
+  body.gside-on .condwrap{padding-bottom:270px}
+  .gsb:last-child{grid-template-columns:auto 1fr}
+  .gsb:last-child .ghelp{grid-column:auto}
 }
 @media (max-width:640px){.gsb{grid-template-columns:1fr 1fr}.gsws{grid-column:1/-1}}
 /* items and crafting */
@@ -824,6 +830,24 @@ body.cc-sheet .ccintro{display:none}
 .ccload b{display:block}
 .ccload small{display:block;font-size:.76rem;color:var(--muted);font-weight:600}
 .cclinks{margin:0}
+.ccschools{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:16px}
+.ccschools label{display:grid;gap:5px;font-weight:800;font-size:.85rem;border:2px solid var(--ink);border-radius:12px;padding:10px 12px}
+.ccschools select{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%}
+.ccschools small{font-weight:600;color:var(--muted);font-size:.78rem}
+.ccschools .ccnote{margin:0;align-self:center}
+.cclist .ccsp{grid-template-columns:auto minmax(0,1fr) 44px 60px 100px}
+.ccsp>.ccrm,.ccsp>.ccstepper{justify-self:end}
+.ccsp .ccrn{cursor:pointer}
+.sctag{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:1px 7px;margin-left:4px;vertical-align:1px}
+.sctag.mj{background:var(--gold);color:#fff}
+.sctag.op{border:1.5px solid var(--red);color:var(--red)}
+.ccmoney{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;border:2px solid var(--ink);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-weight:700}
+.ccml{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ccmr{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.ccmt{margin-left:auto}
+.ccmt b{font-size:1.1rem}
+.ccmoney small{flex-basis:100%;color:var(--muted);font-weight:600}
+@media (max-width:640px){.cclist .ccsp{grid-template-columns:auto minmax(0,1fr) auto}.ccsp>.ccrm:nth-of-type(1),.ccsp>.ccrm:nth-of-type(2){display:none}}
 .ccgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:760px){.ccgrid2{grid-template-columns:1fr}}
 .ccsec h3{margin:8px 0 6px;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
