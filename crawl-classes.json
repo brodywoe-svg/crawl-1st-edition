@@ -19,7 +19,16 @@
    "feats": [],
    "loadouts": [],
    "money": "",
+   "moneyRoll": "",
    "extra": [],
+   "prepared": "",
+   "rankCap": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
    "subs": []
   },
   {
@@ -40,7 +49,16 @@
    "feats": [],
    "loadouts": [],
    "money": "",
+   "moneyRoll": "",
    "extra": [],
+   "prepared": "",
+   "rankCap": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
    "subs": []
   },
   {
@@ -61,7 +79,16 @@
    "feats": [],
    "loadouts": [],
    "money": "",
+   "moneyRoll": "",
    "extra": [],
+   "prepared": "",
+   "rankCap": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
    "subs": []
   },
   {
@@ -82,7 +109,16 @@
    "feats": [],
    "loadouts": [],
    "money": "",
+   "moneyRoll": "",
    "extra": [],
+   "prepared": "",
+   "rankCap": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
    "subs": []
   },
   {
@@ -103,7 +139,16 @@
    "feats": [],
    "loadouts": [],
    "money": "",
+   "moneyRoll": "",
    "extra": [],
+   "prepared": "",
+   "rankCap": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
    "subs": []
   },
   {
@@ -124,7 +169,16 @@
    "feats": [],
    "loadouts": [],
    "money": "",
+   "moneyRoll": "",
    "extra": [],
+   "prepared": "",
+   "rankCap": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
    "subs": []
   },
   {
@@ -137,8 +191,8 @@
    "hd": "d6",
    "hp": "6 + Constitution Modifier",
    "saves": "Intelligence, Wisdom",
-   "skills": "Two skills of your choice",
-   "skillPts": "6",
+   "skills": "Four skills of your choice",
+   "skillPts": "8",
    "prof": "Simple Blades, Simple Polearms",
    "langs": "Two additional Languages of your choice",
    "chart": [
@@ -273,12 +327,35 @@
    "loadouts": [
     {
      "n": "Mages Kit",
-     "gear": []
+     "gear": [
+      {
+       "n": "Linen Hood",
+       "qty": 1,
+       "iid": "i-linen-hood"
+      },
+      {
+       "n": "Linen Robe",
+       "qty": 1,
+       "iid": "i-mv933s37shd0"
+      },
+      {
+       "n": "Quarterstaff",
+       "qty": 1,
+       "iid": "i-quarterstaff"
+      }
+     ]
     }
    ],
    "money": "25 (G)",
+   "moneyRoll": "3d6 (G)",
    "extra": [],
-   "subs": [],
+   "prepared": "max(1, INT + floor(level / 2))",
+   "rankCap": "ceil(level / 2)",
+   "startRank": "0",
+   "schoolStart": "1",
+   "oppCost": "2",
+   "majorLv": "1",
+   "minorLv": "3",
    "schools": [
     {
      "s": "Abjuration",
@@ -313,14 +390,7 @@
      "opp": "Enchantment"
     }
    ],
-   "moneyRoll": "4d8 (G)",
-   "prepared": "max(1, INT + floor(level / 2))",
-   "rankCap": "ceil(level / 2)",
-   "startRank": "0",
-   "schoolStart": "1",
-   "oppCost": "2",
-   "majorLv": "1",
-   "minorLv": "3"
+   "subs": []
   }
  ]
 }
