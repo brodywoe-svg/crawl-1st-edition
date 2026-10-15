@@ -5,14 +5,17 @@
    "id": "bg-mv94nfvwuxuw",
    "n": "Noble",
    "desc": "You were born into Nobility, and being apart of such has taught you many things from proper introductions, to fine dining, and noble presentation.",
-   "skills": "Persuasion, Appraisal",
+   "skills": "Persuasion, Lore",
+   "weapons": "Simple and Martial Swords",
+   "armor": "",
+   "trades": "",
    "prof": "",
    "langs": "One Additional Language of your choice",
+   "choices": [],
    "gear": [],
    "wealth": "25 (G)",
    "feats": [],
-   "extra": [],
-   "weapons": "Simple and Martial Swords"
+   "extra": []
   }
  ]
 }
