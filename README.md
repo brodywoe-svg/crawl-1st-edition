@@ -84,6 +84,41 @@ does) and any extra details such as Size or Speed, followed by its subraces. Sig
 in as admin: **Add race**, **Edit** on a race, **Add a subrace to …** under a race,
 and **Edit** on a subrace. Saves to `crawl-races.json`.
 
+## Character Creator
+
+`creator.html` builds a character in ten steps, Baldur's Gate style: Race,
+Class, Background, Abilities, Skills, Proficiencies, Spells, Equipment,
+Appearance and Name. A description panel on the right shows whatever choice
+you point at. The steps pull from the rest of the site:
+
+- **Races** come from `crawl-races.json`.
+- **Spells** come from `crawl-spells.json`, filtered by the class's magic source.
+- **Gear** comes from `crawl-items.json`, priced in the same (G)/(S)/(C) money.
+- **Conditions and tooltip words** come from the glossary.
+
+Ability scores roll **4d6 and drop the lowest**, with Reroll, Store, Recall and
+click-to-swap; they can also be typed in by hand. Proficiency text is read
+automatically:
+
+- Named skills, weapon types, armor and trade skills are granted.
+- "Either X or Y" becomes a choice.
+- "Two skills of your choice" becomes free picks.
+
+Finishing opens a three-page character sheet laid out like the paper one. Every
+box on it can be typed into, and **Print or save as PDF** fits each page on one
+letter page. Characters are saved in the browser, and **Save to file** /
+**Open a character file** moves them between devices.
+
+Signed in as admin, **Edit classes, backgrounds and rules** edits:
+
+- **Classes:** magic source, spellcasting ability, spells at creation, hit die,
+  hit points, saves, proficiencies, features and subclasses.
+- **Backgrounds:** proficiencies, languages, equipment and wealth.
+- **Rules:** standard starting wealth, starting skill rank, highest starting
+  spell rank, passive base and suggested languages.
+
+These save to `crawl-creator.json`.
+
 ## Items and Crafting
 
 The **Items** page is a chart grouped by category: Weapons (by weapon type), Armor
@@ -127,6 +162,8 @@ The spell list lives in [`crawl-spells.json`](crawl-spells.json).
 | `src/catalog.js` | The Items and Crafting pages |
 | `crawl-races.json` | Races and subraces |
 | `src/races.js` | The Races page |
+| `crawl-creator.json` | Character Creator classes, backgrounds and rules |
+| `src/creator.js` | The Character Creator page and character sheet |
 | `src/editkit.js` | The Text color sidebar shared by the editing pages |
 | `tools/sitekit.py` | The top navigation bar and the Glossary and Conditions page layouts |
 | `app/` | The Windows app (Electron) |

@@ -76,7 +76,15 @@ GLOSSARY_PAGES = {
     "items.html": ("items", "Crawl Items", "Every item in Crawl 1st Edition, with what crafts it and what it's used in."),
     "crafting.html": ("crafting", "Crawl Crafting", "Crafting recipes for Crawl 1st Edition: results, ingredients, tools and checks."),
     "races.html": ("races", "Crawl Races", "The races of Crawl 1st Edition and their subraces: ability score increases, proficiencies, languages and features."),
+    "creator.html": ("creator", "Crawl Character Creator", "Make a Crawl 1st Edition character step by step: race, class, background, ability scores, skills, spells and gear, then a printable character sheet."),
 }
+CREATOR = ROOT / "crawl-creator.json"
+
+
+def read_creator():
+    if not CREATOR.exists():
+        CREATOR.write_text('{\n "v": 1,\n "classes": [],\n "backgrounds": [],\n "rules": {}\n}\n', encoding="utf-8")
+    return json.loads(CREATOR.read_text(encoding="utf-8"))
 RACES = ROOT / "crawl-races.json"
 
 
@@ -115,15 +123,16 @@ def glossary_page(template, glossary, name):
         "const esc=s=>String(s??\"\").replace(/[&<>\"]/g,c=>({\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\"}[c]));"
         f"const GLOSSARY={as_js(glossary)};window.GL_PAGE={json.dumps(page)};"
         + f"const CATALOG={as_js(read_catalog())};"
-        + (f"const RACES={as_js(read_races())};" if page == "races" else "") + "\n"
+        + (f"const RACES={as_js(read_races())};" if page in ("races", "creator") else "")
+        + (f"const CREATOR={as_js(read_creator())};const SPELLS={as_js(json.loads(SPELLS.read_text(encoding='utf-8')))};" if page == "creator" else "") + "\n"
     )
     shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")
-    script = (ROOT / "src" / "editkit.js").read_text(encoding="utf-8") + (ROOT / "src" / ("catalog.js" if catalog else "races.js" if page == "races" else "glossary.js")).read_text(encoding="utf-8")
+    script = (ROOT / "src" / "editkit.js").read_text(encoding="utf-8") + (ROOT / "src" / ("catalog.js" if catalog else "races.js" if page == "races" else "creator.js" if page == "creator" else "glossary.js")).read_text(encoding="utf-8")
     return (
         f"<title>{title}</title>" + links + mode_init
-        + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}</style>"
+        + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}{crawlsite.CREATOR_CSS if page == 'creator' else ''}</style>"
         + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections, races=read_races())
-        + (crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.glossary_shell(page, logo, modal))
+        + (crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.creator_shell(logo, modal) if page == "creator" else crawlsite.glossary_shell(page, logo, modal))
         + f"<script>{mode_js}</script><script>{prelude}{shared}{script}</script>"
     )
 
@@ -187,7 +196,7 @@ def main():
     build_site(body)
     build_app(body)
     out = build_installer()
-    print(f"Built index.html, conditions.html, glossary.html, items.html, crafting.html, races.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
+    print(f"Built index.html, conditions.html, glossary.html, items.html, crafting.html, races.html, creator.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
 
 
 if __name__ == "__main__":
