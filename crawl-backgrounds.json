@@ -1,4 +1,17 @@
 {
  "v": 1,
- "backgrounds": []
+ "backgrounds": [
+  {
+   "id": "bg-mv94nfvwuxuw",
+   "n": "Noble",
+   "desc": "You were born into Nobility, and being apart of such has taught you many things from proper introductions, to fine dining, and noble presentation.",
+   "skills": "Persuasion, Appraisal",
+   "prof": "Simple and Martial Swords,",
+   "langs": "One Additional Language of your choice",
+   "gear": [],
+   "wealth": "25 (G)",
+   "feats": [],
+   "extra": []
+  }
+ ]
 }
