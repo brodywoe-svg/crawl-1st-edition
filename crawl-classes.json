@@ -4,24 +4,158 @@
   {
    "id": "class-bard",
    "n": "Bard",
-   "desc": "Bards weave Arcane magic through music, story and performance.",
+   "desc": "Storytellers, minstrels and silver-tongued wanderers who draw Occult magic from words, music and the hearts of their listeners.\n\nEvery tavern has heard a song that made the room fall silent, and every bard knows why. Words and music carry power, and a bard has learned to pull on the threads that bind a listener’s fear, courage and longing. A ballad steadies a shaking ally’s sword arm. A whispered verse sours an enemy’s luck. A single, perfect note can shatter glass, nerve or bone.\n\nBards draw their magic from the harmonies, magic phrases, and through sheer force of personality rather than study or faith, using Charisma as their spellcasting ability. Where a Wizard pores over spellbooks, a bard learns magic the way a musician learns a tune: by ear, by heart and by performing it for anyone who’ll listen. Their spells are spoken, sung and played, which makes a bard formidable in a crowded hall and helpless with a gag over their mouth.\n\nIn the depths of a crawl, the bard is the party’s voice and nerve. They talk their way past guards, read a rival’s lies, and keep tired companions on their feet when the torches burn low. They are rarely the strongest in a fight, but they are almost always the reason the party survives it.",
    "source": "Arcane",
    "cast": "cha",
    "spells": "3",
    "hd": "d8",
    "hp": "8 + Constitution Modifier",
-   "saves": "Choose two of the following: Charisma, Wisdom",
+   "saves": "Choose two of the following: Charisma, Wisdom, or Dexterity",
    "skills": "Four skills of your choice",
    "skillPts": "10",
    "prof": "Choose two weapon proficiencies of your choice, simple and martial light armor,",
    "langs": "two additional languages of your choice",
-   "chart": [],
-   "feats": [],
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "5",
+     "die": "d4"
+    },
+    {
+     "lv": 2,
+     "pool": "6",
+     "die": "d4"
+    },
+    {
+     "lv": 3,
+     "pool": "6",
+     "die": "d4"
+    },
+    {
+     "lv": 4,
+     "pool": "7",
+     "die": "d4"
+    },
+    {
+     "lv": 5,
+     "pool": "7",
+     "die": "d4"
+    },
+    {
+     "lv": 6,
+     "pool": "8",
+     "die": "d4"
+    },
+    {
+     "lv": 7,
+     "pool": "8",
+     "die": "d4"
+    },
+    {
+     "lv": 8,
+     "pool": "9",
+     "die": "d6"
+    },
+    {
+     "lv": 9,
+     "pool": "9",
+     "die": "d6"
+    },
+    {
+     "lv": 10,
+     "pool": "10",
+     "die": "d6"
+    },
+    {
+     "lv": 11,
+     "pool": "10",
+     "die": "d6"
+    },
+    {
+     "lv": 12,
+     "pool": "11",
+     "die": "d6"
+    },
+    {
+     "lv": 13,
+     "pool": "11",
+     "die": "d6"
+    },
+    {
+     "lv": 14,
+     "pool": "12",
+     "die": "d8"
+    },
+    {
+     "lv": 15,
+     "pool": "12",
+     "die": "d8"
+    },
+    {
+     "lv": 16,
+     "pool": "13",
+     "die": "d8"
+    },
+    {
+     "lv": 17,
+     "pool": "13",
+     "die": "d8"
+    },
+    {
+     "lv": 18,
+     "pool": "14",
+     "die": "d8"
+    },
+    {
+     "lv": 19,
+     "pool": "14",
+     "die": "d8"
+    },
+    {
+     "lv": 20,
+     "pool": "15",
+     "die": "d8"
+    }
+   ],
+   "feats": [
+    {
+     "n": "Somatic Conversion",
+     "d": "At the start of your turn in combat, whenever you roll your Action\nDie, you also gain Magic Points (MP) equal to half your spellcasting\nability modifier (rounded up, minimum of 1).",
+     "lv": 1
+    },
+    {
+     "n": "Arcane Spellcasting",
+     "d": "",
+     "lv": 1
+    }
+   ],
    "loadouts": [],
    "money": "15",
    "moneyRoll": "3d10",
    "extra": [],
-   "choices": [],
+   "choices": [
+    {
+     "n": 2,
+     "cat": "save",
+     "opts": [
+      "Dexterity",
+      "Wisdom",
+      "Charisma"
+     ]
+    },
+    {
+     "n": 2,
+     "cat": "weapon",
+     "opts": [
+      "Axes",
+      "Blades",
+      "Bows",
+      "Crossbows",
+      "Swords",
+      "Special"
+     ]
+    }
+   ],
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
