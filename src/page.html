@@ -297,7 +297,9 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .gtip p{margin:0}
 .gtip .gfrom{font-size:.75rem;color:var(--muted);font-weight:700}
 .tc{color:var(--c)}
-:root[data-mode="dark"] .tc{color:color-mix(in srgb,var(--c),#fff 40%)}
+/* dark mode: brighten picked colors without washing them out; Crawl red matches the site's dark red */
+:root[data-mode="dark"] .tc{color:color-mix(in srgb,var(--c),#fff 40%);color:oklch(from var(--c) max(l,0.72) calc(c * 1.25) h)}
+:root[data-mode="dark"] .tc[style*="8e171c" i]{color:#ff6b6b}
 .gtip ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
 .gtip li{position:relative;padding-left:17px}
 .gtip li::before{content:"";position:absolute;left:2px;top:.5em;width:6px;height:6px;background:var(--ink);transform:rotate(45deg)}
