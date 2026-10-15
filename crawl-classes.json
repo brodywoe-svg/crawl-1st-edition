@@ -11,16 +11,16 @@
    "hd": "",
    "hp": "",
    "saves": "",
-   "prof": "",
-   "langs": "",
-   "feats": [],
-   "extra": [],
-   "subs": [],
    "skills": "",
    "skillPts": "",
+   "prof": "",
+   "langs": "",
    "chart": [],
+   "feats": [],
    "loadouts": [],
-   "money": ""
+   "money": "",
+   "extra": [],
+   "subs": []
   },
   {
    "id": "class-cleric",
@@ -32,16 +32,16 @@
    "hd": "",
    "hp": "",
    "saves": "",
-   "prof": "",
-   "langs": "",
-   "feats": [],
-   "extra": [],
-   "subs": [],
    "skills": "",
    "skillPts": "",
+   "prof": "",
+   "langs": "",
    "chart": [],
+   "feats": [],
    "loadouts": [],
-   "money": ""
+   "money": "",
+   "extra": [],
+   "subs": []
   },
   {
    "id": "class-druid",
@@ -53,16 +53,16 @@
    "hd": "",
    "hp": "",
    "saves": "",
-   "prof": "",
-   "langs": "",
-   "feats": [],
-   "extra": [],
-   "subs": [],
    "skills": "",
    "skillPts": "",
+   "prof": "",
+   "langs": "",
    "chart": [],
+   "feats": [],
    "loadouts": [],
-   "money": ""
+   "money": "",
+   "extra": [],
+   "subs": []
   },
   {
    "id": "class-paladin",
@@ -74,16 +74,16 @@
    "hd": "",
    "hp": "",
    "saves": "",
-   "prof": "",
-   "langs": "",
-   "feats": [],
-   "extra": [],
-   "subs": [],
    "skills": "",
    "skillPts": "",
+   "prof": "",
+   "langs": "",
    "chart": [],
+   "feats": [],
    "loadouts": [],
-   "money": ""
+   "money": "",
+   "extra": [],
+   "subs": []
   },
   {
    "id": "class-sorcerer",
@@ -95,16 +95,16 @@
    "hd": "",
    "hp": "",
    "saves": "",
-   "prof": "",
-   "langs": "",
-   "feats": [],
-   "extra": [],
-   "subs": [],
    "skills": "",
    "skillPts": "",
+   "prof": "",
+   "langs": "",
    "chart": [],
+   "feats": [],
    "loadouts": [],
-   "money": ""
+   "money": "",
+   "extra": [],
+   "subs": []
   },
   {
    "id": "class-warlock",
@@ -116,16 +116,16 @@
    "hd": "",
    "hp": "",
    "saves": "",
-   "prof": "",
-   "langs": "",
-   "feats": [],
-   "extra": [],
-   "subs": [],
    "skills": "",
    "skillPts": "",
+   "prof": "",
+   "langs": "",
    "chart": [],
+   "feats": [],
    "loadouts": [],
-   "money": ""
+   "money": "",
+   "extra": [],
+   "subs": []
   },
   {
    "id": "class-wizard",
@@ -133,20 +133,152 @@
    "desc": "Wizards study Arcane magic and record their spells in a spellbook.",
    "source": "Arcane",
    "cast": "int",
-   "spells": "",
-   "hd": "",
-   "hp": "",
-   "saves": "",
-   "prof": "",
-   "langs": "",
-   "feats": [],
+   "spells": "4",
+   "hd": "d6",
+   "hp": "6 + Constitution Modifier",
+   "saves": "Intelligence, Wisdom",
+   "skills": "Two skills of your choice",
+   "skillPts": "6",
+   "prof": "Simple Blades, Simple Polearms",
+   "langs": "Two additional Languages of your choice",
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "5",
+     "die": "d4"
+    },
+    {
+     "lv": 2,
+     "pool": "6",
+     "die": "d4"
+    },
+    {
+     "lv": 3,
+     "pool": "6",
+     "die": "d4"
+    },
+    {
+     "lv": 4,
+     "pool": "7",
+     "die": "d4"
+    },
+    {
+     "lv": 5,
+     "pool": "7",
+     "die": "d4"
+    },
+    {
+     "lv": 6,
+     "pool": "8",
+     "die": "d4"
+    },
+    {
+     "lv": 7,
+     "pool": "8",
+     "die": "d4"
+    },
+    {
+     "lv": 8,
+     "pool": "9",
+     "die": "d4"
+    },
+    {
+     "lv": 9,
+     "pool": "9",
+     "die": "d4"
+    },
+    {
+     "lv": 10,
+     "pool": "10",
+     "die": "d4"
+    },
+    {
+     "lv": 11,
+     "pool": "10",
+     "die": "d4"
+    },
+    {
+     "lv": 12,
+     "pool": "11",
+     "die": "d4"
+    },
+    {
+     "lv": 13,
+     "pool": "11",
+     "die": "d4"
+    },
+    {
+     "lv": 14,
+     "pool": "12",
+     "die": "d4"
+    },
+    {
+     "lv": 15,
+     "pool": "12",
+     "die": "d4"
+    },
+    {
+     "lv": 16,
+     "pool": "13",
+     "die": "d4"
+    },
+    {
+     "lv": 17,
+     "pool": "13",
+     "die": "d4"
+    },
+    {
+     "lv": 18,
+     "pool": "14",
+     "die": "d4"
+    },
+    {
+     "lv": 19,
+     "pool": "14",
+     "die": "d4"
+    },
+    {
+     "lv": 20,
+     "pool": "15",
+     "die": "d4"
+    }
+   ],
+   "feats": [
+    {
+     "n": "Arcane Spellcasting",
+     "d": "You cast spells by drawing on Arcane magic, using Intelligence as your \nspellcasting ability.\n\n[color=#8e171c]Spellbook.[/color] You start with a spellbook containing [4] 1st-level Wizard spells of your choice. Each time you gain a Wizard level, you add [2] Wizard spells of your choice to your spellbook. You can’t learn a spell whose level is higher than your Wizard level. When you add a spell, it starts at Rank 0, or at Rank +1 if it’s from your Major or Minor.\n\n[color=#8e171c]Copying Spells.[/color] When you find a Wizard spell on a scroll or in another spellbook, you can copy it into yours if its level is no higher than your Wizard level. It takes 2 hours and [X gold] per spell level, plus a Scribing check against the spell’s DC. Copying a scroll destroys it.\n\n[color=#8e171c]Preparing Spells.[/color] After a long rest, choose a number of spells from your spellbook equal to your Intelligence modifier + half your Wizard level (rounded down, minimum 1). These are your prepared spells, and you can cast only prepared spells. Spells from your Major prepared and \ndon’t count against this number.\n\n[color=#8e171c]Casting Spells.[/color] Casting a spell costs the MP listed on the spell. You can spend Action Points in place of Magic Points.\n\n[color=#8e171c]Improving Spell Ranks[/color]. You can spend skill points to raise a spell’s Rank, which unlocks its Rank benefits. Each Rank costs 1 skill point (2 for spells from your Opposing School). A spell’s Rank can’t exceed half your Wizard level (rounded up).\n\n[color=#8e171c]Spell Attacks and Saves.[/color]\n[color=#b7791f]Spell Attack[/color]: d20 + spell’s Rank + your Intelligence modifier\n[color=#b7791f]Spell Save DC[/color]: 8 + spell’s Rank + your Intelligence modifier",
+     "lv": 1
+    },
+    {
+     "n": "Arcane Major",
+     "d": "Choose one school of magic to be your Major. This is the school your wizard has studied most deeply.\n\n[color=#8e171c]Major Spells.[/color] When you learn a spell from your Major, it starts at Rank +1 instead of Rank 0.\n\n[color=#8e171c]Opposing School.[/color] Each school has an opposite, shown in the table below. \nThe opposite of your Major is your Opposing School. Raising the Rank of a \nspell from your Opposing School costs 2 skill points per Rank instead of 1.\n\n[color=#8e171c]School[/color]\t                [color=#8e171c]Opposing School[/color]\nAbjuration\tEvocation\nConjuration\tNecromancy\nDivination\tIllusion\nEnchantment\tTransmutation\nEvocation\tAbjuration\nIllusion\t                Divination\nNecromancy\tConjuration\nTransmutation\tEnchantment",
+     "lv": 1
+    },
+    {
+     "n": "Arcane Minor",
+     "d": "Choose a second school of magic to be your Minor. Your Minor can’t be your Major or your Opposing School.\n\n[color=#8e171c]Minor Spells[/color]. When you learn a spell from your Minor, it starts at Rank +1 instead of Rank 0.",
+     "lv": 3
+    },
+    {
+     "n": "Arcane Channeling",
+     "d": "At the start of your turn in combat, you can forgo rolling your Action Die. If you do, you gain Magic Points (MP) equal to your spellcasting ability modifier instead. (If your spellcasting ability modifier is 0 or less, you instead gain 1 MP.)\n\nStarting at 12th level, when you use Arcane Channeling, you gain twice as many MP.",
+     "lv": 1
+    },
+    {
+     "n": "Somatic Conversion",
+     "d": "At the start of your turn in combat, whenever you roll your Action \nDie, you also gain Magic Points (MP) equal to half your spellcasting \nability modifier (rounded up, minimum of 1).\n\nStarting at 12th level, you instead gain MP equal to your full \nspellcasting ability modifier.",
+     "lv": 6
+    }
+   ],
+   "loadouts": [
+    {
+     "n": "Mages Kit",
+     "gear": []
+    }
+   ],
+   "money": "25 (G) 4d8",
    "extra": [],
-   "subs": [],
-   "skills": "",
-   "skillPts": "",
-   "chart": [],
-   "loadouts": [],
-   "money": ""
+   "subs": []
   }
  ]
 }
