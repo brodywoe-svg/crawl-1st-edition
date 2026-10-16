@@ -87,7 +87,8 @@ def nav_html(active, controls="", sections=("Conditions",), races=None, classes=
             continue
         cur = ' aria-current="page"' if (active == label.lower()) else (' data-current="1"' if sec == label else "")
         if not menu:
-            parts.append(f'<a class="navitem" href="{href}"{cur}>{label}</a>')
+            extra = " adminonly" if label == "Tabletop" else ""
+            parts.append(f'<a class="navitem{extra}" href="{href}"{cur}{' title="Only you can see this while the Tabletop is in testing"' if extra else ""}>{label}</a>')
             continue
         if isinstance(menu, str) and menu in LIST_MENUS:
             items, menu_id = list_menu(menu, lists[menu]), f' id="nav{menu.capitalize()}"'
@@ -119,6 +120,8 @@ NAV_CSS = """
 a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .navitem[aria-current="page"],.navitem[data-current]{box-shadow:inset 0 -3px 0 var(--paper)}
 .navitem.soon{opacity:.5;cursor:default}
+.navitem.adminonly{display:none}
+html.is-admin .navitem.adminonly{display:inline-flex}
 .navitem.soon small{font-size:.55rem;letter-spacing:.1em;border:1px solid currentColor;border-radius:999px;padding:1px 5px}
 .navitem:focus-visible{outline:3px solid var(--paper);outline-offset:-3px}
 .navdrop{position:relative;display:flex}

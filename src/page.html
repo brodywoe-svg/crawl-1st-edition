@@ -841,7 +841,7 @@ async function putFile(path,text,message,key=GH_KEY){
   if(!r.ok)throw {code:"http",status:r.status};
   return r.json();
 }
-function showAdminBtn(){$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?"Admin · Sign out":"Admin"}
+function showAdminBtn(){document.documentElement.classList.toggle("is-admin",ADMIN);$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?"Admin · Sign out":"Admin"}
 function becomeAdmin(key,quiet){GH_KEY=key;ADMIN=true;try{sessionStorage.setItem(ADMIN_SS,key)}catch(e){}closeAdmin();showAdminBtn();AdminHooks.signedIn(quiet)}
 function signOut(){if(!AdminHooks.canSignOut())return;ADMIN=false;GH_KEY=null;try{sessionStorage.removeItem(ADMIN_SS)}catch(e){}showAdminBtn();AdminHooks.signedOut()}
 function restoreAdmin(){if(!STATIC)return;let k=null;try{k=sessionStorage.getItem(ADMIN_SS)}catch(e){}if(k)becomeAdmin(k,true)}

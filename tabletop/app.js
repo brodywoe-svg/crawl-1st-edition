@@ -63,7 +63,7 @@ async function loadConfig() {
 }
 let CFG = null;
 function inviteLink() {
-  const u = new URL(location.href); u.hash = "g=" + G.id + (CFG && CFG.from === "local" ? "&c=" + b64e(JSON.stringify(CFG.cfg)) : "");
+  const u = new URL(location.href); u.search = ""; u.hash = "g=" + G.id + "&i=" + (G.meta.invite || "") + (CFG && CFG.from === "local" ? "&c=" + b64e(JSON.stringify(CFG.cfg)) : "");
   return u.href;
 }
 
@@ -77,11 +77,40 @@ async function boot() {
     console.error(e); net = new LocalNet(); me.uid = await net.init(); CFG = null;
     toast("Couldn't reach the online service, so this game runs on this computer only.", 5000);
   }
-  lobbyMode(); renderMyGames();
+  lobbyMode(); renderMyGames(); lobbyAccess();
   MAT = await content.loadLocal(); materials();
-  const g = new URLSearchParams(location.hash.slice(1)).get("g");
-  if (g) joinGame(g);
+  const h = new URLSearchParams(location.hash.slice(1)), g = h.get("g");
+  if (g) { invite = { id: g.replace(/[^a-z0-9]/gi, ""), key: h.get("i") || "" }; lobbyAccess(); if (me.name) joinGame(invite.id, invite.key) }
 }
+/* ---------------------------------------------------------------- admin lock: only the site admin can make games for now; everyone else needs an invite link */
+let invite = null;
+function isAdmin() { try { return localStorage.getItem("tt-admin") === "1" || !!sessionStorage.getItem("crawl-admin-key") } catch (e) { return false } }
+function lobbyAccess() {
+  const adm = isAdmin(), mine = myGames().length > 0;
+  $("lobStart").hidden = !adm; $("lobLock").hidden = adm || !!invite; $("lobInvite").hidden = !invite;
+  $("lobMode").hidden = !adm;
+  $("lobGames").hidden = !adm && !mine; $("lobMat").hidden = !adm; $("admOut").hidden = !adm;
+  if (invite) $("invName").textContent = "a game";
+}
+async function adminSignIn() {
+  const pass = $("admPass").value; if (!pass) { $("admPass").focus(); return }
+  $("admGo").disabled = true; $("admGo").textContent = "Checking…"; $("lobErr").textContent = "";
+  try {
+    let box = null;
+    for (const u of [new URL("../admin.json", location.href).href, content.SITE + "admin.json"]) { try { const r = await fetch(u, { cache: "no-store" }); if (r.ok) { box = await r.json(); break } } catch (e) { } }
+    if (!box || !box.data) throw new Error("Couldn't reach the Crawl website to check the password.");
+    const unb = x => Uint8Array.from(atob(x), c => c.charCodeAt(0));
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+    const k = await crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: unb(box.salt), iterations: box.iterations || 600000 }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    try { await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb(box.iv) }, k, unb(box.data)) } catch (e) { throw new Error("That password isn't right.") }
+    localStorage.setItem("tt-admin", "1"); $("admPass").value = ""; lobbyAccess(); toast("Signed in as admin.");
+  } catch (e) { $("lobErr").textContent = e.message }
+  $("admGo").disabled = false; $("admGo").textContent = "Sign in";
+}
+$("admGo").addEventListener("click", adminSignIn);
+$("admPass").addEventListener("keydown", ev => { if (ev.key === "Enter") adminSignIn() });
+$("admOutA").addEventListener("click", ev => { ev.preventDefault(); try { localStorage.removeItem("tt-admin"); sessionStorage.removeItem("crawl-admin-key") } catch (e) { } lobbyAccess(); toast("Signed out of admin.") });
+$("invJoin").addEventListener("click", () => { if (needName() && invite) joinGame(invite.id, invite.key) });
 function lobbyMode() {
   $("lobMode").innerHTML = net.kind === "online"
     ? `<span class="chip online">Online</span> Players join from their own devices with your invite link.`
@@ -93,7 +122,7 @@ function renderMyGames() {
     : `<p class="muted">Games you make or join show here.</p>`;
 }
 $("myGames").addEventListener("click", ev => {
-  const o = ev.target.closest("[data-open]"); if (o) { joinGame(o.dataset.open); return }
+  const o = ev.target.closest("[data-open]"); if (o) { const g = myGames().find(x => x.id === o.dataset.open); joinGame(o.dataset.open, g && g.key); return }
   const f = ev.target.closest("[data-forget]"); if (f) { forgetGame(f.dataset.forget); renderMyGames() }
 });
 $("meName").addEventListener("input", () => { me.name = $("meName").value.trim(); savePrefs() });
@@ -101,33 +130,34 @@ $("meColor").addEventListener("input", () => { me.color = $("meColor").value; sa
 function needName() { if (me.name) return true; $("lobErr").textContent = "Put in your name first."; $("meName").focus(); return false }
 $("newGame").addEventListener("click", async () => {
   if (!needName()) return;
+  if (!isAdmin()) { $("lobErr").textContent = "Only the admin can make games for now."; return }
   const id = rid(10), first = newId("p"), name = $("newName").value.trim() || "New game";
   await net.join(id);
-  await net.set("meta", { name, gm: me.uid, created: Date.now(), playerPage: first, fps: 5 });
+  await net.set("meta", { name, gm: me.uid, created: Date.now(), playerPage: first, fps: 5, invite: rid(12) });
   await net.set("pages/" + first, { name: "Start", w: 25, h: 18, grid: 70, gridOn: true, fog: false, order: 1 });
   await net.push("chat", { t: "sys", text: `${me.name} made the game.`, ts: Date.now() });
   rememberGame({ id, name, gm: true, mode: net.kind });
   joinGame(id);
 });
-$("joinGame").addEventListener("click", () => {
-  if (!needName()) return;
-  const v = $("joinCode").value.trim(); if (!v) { $("lobErr").textContent = "Paste the invite link or code."; return }
-  let id = v;
-  try { const u = new URL(v); const h = new URLSearchParams(u.hash.slice(1)); if (h.get("c") && !CFG) { localStorage.setItem("tt-fb", JSON.stringify(JSON.parse(b64d(h.get("c"))))); location.href = u.href; location.reload(); return } id = h.get("g") || id } catch (e) { }
-  joinGame(id.replace(/[^a-z0-9]/gi, ""));
-});
-
-async function joinGame(id) {
-  if (!me.name) { $("lobErr").textContent = "Put in your name, then click Open or Join again."; $("meName").focus(); history.replaceState(null, "", "#g=" + id); return }
+async function joinGame(id, key) {
+  if (!me.name) { $("lobErr").textContent = "Put in your name, then click Join."; $("meName").focus(); return }
   try {
-    if (!(await net.exists(id))) { $("lobErr").textContent = net.kind === "online" ? "There's no game with that code." : "That game isn't on this computer. Online games need online play to be set up."; return }
+    if (!(await net.exists(id))) { $("lobErr").textContent = net.kind === "online" ? "That invite link doesn't lead to a game. Ask your GM for a new one." : "That game isn't on this computer. Games on other devices need online play to be set up."; return }
   } catch (e) { $("lobErr").textContent = "Couldn't reach the game. Check your connection."; return }
   leaveGame(true);
-  G.id = id; await net.join(id);
+  await net.join(id);
+  /* only the GM, players already in the game, or someone holding the current invite link may come in */
+  let meta = {}, been = null;
+  try { meta = (await net.get("meta")) || {}; been = await net.get("players/" + me.uid) } catch (e) { }
+  const gmHere = meta.gm === me.uid || !!(meta.gms || {})[me.uid];
+  if (!gmHere && !been && !(key && meta.invite && key === meta.invite)) { forgetGame(id); renderMyGames(); $("lobErr").textContent = "That invite link isn't valid anymore. Ask your GM to send you a new one."; return }
+  if (gmHere && !meta.invite) await net.update("meta", { invite: rid(12) });
+  invite = null; lobbyAccess();
+  G.id = id;
   history.replaceState(null, "", "#g=" + id);
   await net.update("players/" + me.uid, { name: me.name, color: me.color, online: true });
   net.presence({ name: me.name, color: me.color });
-  subs.push(net.on("meta", v => { G.meta = v || {}; $("gameName").textContent = G.meta.name || ""; rememberGame({ id, name: G.meta.name, gm: isGM(), mode: net.kind }); renderTools(); renderPages(); choosePage(); renderPlayers(); if (curTab === "settings") renderSettings(); renderJournal() }));
+  subs.push(net.on("meta", v => { G.meta = v || {}; $("gameName").textContent = G.meta.name || ""; rememberGame({ id, name: G.meta.name, gm: isGM(), mode: net.kind, key: G.meta.invite || key || "" }); renderTools(); renderPages(); choosePage(); renderPlayers(); if (curTab === "settings") renderSettings(); renderJournal() }));
   subs.push(net.on("players", v => { G.players = v || {}; renderPlayers(); if (curTab === "settings") renderSettings(); fillChatAs() }));
   subs.push(net.on("pages", v => { G.pages = v || {}; renderPages(); choosePage(); if (G.pages[pid]) { page = G.pages[pid]; renderPage() } }));
   subs.push(net.on("chars", v => { G.chars = v || {}; renderJournal(); refreshWins(); renderTokens(); fillChatAs() }));
@@ -145,7 +175,7 @@ function leaveGame(quiet) {
   Object.assign(G, { id: "", meta: {}, players: {}, pages: {}, chars: {}, handouts: {}, turn: null, chat: {} }); pid = ""; page = {};
   $("wins").innerHTML = ""; closeCtx();
 }
-$("leaveGame").addEventListener("click", () => { leaveGame(); history.replaceState(null, "", location.pathname); $("game").hidden = true; $("lobby").hidden = false; renderMyGames() });
+$("leaveGame").addEventListener("click", () => { leaveGame(); history.replaceState(null, "", location.pathname); $("game").hidden = true; $("lobby").hidden = false; renderMyGames(); lobbyAccess() });
 window.addEventListener("beforeunload", () => { if (G.id && me.uid && net.kind === "local") net.update("players/" + me.uid, { online: false }) });
 
 /* ---------------------------------------------------------------- Crawl materials from the website */
@@ -943,8 +973,9 @@ function renderSettings() {
   const lastDl = Object.values(MAT.meta || {}).reduce((m, x) => Math.max(m, x.at || 0), 0);
   $("pane-settings").innerHTML = `<div class="sect">
 <h3>You</h3><label>Your name<input type="text" id="sName" value="${esc(me.name)}" maxlength="40"></label><label class="row">Your color<input type="color" id="sColor" value="${esc(me.color)}"></label>
-<h3>Invite players</h3><p class="muted small">${net.kind === "online" ? "Send this link to your players. They open it, put in their name and join." : "This game runs on this computer only. Other tabs in this browser can join with the link, but to play with people on their own devices, set up online play below."}</p>
+${gm ? `<h3>Invite players</h3><p class="muted small">${net.kind === "online" ? "Players can only join through this link. Send it to them; they open it, put in their name and join." : "This game runs on this computer only. To play with people on their own devices, set up online play below."}</p>
 <div class="row"><input type="text" id="sInvite" readonly value="${esc(inviteLink())}" aria-label="Invite link"><button type="button" class="btn small" id="sCopy">Copy</button></div>
+<button type="button" class="btn small" id="sNewLink">Make a new link</button><p class="muted small">A new link stops the old one from working. Players already in the game stay in.</p>` : ""}
 ${gm ? `<h3>Game</h3><label>Game name<input type="text" id="sGame" value="${esc(G.meta.name || "")}" maxlength="60"></label><label>Feet per square<input type="number" id="sFps" min="1" max="100" value="${FPS()}"></label>
 <h3>Players</h3>${Object.entries(G.players).map(([u, p]) => `<div class="row"><span class="pav" style="--c:${esc(p.color)}"><i>${esc(initials(p.name))}</i>${esc(p.name)}</span><span class="sp"></span>${u === G.meta.gm ? `<small class="muted">Game owner</small>` : `<label class="row small"><input type="checkbox" data-gmtog="${esc(u)}"${isGMuid(u) ? " checked" : ""}> GM</label>`}</div>`).join("")}` : ""}
 <h3>Crawl materials</h3><p class="small">${lastDl ? "Downloaded " + new Date(lastDl).toLocaleString() + "." : "Not downloaded yet."}${freshMat && freshMat.changes && freshMat.changes.length ? " <b>Updates are available.</b>" : ""}</p>
@@ -967,6 +998,7 @@ $("pane-settings").addEventListener("change", async ev => {
 });
 $("pane-settings").addEventListener("click", async ev => {
   if (ev.target.id === "sCopy") { const i = $("sInvite"); i.select(); try { await navigator.clipboard.writeText(i.value); toast("Invite link copied.") } catch (e) { document.execCommand("copy"); toast("Invite link copied.") } }
+  if (ev.target.id === "sNewLink" && isGM()) { if (!ev.target.dataset.sure) { ev.target.dataset.sure = 1; ev.target.textContent = "Click again to replace the link"; return } await net.update("meta", { invite: rid(12) }); toast("New invite link made. The old one no longer works.") }
   if (ev.target.id === "sMat") { ev.target.textContent = "Checking…"; await materials(); renderSettings(); toast(freshMat && freshMat.changes.length ? "Updates are available." : freshMat && freshMat.reachable ? "Your Crawl materials are up to date." : "Couldn't reach the Crawl website.") }
   if (ev.target.id === "sCfgSave") { const c = parseCfg($("sCfg").value); if (!c || !c.apiKey || !c.databaseURL) { toast("Those settings need at least an apiKey and a databaseURL.", 4000); return } localStorage.setItem("tt-fb", JSON.stringify(c)); location.hash = ""; location.reload() }
   if (ev.target.id === "sCfgOff") { localStorage.removeItem("tt-fb"); location.hash = ""; location.reload() }

@@ -22,27 +22,36 @@
         <label>Your name<input id="meName" type="text" autocomplete="off" maxlength="40" placeholder="What should the table call you?"></label>
         <label class="row">Your color<input id="meColor" type="color" value="#c0262d"></label>
       </section>
-      <section class="card">
+      <section class="card" id="lobInvite" hidden>
+        <h2>You're invited</h2>
+        <p>Your GM invited you to <b id="invName">a game</b>. Put in your name, then join.</p>
+        <button type="button" class="btn solid" id="invJoin">Join the game</button>
+      </section>
+      <section class="card" id="lobStart" hidden>
         <h2>Start a game</h2>
         <label>Game name<input id="newName" type="text" autocomplete="off" maxlength="60" placeholder="e.g. The Sunken Halls"></label>
         <button type="button" class="btn solid" id="newGame">Create game (you're the GM)</button>
-        <h2 class="mt">Join a game</h2>
-        <label>Invite link or game code<input id="joinCode" type="text" autocomplete="off" placeholder="Paste the link your GM sent you"></label>
-        <button type="button" class="btn" id="joinGame">Join</button>
-        <p class="err" id="lobErr" role="alert"></p>
+        <p class="muted small">Players join only through the invite link you share from the game's Settings tab.</p>
       </section>
-      <section class="card wide">
+      <section class="card" id="lobLock" hidden>
+        <h2>Private testing</h2>
+        <p class="muted">The Crawl Tabletop is only open to the admin for now. If your GM sent you an invite link, open that link to join their game.</p>
+        <label>Admin password<input id="admPass" type="password" autocomplete="current-password"></label>
+        <button type="button" class="btn" id="admGo">Sign in</button>
+      </section>
+      <p class="err wide" id="lobErr" role="alert"></p>
+      <section class="card wide" id="lobGames">
         <h2>Your games</h2>
         <div id="myGames" class="mygames"></div>
       </section>
-      <section class="card wide">
+      <section class="card wide" id="lobMat">
         <h2>Crawl materials</h2>
         <p class="muted" id="matStatus">Checking the Crawl website…</p>
         <div id="matChanges"></div>
         <div class="row gap"><button type="button" class="btn" id="matCheck">Check for updates</button><button type="button" class="btn solid" id="matGet" hidden>Download update</button></div>
       </section>
     </div>
-    <p class="lob-foot"><a href="../index.html">Crawl 1st Edition website</a> · <a href="https://github.com/brodywoe-svg/crawl-spell-compendium/blob/main/tabletop/SETUP.md" target="_blank" rel="noopener">Online play setup</a></p>
+    <p class="lob-foot"><a href="../index.html">Crawl 1st Edition website</a><span id="admOut" hidden> · <a href="#" id="admOutA">Sign out of admin</a></span> · <a href="https://github.com/brodywoe-svg/crawl-spell-compendium/blob/main/tabletop/SETUP.md" target="_blank" rel="noopener">Online play setup</a></p>
   </div>
 </div>
 
