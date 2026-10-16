@@ -114,7 +114,7 @@ $("invJoin").addEventListener("click", () => { if (needName() && invite) joinGam
 function lobbyMode() {
   $("lobMode").innerHTML = net.kind === "online"
     ? `<span class="chip online">Online</span> Players join from their own devices with your invite link.`
-    : `<span class="chip local">This computer</span> Games are saved in this browser, and every tab you open joins the same table. To play online, set up online play (see <a href="https://github.com/brodywoe-svg/crawl-spell-compendium/blob/main/tabletop/SETUP.md" target="_blank" rel="noopener">Online play setup</a>), then paste the settings under Settings in a game.`;
+    : `<span class="chip local">This computer</span> Games are saved in this browser, and every tab you open joins the same table. To play online, set up online play (see <a href="https://github.com/brodywoe-svg/crawl-1st-edition/blob/main/tabletop/SETUP.md" target="_blank" rel="noopener">Online play setup</a>), then paste the settings under Settings in a game.`;
 }
 function renderMyGames() {
   const list = myGames();
@@ -980,7 +980,7 @@ ${gm ? `<h3>Game</h3><label>Game name<input type="text" id="sGame" value="${esc(
 <h3>Players</h3>${Object.entries(G.players).map(([u, p]) => `<div class="row"><span class="pav" style="--c:${esc(p.color)}"><i>${esc(initials(p.name))}</i>${esc(p.name)}</span><span class="sp"></span>${u === G.meta.gm ? `<small class="muted">Game owner</small>` : `<label class="row small"><input type="checkbox" data-gmtog="${esc(u)}"${isGMuid(u) ? " checked" : ""}> GM</label>`}</div>`).join("")}` : ""}
 <h3>Crawl materials</h3><p class="small">${lastDl ? "Downloaded " + new Date(lastDl).toLocaleString() + "." : "Not downloaded yet."}${freshMat && freshMat.changes && freshMat.changes.length ? " <b>Updates are available.</b>" : ""}</p>
 ${freshMat && freshMat.changes && freshMat.changes.length ? changesHTML(freshMat.changes) + `<button type="button" class="btn solid" data-act="getupd">Download update</button>` : ""}<button type="button" class="btn" id="sMat">Check the Crawl website for updates</button>
-<h3>Online play</h3>${CFG ? `<p class="small">Online play is on${CFG.from === "site" ? " for everyone who uses this tabletop" : " in this browser"}.</p>` : `<p class="small muted">Paste your Firebase settings here to play online. <a href="https://github.com/brodywoe-svg/crawl-spell-compendium/blob/main/tabletop/SETUP.md" target="_blank" rel="noopener" target="_blank">How to get them</a></p>`}
+<h3>Online play</h3>${CFG ? `<p class="small">Online play is on${CFG.from === "site" ? " for everyone who uses this tabletop" : " in this browser"}.</p>` : `<p class="small muted">Paste your Firebase settings here to play online. <a href="https://github.com/brodywoe-svg/crawl-1st-edition/blob/main/tabletop/SETUP.md" target="_blank" rel="noopener" target="_blank">How to get them</a></p>`}
 ${CFG && CFG.from === "site" ? "" : `<textarea id="sCfg" rows="5" placeholder='{ "apiKey": "…", "authDomain": "…", "databaseURL": "…", "projectId": "…" }'>${CFG ? esc(JSON.stringify(CFG.cfg, null, 1)) : ""}</textarea><div class="row gap"><button type="button" class="btn solid" id="sCfgSave">Save and reload</button>${CFG ? `<button type="button" class="btn" id="sCfgOff">Turn off online play</button>` : ""}</div><p class="muted small">Games on this computer and online games are kept separately.</p>`}</div>`;
 }
 function parseCfg(t) {
