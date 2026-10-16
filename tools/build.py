@@ -1,4 +1,4 @@
-"""Build the Crawl Spell Compendium from its sources.
+"""Build the Crawl 1st Edition website from its sources.
 
 Run from the repo root:  python tools/build.py
 
@@ -7,7 +7,7 @@ Reads   src/page.html          the page template (shared by every version)
 Writes  index.html             the GitHub Pages site (read-only)
         conditions.html, glossary.html   the Glossary pages (entries from crawl-glossary.json)
         app/index.html         the Windows app's page (offline, saves on the computer)
-        downloads/Crawl-Spell-Compendium-Installer.zip   the Windows installer
+        downloads/Crawl-1st-Edition-Installer.zip   the Windows installer
 
 The GitHub Pages site also reads crawl-spells.json when it loads, so replacing
 that file is enough to update the site's spells. Rebuild when src/page.html
@@ -27,7 +27,7 @@ TEMPLATE = ROOT / "src" / "page.html"
 GLOSSARY = ROOT / "crawl-glossary.json"
 SPELLS = ROOT / "crawl-spells.json"
 REPO_URL = "https://github.com/brodywoe-svg/crawl-spell-compendium"
-INSTALLER_NAME = "Crawl Spell Compendium Installer"
+INSTALLER_NAME = "Crawl 1st Edition Installer"
 
 RESET = (
     ":root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}"
@@ -36,7 +36,7 @@ RESET = (
 
 FOOTER = f"""
 <footer style="max-width:900px;margin:0 auto;padding:0 16px 120px;font-family:Montserrat,Arial,sans-serif;font-size:13px;line-height:1.5;color:#5c5c5c;text-align:center">
-  <p style="margin:0 0 8px"><a href="downloads/Crawl-Spell-Compendium-Installer.zip" style="color:#000;font-weight:700">Download the offline Windows app</a> &middot; <a href="{REPO_URL}" style="color:#000;font-weight:700">View on GitHub</a></p>
+  <p style="margin:0 0 8px"><a href="downloads/Crawl-1st-Edition-Installer.zip" style="color:#000;font-weight:700">Download the offline Windows app</a> &middot; <a href="{REPO_URL}" style="color:#000;font-weight:700">View on GitHub</a></p>
   <p style="margin:0">Spell content, card designs and the Crawl logo &copy; 2026 Brody Woelke. All rights reserved.<br>
   This work includes material taken from the System Reference Document 5.1 (&ldquo;SRD 5.1&rdquo;) by Wizards of the Coast LLC, available at <a href="https://dnd.wizards.com/resources/systems-reference-document" style="color:#5c5c5c">dnd.wizards.com</a>. The SRD 5.1 is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/legalcode" style="color:#5c5c5c">Creative Commons Attribution 4.0 International License</a>.</p>
 </footer>
@@ -69,16 +69,16 @@ def page_body(template, spells):
 CATALOG = ROOT / "crawl-items.json"
 GLOSSARY_PAGES = {
     # file name: (page key, <title>, meta description)
-    "glossary.html": ("glossary", "Crawl Glossary",
+    "glossary.html": ("glossary", "Glossary · Crawl 1st Edition",
                       "The Crawl 1st Edition glossary: every rules term in one searchable list."),
-    "conditions.html": ("conditions", "Crawl Conditions",
+    "conditions.html": ("conditions", "Conditions · Crawl 1st Edition",
                         "The conditions of Crawl 1st Edition: what each one does and how it ends."),
-    "items.html": ("items", "Crawl Items", "Every item in Crawl 1st Edition, with what crafts it and what it's used in."),
-    "crafting.html": ("crafting", "Crawl Crafting", "Crafting recipes for Crawl 1st Edition: results, ingredients, tools and checks."),
-    "races.html": ("races", "Crawl Races", "The races of Crawl 1st Edition and their subraces: ability score increases, proficiencies, languages and features."),
-    "classes.html": ("classes", "Crawl Classes", "The classes of Crawl 1st Edition: class charts, features by level, proficiencies, skill points, starting equipment and subclasses."),
-    "backgrounds.html": ("backgrounds", "Crawl Backgrounds", "The backgrounds of Crawl 1st Edition: proficiencies, languages, starting gear and features."),
-    "creator.html": ("creator", "Crawl Character Creator", "Make a Crawl 1st Edition character step by step: race, class, background, ability scores, skills, spells and gear, then a printable character sheet."),
+    "items.html": ("items", "Items · Crawl 1st Edition", "Every item in Crawl 1st Edition, with what crafts it and what it's used in."),
+    "crafting.html": ("crafting", "Crafting · Crawl 1st Edition", "Crafting recipes for Crawl 1st Edition: results, ingredients, tools and checks."),
+    "races.html": ("races", "Races · Crawl 1st Edition", "The races of Crawl 1st Edition and their subraces: ability score increases, proficiencies, languages and features."),
+    "classes.html": ("classes", "Classes · Crawl 1st Edition", "The classes of Crawl 1st Edition: class charts, features by level, proficiencies, skill points, starting equipment and subclasses."),
+    "backgrounds.html": ("backgrounds", "Backgrounds · Crawl 1st Edition", "The backgrounds of Crawl 1st Edition: proficiencies, languages, starting gear and features."),
+    "creator.html": ("creator", "Character Creator · Crawl 1st Edition", "Make a Crawl 1st Edition character step by step: race, class, background, ability scores, skills, spells and gear, then a printable character sheet."),
 }
 CREATOR = ROOT / "crawl-creator.json"
 CLASSES = ROOT / "crawl-classes.json"
@@ -206,7 +206,7 @@ def build_app(body):
 
 
 def build_installer():
-    out = ROOT / "downloads" / "Crawl-Spell-Compendium-Installer.zip"
+    out = ROOT / "downloads" / "Crawl-1st-Edition-Installer.zip"
     out.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for f in sorted((ROOT / "installer").rglob("*")):

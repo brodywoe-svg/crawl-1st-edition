@@ -1,7 +1,7 @@
-CRAWL SPELL COMPENDIUM - WINDOWS APP
+CRAWL 1ST EDITION - WINDOWS APP
 
 1. Right-click this zip and choose "Extract All".
-2. Open the extracted folder and double-click "Install Crawl Spell Compendium.bat".
+2. Open the extracted folder and double-click "Install Crawl 1st Edition.bat".
    If Windows shows "Windows protected your PC", click "More info" then "Run anyway".
 3. The first install downloads the app engine (about 110 MB) from GitHub, so you need internet once.
    After that the app works fully offline.

@@ -1,9 +1,10 @@
-# Installs (or updates) Crawl Spell Compendium for the current Windows user.
+# Installs (or updates) Crawl 1st Edition for the current Windows user.
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $version  = '33.2.1'
 $sha256   = 'C325A6D905C67107E166267813EA2151AE7FD316C0A88DE0081DB0B9851A9946'
-$name     = 'Crawl Spell Compendium'
+$name     = 'Crawl 1st Edition'
+$oldName  = 'Crawl Spell Compendium'   # the app's earlier name; its saved spells folder is still used
 $dest     = Join-Path $env:LOCALAPPDATA "Programs\$name"
 $appSrc   = Join-Path $PSScriptRoot 'app'
 $zip      = Join-Path $env:TEMP "electron-v$version-win32-x64.zip"
@@ -23,7 +24,10 @@ if (-not $haveZip) {
   }
 }
 
-Get-Process -Name $name -ErrorAction SilentlyContinue | Stop-Process -Force
+Get-Process -Name $name, $oldName -ErrorAction SilentlyContinue | Stop-Process -Force
+# remove the copy installed under the old name, and its shortcuts
+Remove-Item (Join-Path $env:LOCALAPPDATA "Programs\$oldName") -Recurse -Force -ErrorAction SilentlyContinue
+foreach ($d in @([Environment]::GetFolderPath('Desktop'), (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'))) { Remove-Item (Join-Path $d "$oldName.lnk") -ErrorAction SilentlyContinue }
 Start-Sleep -Milliseconds 500
 if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
 New-Item -ItemType Directory -Path $dest | Out-Null
@@ -55,7 +59,7 @@ foreach ($dir in $places) {
   $lnk.TargetPath = $exe
   $lnk.WorkingDirectory = $dest
   $lnk.IconLocation = $ico
-  $lnk.Description = 'Crawl 1st Edition spell compendium'
+  $lnk.Description = 'Crawl 1st Edition'
   $lnk.Save()
 }
 
@@ -64,5 +68,5 @@ try { Start-Process -FilePath "$env:SystemRoot\System32\ie4uinit.exe" -ArgumentL
 
 Write-Host ""
 Write-Host "Done! Open $name from your Desktop or Start menu." -ForegroundColor Green
-Write-Host "Your spells are saved in: $env:APPDATA\$name\spells.json"
+Write-Host "Your spells are saved in: $env:APPDATA\$oldName\spells.json"
 Start-Process $exe

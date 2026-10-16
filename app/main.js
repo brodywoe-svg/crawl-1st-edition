@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, dialog, Menu, shell } = require("electron")
 const path = require("path");
 const fs = require("fs");
 
+/* The app was called "Crawl Spell Compendium" before; keep using that data folder so saved spells carry over. */
+app.setPath("userData", path.join(app.getPath("appData"), "Crawl Spell Compendium"));
 const dataFile = () => path.join(app.getPath("userData"), "spells.json");
 
 function createWindow() {
@@ -9,7 +11,7 @@ function createWindow() {
     width: 1200,
     height: 900,
     minWidth: 420,
-    title: "Crawl Spell Compendium",
+    title: "Crawl 1st Edition",
     backgroundColor: "#f4f4f4",
     icon: path.join(__dirname, process.platform === "win32" ? "crawl-logo.ico" : "icon.png"),
     autoHideMenuBar: true,

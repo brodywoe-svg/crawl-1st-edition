@@ -1,27 +1,30 @@
-# Crawl Spell Compendium
+# Crawl 1st Edition
 
-Every spell in **Crawl 1st Edition**, in one place. Filter by class or by magic
-source (Arcane, Divine, Primal, Occult), open any spell to read its card and its
-+1 to +10 advancements, and export a card as a PNG or JPEG.
+The home of the **Crawl 1st Edition** tabletop role-playing game: the Character Creator,
+classes, races, backgrounds, spells, crafting, items, the glossary and the Crawl Tabletop.
+On the Spells page you can filter by class or by magic source (Arcane, Divine, Primal,
+Occult), open any spell to read its card and its +1 to +10 advancements, and export a
+card as a PNG or JPEG.
 
 - **Website:** https://brodywoe-svg.github.io/crawl-spell-compendium/
 - **Glossary (search every term):** https://brodywoe-svg.github.io/crawl-spell-compendium/glossary.html
 - **Conditions:** https://brodywoe-svg.github.io/crawl-spell-compendium/conditions.html
 - **Items:** https://brodywoe-svg.github.io/crawl-spell-compendium/items.html
 - **Crafting:** https://brodywoe-svg.github.io/crawl-spell-compendium/crafting.html
-- **Windows app (works offline):** [Download the installer](downloads/Crawl-Spell-Compendium-Installer.zip)
+- **Windows app (works offline):** [Download the installer](downloads/Crawl-1st-Edition-Installer.zip)
 
 ## Installing the Windows app
 
-1. Download `Crawl-Spell-Compendium-Installer.zip`, right-click it and choose **Extract All**.
-2. Open the extracted folder and double-click **Install Crawl Spell Compendium.bat**.
+1. Download `Crawl-1st-Edition-Installer.zip`, right-click it and choose **Extract All**.
+2. Open the extracted folder and double-click **Install Crawl 1st Edition.bat**.
    If Windows shows "Windows protected your PC", click **More info**, then **Run anyway**.
 3. The first install downloads the app engine (Electron, about 110 MB) from GitHub and checks
    its fingerprint. After that the app runs fully offline.
 
 The app opens when the install finishes and adds Desktop and Start menu shortcuts.
 In the app you can edit spells, add new ones and export cards; changes save
-automatically to `%APPDATA%\Crawl Spell Compendium\spells.json`.
+automatically to `%APPDATA%\Crawl Spell Compendium\spells.json` (the folder keeps the app's
+original name so spells saved by earlier versions carry over).
 Run `Uninstall.bat` to remove the app; your saved spells are kept.
 
 ## Admin editing on the website

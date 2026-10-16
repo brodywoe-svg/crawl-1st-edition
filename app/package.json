@@ -1,7 +1,7 @@
 {
-  "name": "crawl-spell-compendium",
-  "productName": "Crawl Spell Compendium",
+  "name": "crawl-1st-edition",
+  "productName": "Crawl 1st Edition",
   "version": "1.0.0",
-  "description": "Crawl 1st Edition Spell Compendium (offline)",
+  "description": "Crawl 1st Edition (offline)",
   "main": "main.js"
 }
