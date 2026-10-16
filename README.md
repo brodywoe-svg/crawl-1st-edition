@@ -6,11 +6,11 @@ On the Spells page you can filter by class or by magic source (Arcane, Divine, P
 Occult), open any spell to read its card and its +1 to +10 advancements, and export a
 card as a PNG or JPEG.
 
-- **Website:** https://brodywoe-svg.github.io/crawl-1st-edition/
-- **Glossary (search every term):** https://brodywoe-svg.github.io/crawl-1st-edition/glossary.html
-- **Conditions:** https://brodywoe-svg.github.io/crawl-1st-edition/conditions.html
-- **Items:** https://brodywoe-svg.github.io/crawl-1st-edition/items.html
-- **Crafting:** https://brodywoe-svg.github.io/crawl-1st-edition/crafting.html
+- **Website:** https://brodywoe-svg.github.io/crawl-spell-compendium/
+- **Glossary (search every term):** https://brodywoe-svg.github.io/crawl-spell-compendium/glossary.html
+- **Conditions:** https://brodywoe-svg.github.io/crawl-spell-compendium/conditions.html
+- **Items:** https://brodywoe-svg.github.io/crawl-spell-compendium/items.html
+- **Crafting:** https://brodywoe-svg.github.io/crawl-spell-compendium/crafting.html
 - **Windows app (works offline):** [Download the installer](downloads/Crawl-1st-Edition-Installer.zip)
 
 ## Installing the Windows app

@@ -3,7 +3,7 @@
    files and reports what changed; download() replaces the copy. */
 import { kvGet, kvSet } from "./net.js";
 
-export const SITE = "https://brodywoe-svg.github.io/crawl-1st-edition/";
+export const SITE = "https://brodywoe-svg.github.io/crawl-spell-compendium/";
 export const FILES = [
   ["races", "crawl-races.json", "Races"], ["classes", "crawl-classes.json", "Classes"], ["backgrounds", "crawl-backgrounds.json", "Backgrounds"],
   ["spells", "crawl-spells.json", "Spells"], ["items", "crawl-items.json", "Items and recipes"], ["glossary", "crawl-glossary.json", "Glossary"], ["rules", "crawl-creator.json", "Creator rules"]

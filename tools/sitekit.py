@@ -23,7 +23,7 @@ NAV_ITEMS = [
     ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Ammunition", "items.html?c=ammunition"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
                              ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items")]),
     ("Glossary", "glossary.html", "glossary"),
-    ("Tabletop", "https://brodywoe-svg.github.io/crawl-1st-edition/tabletop/", None),
+    ("Tabletop", "https://brodywoe-svg.github.io/crawl-spell-compendium/tabletop/", None),
     ("About", None, None),
 ]
 # which nav item each page belongs to
