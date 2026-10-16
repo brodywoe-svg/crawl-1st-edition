@@ -108,7 +108,7 @@ function fixChar(c) {
 chars = chars.map(fixChar);
 function persist(now) {
   clearTimeout(saveT);
-  const go = () => { try { localStorage.setItem(LS, JSON.stringify(chars)) } catch (e) { say("This browser couldn't save your character. Use Save to file so you don't lose it.") } };
+  const go = () => { if (cur) try { cur.snap = snapshot(cur) } catch (e) { } try { localStorage.setItem(LS, JSON.stringify(chars)) } catch (e) { say("This browser couldn't save your character. Use Save to file so you don't lose it.") } };
   if (now) go(); else saveT = setTimeout(go, 250);
 }
 function touch() { if (!cur) return; cur.edited = Date.now(); if (!chars.includes(cur)) chars.unshift(cur); persist() }
@@ -836,6 +836,33 @@ function pips(c, key, prof, label) {
   const r = rankOf(c, key, prof);
   return `<button type="button" class="sstar${prof ? " on" : ""}" data-prof="${esc(key)}" aria-pressed="${prof}" title="Proficient" aria-label="${esc(label)}: proficient">${STAR}</button><span class="spips" role="group" aria-label="${esc(label)} rank">${Array.from({ length: 10 }, (_, i) => `<button type="button" class="spip${i < r ? " on" : ""}" data-rank="${esc(key)}" data-v="${i + 1}" aria-label="${esc(label)} rank +${i + 1}" aria-pressed="${i < r}"></button>`).join("")}</span>`;
 }
+/* the character's worked-out numbers, saved with it for the Crawl Tabletop (which has no rules engine of its own) */
+function snapshot(c) {
+  const ps = profState(c), r = raceOf(c), s = subOf(c), k = clsOf(c), sk = subclsOf(c), b = bgOf(c), row1 = chartRow(c), sv = key => c.sheet[key];
+  const castMod = k && k.cast ? mod(c, k.cast) : null;
+  const num = v => { const n = parseInt(v, 10); return Number.isFinite(n) ? n : null };
+  const acParts = ["Natural", "Armored", "Shield"].map(x => num(sv("ac:" + x))).filter(x => x != null);
+  const spells = c.spells.map(spellByName).filter(Boolean).map(sp => { const rk = spellRankOf(c, sp); return { n: sp.n, lv: sp.lv, rank: rk, school: schoolOf(sp), cost: str(sp.f.cost), time: str(sp.f.time), range: str(sp.f.range), dmg: /^n\/?a$/i.test(str(sp.f.dmg)) ? "" : str(sp.f.dmg), desc: str(sp.f.desc), conc: !!sp.conc, atk: castMod != null ? rk + castMod : null, dc: castMod != null ? 8 + rk + castMod : null } });
+  const weapons = c.inv.filter(x => x.slot === "main" || x.slot === "off").map(x => { const it = x.iid && itemById(x.iid); return { n: invName(x), props: it ? str(it.props) : "", actions: it ? str(it.actions) : "", sub: it ? str(it.sub) : "" } });
+  return {
+    v: 1, at: Date.now(), name: str(c.name) || "Unnamed character", level: LEVEL, portrait: c.details.portrait || "",
+    race: [r && r.n, s && s.n].filter(Boolean).join(" / "), cls: [k && k.n, sk && sk.n].filter(Boolean).join(" / "), bg: b ? b.n : "",
+    abil: Object.fromEntries(ABIL.map(([a, n]) => [a, { n, score: score(c, a), mod: mod(c, a), save: saveTotal(c, a, ps), saveProf: ps.save(a) }])),
+    skills: Object.keys(SKILL_AB).sort().map(n => ({ n, ab: SKILL_AB[n], total: skillTotal(c, n, ps), prof: ps.skill(n), rank: rankOf(c, "skill:" + n, ps.skill(n)) })),
+    hp: num(sv("hpmax")) ?? hpOf(c), hd: sv("hd") || (k && k.hd) || "", ac: acParts.length ? acParts.reduce((a, x) => a + x, 0) : null,
+    init: num(sv("init")) ?? mod(c, "dex"), speed: sv("mv:Ground") || "",
+    pool: { max: sv("pool") || (row1 && row1.pool) || "", die: sv("ad") || (row1 && row1.die) || "" },
+    passive: Object.fromEntries(PASSIVE.map(n => [n, (parseInt(CR.rules.passive, 10) || 10) + skillTotal(c, n, ps)])),
+    cast: k && k.cast ? { ab: AB[k.cast], mod: castMod, prepared: fml(c, k.prepared), major: c.major || "", minor: c.minor || "", opp: c.major ? oppOf(k, c.major) : "" } : null,
+    spells, weapons,
+    profs: { weapons: WEAPONS.filter(n => ps.tiers("weapon", n).size).map(n => `${n} (${[...ps.tiers("weapon", n)].join("")})`), armor: ARMORS.filter(n => ps.tiers("armor", n).size).map(n => `${n} (${[...ps.tiers("armor", n)].join("")})`), trades: TRADES.filter(n => ps.trade(n)).map(n => `${n} (${ps.trade(n)})`) },
+    langs: [...langGrants(c).fixed.map(f => f.name), ...c.langs.filter(Boolean)],
+    inv: c.inv.map(x => { const it = x.iid && itemById(x.iid); return { n: invName(x), qty: x.qty || 1, slot: x.slot || "", weight: it ? it.weight : "", value: it ? it.value : "", iid: x.iid || "" } }),
+    wealth: fmtC(startingWealth(c) - spentC(c)),
+    feats: sources(c).flatMap(x => x.feats.map(f => ({ n: f.n, d: f.d, src: x.label }))),
+    details: { height: c.details.height ?? c.details.hw ?? "", weight: c.details.weight || "", age: c.details.age || "", gender: c.details.gender ?? c.details.pron ?? "", looks: c.details.looks || "", story: c.details.story || "" }
+  };
+}
 function attackRows(c) {
   const rows = [];
   c.inv.filter(x => x.slot === "main" || x.slot === "off").forEach(x => { const it = x.iid && itemById(x.iid); rows.push({ n: invName(x), cost: "", range: it ? (str(it.props).match(/\d+\s*\/\s*\d+\s*ft|\d+\s*ft/i) || [""])[0] : "", note: it ? it.actions : "" }) });
@@ -989,6 +1016,7 @@ $("cchome").addEventListener("change", ev => {
   }).catch(() => say("That file isn't a Crawl character."));
 });
 async function saveFile(c) {
+  try { c.snap = snapshot(c) } catch (e) { }
   const name = (slugOf(c.name) || "character") + ".crawl.json", text = JSON.stringify({ crawlCharacter: c }, null, 1);
   try {
     if (APP && APP.saveFile) { const r = await APP.saveFile(name, new TextEncoder().encode(text).buffer); if (r) say(`Saved ${r}.`); return }
@@ -1073,6 +1101,8 @@ if (STATIC) {
     if (Array.isArray(sj)) SPELL_LIST = sj;
     if (kj && Array.isArray(kj.classes)) CR.classes = normClasses(kj);
     if (bj && Array.isArray(bj.backgrounds)) CR.backgrounds = normBgs(bj);
-  }).finally(() => { show(view, true); restoreAdmin() });
+  }).finally(() => { show(view, true); restoreAdmin(); snapAll() });
 }
+function snapAll() { let n = 0; chars.forEach(c => { try { c.snap = snapshot(c); n++ } catch (e) { } }); if (n) persist(true) }
 start();
+if (!STATIC) snapAll();

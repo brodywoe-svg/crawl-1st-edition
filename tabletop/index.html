@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Crawl Tabletop</title>
+<meta name="description" content="The Crawl 1st Edition virtual tabletop: maps, tokens, fog of war, dice, character sheets and the Crawl compendium.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,700;0,800;1,600&display=swap">
+<link rel="stylesheet" href="tabletop.css">
+</head>
+<body>
+<!-- the lobby: make or join a game -->
+<div id="lobby" class="lobby">
+  <div class="lob-in">
+    <div class="lob-brand"><img src="logo.svg" alt="Crawl 1st Edition" class="lob-logo"><h1>Tabletop</h1></div>
+    <p class="lob-mode" id="lobMode"></p>
+    <div class="lob-grid">
+      <section class="card">
+        <h2>You</h2>
+        <label>Your name<input id="meName" type="text" autocomplete="off" maxlength="40" placeholder="What should the table call you?"></label>
+        <label class="row">Your color<input id="meColor" type="color" value="#c0262d"></label>
+      </section>
+      <section class="card">
+        <h2>Start a game</h2>
+        <label>Game name<input id="newName" type="text" autocomplete="off" maxlength="60" placeholder="e.g. The Sunken Halls"></label>
+        <button type="button" class="btn solid" id="newGame">Create game (you're the GM)</button>
+        <h2 class="mt">Join a game</h2>
+        <label>Invite link or game code<input id="joinCode" type="text" autocomplete="off" placeholder="Paste the link your GM sent you"></label>
+        <button type="button" class="btn" id="joinGame">Join</button>
+        <p class="err" id="lobErr" role="alert"></p>
+      </section>
+      <section class="card wide">
+        <h2>Your games</h2>
+        <div id="myGames" class="mygames"></div>
+      </section>
+      <section class="card wide">
+        <h2>Crawl materials</h2>
+        <p class="muted" id="matStatus">Checking the Crawl website…</p>
+        <div id="matChanges"></div>
+        <div class="row gap"><button type="button" class="btn" id="matCheck">Check for updates</button><button type="button" class="btn solid" id="matGet" hidden>Download update</button></div>
+      </section>
+    </div>
+    <p class="lob-foot"><a href="../index.html">Crawl 1st Edition website</a> · <a href="https://github.com/brodywoe-svg/crawl-spell-compendium/blob/main/tabletop/SETUP.md" target="_blank" rel="noopener">Online play setup</a></p>
+  </div>
+</div>
+
+<!-- the table -->
+<div id="game" class="game" hidden>
+  <header class="top">
+    <img src="logo.svg" alt="Crawl" class="top-logo">
+    <b id="gameName" class="top-name"></b>
+    <nav id="pages" class="pages" aria-label="Pages"></nav>
+    <span class="sp"></span>
+    <span id="modeChip" class="chip"></span>
+    <button type="button" class="tbtn" id="leaveGame" title="Back to the lobby">Leave</button>
+  </header>
+  <aside class="tools" id="tools" aria-label="Tools"></aside>
+  <main class="board" id="board" tabindex="0" aria-label="Map">
+    <div class="world" id="world">
+      <div class="layer" id="mapLayer"></div>
+      <div class="grid" id="grid"></div>
+      <svg class="layer svg" id="drawLayer"></svg>
+      <div class="layer" id="tokLayer"></div>
+      <canvas class="fog" id="fog"></canvas>
+      <svg class="layer svg over" id="overLayer"></svg>
+    </div>
+    <div class="zoomctl"><button type="button" data-zoom="1" title="Zoom in">+</button><button type="button" data-zoom="-1" title="Zoom out">−</button><button type="button" data-zoom="0" title="Fit the map">⤢</button></div>
+  </main>
+  <aside class="side" id="side">
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="chat" aria-selected="true">Chat</button>
+      <button type="button" role="tab" data-tab="journal">Journal</button>
+      <button type="button" role="tab" data-tab="comp">Compendium</button>
+      <button type="button" role="tab" data-tab="settings">Settings</button>
+    </div>
+    <section class="pane" id="pane-chat">
+      <div class="chatlog" id="chatlog" aria-live="polite"></div>
+      <div class="chatin">
+        <div class="dicebar" id="dicebar"></div>
+        <div class="row"><label class="as">As <select id="chatAs"></select></label></div>
+        <textarea id="chatText" rows="2" placeholder="Message, or /r 1d20+3 to roll. Type /help for commands."></textarea>
+        <div class="row"><span class="muted small">Enter sends · Shift+Enter for a new line</span><span class="sp"></span><button type="button" class="btn solid" id="chatSend">Send</button></div>
+      </div>
+    </section>
+    <section class="pane" id="pane-journal" hidden></section>
+    <section class="pane" id="pane-comp" hidden></section>
+    <section class="pane" id="pane-settings" hidden></section>
+  </aside>
+  <div class="playersbar" id="playersbar"></div>
+</div>
+
+<div id="wins"></div>
+<div class="ctx" id="ctx" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<input type="file" id="fileIn" accept="image/*" hidden>
+<input type="file" id="charIn" accept=".json,application/json" hidden>
+<script type="module" src="app.js"></script>
+</body>
+</html>
