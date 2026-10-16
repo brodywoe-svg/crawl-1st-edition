@@ -252,6 +252,7 @@
    "desc": "When you are targeted by a spell cast by a hostile creature, you can cast this spell to create a protective barrier of arcane energy around you. Until the start of your next turn, you gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
    "dmg": "N/A"
   },
+  "conc": true,
   "comp": {
    "v": true,
    "s": true,
@@ -2743,15 +2744,15 @@
   ],
   "lv": 2,
   "f": {
-   "mat": "1 Copper Wire",
-   "cat": "Evocation",
-   "time": "Instantaneous ",
-   "range": "30ft (Single Target)",
-   "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be only be targeted once each round by this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n",
    "pre": "+2 ARCANE or +2 NATURE",
    "cls": "Wizard, Sorcerer, Druid",
+   "mat": "1 Copper Wire",
+   "cat": "Evocation",
    "cost": "4 MP",
-   "type": "Ranged Spell Attack"
+   "time": "Instantaneous ",
+   "type": "Ranged Spell Attack",
+   "range": "30ft (Single Target)",
+   "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be only be targeted once each round by this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n"
   },
   "comp": {
    "v": true,
