@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "src" / "page.html"
 GLOSSARY = ROOT / "crawl-glossary.json"
 SPELLS = ROOT / "crawl-spells.json"
-REPO_URL = "https://github.com/brodywoe-svg/crawl-spell-compendium"
+REPO_URL = "https://github.com/brodywoe-svg/crawl-1st-edition"
 INSTALLER_NAME = "Crawl 1st Edition Installer"
 
 RESET = (
@@ -173,7 +173,7 @@ def build_site(body):
         '<meta name="description" content="Every spell in Crawl 1st Edition, filterable by class and magic source.">'
         '<link rel="icon" type="image/png" href="favicon.png"><link rel="icon" href="favicon.ico" sizes="any"><link rel="apple-touch-icon" href="apple-touch-icon.png">'
         f"<style>{RESET}</style>"
-        "<script>window.CRAWL_STATIC=true;window.CRAWL_REPO={owner:\"brodywoe-svg\",repo:\"crawl-spell-compendium\",branch:\"main\"}</script></head><body>"
+        "<script>window.CRAWL_STATIC=true;window.CRAWL_REPO={owner:\"brodywoe-svg\",repo:\"crawl-1st-edition\",branch:\"main\"}</script></head><body>"
     )
     (ROOT / "index.html").write_text(head + body + FOOTER + "</body></html>", encoding="utf-8")
     template, glossary = TEMPLATE.read_text(encoding="utf-8"), read_glossary()
