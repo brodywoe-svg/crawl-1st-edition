@@ -332,15 +332,58 @@
    "cost": "2 MP",
    "time": "Instantaneous ",
    "type": "Reaction",
-   "range": "Self (Single Target)",
-   "desc": "You create an defensive arcane bubble of magical force that appears and protects you from Physical attacks and weapons. Until the start of your next turn, you have a +3 bonus to AC vs All Non-magical Physical attacks, including against the triggering attack.",
+   "range": "Self ",
+   "desc": "When you are targeted by a weapon attack from a hostile creature, you can cast this spell to raise a shimmering shield of arcane force around you. Until the start of your next turn, you gain a +3 bonus to AC against weapon attacks, including the triggering attack, as long as you maintain concentration. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
    "dmg": "N/A"
   },
+  "conc": true,
   "comp": {
    "v": true,
    "s": true,
    "m": true
-  }
+  },
+  "tiers": [
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The shield also protects against unarmed strikes and natural weapons, such as claws and bites."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Recoil",
+    "While Arcane Shield is active, whenever a weapon attack misses you, the attacker takes 1d4 Force damage as the shield jolts back at them."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Shared Shield",
+    "You can also cast this spell when a creature you can see within 30 feet is targeted by a weapon attack. The shield protects them instead of you, but you still gain the EP from casting it."
+   ],
+   [
+    "",
+    "The shield’s bonus increases to +4."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The shield’s bonus increases to +5."
+   ],
+   [
+    "Rebuke",
+    "Recoil’s damage increases to 1d6 Force, and the attacker is pushed 5 feet away from you."
+   ]
+  ]
  },
  {
   "n": "Armor of Frost",
