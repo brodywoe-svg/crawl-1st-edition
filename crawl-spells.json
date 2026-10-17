@@ -1747,15 +1747,61 @@
   ],
   "lv": 1,
   "f": {
-   "cat": "Divination (Ritual)",
-   "time": "1 Action",
+   "cat": "Divination",
    "range": "Self (Single Target)",
-   "desc": "For the duration, you gain the ability to sense the presence of magic within 20 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any.\n\nThe spell can penetrate most barriers, but is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt."
+   "desc": "You spend a minute quieting your mind and attuning your senses to the flow of magic around you. For the next 10 minutes, you sense the presence of magic within 30 feet of you. While the spell lasts, you can focus on a creature or object you can see within that area to see a faint aura around it and learn its school of magic, if any. The spell is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt. When you cast this spell you gain 1 Exhaustion Point (EP).",
+   "time": "1 Minute",
+   "cost": "N/A",
+   "cls": "Wizard, Sorcerer, Warlock, Bard, Cleric, Druid",
+   "pre": "+1 ARCANE",
+   "type": "Ritual"
   },
   "comp": {
    "v": true,
    "s": true
-  }
+  },
+  "tiers": [
+   [
+    "Wider Sense",
+    "The range increases to 40 feet."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Lingering Sight",
+    "The duration increases to 30 minutes."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Arcane Residue",
+    "You can sense where a spell was cast within the area in the last hour, and you learn its school."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Appraiser’s Eye",
+    "When you focus on a magic item, object, or residue from a spell, you learn the source of its magic; Arcane, Primal, Divine, or Occult."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Snap Casting",
+    "You can cast this spell as a Utility spell for 2 MP with an Instantaneous casting time instead of as a Ritual."
+   ]
+  ]
  },
  {
   "n": "Detect Poison",
