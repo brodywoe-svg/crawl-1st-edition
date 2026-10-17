@@ -628,7 +628,7 @@
    "time": "Instantaneous",
    "type": "Utility",
    "range": "20ft",
-   "desc": "You speak a prayer to a deity of your choice, calling upon a blessing for you or your companions. Choose a single target of your choice, for the next 1d4 rounds of combat or until your concentration is broken or the spell ends, the target creatures receives a +1 bonus to all saving throws and the first attack roll they make each turn for the duration.",
+   "desc": "You speak a prayer to a deity of your choice, calling upon a blessing for you or your companions. Choose a single target of your choice, for the next 1d4 rounds of combat or until your concentration is broken or the spell ends, the target creatures receives a +1 bonus to all saving throws and the first attack roll they make each turn for the duration. Whenever you cast this spell you gain 1 Exhaustion Point (EP).",
    "dmg": "N/A"
   },
   "conc": true,
