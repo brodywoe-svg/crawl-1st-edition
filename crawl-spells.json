@@ -338,13 +338,55 @@
    "time": "Instantaneous ",
    "type": "Utility",
    "range": "Self",
-   "desc": "You speak an incantation shaping the air around you into spiny ice armor that covers your torso. For the 1d4 rounds of combat, all melee attacks that deal damage to you, cause your icey armor to burst, firing off icey needles and shards of ice towards your attacker dealing 1d6 cold damage to them.",
-   "dmg": "1d6 cold damage but only if dealt damage"
+   "desc": "You speak an incantation shaping the air around you into spiny ice armor that covers your torso. For the 1d4 rounds of combat, all melee attacks that deal damage to you, cause your icey armor to burst, firing off icey needles and shards of ice towards your attacker dealing 1d6 cold damage to them. When you cast this spell, you gain 1 Exhaustion Point (EP).",
+   "dmg": "1d6 cold damage but only if you are dealt damage"
   },
   "comp": {
    "s": true,
    "v": true
-  }
+  },
+  "tiers": [
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The duration of this spell lasts for 1d4+1 rounds of combat"
+   ],
+   [
+    "Ice Spines",
+    "Ice needles that fire off from you icey armor deal 1d8 cold damage."
+   ],
+   [
+    "",
+    "The duration of this spell lasts for 1d4+2 rounds of combat"
+   ],
+   [
+    "Cool Coat",
+    "For the duration of this spell, all fire damage you take is reduced by 2."
+   ],
+   [
+    "",
+    "The duration of this spell lasts for 1d4+3 rounds of combat"
+   ],
+   [
+    "Ice Spears",
+    "Ice needles that fire off from you icey armor deal 1d10 cold damage."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ]
+  ]
  },
  {
   "n": "Ascension",
