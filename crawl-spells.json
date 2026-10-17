@@ -812,14 +812,62 @@
   "lv": 1,
   "f": {
    "cat": "Enchantment",
-   "time": "1 Action",
+   "time": "Instantaneous",
    "range": "10ft (Single Target)",
-   "desc": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is Charmed by you until the spell ends or until you or your companions do anything harmful to it. The Charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
+   "desc": "You catch a humanoid’s eye and speak a few warm, honeyed words laced with magic. The target must be a humanoid that can see and hear you, and it must make a Wisdom saving throw against your spell save DC. It has Advantage on the save if you or your allies are fighting it. On a failure, it is Charmed by you for 1 hour, or until you or your allies do anything harmful to it, and it treats you as a friendly acquaintance. When the spell ends, the creature knows it was charmed and by whom.",
+   "pre": "+2 ARCANE",
+   "cls": "Wizard, Sorcerer, Warlock, Bard",
+   "cost": "2 MP",
+   "type": "Spell Attack (Wisdom Save)",
+   "mat": "1 Pink Pearl"
   },
   "comp": {
    "v": true,
-   "s": true
-  }
+   "s": true,
+   "m": true
+  },
+  "tiers": [
+   [
+    "",
+    "This spell’s range increases to 30 feet."
+   ],
+   [
+    "",
+    "This spell no longer consumes it's material cost when cast."
+   ],
+   [
+    "Second Glance",
+    "You can target a second humanoid within 10 feet of the first. Each makes its own saving throw."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Subtle Charm",
+    "When the spell ends, the creature makes a Wisdom saving throw against your spell save DC as it shakes off its charmed stupor. On a failure, it doesn’t realize it was charmed. On a success, it knows it was charmed and by whom."
+   ],
+   [
+    "",
+    "The duration increases to 8 hours"
+   ],
+   [
+    "Captivate",
+    "The target no longer has Advantage on its save when you or your allies are fighting it."
+   ],
+   [
+    "",
+    "You can target a third humanoid within 10 feet of the others."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Lingering Haze",
+    "When the spell ends, the creature is left reeling as it shakes off the charm. It takes 2d6 Psychic damage and becomes Dazed for its next 1d4 turns in combat."
+   ]
+  ]
  },
  {
   "n": "Chromatic Ray",
