@@ -726,12 +726,13 @@
    "mat": "1 Vial of Citrus Powder",
    "cat": "Evocation",
    "time": "Instantaneous",
-   "range": "15ft (Single Target)",
-   "desc": "You whisper an incantation and blow citrus powder from palm towards a target conjuring a sickly sweet yellow and orange cloud that fills a 15ft by 15ft circle. Each creature within the cloud must succeed on a Constitution saving throw or take 2d4 Acid damage and become inflicted with the Sickened Condition, half as much damage on a successful save. target creatures that start their turn within the cloud must roll a constitution saving throw or take 1d4 acid damage. The cloud lingers for 1d4 turns before dissipating. ",
+   "range": "25ft (Single Target)",
+   "desc": "You whisper an incantation and blow citrus powder from palm towards a target conjuring a sickly sweet yellow and orange cloud that fills a 15ft by 15ft circle. Each creature within the cloud must succeed on a Constitution saving throw or take 2d4 Acid damage and become inflicted with the Sickened Condition until the end of their next turn, half as much damage on a successful save. target creatures that start their turn within the cloud must roll a constitution saving throw or take 1d4 acid damage. The cloud lingers for 1d4 turns before dissipating. ",
    "cls": "Wizard, Druid",
    "pre": "+2 NATURE",
    "cost": "3 MP",
-   "type": "Ranged Spell Attack (Saving Throw)"
+   "type": "Ranged Spell Attack (Saving Throw)",
+   "dmg": "2d4 Acid Damage"
   },
   "comp": {
    "v": true,
@@ -740,44 +741,44 @@
   },
   "tiers": [
    [
-    "Splash Damage",
-    "whenever you deal damage you deal an extra 1d4 acid damage"
+    "",
+    "The range of this spell increases to 40ft"
    ],
    [
-    "Test",
-    "Test"
+    "Dense Cloud",
+    "Creatures within the cloud are obscured and ranged attacks made against them have disadvantage."
+   ],
+   [
+    "",
+    "This spells damage increases to 3d4"
    ],
    [
     "",
     ""
    ],
    [
-    "",
-    ""
+    "Lingering Fumes",
+    "When you cast this spell, the cloud lingers for a number of turns equally to 1d4 + Your Spellcasting ability modifier."
    ],
    [
     "",
-    ""
+    "This spells range increases to 60ft"
+   ],
+   [
+    "Choking Hazard",
+    "A creature that fails its save at the start of its turn while within the cloud gains the Sickened Condition until the end of their next turn."
    ],
    [
     "",
-    ""
+    "This spells damage increases to 4d4"
    ],
    [
     "",
-    ""
+    "This spells damage increases to 5d4"
    ],
    [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
+    "Acidic Shock",
+    "As the cloud dissipates, creatures caught within its area take 1d4 acid damage."
    ]
   ]
  },
