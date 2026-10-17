@@ -988,7 +988,7 @@
     "The hit damage increases to 1d10 Fire. "
    ],
    [
-    "Kindling:",
+    "Kindling",
     " The burst ignites flammable objects in the area that aren’t being worn or carried, such as dry brush, cloth, oil and wooden crates."
    ],
    [
@@ -1009,7 +1009,7 @@
    ],
    [
     "Smokescreen",
-    "The burst leaves a dense cloud of smoke covering a 10ft circle centered on the original target, the smoke last until the start of the next round of combat, while a creature remains in the smoke cloud they are blinded."
+    "The burst leaves a dense cloud of smoke covering a 10ft circle centered on the original target, the smoke last until the start of the next round of combat, while a creature remains in the smoke cloud it is blinded."
    ],
    [
     "",
