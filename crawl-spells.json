@@ -1490,14 +1490,64 @@
   "lv": 1,
   "f": {
    "cat": "Evocation",
-   "time": "1 Action",
-   "range": "5ft (Touch) (Single Target)",
-   "desc": "You touch a creature within range. The creature regains a number of hit-points equal to 1d8 + your Spellcasting Ability Modifier. This spell has no effect on Undead or Construct Creatures.\n\nAt Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the Healing increases by 1d8 for each slot level above 1st."
+   "range": "Touch",
+   "desc": "You lay a hand on a creature’s wounds, and warm light knits torn flesh back together. The creature regains hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on Undead or Constructs. When you cast this spell, you gain 1 Exhaustion Point (EP).",
+   "pre": "+2 MEDICINE",
+   "cls": "Cleric, Paladin, Druid",
+   "cost": "2 MP",
+   "time": "Instantaneous",
+   "type": "Utility",
+   "dmg": "1d8 Healing + Spellcasting Modifier"
   },
   "comp": {
    "v": true,
    "s": true
-  }
+  },
+  "ct": [
+   "Healing"
+  ],
+  "tiers": [
+   [
+    "Purge",
+    "The spell also ends the Sickened condition on the creature."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The healing increases to 1d10 + your spellcasting ability modifier."
+   ],
+   [
+    "Knitted Wounds",
+    "whenever you cast this spell targeting a creature that has the Bleeding Condition, that creature cannot cannot be inflicted with the bleeding condition for the next 1d4 turns of combat."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Second Wind",
+    "When you cast this spell on a unconscious target, it also gains 1 Action Point (AP)."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Shared Mending",
+    "When you cast this spell, you may choose a secondary target creature with 5ft of you and the original target, the secondary target regains hit-points equal to your Spellcasting Ability Modifier."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Lifeline",
+    "whenever you cast this spell targeting a creature that has 0 hit points, it regains a number of hit-points equal to twice your Spellcasting Ability Modifier."
+   ]
+  ]
  },
  {
   "n": "Cutting Wind",
