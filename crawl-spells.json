@@ -330,7 +330,21 @@
    "Occult"
   ],
   "lv": 1,
-  "f": {}
+  "f": {
+   "pre": "+1 NATURE or +1 OCCULT",
+   "cls": "Sorcerer, Druid, Warlock",
+   "cat": "Transmutation",
+   "cost": "2 MP",
+   "time": "Instantaneous ",
+   "type": "Utility",
+   "range": "Self",
+   "desc": "You speak an incantation shaping the air around you into spiny ice armor that covers your torso. For the 1d4 rounds of combat, all melee attacks that deal damage to you, cause your icey armor to burst, firing off icey needles and shards of ice towards your attacker dealing 1d6 cold damage to them.",
+   "dmg": "1d6 cold damage but only if dealt damage"
+  },
+  "comp": {
+   "s": true,
+   "v": true
+  }
  },
  {
   "n": "Ascension",
