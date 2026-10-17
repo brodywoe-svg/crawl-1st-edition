@@ -1529,7 +1529,7 @@
    ],
    [
     "Second Wind",
-    "When you cast this spell on a unconscious target, it also gains 1 Action Point (AP)."
+    "When you cast this spell on an Unconscious target, it also gains 1 Action Point (AP)."
    ],
    [
     "",
@@ -1545,7 +1545,7 @@
    ],
    [
     "Lifeline",
-    "whenever you cast this spell targeting a creature that has 0 hit points, it regains a number of hit-points equal to twice your Spellcasting Ability Modifier."
+    "whenever you cast this spell targeting a creature that has 0 hit points, it regains an additional number of hit-points equal to twice your Spellcasting Ability Modifier."
    ]
   ]
  },
