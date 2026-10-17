@@ -1559,15 +1559,65 @@
   "f": {
    "mat": "A paper fan or feather",
    "cat": "Transmutation",
-   "time": "1 Action",
+   "time": "Instantaneous",
    "range": "40ft (Single Target)",
-   "desc": "You seize the air and compress it as you whip up the air around you creating an invisible blade of wind. Make a ranged spell attack against a single target. On a hit, the target takes 1d10 slashing damage and the target and two other creatures Adjacent within 5 feet of the target must roll Dexterity saving throw or be knocked prone.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the slashing damage created by blade of wind increases by 1d10 for each slot level above 1st."
+   "desc": "You seize the air around you and compress it into an invisible blade of wind, then send it flying at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 slashing damage.",
+   "pre": "+2 ARCANA or +2 NATURE",
+   "cls": "Wizard, Sorcerer, Druid",
+   "cost": "2 MP",
+   "type": "Spell Attack (Attack Roll and Dexterity Save)",
+   "dmg": "1d8 Slashing"
   },
   "comp": {
    "v": true,
    "s": true,
    "m": true
-  }
+  },
+  "ct": [
+   "Wind"
+  ],
+  "tiers": [
+   [
+    "Long Draft",
+    "The range increases to 60ft."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Back Draft",
+    "On a hit, you can choose to choose to create a backdraft pulling the target creature 5ft towards you."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Rending Gale",
+    "On a critical hit, the target also gains the Bleeding condition."
+   ],
+   [
+    "Unseen Edge",
+    "The blade is invisible and silent, so casting this spell doesn’t reveal your position if you’re hidden."
+   ],
+   [
+    "",
+    "The damage increases to 2d8."
+   ],
+   [
+    "Wind Screen",
+    "After you cast this spell, the next ranged weapon attacks made against you has disadvantage."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Twin Blades",
+    "When you cast this spell, you can make a second ranged spell attack against a different creature within 10 feet of the first target. On a hit, it takes 1d8 slashing damage."
+   ]
+  ]
  },
  {
   "n": "Cyclone",
