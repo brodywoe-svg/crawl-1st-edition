@@ -821,6 +821,7 @@
    "type": "Spell Attack (Wisdom Save)",
    "mat": "1 Pink Pearl"
   },
+  "conc": true,
   "comp": {
    "v": true,
    "s": true,
