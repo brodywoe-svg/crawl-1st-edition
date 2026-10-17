@@ -819,7 +819,7 @@
    "cls": "Wizard, Sorcerer, Warlock, Bard",
    "cost": "2 MP",
    "type": "Spell Attack (Wisdom Save)",
-   "mat": "1 Pink Pearl"
+   "mat": "1 Pink Pearl (Consumed)"
   },
   "conc": true,
   "comp": {
