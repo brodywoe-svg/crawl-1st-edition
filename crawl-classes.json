@@ -7,12 +7,12 @@
    "desc": "Storytellers, minstrels and silver-tongued wanderers who draw Occult magic from words, music and the hearts of their listeners.\n\nEvery tavern has heard a song that made the room fall silent, and every bard knows why. Words and music carry power, and a bard has learned to pull on the threads that bind a listener’s fear, courage and longing. A ballad steadies a shaking ally’s sword arm. A whispered verse sours an enemy’s luck. A single, perfect note can shatter glass, nerve or bone.\n\nBards draw their magic from the harmonies, magic phrases, and through sheer force of personality rather than study or faith, using Charisma as their spellcasting ability. Where a Wizard pores over spellbooks, a bard learns magic the way a musician learns a tune: by ear, by heart and by performing it for anyone who’ll listen. Their spells are spoken, sung and played, which makes a bard formidable in a crowded hall and helpless with a gag over their mouth.\n\nIn the depths of a crawl, the bard is the party’s voice and nerve. They talk their way past guards, read a rival’s lies, and keep tired companions on their feet when the torches burn low. They are rarely the strongest in a fight, but they are almost always the reason the party survives it.",
    "source": "Arcane",
    "cast": "cha",
-   "spells": "3",
+   "spells": "2",
    "hd": "d8",
    "hp": "8 + Constitution Modifier",
    "saves": "Choose two of the following: Charisma, Wisdom, or Dexterity",
    "skills": "Four skills of your choice",
-   "skillPts": "10",
+   "skillPts": "7",
    "prof": "Choose two weapon proficiencies of your choice, simple and martial light armor,",
    "langs": "two additional languages of your choice",
    "chart": [
@@ -126,6 +126,11 @@
     {
      "n": "Arcane Spellcasting",
      "d": "",
+     "lv": 1
+    },
+    {
+     "n": "Bladesong Magic",
+     "d": "Bards can learn Enchantment or Illusion spells from the Occult Spell List.",
      "lv": 1
     }
    ],
