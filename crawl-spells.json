@@ -1560,12 +1560,12 @@
    "mat": "A paper fan or feather",
    "cat": "Transmutation",
    "time": "Instantaneous",
-   "range": "40ft (Single Target)",
+   "range": "40ft",
    "desc": "You seize the air around you and compress it into an invisible blade of wind, then send it flying at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 slashing damage.",
    "pre": "+2 ARCANA or +2 NATURE",
    "cls": "Wizard, Sorcerer, Druid",
    "cost": "2 MP",
-   "type": "Spell Attack (Attack Roll and Dexterity Save)",
+   "type": "Spell Attack (Attack Roll)",
    "dmg": "1d8 Slashing"
   },
   "comp": {
@@ -1587,7 +1587,7 @@
    ],
    [
     "Back Draft",
-    "On a hit, you can choose to choose to create a backdraft pulling the target creature 5ft towards you."
+    "On a hit, you can choose to create a backdraft pulling the target creature 5ft towards you."
    ],
    [
     "",
@@ -1607,7 +1607,7 @@
    ],
    [
     "Wind Screen",
-    "After you cast this spell, the next ranged weapon attacks made against you has disadvantage."
+    "After you cast this spell, until the start of your next turn the next ranged weapon attack made against you has disadvantage."
    ],
    [
     "",
