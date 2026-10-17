@@ -728,7 +728,7 @@
    "range": "25ft (Single Target)",
    "desc": "You whisper an incantation and blow citrus powder from palm towards a target conjuring a sickly sweet yellow and orange cloud that fills a 15ft by 15ft circle. Each creature within the cloud must succeed on a Constitution saving throw or take 2d4 Acid damage and become inflicted with the Sickened Condition until the end of their next turn, half as much damage on a successful save. target creatures that start their turn within the cloud must roll a constitution saving throw or take 1d4 acid damage. The cloud lingers for 1d4 turns before dissipating. ",
    "cls": "Wizard, Druid",
-   "pre": "+2 NATURE",
+   "pre": "+2 ARCANE or +2 NATURE",
    "cost": "3 MP",
    "type": "Ranged Spell Attack (Saving Throw)",
    "dmg": "2d4 Acid Damage",
