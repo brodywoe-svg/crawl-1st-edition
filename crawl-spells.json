@@ -615,12 +615,70 @@
   "f": {}
  },
  {
-  "n": "Bless",
+  "n": "Blessing",
   "tags": [
    "Divine"
   ],
   "lv": 1,
-  "f": {}
+  "f": {
+   "mat": "Any Holy Symbol (not consumed)",
+   "cls": "Cleric, Paladin,",
+   "pre": "+1 Religion ",
+   "cost": "2 MP",
+   "time": "Instantaneous",
+   "type": "Utility",
+   "range": "20ft",
+   "desc": "You speak a prayer to a deity of your choice, calling upon a blessing for you or your companions. Choose a single target of your choice, for the next 1d4 rounds of combat or until your concentration is broken or the spell ends, the target creatures receives a +1 bonus to all saving throws and the first attack roll they make each turn for the duration.",
+   "dmg": "N/A"
+  },
+  "conc": true,
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
+  },
+  "tiers": [
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The bonus provided by this spell increases to +2"
+   ],
+   [
+    "Balance",
+    "When you cast this spell, creatures affected by your blessing gain advantage on saving throws against being Dazed."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The bonus provided by this spell increases to +3"
+   ],
+   [
+    "Mind Shield",
+    "When you cast this spell, creatures affected by your blessing gain advantage on Wisdom saving throws against being charmed."
+   ],
+   [
+    "",
+    "The bonus provided by this spell increases to +4"
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The bonus provided by this spell increases to +5"
+   ],
+   [
+    "True Blessing",
+    "A creature blessed by this spell gains their choice of 1AP or 1MP at the start of their turn whenever they roll an Action die"
+   ]
+  ]
  },
  {
   "n": "Blight",
