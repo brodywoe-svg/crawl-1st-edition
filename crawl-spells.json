@@ -612,26 +612,6 @@
   "f": {}
  },
  {
-  "n": "Blade Burst",
-  "tags": [
-   "Arcane",
-   "Occult"
-  ],
-  "lv": 1,
-  "f": {
-   "mat": "A sword of any kind that you also proficient in",
-   "cat": "Transmutation",
-   "time": "1 Bonus Action",
-   "range": "5ft (Area of Effect)",
-   "desc": "You speak an incantation over a sword that is used in the casting of this spell. For the duration of this spell, while you are wielding the sword you gain an additional 10ft of movement and your next attack made with the sword deals and additional 1d10 thunder damage."
-  },
-  "comp": {
-   "v": true,
-   "s": true,
-   "m": true
-  }
- },
- {
   "n": "Bleed Fire",
   "tags": [
    "Arcane",
@@ -2547,6 +2527,76 @@
   ],
   "lv": 5,
   "f": {}
+ },
+ {
+  "n": "Humming Blade",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "mat": "A Blade or Sword you are proficient with (not consumed)",
+   "cat": "Transmutation",
+   "time": "Instantaneous ",
+   "range": "Self",
+   "desc": "You run your hand along your Blade or Sword and speak a single sharp note. The weapon begins to vibrate, letting out a thin, high-pitched hum that sets nearby teeth on edge. While you maintain concentration, the next time you hit a creature with that weapon, the stored vibration releases on impact in a crack of sound: the target takes an extra 1d8 Thunder damage, and each other hostile creature within 5 feet of it must make a Constitution saving throw or take 1d4 Thunder damage. The weapon then falls silent and the spell ends.",
+   "pre": "+2 ARCANE",
+   "cls": "Wizard, Druid, Bard",
+   "cost": "2 MP",
+   "type": "Utility"
+  },
+  "conc": true,
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
+  },
+  "ct": [
+   "Weapon Magic"
+  ],
+  "tiers": [
+   [
+    "",
+    ""
+   ],
+   [
+    "Ringing Parry",
+    "While Humming Blade is active and you’re wielding the humming weapon, whenever a creature misses you with a melee weapon attack, it takes 2 Thunder damage as its weapon rings off the vibrating blade. This doesn’t end the spell."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Deafening Ring",
+    "Whenever you deal thunder damage with a humming weapon to a creature, those creatures become Deafened until the end of its next turn."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "The extra damage increases to 2d8 Thunder."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Supercharge",
+    "While Humming Blade is active, if you take Lightning damage, the vibrating blade drinks in the current. Your next melee weapon attack with the humming weapon deals an extra 1d8 Lightning damage on a hit. If that attack misses, the current arcs back through you, and you take the 1d8 Lightning damage instead."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Sonic Slash",
+    "When you make the next melee weapon attack with the humming weapon, you can swing it to release its stored vibration as a slash of sound, attacking a creature up to 15 feet away from you as long as their are no obstacles in your way. This counts as a melee weapon attack. On a hit, the spell’s effects resolve as normal."
+   ]
+  ]
  },
  {
   "n": "Ice Knife",
