@@ -65,69 +65,6 @@
   ]
  },
  {
-  "n": "Acid Spray",
-  "tags": [
-   "Arcane",
-   "Primal"
-  ],
-  "lv": 1,
-  "f": {
-   "mat": "A Vial of Citrus Extract",
-   "cat": "Evocation",
-   "cost": "2 MP",
-   "time": "Instantaneous",
-   "range": "15ft (Single Target)",
-   "desc": "You extend your hand toward a creature you can see within range and project a Stream of acidic wash from your palm. The creature must succeed on a Dexterity saving throw or take 2d12 Acid damage and if your target is wearing metallic armor their AC is reduced by 1 until the start of your next turn, if the target is a Construct their AC is instead Reduced by 3. On Successful save the targets AC is not reduced and the target only takes half damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d12 for each slot level above 1st."
-  },
-  "comp": {
-   "v": true,
-   "s": true,
-   "m": true
-  },
-  "tiers": [
-   [
-    "Splash Damage",
-    "whenever you deal damage you deal an extra 1d4 acid damage"
-   ],
-   [
-    "Test",
-    "Test"
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ],
-   [
-    "",
-    ""
-   ]
-  ]
- },
- {
   "n": "Aid",
   "tags": [
    "Divine"
@@ -779,6 +716,72 @@
   "f": {}
  },
  {
+  "n": "Caustic Cloud",
+  "tags": [
+   "Arcane",
+   "Primal"
+  ],
+  "lv": 1,
+  "f": {
+   "mat": "1 Vial of Citrus Powder",
+   "cat": "Evocation",
+   "time": "Instantaneous",
+   "range": "15ft (Single Target)",
+   "desc": "You whisper an incantation and blow citrus powder from palm towards a target conjuring a sickly sweet yellow and orange cloud that fills a 15ft by 15ft circle. Each creature within the cloud must succeed on a Constitution saving throw or take 2d4 Acid damage and become inflicted with the Sickened Condition, half as much damage on a successful save. target creatures that start their turn within the cloud must roll a constitution saving throw or take 1d4 acid damage. The cloud lingers for 1d4 turns before dissipating. ",
+   "cls": "Wizard, Druid",
+   "pre": "+2 NATURE",
+   "cost": "3 MP",
+   "type": "Ranged Spell Attack (Saving Throw)"
+  },
+  "comp": {
+   "v": true,
+   "s": true,
+   "m": true
+  },
+  "tiers": [
+   [
+    "Splash Damage",
+    "whenever you deal damage you deal an extra 1d4 acid damage"
+   ],
+   [
+    "Test",
+    "Test"
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    ""
+   ]
+  ]
+ },
+ {
   "n": "Ceremony",
   "tags": [
    "Divine"
@@ -811,15 +814,15 @@
   ],
   "lv": 1,
   "f": {
-   "cat": "Enchantment",
-   "time": "Instantaneous",
-   "range": "10ft (Single Target)",
-   "desc": "You catch a humanoid’s eye and speak a few warm, honeyed words laced with magic. The target must be a humanoid that can see and hear you, and it must make a Wisdom saving throw against your spell save DC. It has Advantage on the save if you or your allies are fighting it. On a failure, it is Charmed by you for 1 hour, or until you or your allies do anything harmful to it, and it treats you as a friendly acquaintance. When the spell ends, the creature knows it was charmed and by whom. When you cast this spell, you gain 1 Exhaustion Point (EP).",
    "pre": "+2 ARCANE",
    "cls": "Wizard, Sorcerer, Warlock, Bard",
+   "mat": "1 Pink Pearl (Consumed)",
+   "cat": "Enchantment",
    "cost": "2 MP",
+   "time": "Instantaneous",
    "type": "Spell Attack (Wisdom Save)",
-   "mat": "1 Pink Pearl (Consumed)"
+   "range": "10ft (Single Target)",
+   "desc": "You catch a humanoid’s eye and speak a few warm, honeyed words laced with magic. The target must be a humanoid that can see and hear you, and it must make a Wisdom saving throw against your spell save DC. It has Advantage on the save if you or your allies are fighting it. On a failure, it is Charmed by you for 1 hour, or until you or your allies do anything harmful to it, and it treats you as a friendly acquaintance. When the spell ends, the creature knows it was charmed and by whom. When you cast this spell, you gain 1 Exhaustion Point (EP)."
   },
   "conc": true,
   "comp": {
@@ -966,15 +969,15 @@
   ],
   "lv": 1,
   "f": {
-   "mat": "A burnt piece of paper",
-   "cat": "Evocation",
-   "range": "30ft (Single Target / Area of Effect)",
-   "desc": "You crush a scrap of burnt paper in your fist, and it reforms as a glowing ball of packed cinders, which you send flying at a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 Fire damage. Hit or miss, the ball then bursts in a shower of burning ash: the target and each other creature within 5 feet of it must make a Dexterity saving throw against your spell save DC or take 1d4 Fire damage.",
    "pre": "+2 Arcane",
    "cls": "Wizard, Sorcerer",
+   "mat": "A burnt piece of paper",
+   "cat": "Evocation",
    "cost": "3 MP",
    "time": "Instantaneous",
    "type": "Ranged Spell Attack (Attack Roll and Dexterity Save)",
+   "range": "30ft (Single Target / Area of Effect)",
+   "desc": "You crush a scrap of burnt paper in your fist, and it reforms as a glowing ball of packed cinders, which you send flying at a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 Fire damage. Hit or miss, the ball then bursts in a shower of burning ash: the target and each other creature within 5 feet of it must make a Dexterity saving throw against your spell save DC or take 1d4 Fire damage.",
    "dmg": "1d8 Fire"
   },
   "comp": {
@@ -1489,14 +1492,14 @@
   ],
   "lv": 1,
   "f": {
-   "cat": "Evocation",
-   "range": "Touch",
-   "desc": "You lay a hand on a creature’s wounds, and warm light knits torn flesh back together. The creature regains hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on Undead or Constructs. When you cast this spell, you gain 1 Exhaustion Point (EP).",
    "pre": "+2 MEDICINE",
    "cls": "Cleric, Paladin, Druid",
+   "cat": "Evocation",
    "cost": "2 MP",
    "time": "Instantaneous",
    "type": "Utility",
+   "range": "Touch",
+   "desc": "You lay a hand on a creature’s wounds, and warm light knits torn flesh back together. The creature regains hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on Undead or Constructs. When you cast this spell, you gain 1 Exhaustion Point (EP).",
    "dmg": "1d8 Healing + Spellcasting Modifier"
   },
   "comp": {
@@ -1557,15 +1560,15 @@
   ],
   "lv": 1,
   "f": {
-   "mat": "A paper fan or feather",
-   "cat": "Transmutation",
-   "time": "Instantaneous",
-   "range": "40ft",
-   "desc": "You seize the air around you and compress it into an invisible blade of wind, then send it flying at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 slashing damage.",
    "pre": "+2 ARCANA or +2 NATURE",
    "cls": "Wizard, Sorcerer, Druid",
+   "mat": "A paper fan or feather",
+   "cat": "Transmutation",
    "cost": "2 MP",
+   "time": "Instantaneous",
    "type": "Spell Attack (Attack Roll)",
+   "range": "40ft",
+   "desc": "You seize the air around you and compress it into an invisible blade of wind, then send it flying at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 slashing damage.",
    "dmg": "1d8 Slashing"
   },
   "comp": {
@@ -1747,14 +1750,14 @@
   ],
   "lv": 1,
   "f": {
-   "cat": "Divination",
-   "range": "Self (Single Target)",
-   "desc": "You spend a minute quieting your mind and attuning your senses to the flow of magic around you. For the next 10 minutes, you sense the presence of magic within 30 feet of you. While the spell lasts, you can focus on a creature or object you can see within that area to see a faint aura around it and learn its school of magic, if any. The spell is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt. When you cast this spell you gain 1 Exhaustion Point (EP).",
-   "time": "1 Minute",
-   "cost": "N/A",
-   "cls": "Wizard, Sorcerer, Warlock, Bard, Cleric, Druid",
    "pre": "+1 ARCANE",
-   "type": "Ritual"
+   "cls": "Wizard, Sorcerer, Warlock, Bard, Cleric, Druid",
+   "cat": "Divination",
+   "cost": "N/A",
+   "time": "1 Minute",
+   "type": "Ritual",
+   "range": "Self (Single Target)",
+   "desc": "You spend a minute quieting your mind and attuning your senses to the flow of magic around you. For the next 10 minutes, you sense the presence of magic within 30 feet of you. While the spell lasts, you can focus on a creature or object you can see within that area to see a faint aura around it and learn its school of magic, if any. The spell is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt. When you cast this spell you gain 1 Exhaustion Point (EP)."
   },
   "comp": {
    "v": true,
@@ -2778,15 +2781,15 @@
   ],
   "lv": 1,
   "f": {
-   "mat": "A Blade or Sword you are proficient with (not consumed)",
-   "cat": "Transmutation",
-   "time": "Instantaneous ",
-   "range": "Self",
-   "desc": "You run your hand along your Blade or Sword and speak a single sharp note. The weapon begins to vibrate, letting out a thin, high-pitched hum that sets nearby teeth on edge. While you maintain concentration, the next time you hit a creature with that weapon, the stored vibration releases on impact in a crack of sound: the target takes an extra 1d8 Thunder damage, and each other hostile creature within 5 feet of it must make a Constitution saving throw or take 1d4 Thunder damage. The weapon then falls silent and the spell ends.",
    "pre": "+2 ARCANE",
    "cls": "Wizard, Druid, Bard",
+   "mat": "A Blade or Sword you are proficient with (not consumed)",
+   "cat": "Transmutation",
    "cost": "2 MP",
+   "time": "Instantaneous ",
    "type": "Utility",
+   "range": "Self",
+   "desc": "You run your hand along your Blade or Sword and speak a single sharp note. The weapon begins to vibrate, letting out a thin, high-pitched hum that sets nearby teeth on edge. While you maintain concentration, the next time you hit a creature with that weapon, the stored vibration releases on impact in a crack of sound: the target takes an extra 1d8 Thunder damage, and each other hostile creature within 5 feet of it must make a Constitution saving throw or take 1d4 Thunder damage. The weapon then falls silent and the spell ends.",
    "dmg": "1d8 Thunder Damage"
   },
   "conc": true,
