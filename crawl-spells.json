@@ -814,7 +814,7 @@
    "cat": "Enchantment",
    "time": "Instantaneous",
    "range": "10ft (Single Target)",
-   "desc": "You catch a humanoid’s eye and speak a few warm, honeyed words laced with magic. The target must be a humanoid that can see and hear you, and it must make a Wisdom saving throw against your spell save DC. It has Advantage on the save if you or your allies are fighting it. On a failure, it is Charmed by you for 1 hour, or until you or your allies do anything harmful to it, and it treats you as a friendly acquaintance. When the spell ends, the creature knows it was charmed and by whom.",
+   "desc": "You catch a humanoid’s eye and speak a few warm, honeyed words laced with magic. The target must be a humanoid that can see and hear you, and it must make a Wisdom saving throw against your spell save DC. It has Advantage on the save if you or your allies are fighting it. On a failure, it is Charmed by you for 1 hour, or until you or your allies do anything harmful to it, and it treats you as a friendly acquaintance. When the spell ends, the creature knows it was charmed and by whom. When you cast this spell, you gain 1 Exhaustion Point (EP).",
    "pre": "+2 ARCANE",
    "cls": "Wizard, Sorcerer, Warlock, Bard",
    "cost": "2 MP",
