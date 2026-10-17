@@ -2544,7 +2544,8 @@
    "pre": "+2 ARCANE",
    "cls": "Wizard, Druid, Bard",
    "cost": "2 MP",
-   "type": "Utility"
+   "type": "Utility",
+   "dmg": "1d8 Thunder Damage"
   },
   "conc": true,
   "comp": {
