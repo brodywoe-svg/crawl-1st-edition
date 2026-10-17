@@ -968,15 +968,62 @@
   "f": {
    "mat": "A burnt piece of paper",
    "cat": "Evocation",
-   "time": "1 Action",
    "range": "30ft (Single Target / Area of Effect)",
-   "desc": "You create a condensed ball of fiery energy and fling it at one creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. Hit or miss, the ball then explodes in a blast of fiery cinders. The target and each creature within 5 feet of the point where the ball exploded must succeed on a Dexterity saving throw or take 2d6 fire damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the fire damage created by the explosion increases by 1d6 for each slot level above 1st."
+   "desc": "You crush a scrap of burnt paper in your fist, and it reforms as a glowing ball of packed cinders, which you send flying at a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 Fire damage. Hit or miss, the ball then bursts in a shower of burning ash: the target and each other creature within 5 feet of it must make a Dexterity saving throw against your spell save DC or take 1d4 Fire damage.",
+   "pre": "+2 Arcane",
+   "cls": "Wizard, Sorcerer",
+   "cost": "3 MP",
+   "time": "Instantaneous",
+   "type": "Ranged Spell Attack (Attack Roll and Dexterity Save)",
+   "dmg": "1d8 Fire"
   },
   "comp": {
    "v": true,
    "s": true,
    "m": true
-  }
+  },
+  "tiers": [
+   [
+    "",
+    "The hit damage increases to 1d10 Fire. "
+   ],
+   [
+    "Kindling:",
+    " The burst ignites flammable objects in the area that aren’t being worn or carried, such as dry brush, cloth, oil and wooden crates."
+   ],
+   [
+    "",
+    "This spell’s range increases to 60 feet."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "Smolder",
+    "On a hit, the target becomes Enflamed."
+   ],
+   [
+    "",
+    "The burst’s radius increases to 10 feet."
+   ],
+   [
+    "Smokescreen",
+    "The burst leaves a dense cloud of smoke covering a 10ft circle centered on the original target, the smoke last until the start of the next round of combat, while a creature remains in the smoke cloud they are blinded."
+   ],
+   [
+    "",
+    ""
+   ],
+   [
+    "",
+    "This spell’s range increases to 90 feet."
+   ],
+   [
+    "Volley",
+    "When you cast this spell, you can spend 2 additional MP to hurl an additional ball of cinders at a different target within range."
+   ]
+  ]
  },
  {
   "n": "Circle of Death",
