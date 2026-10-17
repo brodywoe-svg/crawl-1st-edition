@@ -6,7 +6,7 @@
    "n": "Noble",
    "desc": "You were born into Nobility, and being apart of such has taught you many things from proper introductions, to fine dining, and noble presentation.",
    "skills": "Persuasion, Lore",
-   "weapons": "Simple and Martial Swords",
+   "weapons": "Simple Swords",
    "armor": "",
    "trades": "",
    "prof": "",
@@ -14,6 +14,33 @@
    "choices": [],
    "gear": [],
    "wealth": "25 (G)",
+   "feats": [],
+   "extra": []
+  },
+  {
+   "id": "bg-mvcljckd9rn0",
+   "n": "Refugee",
+   "desc": "You are refugee, in one way or another you have been flung from your way of life due to a conflict or by the decision of some king or ruler. You’ve lost everything, with nothing but the clothes off your back you aim for clearer pastures and better future.",
+   "skills": "",
+   "weapons": "",
+   "armor": "",
+   "trades": "",
+   "prof": "",
+   "langs": "None",
+   "choices": [
+    {
+     "n": 1,
+     "cat": "skill",
+     "opts": [
+      "Insight",
+      "Intimidation",
+      "Persuasion",
+      "Thievery"
+     ]
+    }
+   ],
+   "gear": [],
+   "wealth": "5 (S)",
    "feats": [],
    "extra": []
   }
