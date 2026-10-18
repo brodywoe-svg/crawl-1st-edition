@@ -372,114 +372,130 @@
    "hp": "10 + Constitution Modifier",
    "saves": "Strength, Constitution",
    "skills": "",
-   "skillPts": "",
+   "skillPts": "6",
    "prof": "",
    "langs": "",
    "chart": [
     {
      "lv": 1,
-     "pool": "",
-     "die": ""
+     "pool": "5",
+     "die": "d4"
     },
     {
      "lv": 2,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 3,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 4,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d6"
     },
     {
      "lv": 5,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d6"
     },
     {
      "lv": 6,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 7,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 8,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d8"
     },
     {
      "lv": 9,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d8"
     },
     {
      "lv": 10,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d8"
     },
     {
      "lv": 11,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d8"
     },
     {
      "lv": 12,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d10"
     },
     {
      "lv": 13,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d10"
     },
     {
      "lv": 14,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d10"
     },
     {
      "lv": 15,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d10"
     },
     {
      "lv": 16,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d10"
     },
     {
      "lv": 17,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d10"
     },
     {
      "lv": 18,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d10"
     },
     {
      "lv": 19,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d10"
     },
     {
      "lv": 20,
-     "pool": "",
-     "die": ""
+     "pool": "15",
+     "die": "d10"
     }
    ],
-   "feats": [],
+   "feats": [
+    {
+     "n": "Prowess",
+     "d": "Starting at 1st level, your martial training lets you push harder with each moment of combat.\n\nWhenever you roll your Action Die, you gain 1 additional Action Point (AP). This bonus increases to 2 AP at 6th level and 3 AP at 12th level.\n\nPoints gained from Prowess can’t exceed your Max Pool. Any excess is lost.",
+     "lv": 1
+    },
+    {
+     "n": "Fighting Style",
+     "d": "You adopt a particular style of fighting as your specialty. Choose\none of the following options. You gain an additional Fighting \nStyle option at the 5th level.\n\n[color=#b7791f]Archery[/color]: Your Critical Multiplier with Bows and Crossbows is x2.\n\n[color=#b7791f]Duel-Wielder[/color]: While you are wielding a weapon in each hand, you can add you can use the Whirlwind Weapon attack.\n\n[color=#b7791f]Two-Handed[/color]: While you are wielding a melee in both hands, Weapon actions costs are reduced by 1AP and whenever you roll a die for weapon damage, if you roll a 1, you may choose to reroll that die.\n\n[color=#b7791f]Bulwark[/color]: While you are wearing a Helmet and either Medium or heavy Armor, you gain an additional +1 to your Armor Class.\n\n[color=#b7791f]Defender[/color]: Whenever you use the Shield Bash weapon action, you can add your Strength Modifier to the Damage total. you gain an additional skill point in Shields.\n\n[color=#b7791f]Weapon Specialist[/color]. Choose a weapon Category of your Choice, You gain a single skill point in that weapon Category.",
+     "lv": 1
+    },
+    {
+     "n": "Adrenaline",
+     "d": "Starting at 2nd level, during Intense moments of duress and stress you’ll sometimes find your body is able to take on more than it can tolerate. During combat on your turn, you can expend 1AP to gain an additional 2 Action Points (AP) for your current turn, At the start of your next turn, you start with one less Action point and gain 1EP (Exhaustion Point). Once this Combat action has been used, it cannot be used for the next 3 rounds of combat.",
+     "lv": 2
+    }
+   ],
    "loadouts": [],
-   "money": "",
+   "money": "25",
    "moneyRoll": "",
    "extra": [],
    "choices": [],
