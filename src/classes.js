@@ -1,16 +1,17 @@
-/* Classes page (crawl-classes.json) and Backgrounds page (crawl-backgrounds.json); see src/crawldata.js for the data.
+/* Classes page (crawl-classes.json), Backgrounds page (crawl-backgrounds.json) and Feats page (crawl-feats.json); see src/crawldata.js for the data.
    The Character Creator reads both files, so whatever is added here can be picked there.
    Signed in as admin: Add, Edit, Delete; classes also get subclasses, a class chart, features by level and loadouts.
    Runs after the shared admin code, src/editkit.js and src/crawldata.js. */
-const PAGE = window.GL_PAGE;                       // "classes" or "backgrounds"
-const IS_CLS = PAGE === "classes";
-const FILE = IS_CLS ? "crawl-classes.json" : "crawl-backgrounds.json";
-const WHAT = IS_CLS ? "class" : "background";
-let list = IS_CLS ? normClasses(CLASSES) : normBgs(BACKGROUNDS), original = "", dirty = false;
+const PAGE = window.GL_PAGE;                       // "classes", "backgrounds" or "feats"
+const IS_CLS = PAGE === "classes", IS_FEAT = PAGE === "feats";
+const FILE = IS_CLS ? "crawl-classes.json" : IS_FEAT ? "crawl-feats.json" : "crawl-backgrounds.json";
+const WHAT = IS_CLS ? "class" : IS_FEAT ? "feat" : "background";
+const WHATS = IS_CLS ? "classes" : IS_FEAT ? "feats" : "backgrounds";
+let list = IS_CLS ? normClasses(CLASSES) : IS_FEAT ? normFeats(FEATS) : normBgs(BACKGROUNDS), original = "", dirty = false;
 const editing = new Set(), drafts = new Map();
-const clean = () => IS_CLS ? cleanClasses(list) : cleanBgs(list);
+const clean = () => IS_CLS ? cleanClasses(list) : IS_FEAT ? cleanFeats(list) : cleanBgs(list);
 function load(j) {
-  const a = IS_CLS ? (j && Array.isArray(j.classes) ? normClasses(j) : null) : (j && Array.isArray(j.backgrounds) ? normBgs(j) : null);
+  const a = IS_CLS ? (j && Array.isArray(j.classes) ? normClasses(j) : null) : IS_FEAT ? (j && Array.isArray(j.feats) ? normFeats(j) : null) : (j && Array.isArray(j.backgrounds) ? normBgs(j) : null);
   if (!a) return false; list = a; original = JSON.stringify(clean()); return true;
 }
 original = JSON.stringify(clean());
@@ -19,19 +20,25 @@ const say = m => { $("gmsg").textContent = m || "" };
 
 /* ---------------------------------------------------------------- view */
 const query = () => lcs($("cq").value.trim()).replace(/\s+/g, " ");
-const textOf = p => plainText([p.n, p.desc, p.skills, p.weapons, p.armor, p.trades, ...arr(p.choices).map(choiceText), p.prof, p.saves, p.langs, p.hd, p.hp, p.source, p.money, p.wealth, ...(p.feats || []).map(f => f.n + " " + f.d),
+const textOf = p => plainText([p.n, p.desc, p.cat, p.pre, p.skills, p.weapons, p.armor, p.trades, ...arr(p.choices).map(choiceText), p.prof, p.saves, p.langs, p.hd, p.hp, p.source, p.money, p.wealth, ...(p.feats || []).map(f => f.n + " " + f.d),
   ...(p.extra || []).map(x => x.k + " " + x.v), ...arr(p.loadouts).map(l => l.n + " " + gearLine(l.gear)), gearLine(p.gear || []), ...arr(p.subs).map(s => s.n)].join(" ")).toLowerCase();
 const gearHTML = g => g.length ? `<ul class="gearl">${g.map(x => `<li>${x.qty > 1 ? `<b>${x.qty}×</b> ` : ""}${x.iid ? `<a class="ilink" href="items.html#${encodeURIComponent(x.iid)}">${esc(x.n)}</a>` : esc(x.n)}</li>`).join("")}</ul>` : `<p class="muted">No gear listed.</p>`;
 const factsHTML = rows => { rows = rows.filter(r => r[1]); return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${richInline(v)}</dd>`).join("")}</dl>` : "" };
 const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, richInline, f.lv ? ` <span class="lvtag">Level ${f.lv}</span>` : "")).join("")}</div>` : "";
 const featId = (p, i) => `feat-${p.id}-${i}`;
+/* the general Feat feature: every class gains a feat at every Nth level (Character Creator rules) */
+const featRuleText = () => { const lv = featLevels(20); return lv.length ? `At ${ordinal(lv[0])} level, and again at ${lv.slice(1, 4).map(ordinal).join(", ")}${lv.length > 4 ? " and so on" : ""}, you gain a feat of your choice from the [link=feats.html]Feats[/link] page, as long as you meet its prerequisite.` : "" };
 function chartHTML(k) {
+  const maxLv = Math.max(0, ...k.chart.map(r => r.lv || 0)), fLv = k.chart.length ? featLevels(Math.max(maxLv, 1)) : [];
   const lvls = [...new Set([...k.chart.map(r => r.lv).filter(Boolean), ...k.feats.map(f => f.lv || 1)])].sort((a, b) => a - b);
-  const byLv = new Map(k.chart.map(r => [r.lv, r]));
+  const byLv = new Map(k.chart.map(r => [r.lv, r])), ruleId = `feat-${k.id}-rule`;
   const rows = lvls.map(lv => { const r = byLv.get(lv) || {}, fs = k.feats.map((f, i) => [f, i]).filter(([f]) => (f.lv || 1) === lv);
-    return `<tr><th scope="row">${lv}</th><td>${esc(r.pool || "–")}</td><td>${esc(r.die || "–")}</td><td>${fs.map(([f, i]) => `<button type="button" class="flink" data-feat="${featId(k, i)}">${esc(f.n)}</button>`).join(", ") || "–"}</td></tr>` }).join("");
+    const cells = fs.map(([f, i]) => `<button type="button" class="flink" data-feat="${featId(k, i)}">${esc(f.n)}</button>`);
+    if (fLv.includes(lv)) cells.push(`<button type="button" class="flink" data-feat="${ruleId}">Feat</button>`);
+    return `<tr><th scope="row">${lv}</th><td>${esc(r.pool || "–")}</td><td>${esc(r.die || "–")}</td><td>${cells.join(", ") || "–"}</td></tr>` }).join("");
+  const ruleBox = fLv.length ? `<div class="clsf" id="${ruleId}"><h4><span class="pdn">Feat</span><span class="lvtag">Levels ${fLv.slice(0, 3).join(", ")}…</span></h4>${paras(featRuleText())}</div>` : "";
   return `<div class="clsgrid"><div class="clschart"><table><thead><tr><th>Level</th><th>Max Pool</th><th>Action Die</th><th>Features</th></tr></thead><tbody>${rows || `<tr><td colspan="4" class="muted">No levels yet.</td></tr>`}</tbody></table></div>
-<div class="clsfeats" aria-label="${esc(k.n)} features"><div class="cfh">Class features</div><div class="cfin" tabindex="0">${k.feats.map((f, i) => [f, i]).sort((a, b) => (a[0].lv || 1) - (b[0].lv || 1)).map(([f, i]) => `<div class="clsf" id="${featId(k, i)}"><h4><span class="pdn">${esc(f.n)}</span><span class="lvtag">Level ${f.lv || 1}</span></h4>${paras(f.d)}</div>`).join("") || `<p class="muted">No features yet.</p>`}</div></div></div>`;
+<div class="clsfeats" aria-label="${esc(k.n)} features"><div class="cfh">Class features</div><div class="cfin" tabindex="0">${k.feats.map((f, i) => [f, i]).sort((a, b) => (a[0].lv || 1) - (b[0].lv || 1)).map(([f, i]) => `<div class="clsf" id="${featId(k, i)}"><h4><span class="pdn">${esc(f.n)}</span><span class="lvtag">Level ${f.lv || 1}</span></h4>${paras(f.d)}</div>`).join("")}${ruleBox}${k.feats.length || ruleBox ? "" : `<p class="muted">No features yet.</p>`}</div></div></div>`;
 }
 function classBody(k) {
   return (k.desc ? `<div class="clead">${paras(k.desc)}</div>` : "") + chartHTML(k) +
@@ -52,16 +59,19 @@ function bgBody(b) {
       ...b.choices.map(ch => ["Proficiency choice", choiceText(ch)]), ["Starting wealth", b.wealth], ...b.extra.map(x => [x.k || "Detail", x.v])]) +
     (b.gear.length ? `<div class="clsload"><h3>Starting equipment</h3>${gearHTML(b.gear)}</div>` : "") + featHTML(b.feats);
 }
+function featBody(f) {
+  return factsHTML([["Prerequisite", f.pre], ...f.extra.map(x => [x.k || "Detail", x.v])]) + (f.desc ? `<div class="clead">${paras(f.desc)}</div>` : `<p class="muted">No description yet.</p>`);
+}
 function subHTML(s, k) {
   if (editing.has(s._id)) return `<div class="subr">${form(s, "sub", k)}</div>`;
   return `<div class="subr" id="${esc(s.id)}"><div class="subh"><b>${esc(s.n)}</b>${ADMIN ? `<button type="button" class="gedit" data-act="edit" data-id="${s._id}">Edit</button>` : ""}</div>${s.desc ? `<div class="clead">${paras(s.desc)}</div>` : ""}${featHTML(s.feats.slice().sort((a, b) => (a.lv || 1) - (b.lv || 1)))}${s.desc || s.feats.length ? "" : `<p class="muted">No details yet.</p>`}</div>`;
 }
 function cardHTML(p, q) {
-  if (editing.has(p._id)) return `<section class="cond" id="${esc(p.id)}"><div class="chead"><span>${p._new ? "New " + WHAT : "Editing " + esc(p.n)}</span></div><div class="cbody">${form(p, IS_CLS ? "class" : "bg")}</div></section>`;
-  const tag = IS_CLS && p.source ? `<span class="ctag">${esc(p.source)} magic</span>` : "";
+  if (editing.has(p._id)) return `<section class="cond" id="${esc(p.id)}"><div class="chead"><span>${p._new ? "New " + WHAT : "Editing " + esc(p.n)}</span></div><div class="cbody">${form(p, IS_CLS ? "class" : IS_FEAT ? "feat" : "bg")}</div></section>`;
+  const tag = IS_CLS && p.source ? `<span class="ctag">${esc(p.source)} magic</span>` : IS_FEAT && p.cat ? `<span class="ctag">${esc(p.cat)}</span>` : "";
   const subs = !IS_CLS ? [] : q && !textOf({ ...p, subs: [] }).includes(q) ? p.subs.filter(s => editing.has(s._id) || textOf(s).includes(q)) : p.subs;
   return `<section class="cond" id="${esc(p.id)}"><h2 class="chead"><span>${esc(p.n)}</span><span class="chr">${tag}${ADMIN ? `<button type="button" class="gedit" data-act="edit" data-id="${p._id}">Edit</button>` : ""}</span></h2>
-<div class="cbody">${IS_CLS ? classBody(p) : bgBody(p)}
+<div class="cbody">${IS_CLS ? classBody(p) : IS_FEAT ? featBody(p) : bgBody(p)}
 ${IS_CLS && (subs.length || ADMIN) ? `<div class="subs"><h3>Subclasses</h3>${subs.map(s => subHTML(s, p)).join("") || `<p class="muted">No subclasses yet.</p>`}${ADMIN ? `<button type="button" class="btn addsub" data-act="addsub" data-id="${p._id}">Add a subclass to ${esc(p.n)}</button>` : ""}</div>` : ""}</div></section>`;
 }
 
@@ -99,7 +109,7 @@ ${fld("spells", "Spells at character creation", "Empty = no limit", inp("spells"
     fld("skills", "Starting Skill Proficiencies", "Name skills, or write “Two skills of your choice” or “Either Arcane or Lore”.", inp("skills", "e.g. Arcane, Two skills of your choice")) +
     fld("prof", "Other Proficiencies", "Weapon types, armor and trade skills, e.g. simple Blades, Light Armor, Either Alchemy or Scribing.", inp("prof", "e.g. simple Blades, Light Armor")) +
     fld("langs", "Languages", "", inp("langs", "e.g. One additional Language of your choice")) + choicesEditor(d) +
-    `<div class="glab">Class chart <small>One row per level: its Max Pool and Action Die. Features are added to the right level automatically.</small></div><div class="chlist"><div class="chrow chh"><span>Level</span><span>Max Pool</span><span>Action Die</span><span></span></div>${d.chart.map(chartRowHTML).join("")}</div>
+    `<div class="glab">Class chart <small>One row per level: its Max Pool and Action Die. Features are added to the right level automatically, and so is a Feat at every ${featEvery() ? ordinal(featEvery()) : "Nth"} level (set in the Character Creator's rules).</small></div><div class="chlist"><div class="chrow chh"><span>Level</span><span>Max Pool</span><span>Action Die</span><span></span></div>${d.chart.map(chartRowHTML).join("")}</div>
 <div class="gbtns"><button type="button" class="btn" data-act="cadd">Add a level</button><button type="button" class="btn" data-act="cfill">Fill in levels 1 to 20</button></div>` +
     feats(d.feats, "Class features") +
     `<div class="glab">Equipment Loadouts <small>Each loadout is a set of gear a player can take. Item names from the Items page link to them.</small></div><div class="llist">${d.loadouts.map(loadoutHTML).join("")}</div><button type="button" class="btn" data-act="ladd">Add a loadout</button>` +
@@ -111,6 +121,10 @@ ${fld("majorLv", "Major school chosen at level", "Empty = no Major", inp("majorL
 ${fld("oppCost", "Skill points per Rank for an Opposing School spell", "", inp("oppCost", "e.g. 2"))}</div>
 <div class="glab">Schools and their Opposing Schools <small>The schools a player can pick as their Major or Minor.</small></div><datalist id="schoolNames">${SCHOOLS.map(s => `<option value="${esc(s)}">`).join("")}</datalist><div class="schlist">${d.schools.map(schoolRowHTML).join("")}</div>
 <div class="gbtns"><button type="button" class="btn" data-act="sadd">Add a school</button><button type="button" class="btn" data-act="sfill">Add the schools from the spell list</button></div>` + extras;
+  else if (kind === "feat") body = fld("n", "Feat name", "", inp("n", "e.g. Shield Master")) +
+    `<div class="fgrid">${fld("cat", "Category", "Optional, e.g. Combat, Magic, Skill, General", `<input type="text" id="${id("cat")}" data-k="cat" value="${esc(d.cat)}" placeholder="e.g. Combat" list="featCats" autocomplete="off">`)}${fld("pre", "Prerequisite", "Optional", inp("pre", "e.g. Strength 13 or higher, 4th level"))}</div>` +
+    `<datalist id="featCats">${[...new Set(["General", "Combat", "Magic", "Skill", ...list.map(x => x.cat).filter(Boolean)])].map(c => `<option value="${esc(c)}">`).join("")}</datalist>` +
+    fld("desc", "What the feat does", "Leave a blank line between paragraphs.", `<textarea id="${id("desc")}" data-k="desc" rows="6">${esc(d.desc)}</textarea>`) + extras;
   else body = fld("n", "Background name", "", inp("n", "e.g. Ferryman")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) +
     `<div class="glab">Starting proficiencies <small>Name what the background gives. Write "Either Lore or Occult" for a pick of one, or "Two skills of your choice" for free picks. Use Proficiency choices below to let the player pick from a group you set.</small></div>
 <div class="fgrid">${fld("skills", "Skill Proficiencies", "", inp("skills", "e.g. Persuasion, Appraisal"))}${fld("weapons", "Weapon Proficiencies", "", inp("weapons", "e.g. Simple and Martial Swords"))}
@@ -144,11 +158,11 @@ function render() {
   if (q) shown = shown.filter(p => editing.has(p._id) || textOf(p).includes(q) || arr(p.subs).some(s => editing.has(s._id)));
   shown.sort((a, b) => (a._new ? -1 : b._new ? 1 : 0) || byName(a, b));
   const n = list.filter(p => !p._new).length;
-  $("ccount").textContent = `${n} ${n === 1 ? WHAT : WHAT === "class" ? "classes" : "backgrounds"}`;
+  $("ccount").textContent = `${n} ${n === 1 ? WHAT : WHATS}`;
   $("clist").innerHTML = ITEM_LIST() + (shown.length ? `<div class="rlist2">${shown.map(p => cardHTML(p, q)).join("")}</div>` : "");
   sideShow(editing.size > 0);
   $("cempty").hidden = shown.length > 0;
-  $("cempty").textContent = n ? "Nothing matches. Try a different word, or clear the search." : `No ${WHAT === "class" ? "classes" : "backgrounds"} yet.` + (ADMIN ? ` Click Add ${WHAT} to create the first one.` : "");
+  $("cempty").textContent = n ? "Nothing matches. Try a different word, or clear the search." : `No ${WHATS} yet.` + (ADMIN ? ` Click Add ${WHAT} to create the first one.` : "");
   $("gAdd").hidden = !ADMIN;
 }
 function markDirty() {
@@ -201,7 +215,7 @@ $("clist").addEventListener("click", ev => {
     const lvs = d.chart.map(r => featLv(r.lv)).filter(Boolean);
     if (new Set(lvs).size !== lvs.length) { err("Two chart rows have the same level."); return }
     const kind = f.dataset.kind;
-    const keep = kind === "sub" ? normClass({ subs: [{ ...p, ...d, n: name }] }).subs[0] : kind === "class" ? normClass({ ...p, ...d, n: name, subs: p.subs }) : normBg({ ...p, ...d, n: name });
+    const keep = kind === "sub" ? normClass({ subs: [{ ...p, ...d, n: name }] }).subs[0] : kind === "class" ? normClass({ ...p, ...d, n: name, subs: p.subs }) : kind === "feat" ? normFeat({ ...p, ...d, n: name }) : normBg({ ...p, ...d, n: name });
     if (kind === "class") keep.subs = p.subs;
     Object.keys(keep).forEach(k => { if (k !== "_id") p[k] = keep[k] });
     delete p._new; editing.delete(id); drafts.delete(id); render(); markDirty();
@@ -212,7 +226,7 @@ $("clist").addEventListener("change", ev => {
   const row = s.closest(".choicerow"); row.querySelector(".chopts").innerHTML = choiceOptsHTML(s.value, []);
 });
 $("gAdd").addEventListener("click", () => {
-  const p = IS_CLS ? normClass({ n: "" }) : normBg({ n: "" }); p._new = true;
+  const p = IS_CLS ? normClass({ n: "" }) : IS_FEAT ? normFeat({ n: "" }) : normBg({ n: "" }); p._new = true;
   list.push(p); editing.add(p._id); $("cq").value = ""; render(); focusForm(p._id);
 });
 $("cq").addEventListener("input", render);
@@ -222,11 +236,11 @@ $("saveBtn").addEventListener("click", async () => {
   $("saveBtn").disabled = true; $("discardBtn").disabled = true; $("saveMsg").textContent = "Saving to the site…";
   try {
     const data = clean();
-    await putFile(FILE, JSON.stringify(data, null, 1) + "\n", `Update ${IS_CLS ? "classes" : "backgrounds"} from the admin page`);
+    await putFile(FILE, JSON.stringify(data, null, 1) + "\n", `Update ${WHATS} from the admin page`);
     original = JSON.stringify(data); dirty = false;
-    $("saveMsg").textContent = "Saved. Everyone sees the changes, in the Character Creator too, in about a minute.";
+    $("saveMsg").textContent = IS_FEAT ? "Saved. Everyone sees the changes in about a minute." : "Saved. Everyone sees the changes, in the Character Creator too, in about a minute.";
     setTimeout(() => { if (!dirty) $("savebar").hidden = true }, 4000);
-  } catch (x) { $("saveMsg").textContent = saveError(x && x.code, IS_CLS ? "classes" : "backgrounds"); $("saveBtn").disabled = false; $("discardBtn").disabled = false }
+  } catch (x) { $("saveMsg").textContent = saveError(x && x.code, WHATS); $("saveBtn").disabled = false; $("discardBtn").disabled = false }
 });
 $("discardBtn").addEventListener("click", () => { load(JSON.parse(original)); editing.clear(); drafts.clear(); dirty = false; $("savebar").hidden = true; say(""); render() });
 window.addEventListener("beforeunload", ev => { if (dirty || editing.size) { ev.preventDefault(); ev.returnValue = "" } });
@@ -248,4 +262,5 @@ if (STATIC) {
     .then(([j, ij]) => { if (ij && Array.isArray(ij.items)) GEAR_ITEMS = ij.items; if (j && !dirty) load(j) })
     .finally(() => { render(); showHash(); restoreAdmin() });
 }
+if (IS_FEAT && $("lintro")) { const lv = featLevels(20); $("lintro").textContent = "The feats of Crawl 1st Edition: special talents that set a character apart. " + (lv.length ? `Every class gains a feat at ${ordinal(lv[0])} level and every ${featEvery()} levels after (${lv.slice(1, 4).map(ordinal).join(", ")} and so on).` : "") }
 render(); showHash();

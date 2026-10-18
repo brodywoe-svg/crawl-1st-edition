@@ -178,12 +178,12 @@
   ],
   "lv": 1,
   "f": {
-   "pre": "+2 ARC",
+   "pre": "+2 ARCANE",
    "cls": "Wizard, Sorcerer",
    "mat": "1 Moonstone",
    "cat": "Abjuration",
    "cost": "2 MP",
-   "time": "Instantaneous ",
+   "time": "Instantaneous",
    "type": "Reaction",
    "range": "Self",
    "desc": "When you are targeted by a spell cast by a hostile creature, you can cast this spell to create a protective barrier of arcane energy around you. Until the start of your next turn, you gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
@@ -210,7 +210,7 @@
    ],
    [
     "Wide Barrier",
-    "Whenever you cast this spell, you may choose to gain 1 addition Exhaustion Point (EP), if you do, choose two target allies within 5ft of you. Both allies gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells until next turn."
+    "Whenever you cast this spell, you can choose to gain 1 additional Exhaustion Point (EP). If you do, choose up to two allies within 5 feet of you. Both allies gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells until the start of your next turn."
    ],
    [
     "",
@@ -222,7 +222,7 @@
    ],
    [
     "",
-    "Whenever you cast this spell, you instead gain a+4 bonus to AC vs Spell attacks."
+    "Whenever you cast this spell, you instead gain a +4 bonus to AC against spell attacks."
    ],
    [
     "",
@@ -230,11 +230,11 @@
    ],
    [
     "",
-    "Whenever you cast this spell, you instead gain a+5 bonus to AC vs Spell attacks."
+    "Whenever you cast this spell, you instead gain a +5 bonus to AC against spell attacks."
    ],
    [
     "Absorption",
-    "When you cast this spell, If a spell attack misses you, or you succeed on a saving throw against a spell targeting you, you gain MP equal to half that spell’s casting cost."
+    "When you cast this spell, if a spell attack misses you, or you succeed on a saving throw against a spell targeting you, you gain MP equal to half that spell’s casting cost."
    ]
   ]
  },
@@ -267,9 +267,9 @@
    "mat": "A piece of wrought iron",
    "cat": "Abjuration",
    "cost": "2 MP",
-   "time": "Instantaneous ",
+   "time": "Instantaneous",
    "type": "Reaction",
-   "range": "Self ",
+   "range": "Self",
    "desc": "When you are targeted by a weapon attack from a hostile creature, you can cast this spell to raise a shimmering shield of arcane force around you. Until the start of your next turn, you gain a +3 bonus to AC against weapon attacks, including the triggering attack, as long as you maintain concentration. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
    "dmg": "N/A"
   },
@@ -335,11 +335,11 @@
    "cls": "Sorcerer, Druid, Warlock",
    "cat": "Transmutation",
    "cost": "2 MP",
-   "time": "Instantaneous ",
+   "time": "Instantaneous",
    "type": "Utility",
    "range": "Self",
-   "desc": "You speak an incantation shaping the air around you into spiny ice armor that covers your torso. For the 1d4 rounds of combat, all melee attacks that deal damage to you, cause your icey armor to burst, firing off icey needles and shards of ice towards your attacker dealing 1d6 cold damage to them. When you cast this spell, you gain 1 Exhaustion Point (EP).",
-   "dmg": "1d6 cold damage but only if you are dealt damage"
+   "desc": "You speak an incantation, shaping the air around you into spiny ice armor that covers your torso. For the next 1d4 rounds of combat, whenever a melee attack deals damage to you, your icy armor bursts, firing needles and shards of ice at your attacker and dealing 1d6 Cold damage to it. When you cast this spell, you gain 1 Exhaustion Point (EP).",
+   "dmg": "1d6 Cold (only when you take damage)"
   },
   "comp": {
    "s": true,
@@ -352,27 +352,27 @@
    ],
    [
     "",
-    "The duration of this spell lasts for 1d4+1 rounds of combat"
+    "The duration of this spell increases to 1d4+1 rounds of combat."
    ],
    [
     "Ice Spines",
-    "Ice needles that fire off from you icey armor deal 1d8 cold damage."
+    "The ice needles fired from your icy armor deal 1d8 Cold damage."
    ],
    [
     "",
-    "The duration of this spell lasts for 1d4+2 rounds of combat"
+    "The duration of this spell increases to 1d4+2 rounds of combat."
    ],
    [
     "Cool Coat",
-    "For the duration of this spell, all fire damage you take is reduced by 2."
+    "For the duration of this spell, all Fire damage you take is reduced by 2."
    ],
    [
     "",
-    "The duration of this spell lasts for 1d4+3 rounds of combat"
+    "The duration of this spell increases to 1d4+3 rounds of combat."
    ],
    [
     "Ice Spears",
-    "Ice needles that fire off from you icey armor deal 1d10 cold damage."
+    "The ice needles fired from your icy armor deal 1d10 Cold damage."
    ],
    [
     "",
@@ -622,13 +622,13 @@
   "lv": 1,
   "f": {
    "mat": "Any Holy Symbol (not consumed)",
-   "cls": "Cleric, Paladin,",
-   "pre": "+1 Religion ",
+   "cls": "Cleric, Paladin",
+   "pre": "+1 Religion",
    "cost": "2 MP",
    "time": "Instantaneous",
    "type": "Utility",
    "range": "20ft",
-   "desc": "You speak a prayer to a deity of your choice, calling upon a blessing for you or your companions. Choose a single target of your choice, for the next 1d4 rounds of combat or until your concentration is broken or the spell ends, the target creatures receives a +1 bonus to all saving throws and the first attack roll they make each turn for the duration. Whenever you cast this spell you gain 1 Exhaustion Point (EP).",
+   "desc": "You speak a prayer to a deity of your choice, calling down a blessing on yourself or one of your companions. Choose one target. For the next 1d4 rounds of combat, or until your concentration is broken, the target gains a +1 bonus to all saving throws and to the first attack roll it makes each turn. When you cast this spell, you gain 1 Exhaustion Point (EP).",
    "dmg": "N/A",
    "cat": "Enchantment"
   },
@@ -645,11 +645,11 @@
    ],
    [
     "",
-    "The bonus provided by this spell increases to +2"
+    "The bonus provided by this spell increases to +2."
    ],
    [
     "Balance",
-    "When you cast this spell, creatures affected by your blessing gain advantage on saving throws against being Dazed."
+    "When you cast this spell, creatures affected by your blessing gain Advantage on saving throws against being Dazed."
    ],
    [
     "",
@@ -657,15 +657,15 @@
    ],
    [
     "",
-    "The bonus provided by this spell increases to +3"
+    "The bonus provided by this spell increases to +3."
    ],
    [
     "Mind Shield",
-    "When you cast this spell, creatures affected by your blessing gain advantage on Wisdom saving throws against being charmed."
+    "When you cast this spell, creatures affected by your blessing gain Advantage on Wisdom saving throws against being Charmed."
    ],
    [
     "",
-    "The bonus provided by this spell increases to +4"
+    "The bonus provided by this spell increases to +4."
    ],
    [
     "",
@@ -673,11 +673,11 @@
    ],
    [
     "",
-    "The bonus provided by this spell increases to +5"
+    "The bonus provided by this spell increases to +5."
    ],
    [
     "True Blessing",
-    "A creature blessed by this spell gains their choice of 1AP or 1MP at the start of their turn whenever they roll an Action die"
+    "A creature blessed by this spell gains its choice of 1 AP or 1 MP whenever it rolls its Action Die at the start of its turn."
    ]
   ]
  },
@@ -841,7 +841,7 @@
    "mat": "1 Vial of Citrus Powder",
    "time": "Instantaneous",
    "range": "25ft (Single Target)",
-   "desc": "You whisper an incantation and blow citrus powder from palm towards a target conjuring a sickly sweet yellow and orange cloud that fills a 15ft by 15ft circle. Each creature within the cloud must succeed on a Constitution saving throw or take 2d4 Acid damage and become inflicted with the Sickened Condition until the end of their next turn, half as much damage on a successful save. target creatures that start their turn within the cloud must roll a constitution saving throw or take 1d4 acid damage. The cloud lingers for 1d4 turns before dissipating. ",
+   "desc": "You whisper an incantation and blow citrus powder from your palm toward a target, conjuring a sickly sweet yellow-and-orange cloud that fills a 15ft by 15ft circle. Each creature within the cloud must make a Constitution saving throw. On a failure, it takes 2d4 Acid damage and becomes Sickened until the end of its next turn. On a success, it takes half as much damage. A creature that starts its turn within the cloud must succeed on a Constitution saving throw or take 1d4 Acid damage. The cloud lingers for 1d4 turns before dissipating.",
    "cls": "Wizard, Druid",
    "pre": "+2 ARCANE or +2 NATURE",
    "cost": "3 MP",
@@ -857,15 +857,15 @@
   "tiers": [
    [
     "",
-    "The range of this spell increases to 40ft"
+    "The range of this spell increases to 40ft."
    ],
    [
     "Dense Cloud",
-    "Creatures within the cloud are obscured and ranged attacks made against them have disadvantage."
+    "Creatures within the cloud are obscured, and ranged attacks made against them have Disadvantage."
    ],
    [
     "",
-    "This spells damage increases to 3d4"
+    "This spell’s damage increases to 3d4."
    ],
    [
     "",
@@ -873,27 +873,27 @@
    ],
    [
     "Lingering Fumes",
-    "When you cast this spell, the cloud lingers for a number of turns equally to 1d4 + Your Spellcasting ability modifier."
+    "When you cast this spell, the cloud lingers for a number of turns equal to 1d4 + your spellcasting ability modifier."
    ],
    [
     "",
-    "This spells range increases to 60ft"
+    "This spell’s range increases to 60ft."
    ],
    [
     "Choking Hazard",
-    "A creature that fails its save at the start of its turn while within the cloud gains the Sickened Condition until the end of their next turn."
+    "A creature that fails its save at the start of its turn while within the cloud becomes Sickened until the end of its next turn."
    ],
    [
     "",
-    "This spells damage increases to 4d4"
+    "This spell’s damage increases to 4d4."
    ],
    [
     "",
-    "This spells damage increases to 5d4"
+    "This spell’s damage increases to 5d4."
    ],
    [
     "Acidic Shock",
-    "As the cloud dissipates, creatures caught within its area take 1d4 acid damage."
+    "As the cloud dissipates, creatures caught within its area take 1d4 Acid damage."
    ]
   ]
  },
@@ -969,7 +969,7 @@
    ],
    [
     "",
-    "The duration increases to 8 hours"
+    "The duration increases to 8 hours."
    ],
    [
     "Captivate",
@@ -1104,11 +1104,11 @@
   "tiers": [
    [
     "",
-    "The hit damage increases to 1d10 Fire. "
+    "The hit damage increases to 1d10 Fire."
    ],
    [
     "Kindling",
-    " The burst ignites flammable objects in the area that aren’t being worn or carried, such as dry brush, cloth, oil and wooden crates."
+    "The burst ignites flammable objects in the area that aren’t being worn or carried, such as dry brush, cloth, oil and wooden crates."
    ],
    [
     "",
@@ -1128,7 +1128,7 @@
    ],
    [
     "Smokescreen",
-    "The burst leaves a dense cloud of smoke covering a 10ft circle centered on the original target, the smoke last until the start of the next round of combat, while a creature remains in the smoke cloud it is blinded."
+    "The burst leaves a dense cloud of smoke in a 10ft circle centered on the original target. The smoke lasts until the start of the next round of combat. While a creature remains in the smoke, it is Blinded."
    ],
    [
     "",
@@ -1640,7 +1640,7 @@
    ],
    [
     "Knitted Wounds",
-    "whenever you cast this spell targeting a creature that has the Bleeding Condition, that creature cannot be inflicted with the bleeding condition for the next 1d4 turns of combat."
+    "Whenever you cast this spell on a creature that has the Bleeding condition, that creature can’t gain the Bleeding condition again for its next 1d4 turns of combat."
    ],
    [
     "",
@@ -1656,7 +1656,7 @@
    ],
    [
     "Shared Mending",
-    "When you cast this spell, you may choose a secondary target creature with 5ft of you and the original target, the secondary target regains hit-points equal to your Spellcasting Ability Modifier."
+    "When you cast this spell, you can choose a second creature within 5 feet of both you and the original target. The second creature regains hit points equal to your spellcasting ability modifier."
    ],
    [
     "",
@@ -1664,7 +1664,7 @@
    ],
    [
     "Lifeline",
-    "whenever you cast this spell targeting a creature that has 0 hit points, it regains an additional number of hit-points equal to twice your Spellcasting Ability Modifier."
+    "Whenever you cast this spell on a creature that has 0 hit points, it regains additional hit points equal to twice your spellcasting ability modifier."
    ]
   ]
  },
@@ -1676,7 +1676,7 @@
   ],
   "lv": 1,
   "f": {
-   "pre": "+2 ARCANA or +2 NATURE",
+   "pre": "+2 ARCANE or +2 NATURE",
    "cls": "Wizard, Sorcerer, Druid",
    "mat": "A paper fan or feather",
    "cat": "Transmutation",
@@ -1684,7 +1684,7 @@
    "time": "Instantaneous",
    "type": "Spell Attack (Attack Roll)",
    "range": "40ft",
-   "desc": "You seize the air around you and compress it into an invisible blade of wind, then send it flying at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 slashing damage.",
+   "desc": "You seize the air around you and compress it into an invisible blade of wind, then send it flying at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 Slashing damage.",
    "dmg": "1d8 Slashing"
   },
   "comp": {
@@ -1706,7 +1706,7 @@
    ],
    [
     "Back Draft",
-    "On a hit, you can choose to create a backdraft pulling the target creature 5ft towards you."
+    "On a hit, you can create a backdraft that pulls the target 5 feet toward you."
    ],
    [
     "",
@@ -1726,7 +1726,7 @@
    ],
    [
     "Wind Screen",
-    "After you cast this spell, until the start of your next turn the next ranged weapon attack made against you has disadvantage."
+    "After you cast this spell, the next ranged weapon attack made against you before the start of your next turn has Disadvantage."
    ],
    [
     "",
@@ -1734,7 +1734,7 @@
    ],
    [
     "Twin Blades",
-    "When you cast this spell, you can make a second ranged spell attack against a different creature within 10 feet of the first target. On a hit, it takes 1d8 slashing damage."
+    "When you cast this spell, you can make a second ranged spell attack against a different creature within 10 feet of the first target. On a hit, it takes 1d8 Slashing damage."
    ]
   ]
  },
@@ -1873,7 +1873,7 @@
    "time": "1 Minute",
    "type": "Ritual",
    "range": "Self (Single Target)",
-   "desc": "You spend a minute quieting your mind and attuning your senses to the flow of magic around you. For the next 10 minutes, you sense the presence of magic within 30 feet of you. While the spell lasts, you can focus on a creature or object you can see within that area to see a faint aura around it and learn its school of magic, if any. The spell is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt. When you cast this spell you gain 1 Exhaustion Point (EP)."
+   "desc": "You spend a minute quieting your mind and attuning your senses to the flow of magic around you. For the next 10 minutes, you sense the presence of magic within 30 feet of you. While the spell lasts, you can focus on a creature or object you can see within that area to see a faint aura around it and learn its school of magic, if any. The spell is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt. When you cast this spell, you gain 1 Exhaustion Point (EP)."
   },
   "comp": {
    "v": true,
@@ -1906,7 +1906,7 @@
    ],
    [
     "Appraiser’s Eye",
-    "When you focus on a magic item, object, or residue from a spell, you learn the source of its magic; Arcane, Primal, Divine, or Occult."
+    "When you focus on a magic item, object, or residue from a spell, you learn the source of its magic: Arcane, Primal, Divine, or Occult."
    ],
    [
     "",
@@ -2902,7 +2902,7 @@
    "mat": "A Blade or Sword you are proficient with (not consumed)",
    "cat": "Transmutation",
    "cost": "2 MP",
-   "time": "Instantaneous ",
+   "time": "Instantaneous",
    "type": "Utility",
    "range": "Self",
    "desc": "You run your hand along your Blade or Sword and speak a single sharp note. The weapon begins to vibrate, letting out a thin, high-pitched hum that sets nearby teeth on edge. While you maintain concentration, the next time you hit a creature with that weapon, the stored vibration releases on impact in a crack of sound: the target takes an extra 1d8 Thunder damage, and each other hostile creature within 5 feet of it must make a Constitution saving throw or take 1d4 Thunder damage. The weapon then falls silent and the spell ends.",
@@ -2932,7 +2932,7 @@
    ],
    [
     "Deafening Ring",
-    "Whenever you deal thunder damage with a humming weapon to a creature, those creatures become Deafened until the end of its next turn."
+    "Whenever you deal Thunder damage to a creature with the humming weapon, that creature becomes Deafened until the end of its next turn."
    ],
    [
     "",
@@ -2956,7 +2956,7 @@
    ],
    [
     "Sonic Slash",
-    "When you make the next melee weapon attack with the humming weapon, you can swing it to release its stored vibration as a slash of sound, attacking a creature up to 15 feet away from you as long as their are no obstacles in your way. This counts as a melee weapon attack. On a hit, the spell’s effects resolve as normal."
+    "When you make the next melee weapon attack with the humming weapon, you can swing it to release its stored vibration as a slash of sound, attacking a creature up to 15 feet away from you as long as there are no obstacles in the way. This counts as a melee weapon attack. On a hit, the spell’s effects resolve as normal."
    ]
   ]
  },

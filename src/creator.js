@@ -31,7 +31,7 @@ function normRaces(j) {
   const part = p => ({ id: str(p.id), n: str(p.n), desc: str(p.desc), asi: str(p.asi), prof: str(p.prof), langs: str(p.langs), feats: featsOf(p.feats), extra: extrasOf(p.extra) });
   return arr(j && j.races).filter(r => r && str(r.n)).map(r => ({ ...part(r), subs: arr(r.subs).filter(s => s && str(s.n)).map(part).sort(byName) })).sort(byName);
 }
-const RULE_DEFAULTS = { wealth: "25 (G)", rank: "1", spellRank: "1", saveCost: "3", tierCost: "3", passive: "10", langs: "Common" };
+const RULE_DEFAULTS = { wealth: "25 (G)", rank: "1", spellRank: "1", saveCost: "3", tierCost: "3", featEvery: "2", passive: "10", langs: "Common" };
 function normRules(j) {
   if (!j || typeof j !== "object") return null;
   const rules = { ...RULE_DEFAULTS }; for (const k in RULE_DEFAULTS) if (j.rules && j.rules[k] != null) rules[k] = str(j.rules[k]);
@@ -1045,7 +1045,7 @@ function show(v, quiet) {
 /* ---------------------------------------------------------------- admin: rules (classes and backgrounds have their own pages) */
 const adminDirty = () => JSON.stringify(cleanCreator()) !== RULES_ORIG;
 const RULE_FIELDS = [["wealth", "Standard starting wealth", "Used when a class doesn't set its own Starting Currency, e.g. 25 (G)"], ["rank", "Starting rank for a proficient skill", "e.g. 1"], ["spellRank", "Highest spell level at character creation", "e.g. 1"], ["saveCost", "Skill points to become proficient in a saving throw", "e.g. 3"], ["tierCost", "Skill points for each weapon or armor proficiency type (Simple, Martial, Exotic)", "e.g. 3"],
-  ["passive", "Passive skill base", "Passive DC = this + the skill's bonus, e.g. 10"], ["langs", "Languages to suggest", "Comma separated. Languages written on races are added automatically."]];
+  ["featEvery", "Feat every N levels", "Every class gains a feat at each multiple of this level (2 = 2nd, 4th, 6th…). 0 turns it off. e.g. 2"], ["passive", "Passive skill base", "Passive DC = this + the skill's bonus, e.g. 10"], ["langs", "Languages to suggest", "Comma separated. Languages written on races are added automatically."]];
 function fieldHTML(d, [k, label, help], id) {
   const ph = /^e\.g\./.test(help) ? help : "", h = ph ? "" : help;
   return `<label for="${id}${k}">${label}${h ? ` <small>${esc(h)}</small>` : ""}<input type="text" id="${id}${k}" data-k="${k}" value="${esc(d[k] ?? "")}" placeholder="${esc(ph)}" autocomplete="off"></label>`;

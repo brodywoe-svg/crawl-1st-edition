@@ -14,6 +14,7 @@ NAV_ITEMS = [
     ("Classes", "classes.html", "classes"),
     ("Races", "races.html", "races"),
     ("Backgrounds", "backgrounds.html", "backgrounds"),
+    ("Feats", "feats.html", "feats"),
     ("Spells", "index.html", [("All spells", "index.html?show=all"), ("By magic source", None),
                               ("Arcane", "index.html?source=arcane"), ("Divine", "index.html?source=divine"), ("Primal", "index.html?source=primal"), ("Occult", "index.html?source=occult"),
                               ("By class", None),
@@ -27,7 +28,7 @@ NAV_ITEMS = [
     ("About", None, None),
 ]
 # which nav item each page belongs to
-SECTION = {"creator": "Character Creator", "classes": "Classes", "backgrounds": "Backgrounds", "races": "Races", "spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
+SECTION = {"creator": "Character Creator", "classes": "Classes", "backgrounds": "Backgrounds", "feats": "Feats", "races": "Races", "spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
 
 CARET = '<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 
@@ -52,6 +53,7 @@ LIST_MENUS = {
     "races": ("races.html", "races", "All races"),
     "classes": ("classes.html", "classes", "All classes"),
     "backgrounds": ("backgrounds.html", "backgrounds", "All backgrounds"),
+    "feats": ("feats.html", "feats", "All feats"),
 }
 
 
@@ -73,10 +75,10 @@ def list_menu(kind, data):
 CARET_R = '<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 
 
-def nav_html(active, controls="", sections=("Conditions",), races=None, classes=None, backgrounds=None):
+def nav_html(active, controls="", sections=("Conditions",), races=None, classes=None, backgrounds=None, feats=None):
     """active: the page key. controls: buttons for the right side. sections: Glossary menu entries.
     races, classes, backgrounds: the data behind those menus."""
-    lists = {"races": races, "classes": classes, "backgrounds": backgrounds}
+    lists = {"races": races, "classes": classes, "backgrounds": backgrounds, "feats": feats}
     sec = SECTION.get(active)
     parts = [
         '<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks">',
@@ -179,7 +181,7 @@ NAV_JS = """(function(){
   function mark(){var here=location.pathname.split('/').pop()+location.search;[].forEach.call(document.querySelectorAll('.navmenu a'),function(a){if(a.getAttribute('href')===here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
   window.crawlNavMark=mark;
   /* Races, Classes and Backgrounds menus: rebuilt when the data loads or an admin edits it */
-  var LISTS={races:['races.html','All races'],classes:['classes.html','All classes'],backgrounds:['backgrounds.html','All backgrounds']};
+  var LISTS={races:['races.html','All races'],classes:['classes.html','All classes'],backgrounds:['backgrounds.html','All backgrounds'],feats:['feats.html','All feats']};
   window.crawlNavList=function(kind,items){
     var m=document.getElementById('nav'+kind.charAt(0).toUpperCase()+kind.slice(1)),L=LISTS[kind];
     if(!m||!L||!items)return;
@@ -302,6 +304,7 @@ def creator_shell(logo_svg, admin_modal):
 LIST_PAGES = {
     "classes": ("Classes", "The classes of Crawl 1st Edition: each one's class chart, features by level, proficiencies, skill points and starting equipment, followed by its subclasses. Everything here can be chosen in the Character Creator.", "Search classes, features and subclasses", "Add class"),
     "backgrounds": ("Backgrounds", "The backgrounds of Crawl 1st Edition: the life a character lived before adventuring, with the proficiencies, languages and gear it brings. Everything here can be chosen in the Character Creator.", "Search backgrounds", "Add background"),
+    "feats": ("Feats", "The feats of Crawl 1st Edition: special talents that set a character apart. Every class gains a feat at 2nd level and every 2 levels after (4th, 6th, 8th and so on).", "Search feats", "Add feat"),
 }
 
 
@@ -312,7 +315,7 @@ def list_shell(page, logo_svg, admin_modal):
 <header class="intro">
   {logo_svg}
   <h1>{title}</h1>
-  <p>{intro}</p>
+  <p id="lintro">{intro}</p>
 </header>
 <div class="cbar">
   <input id="cq" type="search" placeholder="{placeholder}" aria-label="{placeholder}" autocomplete="off">

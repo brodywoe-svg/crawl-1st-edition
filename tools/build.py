@@ -62,7 +62,7 @@ def page_body(template, spells):
     # the glossary goes in first: the TPL copy of the template also contains its placeholder
     body = template.replace("/*@GLOSSARY@*/null", as_js(read_glossary()), 1)
     body = body.replace("/*@DATA@*/", as_js(spells), 1).replace("/*@TPL@*/", as_js(template), 1)
-    body = body.replace("<!--@NAV@-->", crawlsite.nav_html("spells", sections=crawlsite.glossary_sections(read_glossary()), races=read_races(), classes=read_classes(), backgrounds=read_backgrounds()), 1)
+    body = body.replace("<!--@NAV@-->", crawlsite.nav_html("spells", sections=crawlsite.glossary_sections(read_glossary()), races=read_races(), classes=read_classes(), backgrounds=read_backgrounds(), feats=read_feats()), 1)
     return body.replace("/*@NAVCSS@*/", crawlsite.NAV_CSS, 1)
 
 
@@ -78,11 +78,13 @@ GLOSSARY_PAGES = {
     "races.html": ("races", "Races · Crawl 1st Edition", "The races of Crawl 1st Edition and their subraces: ability score increases, proficiencies, languages and features."),
     "classes.html": ("classes", "Classes · Crawl 1st Edition", "The classes of Crawl 1st Edition: class charts, features by level, proficiencies, skill points, starting equipment and subclasses."),
     "backgrounds.html": ("backgrounds", "Backgrounds · Crawl 1st Edition", "The backgrounds of Crawl 1st Edition: proficiencies, languages, starting gear and features."),
+    "feats.html": ("feats", "Feats · Crawl 1st Edition", "The feats of Crawl 1st Edition: special talents every class gains at 2nd level and every 2 levels after."),
     "creator.html": ("creator", "Character Creator · Crawl 1st Edition", "Make a Crawl 1st Edition character step by step: race, class, background, ability scores, skills, spells and gear, then a printable character sheet."),
 }
 CREATOR = ROOT / "crawl-creator.json"
 CLASSES = ROOT / "crawl-classes.json"
 BACKGROUNDS = ROOT / "crawl-backgrounds.json"
+FEATS = ROOT / "crawl-feats.json"
 
 
 def read_json(path, empty):
@@ -103,6 +105,10 @@ def read_classes():
 
 def read_backgrounds():
     return read_json(BACKGROUNDS, '{\n "v": 1,\n "backgrounds": []\n}\n')
+
+
+def read_feats():
+    return read_json(FEATS, '{\n "v": 1,\n "feats": []\n}\n')
 
 
 def read_creator():
@@ -148,20 +154,21 @@ def glossary_page(template, glossary, name):
         f"const GLOSSARY={as_js(glossary)};window.GL_PAGE={json.dumps(page)};"
         + f"const CATALOG={as_js(read_catalog())};"
         + (f"const RACES={as_js(read_races())};" if page in ("races", "creator") else "")
-        + (f"const CREATOR={as_js(read_creator())};const SPELLS={as_js(json.loads(SPELLS.read_text(encoding='utf-8')))};" if page == "creator" else "")
-        + (f"const CLASSES={as_js(read_classes())};const BACKGROUNDS={as_js(read_backgrounds())};const SCHOOLS={as_js(spell_schools())};" if page in ("creator", "classes", "backgrounds") else "") + "\n"
+        + (f"const CREATOR={as_js(read_creator())};const SPELLS={as_js(json.loads(SPELLS.read_text(encoding='utf-8')))};" if page == "creator" else f"const CREATOR={as_js(read_creator())};" if page in ("classes", "feats") else "")
+        + (f"const FEATS={as_js(read_feats())};" if page == "feats" else "")
+        + (f"const CLASSES={as_js(read_classes())};const BACKGROUNDS={as_js(read_backgrounds())};const SCHOOLS={as_js(spell_schools())};" if page in ("creator", "classes", "backgrounds", "feats") else "") + "\n"
     )
     shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")
-    page_js = "catalog.js" if catalog else "races.js" if page == "races" else "creator.js" if page == "creator" else "classes.js" if page in ("classes", "backgrounds") else "glossary.js"
+    page_js = "catalog.js" if catalog else "races.js" if page == "races" else "creator.js" if page == "creator" else "classes.js" if page in ("classes", "backgrounds", "feats") else "glossary.js"
     script = (ROOT / "src" / "editkit.js").read_text(encoding="utf-8")
-    if page in ("creator", "classes", "backgrounds"):
+    if page in ("creator", "classes", "backgrounds", "feats"):
         script += (ROOT / "src" / "crawldata.js").read_text(encoding="utf-8")
     script += (ROOT / "src" / page_js).read_text(encoding="utf-8")
     return (
         f"<title>{title}</title>" + links + mode_init
-        + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}{crawlsite.CREATOR_CSS if page == 'creator' else crawlsite.CLASSES_CSS if page in ('classes', 'backgrounds') else ''}</style>"
-        + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections, races=read_races(), classes=read_classes(), backgrounds=read_backgrounds())
-        + (crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.creator_shell(logo, modal) if page == "creator" else crawlsite.list_shell(page, logo, modal) if page in ("classes", "backgrounds") else crawlsite.glossary_shell(page, logo, modal))
+        + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}{crawlsite.CREATOR_CSS if page == 'creator' else crawlsite.CLASSES_CSS if page in ('classes', 'backgrounds', 'feats') else ''}</style>"
+        + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections, races=read_races(), classes=read_classes(), backgrounds=read_backgrounds(), feats=read_feats())
+        + (crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.creator_shell(logo, modal) if page == "creator" else crawlsite.list_shell(page, logo, modal) if page in ("classes", "backgrounds", "feats") else crawlsite.glossary_shell(page, logo, modal))
         + f"<script>{mode_js}</script><script>{prelude}{shared}{script}</script>"
     )
 

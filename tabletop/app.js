@@ -914,7 +914,7 @@ $("wins").addEventListener("click", async ev => {
 
 /* ---------------------------------------------------------------- compendium: the Crawl materials */
 let compCat = "all", compQ = "";
-const CATS = [["all", "All"], ["spells", "Spells"], ["items", "Items"], ["recipes", "Recipes"], ["races", "Races"], ["classes", "Classes"], ["backgrounds", "Backgrounds"], ["rules", "Rules"]];
+const CATS = [["all", "All"], ["spells", "Spells"], ["items", "Items"], ["recipes", "Recipes"], ["races", "Races"], ["classes", "Classes"], ["backgrounds", "Backgrounds"], ["feats", "Feats"], ["rules", "Rules"]];
 function compEntries() {
   const d = MAT.data || {}, out = [];
   arr(d.spells).forEach((s, i) => out.push({ cat: "spells", n: s.n, sub: `Level ${s.lv} spell`, i }));
@@ -923,6 +923,7 @@ function compEntries() {
   arr(d.races && d.races.races).forEach((s, i) => out.push({ cat: "races", n: s.n, sub: "Race", i }));
   arr(d.classes && d.classes.classes).forEach((s, i) => out.push({ cat: "classes", n: s.n, sub: "Class", i }));
   arr(d.backgrounds && d.backgrounds.backgrounds).forEach((s, i) => out.push({ cat: "backgrounds", n: s.n, sub: "Background", i }));
+  arr(d.feats && d.feats.feats).forEach((s, i) => out.push({ cat: "feats", n: s.n, sub: s.cat ? s.cat + " feat" : "Feat", i }));
   arr(d.glossary && d.glossary.entries).forEach((s, i) => out.push({ cat: "rules", n: s.n, sub: s.sec || "Rule", i }));
   return out;
 }
@@ -957,6 +958,7 @@ function entryOf(cat, i) {
   if (cat === "races") { const s = arr(d.races.races)[i]; return { title: s.n, sub: "Race", html: blocks(s.desc) + facts([["Ability", s.asi], ["Proficiency", s.prof], ["Languages", s.langs]]) + extraH(s.extra) + featsH(s.feats) + arr(s.subs).map(x => `<h3>${esc(x.n)}</h3>${blocks(x.desc)}${facts([["Ability", x.asi], ["Proficiency", x.prof]])}${featsH(x.feats)}`).join(""), text: plain(s.desc) } }
   if (cat === "classes") { const s = arr(d.classes.classes)[i]; return { title: s.n, sub: "Class", html: blocks(s.desc) + facts([["Hit die", s.hd], ["Hit points", s.hp], ["Saving throws", list(s.saves)], ["Skills", list(s.skills)], ["Skill points", s.skillPts], ["Proficiencies", list(s.prof)], ["Spellcasting", s.cast], ["Starting money", s.money]]) + featsH(s.feats) + arr(s.subs).map(x => `<h3>${esc(x.n)}</h3>${blocks(x.desc)}${featsH(x.feats)}`).join(""), text: plain(s.desc) } }
   if (cat === "backgrounds") { const s = arr(d.backgrounds.backgrounds)[i]; return { title: s.n, sub: "Background", html: blocks(s.desc) + facts([["Skills", list(s.skills)], ["Weapons", list(s.weapons)], ["Armor", list(s.armor)], ["Trades", list(s.trades)], ["Languages", list(s.langs)], ["Gear", list(s.gear)], ["Money", s.wealth]]) + featsH(s.feats), text: plain(s.desc) } }
+  if (cat === "feats") { const s = arr(d.feats.feats)[i]; return { title: s.n, sub: s.cat ? s.cat + " feat" : "Feat", html: facts([["Prerequisite", s.pre], ...arr(s.extra).map(x => [x.k, x.v])]) + blocks(s.desc), text: [s.pre && "Prerequisite: " + s.pre, plain(s.desc)].filter(Boolean).join("\n\n") } }
   const s = arr(d.glossary.entries)[i];
   return { title: s.n, sub: s.sec, html: blocks(s.lead) + (arr(s.fx).length ? `<ul>${arr(s.fx).map(x => `<li>${rich(x)}</li>`).join("")}</ul>` : "") + blocks(s.notes) + (s.tip ? `<p class="muted small">${rich(s.tip)}</p>` : ""), text: [plain(s.lead), arr(s.fx).map(x => "• " + plain(x)).join("\n")].filter(Boolean).join("\n\n") };
 }

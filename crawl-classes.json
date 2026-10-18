@@ -2,6 +2,137 @@
  "v": 1,
  "classes": [
   {
+   "id": "class-barbarian",
+   "n": "Barbarian",
+   "desc": "Barbarians are fierce warriors who channel a primal fury into battle, shrugging off blows that would fell anyone else.",
+   "source": "",
+   "cast": "",
+   "spells": "",
+   "hd": "d12",
+   "hp": "12 + Constitution Modifier",
+   "saves": "Strength, Constitution",
+   "skills": "",
+   "skillPts": "",
+   "prof": "",
+   "langs": "",
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 2,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 3,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 4,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 5,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 6,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 7,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 8,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 9,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 10,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 11,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 12,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 13,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 14,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 15,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 16,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 17,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 18,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 19,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 20,
+     "pool": "",
+     "die": ""
+    }
+   ],
+   "feats": [],
+   "loadouts": [],
+   "money": "",
+   "moneyRoll": "",
+   "extra": [],
+   "choices": [],
+   "prepared": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
+   "subs": []
+  },
+  {
    "id": "class-bard",
    "n": "Bard",
    "desc": "Storytellers, minstrels and silver-tongued wanderers who draw Occult magic from words, music and the hearts of their listeners.\n\nEvery tavern has heard a song that made the room fall silent, and every bard knows why. Words and music carry power, and a bard has learned to pull on the threads that bind a listener’s fear, courage and longing. A ballad steadies a shaking ally’s sword arm. A whispered verse sours an enemy’s luck. A single, perfect note can shatter glass, nerve or bone.\n\nBards draw their magic from the harmonies, magic phrases, and through sheer force of personality rather than study or faith, using Charisma as their spellcasting ability. Where a Wizard pores over spellbooks, a bard learns magic the way a musician learns a tune: by ear, by heart and by performing it for anyone who’ll listen. Their spells are spoken, sung and played, which makes a bard formidable in a crowded hall and helpless with a gag over their mouth.\n\nIn the depths of a crawl, the bard is the party’s voice and nerve. They talk their way past guards, read a rival’s lies, and keep tired companions on their feet when the torches burn low. They are rarely the strongest in a fight, but they are almost always the reason the party survives it.",
@@ -231,6 +362,268 @@
    "subs": []
   },
   {
+   "id": "class-fighter",
+   "n": "Fighter",
+   "desc": "Fighters are masters of weapons and armor, trained to win any battle through skill, discipline and endurance.",
+   "source": "",
+   "cast": "",
+   "spells": "",
+   "hd": "d10",
+   "hp": "10 + Constitution Modifier",
+   "saves": "Strength, Constitution",
+   "skills": "",
+   "skillPts": "",
+   "prof": "",
+   "langs": "",
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 2,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 3,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 4,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 5,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 6,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 7,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 8,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 9,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 10,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 11,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 12,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 13,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 14,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 15,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 16,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 17,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 18,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 19,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 20,
+     "pool": "",
+     "die": ""
+    }
+   ],
+   "feats": [],
+   "loadouts": [],
+   "money": "",
+   "moneyRoll": "",
+   "extra": [],
+   "choices": [],
+   "prepared": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
+   "subs": []
+  },
+  {
+   "id": "class-monk",
+   "n": "Monk",
+   "desc": "Monks are disciplined martial artists who turn body and spirit into weapons, striking with speed and precision.",
+   "source": "",
+   "cast": "",
+   "spells": "",
+   "hd": "d8",
+   "hp": "8 + Constitution Modifier",
+   "saves": "Strength, Dexterity",
+   "skills": "",
+   "skillPts": "",
+   "prof": "",
+   "langs": "",
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 2,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 3,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 4,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 5,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 6,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 7,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 8,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 9,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 10,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 11,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 12,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 13,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 14,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 15,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 16,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 17,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 18,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 19,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 20,
+     "pool": "",
+     "die": ""
+    }
+   ],
+   "feats": [],
+   "loadouts": [],
+   "money": "",
+   "moneyRoll": "",
+   "extra": [],
+   "choices": [],
+   "prepared": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
+   "subs": []
+  },
+  {
    "id": "class-paladin",
    "n": "Paladin",
    "desc": "Paladins are holy warriors who wield Divine magic in service of an oath.",
@@ -245,6 +638,268 @@
    "prof": "",
    "langs": "",
    "chart": [],
+   "feats": [],
+   "loadouts": [],
+   "money": "",
+   "moneyRoll": "",
+   "extra": [],
+   "choices": [],
+   "prepared": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
+   "subs": []
+  },
+  {
+   "id": "class-ranger",
+   "n": "Ranger",
+   "desc": "Rangers are hunters and trackers of the wild places, deadly with bow and blade and at home far from civilization.",
+   "source": "",
+   "cast": "",
+   "spells": "",
+   "hd": "d10",
+   "hp": "10 + Constitution Modifier",
+   "saves": "Strength, Dexterity",
+   "skills": "",
+   "skillPts": "",
+   "prof": "",
+   "langs": "",
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 2,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 3,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 4,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 5,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 6,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 7,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 8,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 9,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 10,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 11,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 12,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 13,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 14,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 15,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 16,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 17,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 18,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 19,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 20,
+     "pool": "",
+     "die": ""
+    }
+   ],
+   "feats": [],
+   "loadouts": [],
+   "money": "",
+   "moneyRoll": "",
+   "extra": [],
+   "choices": [],
+   "prepared": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
+   "subs": []
+  },
+  {
+   "id": "class-rogue",
+   "n": "Rogue",
+   "desc": "Rogues rely on cunning, stealth and precision, striking where enemies are weakest and slipping away before they can answer.",
+   "source": "",
+   "cast": "",
+   "spells": "",
+   "hd": "d8",
+   "hp": "8 + Constitution Modifier",
+   "saves": "Dexterity, Intelligence",
+   "skills": "",
+   "skillPts": "",
+   "prof": "",
+   "langs": "",
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 2,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 3,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 4,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 5,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 6,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 7,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 8,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 9,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 10,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 11,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 12,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 13,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 14,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 15,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 16,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 17,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 18,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 19,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 20,
+     "pool": "",
+     "die": ""
+    }
+   ],
    "feats": [],
    "loadouts": [],
    "money": "",

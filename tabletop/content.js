@@ -6,7 +6,7 @@ import { kvGet, kvSet } from "./net.js";
 export const SITE = "https://brodywoe-svg.github.io/crawl-1st-edition/";
 export const FILES = [
   ["races", "crawl-races.json", "Races"], ["classes", "crawl-classes.json", "Classes"], ["backgrounds", "crawl-backgrounds.json", "Backgrounds"],
-  ["spells", "crawl-spells.json", "Spells"], ["items", "crawl-items.json", "Items and recipes"], ["glossary", "crawl-glossary.json", "Glossary"], ["rules", "crawl-creator.json", "Creator rules"]
+  ["spells", "crawl-spells.json", "Spells"], ["items", "crawl-items.json", "Items and recipes"], ["feats", "crawl-feats.json", "Feats"], ["glossary", "crawl-glossary.json", "Glossary"], ["rules", "crawl-creator.json", "Creator rules"]
 ];
 const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) } return (h >>> 0).toString(36) };
 /* names inside each file, to describe what changed */
@@ -18,6 +18,7 @@ function names(key, j) {
   if (key === "races") return (j.races || []).flatMap(r => [r.n, ...(r.subs || []).map(s => s.n)]);
   if (key === "classes") return (j.classes || []).flatMap(r => [r.n, ...(r.subs || []).map(s => s.n)]);
   if (key === "backgrounds") return (j.backgrounds || []).map(b => b.n);
+  if (key === "feats") return (j.feats || []).map(f => f.n);
   return [];
 }
 /* the site's files: next to the tabletop when it's served from the site, otherwise from the public site */

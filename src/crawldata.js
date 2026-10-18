@@ -79,6 +79,14 @@ const normBgs = j => arr(j && j.backgrounds).filter(b => b && str(b.n)).map(norm
 const stripIds = ({ _id, _new, ...x }) => x;
 const cleanClasses = list => ({ v: 1, classes: list.filter(c => !c._new).map(c => ({ ...stripIds(c), subs: c.subs.filter(s => !s._new).map(stripIds).sort(byName) })).sort(byName) });
 const cleanBgs = list => ({ v: 1, backgrounds: list.filter(b => !b._new).map(stripIds).sort(byName) });
+/* feats (crawl-feats.json): name, category, prerequisite, description, extra details */
+function normFeat(p) { p = p || {}; return { id: str(p.id) || newId("feat"), n: str(p.n), cat: str(p.cat), pre: str(p.pre), desc: str(p.desc), extra: extrasOf(p.extra), _id: ++uid } }
+const normFeats = j => arr(j && j.feats).filter(f => f && str(f.n)).map(normFeat).sort(byName);
+const cleanFeats = list => ({ v: 1, feats: list.filter(f => !f._new).map(stripIds).sort(byName) });
+/* every class gains a feat at every Nth level (Character Creator rules: featEvery, 0 = off) */
+const featEvery = () => { const r = typeof CREATOR !== "undefined" && CREATOR && CREATOR.rules ? CREATOR.rules.featEvery : undefined, n = parseInt(r, 10); return r === undefined || r === "" || isNaN(n) ? 2 : Math.max(0, n) };
+const featLevels = (max = 20) => { const n = featEvery(); return n ? Array.from({ length: Math.floor(max / n) }, (_, i) => (i + 1) * n) : [] };
+const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
 /* features a class has by a given level; features without a level count as 1st level */
 const featsAt = (fs, lv) => fs.filter(f => (f.lv || 1) <= lv);
 const gearLine = g => g.map(x => (x.qty > 1 ? x.qty + "× " : "") + x.n).join(", ");
