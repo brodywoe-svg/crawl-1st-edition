@@ -4,7 +4,8 @@ Run from the repo root:  python tools/build.py
 
 Reads   src/page.html          the page template (shared by every version)
         crawl-spells.json      the spell list
-Writes  index.html             the GitHub Pages site (read-only)
+Writes  index.html             the home page
+        spells.html            the Spells page
         conditions.html, glossary.html   the Glossary pages (entries from crawl-glossary.json)
         app/index.html         the Windows app's page (offline, saves on the computer)
         downloads/Crawl-1st-Edition-Installer.zip   the Windows installer
@@ -69,6 +70,7 @@ def page_body(template, spells):
 CATALOG = ROOT / "crawl-items.json"
 GLOSSARY_PAGES = {
     # file name: (page key, <title>, meta description)
+    "index.html": ("home", "Crawl 1st Edition", "Crawl 1st Edition: the Character Creator, classes, races, backgrounds, feats, spells, crafting, items and the rules glossary."),
     "glossary.html": ("glossary", "Glossary · Crawl 1st Edition",
                       "The Crawl 1st Edition glossary: every rules term in one searchable list."),
     "conditions.html": ("conditions", "Conditions · Crawl 1st Edition",
@@ -159,18 +161,25 @@ def glossary_page(template, glossary, name):
         + (f"const CLASSES={as_js(read_classes())};const BACKGROUNDS={as_js(read_backgrounds())};const SCHOOLS={as_js(spell_schools())};" if page in ("creator", "classes", "backgrounds", "feats") else "") + "\n"
     )
     shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")
-    page_js = "catalog.js" if catalog else "races.js" if page == "races" else "creator.js" if page == "creator" else "classes.js" if page in ("classes", "backgrounds", "feats") else "glossary.js"
-    script = (ROOT / "src" / "editkit.js").read_text(encoding="utf-8")
+    page_js = "home.js" if page == "home" else "catalog.js" if catalog else "races.js" if page == "races" else "creator.js" if page == "creator" else "classes.js" if page in ("classes", "backgrounds", "feats") else "glossary.js"
+    script = "" if page == "home" else (ROOT / "src" / "editkit.js").read_text(encoding="utf-8")
     if page in ("creator", "classes", "backgrounds", "feats"):
         script += (ROOT / "src" / "crawldata.js").read_text(encoding="utf-8")
     script += (ROOT / "src" / page_js).read_text(encoding="utf-8")
     return (
         f"<title>{title}</title>" + links + mode_init
-        + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}{crawlsite.CREATOR_CSS if page == 'creator' else crawlsite.CLASSES_CSS if page in ('classes', 'backgrounds', 'feats') else ''}</style>"
+        + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}{crawlsite.CREATOR_CSS if page == 'creator' else crawlsite.CLASSES_CSS if page in ('classes', 'backgrounds', 'feats') else crawlsite.HOME_CSS if page == 'home' else ''}</style>"
         + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections, races=read_races(), classes=read_classes(), backgrounds=read_backgrounds(), feats=read_feats())
-        + (crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.creator_shell(logo, modal) if page == "creator" else crawlsite.list_shell(page, logo, modal) if page in ("classes", "backgrounds", "feats") else crawlsite.glossary_shell(page, logo, modal))
+        + (crawlsite.home_shell(logo, modal, home_counts()) if page == "home" else crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.creator_shell(logo, modal) if page == "creator" else crawlsite.list_shell(page, logo, modal) if page in ("classes", "backgrounds", "feats") else crawlsite.glossary_shell(page, logo, modal))
         + f"<script>{mode_js}</script><script>{prelude}{shared}{script}</script>"
     )
+
+
+def home_counts():
+    cat = read_catalog()
+    return {"classes": len(read_classes().get("classes", [])), "races": len(read_races().get("races", [])), "backgrounds": len(read_backgrounds().get("backgrounds", [])),
+            "feats": len(read_feats().get("feats", [])), "spells": len(json.loads(SPELLS.read_text(encoding="utf-8"))), "items": len(cat.get("items", [])),
+            "recipes": len(cat.get("recipes", [])), "entries": len(read_glossary().get("entries", []))}
 
 
 def build_site(body):
@@ -182,7 +191,7 @@ def build_site(body):
         f"<style>{RESET}</style>"
         "<script>window.CRAWL_STATIC=true;window.CRAWL_REPO={owner:\"brodywoe-svg\",repo:\"crawl-1st-edition\",branch:\"main\"}</script></head><body>"
     )
-    (ROOT / "index.html").write_text(head + body + FOOTER + "</body></html>", encoding="utf-8")
+    (ROOT / "spells.html").write_text(head.replace("<title>", "<title>") + body + FOOTER + "</body></html>", encoding="utf-8")
     template, glossary = TEMPLATE.read_text(encoding="utf-8"), read_glossary()
     for name, (_, _, desc) in GLOSSARY_PAGES.items():
         ghead = head.replace("Every spell in Crawl 1st Edition, filterable by class and magic source.", desc)
@@ -204,7 +213,7 @@ def build_app(body):
     # The app is offline: its fonts are bundled, so drop the Google Fonts links.
     body = re.sub(r'<link rel="preconnect" href="https://fonts.googleapis.com">\n?', "", body, count=1)
     body = re.sub(r'<link rel="stylesheet" href="https://fonts.googleapis.com/css2[^"]*">\n?', "", body, count=1)
-    (ROOT / "app" / "index.html").write_text(head + body + "</body></html>", encoding="utf-8")
+    (ROOT / "app" / "spells.html").write_text(head + body + "</body></html>", encoding="utf-8")
     template, glossary = TEMPLATE.read_text(encoding="utf-8"), read_glossary()
     for name in GLOSSARY_PAGES:
         page = glossary_page(template, glossary, name)
@@ -232,7 +241,7 @@ def main():
     build_site(body)
     build_app(body)
     out = build_installer()
-    print(f"Built index.html, conditions.html, glossary.html, items.html, crafting.html, races.html, classes.html, backgrounds.html, creator.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
+    print(f"Built index.html (home), spells.html, feats.html, conditions.html, glossary.html, items.html, crafting.html, races.html, classes.html, backgrounds.html, creator.html, app/ and {out.relative_to(ROOT)} with {len(spells)} spells.")
 
 
 if __name__ == "__main__":

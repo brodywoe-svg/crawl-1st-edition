@@ -14,7 +14,14 @@ const arr = x => Array.isArray(x) ? x : [];
 const lcs = x => String(x || "").toLowerCase();
 const newId = p => p + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const featLv = x => { const n = parseInt(x, 10); return n > 0 ? n : "" };
-const featsOf = x => arr(x).map(f => ({ n: str(f && f.n), d: str(f && f.d), ...(f && featLv(f.lv) ? { lv: featLv(f.lv) } : {}) })).filter(f => f.n || f.d);
+/* a feature can be a choice: "choose `pick` of these `opts`", with one more pick at each level in `more` (e.g. Fighting Style) */
+const featOpts = x => arr(x).map(o => ({ n: str(o && o.n), d: str(o && o.d) })).filter(o => o.n);
+const levelsOf = x => [...new Set((Array.isArray(x) ? x : String(x || "").split(/[^0-9]+/)).map(v => parseInt(v, 10)).filter(v => v > 0 && v <= 30))].sort((a, b) => a - b);
+const featsOf = x => arr(x).map(f => { const o = featOpts(f && f.opts); return { n: str(f && f.n), d: str(f && f.d), ...(f && featLv(f.lv) ? { lv: featLv(f.lv) } : {}), ...(o.length ? { opts: o, pick: Math.max(1, Math.min(o.length, parseInt(f.pick, 10) || 1)), more: levelsOf(f.more) } : {}) } }).filter(f => f.n || f.d);
+/* how many options of a choice feature a character has by a level */
+const picksAt = (f, lv) => !f.opts || (f.lv || 1) > lv ? 0 : Math.min(f.opts.length, f.pick + f.more.filter(m => m <= lv).length);
+const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
+const choiceLine = f => { const w = ["", "one", "two", "three", "four", "five"]; return `Choose ${w[f.pick] || f.pick} of the following options.${f.more.length ? ` You gain another option at ${f.more.map(ordinal).join(", ")} level.` : ""}` };
 const extrasOf = x => arr(x).map(r => ({ k: str(r && r.k), v: str(r && r.v) })).filter(r => r.k || r.v);
 const byName = (a, b) => lcs(a.n).localeCompare(lcs(b.n));
 const SOURCES = ["Arcane", "Divine", "Primal", "Occult"];
@@ -86,7 +93,6 @@ const cleanFeats = list => ({ v: 1, feats: list.filter(f => !f._new).map(stripId
 /* every class gains a feat at every Nth level (Character Creator rules: featEvery, 0 = off) */
 const featEvery = () => { const r = typeof CREATOR !== "undefined" && CREATOR && CREATOR.rules ? CREATOR.rules.featEvery : undefined, n = parseInt(r, 10); return r === undefined || r === "" || isNaN(n) ? 2 : Math.max(0, n) };
 const featLevels = (max = 20) => { const n = featEvery(); return n ? Array.from({ length: Math.floor(max / n) }, (_, i) => (i + 1) * n) : [] };
-const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
 /* features a class has by a given level; features without a level count as 1st level */
 const featsAt = (fs, lv) => fs.filter(f => (f.lv || 1) <= lv);
 const gearLine = g => g.map(x => (x.qty > 1 ? x.qty + "× " : "") + x.n).join(", ");

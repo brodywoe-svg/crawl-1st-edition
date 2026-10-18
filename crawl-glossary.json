@@ -3,7 +3,7 @@
  "entries": [
   {
    "n": "Action Pool",
-   "sec": "Combat System",
+   "sec": "Combat Systems",
    "lead": "[color=#8e171c]The Action Pool[/color]\nYour Action Pool holds all of your Action Points (AP), Magic Points \n(MP) and Exhaustion Points. The combined total can never exceed \nyour Max Pool.\n\n[color=#8e171c]Overflow. [/color]If you would gain points that put you over your Max Pool, \nyou choose which of the new points to keep and which are lost. For \nexample, if you gain both AP and MP, you decide how many of each \nto keep.\n\n[color=#8e171c]Exhaustion.[/color] Exhaustion Points take up space in your pool like any \nother point, but they can’t be spent or lost to overflow. If your pool is \never completely filled with Exhaustion Points, you die.",
    "fx": [],
    "notes": [],

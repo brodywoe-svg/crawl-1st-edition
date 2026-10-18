@@ -24,7 +24,9 @@ const textOf = p => plainText([p.n, p.desc, p.cat, p.pre, p.skills, p.weapons, p
   ...(p.extra || []).map(x => x.k + " " + x.v), ...arr(p.loadouts).map(l => l.n + " " + gearLine(l.gear)), gearLine(p.gear || []), ...arr(p.subs).map(s => s.n)].join(" ")).toLowerCase();
 const gearHTML = g => g.length ? `<ul class="gearl">${g.map(x => `<li>${x.qty > 1 ? `<b>${x.qty}×</b> ` : ""}${x.iid ? `<a class="ilink" href="items.html#${encodeURIComponent(x.iid)}">${esc(x.n)}</a>` : esc(x.n)}</li>`).join("")}</ul>` : `<p class="muted">No gear listed.</p>`;
 const factsHTML = rows => { rows = rows.filter(r => r[1]); return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${richInline(v)}</dd>`).join("")}</dl>` : "" };
-const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, richInline, f.lv ? ` <span class="lvtag">Level ${f.lv}</span>` : "")).join("")}</div>` : "";
+/* a choice feature's options, e.g. the Fighting Styles */
+const optsHTML = f => f.opts ? `<div class="fopts"><p class="fchoose">${esc(choiceLine(f))}</p>${f.opts.map(o => `<div class="fopt"><b>${esc(o.n)}</b>${o.d ? paras(o.d) : ""}</div>`).join("")}</div>` : "";
+const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, richInline, f.lv ? ` <span class="lvtag">Level ${f.lv}</span>` : "") + optsHTML(f)).join("")}</div>` : "";
 const featId = (p, i) => `feat-${p.id}-${i}`;
 /* the general Feat feature: every class gains a feat at every Nth level (Character Creator rules) */
 const featRuleText = () => { const lv = featLevels(20); return lv.length ? `At ${ordinal(lv[0])} level, and again at ${lv.slice(1, 4).map(ordinal).join(", ")}${lv.length > 4 ? " and so on" : ""}, you gain a feat of your choice from the [link=feats.html]Feats[/link] page, as long as you meet its prerequisite.` : "" };
@@ -32,13 +34,14 @@ function chartHTML(k) {
   const maxLv = Math.max(0, ...k.chart.map(r => r.lv || 0)), fLv = k.chart.length ? featLevels(Math.max(maxLv, 1)) : [];
   const lvls = [...new Set([...k.chart.map(r => r.lv).filter(Boolean), ...k.feats.map(f => f.lv || 1)])].sort((a, b) => a - b);
   const byLv = new Map(k.chart.map(r => [r.lv, r])), ruleId = `feat-${k.id}-rule`;
-  const rows = lvls.map(lv => { const r = byLv.get(lv) || {}, fs = k.feats.map((f, i) => [f, i]).filter(([f]) => (f.lv || 1) === lv);
-    const cells = fs.map(([f, i]) => `<button type="button" class="flink" data-feat="${featId(k, i)}">${esc(f.n)}</button>`);
+  const lvls2 = [...new Set([...lvls, ...k.feats.flatMap(f => f.more || [])])].sort((a, b) => a - b);
+  const rows = lvls2.map(lv => { const r = byLv.get(lv) || {}, fs = k.feats.map((f, i) => [f, i]).filter(([f]) => (f.lv || 1) === lv || (f.more || []).includes(lv));
+    const cells = fs.map(([f, i]) => `<button type="button" class="flink" data-feat="${featId(k, i)}">${esc(f.n)}${(f.lv || 1) !== lv ? " (another option)" : ""}</button>`);
     if (fLv.includes(lv)) cells.push(`<button type="button" class="flink" data-feat="${ruleId}">Feat</button>`);
     return `<tr><th scope="row">${lv}</th><td>${esc(r.pool || "–")}</td><td>${esc(r.die || "–")}</td><td>${cells.join(", ") || "–"}</td></tr>` }).join("");
   const ruleBox = fLv.length ? `<div class="clsf" id="${ruleId}"><h4><span class="pdn">Feat</span><span class="lvtag">Levels ${fLv.slice(0, 3).join(", ")}…</span></h4>${paras(featRuleText())}</div>` : "";
   return `<div class="clsgrid"><div class="clschart"><table><thead><tr><th>Level</th><th>Max Pool</th><th>Action Die</th><th>Features</th></tr></thead><tbody>${rows || `<tr><td colspan="4" class="muted">No levels yet.</td></tr>`}</tbody></table></div>
-<div class="clsfeats" aria-label="${esc(k.n)} features"><div class="cfh">Class features</div><div class="cfin" tabindex="0">${k.feats.map((f, i) => [f, i]).sort((a, b) => (a[0].lv || 1) - (b[0].lv || 1)).map(([f, i]) => `<div class="clsf" id="${featId(k, i)}"><h4><span class="pdn">${esc(f.n)}</span><span class="lvtag">Level ${f.lv || 1}</span></h4>${paras(f.d)}</div>`).join("")}${ruleBox}${k.feats.length || ruleBox ? "" : `<p class="muted">No features yet.</p>`}</div></div></div>`;
+<div class="clsfeats" aria-label="${esc(k.n)} features"><div class="cfh">Class features</div><div class="cfin" tabindex="0">${k.feats.map((f, i) => [f, i]).sort((a, b) => (a[0].lv || 1) - (b[0].lv || 1)).map(([f, i]) => `<div class="clsf" id="${featId(k, i)}"><h4><span class="pdn">${esc(f.n)}</span><span class="lvtag">Level ${f.lv || 1}</span></h4>${paras(f.d)}${optsHTML(f)}</div>`).join("")}${ruleBox}${k.feats.length || ruleBox ? "" : `<p class="muted">No features yet.</p>`}</div></div></div>`;
 }
 function classBody(k) {
   return (k.desc ? `<div class="clead">${paras(k.desc)}</div>` : "") + chartHTML(k) +
@@ -77,7 +80,11 @@ ${IS_CLS && (subs.length || ADMIN) ? `<div class="subs"><h3>Subclasses</h3>${sub
 
 /* ---------------------------------------------------------------- forms */
 const ITEM_LIST = () => `<datalist id="itemNames">${GEAR_ITEMS.slice().sort(byName).map(i => `<option value="${esc(i.n)}">`).join("")}</datalist>`;
-const featRow = f => `<div class="prow frow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><input type="number" class="pl" min="1" max="30" value="${esc(f.lv || "")}" placeholder="Lv" aria-label="Level gained" title="Level gained"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
+const optRow = o => `<div class="forow"><input type="text" class="fon" value="${esc(o.n)}" placeholder="Option name, e.g. Archery" aria-label="Option name" autocomplete="off"><textarea class="fod" rows="2" placeholder="What the option does" aria-label="Option description">${esc(o.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
+const optEditor = f => `<details class="foptbox"${f.opts && f.opts.length ? " open" : ""}><summary>Options to choose from${f.opts && f.opts.length ? ` (${f.opts.length})` : ""} <small>Make this a choice feature, like Fighting Style</small></summary>
+<div class="foptctl"><label>Player chooses <input type="number" class="fpick" min="1" max="10" value="${f.pick || 1}" aria-label="How many options to choose"></label><label>Another choice at levels <input type="text" class="fmore" value="${esc((f.more || []).join(", "))}" placeholder="e.g. 5, 10" aria-label="Levels with another choice" autocomplete="off"></label></div>
+<div class="folist">${arr(f.opts).map(optRow).join("")}</div><button type="button" class="btn" data-act="foadd">Add an option</button></details>`;
+const featRow = f => `<div class="prow frow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><input type="number" class="pl" min="1" max="30" value="${esc(f.lv || "")}" placeholder="Lv" aria-label="Level gained" title="Level gained"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button>${optEditor(f)}</div>`;
 const bgFeatRow = f => `<div class="prow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
 const extraRow = x => `<div class="xrow"><input type="text" class="xk" value="${esc(x.k)}" placeholder="Label" aria-label="Detail label" autocomplete="off"><input type="text" class="xv" value="${esc(x.v)}" placeholder="Value" aria-label="Detail value" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
 const chartRowHTML = r => `<div class="chrow"><input type="number" class="cl" min="1" max="30" value="${esc(r.lv || "")}" placeholder="Lv" aria-label="Level"><input type="text" class="cp" value="${esc(r.pool)}" placeholder="Max Pool" aria-label="Max Pool" autocomplete="off"><input type="text" class="cd" value="${esc(r.die)}" placeholder="Action Die, e.g. 1d6" aria-label="Action Die" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
@@ -138,7 +145,8 @@ ${fld("langs", "Language Proficiencies", "", inp("langs", "e.g. One additional L
 const own = (f, sel) => [...f.querySelectorAll(sel)].filter(el => el.closest(".rform") === f);
 function readForm(f) {
   const d = {}; own(f, "[data-k]").forEach(el => { d[el.dataset.k] = el.value });
-  d.feats = own(f, ".prow").map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value, lv: r.querySelector(".pl") ? r.querySelector(".pl").value : "" }));
+  d.feats = own(f, ".prow").map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value, lv: r.querySelector(".pl") ? r.querySelector(".pl").value : "",
+    ...(r.querySelector(".foptbox") ? { opts: [...r.querySelectorAll(".forow")].map(o => ({ n: o.querySelector(".fon").value, d: o.querySelector(".fod").value })), pick: r.querySelector(".fpick").value, more: r.querySelector(".fmore").value } : {}) }));
   d.extra = own(f, ".xrow").map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
   d.chart = own(f, ".chrow:not(.chh)").map(r => ({ lv: r.querySelector(".cl").value, pool: r.querySelector(".cp").value, die: r.querySelector(".cd").value }));
   d.loadouts = own(f, ".lrow").map(l => ({ n: l.querySelector(".ln").value, gear: [...l.querySelectorAll(".grow")].map(g => ({ n: g.querySelector(".gn").value, qty: g.querySelector(".gq").value })) }));
@@ -147,7 +155,7 @@ function readForm(f) {
   d.gear = own(f, ".glist").filter(g => !g.closest(".lrow")).flatMap(g => [...g.querySelectorAll(".grow")].map(r => ({ n: r.querySelector(".gn").value, qty: r.querySelector(".gq").value })));
   return d;
 }
-function saveDrafts() { document.querySelectorAll(".cform").forEach(f => { const d = readForm(f); drafts.set(+f.dataset.id, { ...findPart(+f.dataset.id).part, ...d, chart: d.chart.map(r => ({ lv: featLv(r.lv), pool: r.pool, die: r.die })), feats: d.feats.map(x => ({ ...x, lv: featLv(x.lv) })), gear: gearOf(d.gear), loadouts: d.loadouts.map(l => ({ n: l.n, gear: gearOf(l.gear) })) }) }) }
+function saveDrafts() { document.querySelectorAll(".cform").forEach(f => { const d = readForm(f); drafts.set(+f.dataset.id, { ...findPart(+f.dataset.id).part, ...d, chart: d.chart.map(r => ({ lv: featLv(r.lv), pool: r.pool, die: r.die })), feats: featsOf(d.feats.map(x => ({ ...x, lv: featLv(x.lv) }))), gear: gearOf(d.gear), loadouts: d.loadouts.map(l => ({ n: l.n, gear: gearOf(l.gear) })) }) }) }
 
 /* ---------------------------------------------------------------- page */
 function render() {
@@ -181,9 +189,10 @@ $("clist").addEventListener("click", ev => {
   if (fl) { const el = document.getElementById(fl.dataset.feat); if (el) { const box = el.closest(".cfin"); box.scrollTo({ top: el.offsetTop - box.offsetTop - 6, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash") } return }
   const b = ev.target.closest("button"); if (!b) return;
   const f = b.closest(".rform"), act = b.dataset.act;
-  if (b.classList.contains("xdel")) { b.closest(".lrow>.lhead") ? b.closest(".lrow").remove() : b.closest(".prow,.xrow,.chrow,.grow,.schrow,.choicerow").remove(); return }
+  if (b.classList.contains("xdel")) { b.closest(".lrow>.lhead") ? b.closest(".lrow").remove() : b.closest(".forow,.prow,.xrow,.chrow,.grow,.schrow,.choicerow").remove(); return }
   const addTo = (box, html, sel) => { box.insertAdjacentHTML("beforeend", html); const el = box.lastElementChild.querySelector(sel); if (el) el.focus() };
   if (f && act === "fadd") { addTo(own(f, ".plist")[0], f.dataset.kind === "bg" ? bgFeatRow({ n: "", d: "" }) : featRow({ n: "", d: "" }), ".pn"); return }
+  if (f && act === "foadd") { const box = b.closest(".foptbox").querySelector(".folist"); addTo(box, optRow({ n: "", d: "" }), ".fon"); return }
   if (f && act === "xadd") { addTo(own(f, ".xlist")[0], extraRow({ k: "", v: "" }), ".xk"); return }
   if (f && act === "cadd") { const rows = own(f, ".chrow:not(.chh)"), last = rows.length ? parseInt(rows[rows.length - 1].querySelector(".cl").value, 10) || rows.length : 0; addTo(own(f, ".chlist")[0], chartRowHTML({ lv: last + 1, pool: "", die: "" }), ".cp"); return }
   if (f && act === "cfill") { const box = own(f, ".chlist")[0], have = new Set(own(f, ".chrow:not(.chh)").map(r => parseInt(r.querySelector(".cl").value, 10))); for (let lv = 1; lv <= 20; lv++) if (!have.has(lv)) box.insertAdjacentHTML("beforeend", chartRowHTML({ lv, pool: "", die: "" })); [...box.querySelectorAll(".chrow:not(.chh)")].sort((x, y) => (parseInt(x.querySelector(".cl").value, 10) || 99) - (parseInt(y.querySelector(".cl").value, 10) || 99)).forEach(r => box.appendChild(r)); return }

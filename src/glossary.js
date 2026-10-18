@@ -8,18 +8,29 @@ let entries = [], uid = 0, original = "", dirty = false;
 const editing = new Set(), drafts = new Map();
 /* glossary.html?s=combat-rules shows one section on its own page, like the Conditions page */
 const SLUG = PAGE === "glossary" ? new URLSearchParams(location.search).get("s") : null;
+/* menu groups such as Combat (Combat Rules, Combat Systems, Actions > Weapon Actions, Combat Actions); their sections always exist */
+const GTREE = window.CRAWL_GTREE || [];
+const leavesOf = items => items.flatMap(x => typeof x === "string" ? [x] : leavesOf(x.items));
+const FIXED = PAGE === "glossary" ? leavesOf(GTREE) : [];
+function findGroup(items) { for (const x of items) { if (typeof x === "string") continue; if (x.slug === SLUG) return { n: x.n, secs: leavesOf(x.items) }; const g = findGroup(x.items); if (g) return g } return null }
+const GROUP = SLUG ? findGroup(GTREE) : null;
 function only() {
   if (PAGE === "conditions") return FIRST;
-  if (!SLUG) return null;
-  return [...new Set(entries.map(e => e.sec))].find(x => slugOf(x) === SLUG) || null;
+  if (!SLUG || GROUP) return null;
+  return [...new Set([...entries.map(e => e.sec), ...FIXED])].find(x => slugOf(x) === SLUG) || null;
 }
 const secHref = sec => sec === FIRST ? "conditions.html" : "glossary.html?s=" + encodeURIComponent(slugOf(sec));
 let shownOnly;
+const EMPTY0 = $("cempty").textContent;
 function pageHeading() {
-  const o = only(); if (PAGE !== "glossary" || o === shownOnly) return; shownOnly = o;
+  const o = only() || (GROUP && GROUP.n); if (PAGE !== "glossary" || o === shownOnly) return; shownOnly = o;
   const h = document.querySelector(".intro h1"), p = document.querySelector(".intro p");
-  if (o) {
-    h.textContent = o; document.title = "Crawl " + o;
+  if (GROUP) {
+    h.textContent = GROUP.n; document.title = GROUP.n + " · Crawl 1st Edition";
+    p.innerHTML = `${GROUP.secs.map(s => `<a href="${secHref(s)}">${esc(s)}</a>`).join(", ").replace(/, ([^,]*)$/, " and $1")}. <a href="glossary.html">See the whole Glossary</a>.`;
+    $("cq").placeholder = `Search ${GROUP.n}`; $("cq").setAttribute("aria-label", `Search ${GROUP.n}`);
+  } else if (o) {
+    h.textContent = o; document.title = o + " · Crawl 1st Edition";
     p.innerHTML = `Every entry in the ${esc(o)} section of the glossary. <a href="glossary.html">See the whole Glossary</a>.`;
     $("cq").placeholder = `Search ${o}`; $("cq").setAttribute("aria-label", `Search ${o}`);
   } else if (SLUG) {
@@ -38,12 +49,13 @@ function clean() {
   return { v: 1, entries: entries.filter(e => !e._new).map(({ _id, _new, _score, ...e }) => e).sort(byName) };
 }
 function sections() {
-  return [...new Set(entries.filter(e => !e._new || editing.has(e._id)).map(e => e.sec))]
+  return [...new Set([...entries.filter(e => !e._new || editing.has(e._id)).map(e => e.sec), ...FIXED])]
     .sort((a, b) => a === FIRST ? -1 : b === FIRST ? 1 : a.localeCompare(b));
 }
 function visible() {
   let list = entries.filter(e => !e._new || editing.has(e._id));
   const o = only(); if (o) list = list.filter(e => e.sec === o || editing.has(e._id));
+  if (GROUP) list = list.filter(e => GROUP.secs.includes(e.sec) || editing.has(e._id));
   const q = query();
   if (q) {
     list.forEach(e => { e._score = score(e, q) });
@@ -163,14 +175,16 @@ function render() {
   let h;
   if (query()) h = list.length ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist">${list.map(e => card(e, !o)).join("")}</div>` : "";
   else if (o) h = `<div class="clist">${list.map(e => card(e, false)).join("")}</div>`;
-  else h = sections().map(sec => {
-    const items = list.filter(e => e.sec === sec); if (!items.length) return "";
+  else h = (GROUP ? [...GROUP.secs, ...sections().filter(s => !GROUP.secs.includes(s))] : sections()).map(sec => {
+    const items = list.filter(e => e.sec === sec); if (!items.length && !(GROUP && GROUP.secs.includes(sec))) return "";
+    if (!items.length) return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><p class="muted">No entries yet.${ADMIN ? " Click Add entry and choose this section." : ""}</p></section>`;
     return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><div class="clist">${items.map(e => card(e, true)).join("")}</div></section>`;
   }).join("");
   $("clist").innerHTML = h;
   document.querySelectorAll(".gediting").forEach(preview);
   sideShow(editing.size > 0);
-  $("cempty").hidden = list.length > 0;
+  $("cempty").hidden = list.length > 0 || (GROUP && !query());
+  $("cempty").textContent = !list.length && !query() && o ? `No ${o} entries yet.` + (ADMIN ? " Click Add entry to write the first one." : "") : EMPTY0;
   $("gsecs").innerHTML = sections().map(s => `<option value="${esc(s)}">`).join("");
   $("gAdd").hidden = !ADMIN;
 }
@@ -218,7 +232,7 @@ $("clist").addEventListener("click", ev => {
   const del = ev.target.closest(".gwdel"); if (del) { del.closest(".gword").remove(); preview(f) }
 }, true);
 $("gAdd").addEventListener("click", () => {
-  const e = { n: "", sec: only() || (SLUG ? "" : sections()[0]) || FIRST, lead: "", fx: [], notes: [], aka: [], tip: true, _id: ++uid, _new: true };
+  const e = { n: "", sec: only() || (GROUP ? GROUP.secs[0] : SLUG ? "" : sections()[0]) || FIRST, lead: "", fx: [], notes: [], aka: [], tip: true, _id: ++uid, _new: true };
   entries.push(e); editing.add(e._id); $("cq").value = ""; render();
   const f = document.querySelector(`.gediting[data-id="${e._id}"]`);
   if (f) { f.scrollIntoView({ block: "center" }); f.querySelector('[data-k="n"]').focus() }

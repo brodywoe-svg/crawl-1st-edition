@@ -485,8 +485,38 @@
     },
     {
      "n": "Fighting Style",
-     "d": "You adopt a particular style of fighting as your specialty. Choose\none of the following options. You gain an additional Fighting \nStyle option at the 5th level.\n\n[color=#b7791f]Archery[/color]: Your Critical Multiplier with Bows and Crossbows is x2.\n\n[color=#b7791f]Duel-Wielder[/color]: While you are wielding a weapon in each hand, you can add you can use the Whirlwind Weapon attack.\n\n[color=#b7791f]Two-Handed[/color]: While you are wielding a melee in both hands, Weapon actions costs are reduced by 1AP and whenever you roll a die for weapon damage, if you roll a 1, you may choose to reroll that die.\n\n[color=#b7791f]Bulwark[/color]: While you are wearing a Helmet and either Medium or heavy Armor, you gain an additional +1 to your Armor Class.\n\n[color=#b7791f]Defender[/color]: Whenever you use the Shield Bash weapon action, you can add your Strength Modifier to the Damage total. you gain an additional skill point in Shields.\n\n[color=#b7791f]Weapon Specialist[/color]. Choose a weapon Category of your Choice, You gain a single skill point in that weapon Category.",
-     "lv": 1
+     "d": "You adopt a particular style of fighting as your specialty.",
+     "lv": 1,
+     "opts": [
+      {
+       "n": "Archery",
+       "d": "Your Critical Multiplier with Bows and Crossbows is x2."
+      },
+      {
+       "n": "Duel-Wielder",
+       "d": "While you are wielding a weapon in each hand, you can add you can use the Whirlwind Weapon attack."
+      },
+      {
+       "n": "Two-Handed",
+       "d": "While you are wielding a melee in both hands, Weapon actions costs are reduced by 1AP and whenever you roll a die for weapon damage, if you roll a 1, you may choose to reroll that die."
+      },
+      {
+       "n": "Bulwark",
+       "d": "While you are wearing a Helmet and either Medium or heavy Armor, you gain an additional +1 to your Armor Class."
+      },
+      {
+       "n": "Defender",
+       "d": "Whenever you use the Shield Bash weapon action, you can add your Strength Modifier to the Damage total. you gain an additional skill point in Shields."
+      },
+      {
+       "n": "Weapon Specialist",
+       "d": "Choose a weapon Category of your Choice, You gain a single skill point in that weapon Category."
+      }
+     ],
+     "pick": 1,
+     "more": [
+      5
+     ]
     },
     {
      "n": "Adrenaline",

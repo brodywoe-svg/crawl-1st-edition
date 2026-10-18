@@ -98,11 +98,11 @@ const LS = "crawl-characters";
 let chars = [], cur = null, view = "home", saveT = 0;
 try { chars = arr(JSON.parse(localStorage.getItem(LS) || "[]")).filter(c => c && c.id) } catch (e) { chars = [] }
 function blankChar() {
-  return { id: newId("pc"), v: 1, name: "", race: "", sub: "", cls: "", subcls: "", bg: "", bgCustom: null, loadout: "", major: "", minor: "", spellUp: {}, moneyRoll: null, method: "roll", base: {}, dice: {}, stored: null, rolls: 0, asi: [],
+  return { id: newId("pc"), v: 1, name: "", race: "", sub: "", cls: "", subcls: "", bg: "", bgCustom: null, loadout: "", major: "", minor: "", fopt: {}, spellUp: {}, moneyRoll: null, method: "roll", base: {}, dice: {}, stored: null, rolls: 0, asi: [],
     prof: { skill: {}, save: {}, weapon: {}, armor: {}, trade: {} }, choice: {}, langs: [], spells: [], inv: [], details: {}, rank: {}, sheet: {}, seen: {}, step: 0, done: false, made: Date.now() };
 }
 function fixChar(c) {
-  const b = blankChar(); c = { ...b, ...c }; c.prof = { ...b.prof, ...(c.prof || {}) }; for (const k of ["base", "dice", "choice", "details", "rank", "sheet", "seen", "spellUp"]) c[k] = c[k] && typeof c[k] === "object" ? c[k] : {};
+  const b = blankChar(); c = { ...b, ...c }; c.prof = { ...b.prof, ...(c.prof || {}) }; for (const k of ["base", "dice", "choice", "details", "rank", "sheet", "seen", "spellUp", "fopt"]) c[k] = c[k] && typeof c[k] === "object" ? c[k] : {};
   for (const k of ["asi", "langs", "spells", "inv"]) c[k] = arr(c[k]); return c;
 }
 chars = chars.map(fixChar);
@@ -120,8 +120,16 @@ const bgOf = c => c.bg === "custom" ? (c.bgCustom ? { n: str(c.bgCustom.n) || "C
 /* everything that gives the character something; class and subclass features only count up to the character's level */
 function sources(c) {
   return [[raceOf(c), "race"], [subOf(c), "sub"], [clsOf(c), "class"], [subclsOf(c), "subclass"], [bgOf(c), "bg"]].filter(x => x[0])
-    .map(([p, kind]) => ({ p, kind, label: p.n, feats: kind === "class" || kind === "subclass" ? featsAt(p.feats, LEVEL) : p.feats }));
+    .map(([p, kind]) => ({ p, kind, label: p.n, feats: kind === "class" || kind === "subclass" ? withPicks(c, kind, featsAt(p.feats, LEVEL)) : p.feats }));
 }
+/* choice features (e.g. Fighting Style): the options the player picked, stored by "kind:feature name" */
+const foptKey = (kind, f) => kind + ":" + f.n;
+const foptChosen = (c, kind, f) => arr(c.fopt[foptKey(kind, f)]).filter(n => f.opts.some(o => o.n === n)).slice(0, picksAt(f, LEVEL));
+const withPicks = (c, kind, fs) => fs.flatMap(f => f.opts ? [f, ...foptChosen(c, kind, f).map(n => { const o = f.opts.find(x => x.n === n); return { n: `${f.n}: ${o.n}`, d: o.d, lv: f.lv } })] : [f]);
+function choiceFeats(c) {
+  return [[clsOf(c), "class"], [subclsOf(c), "subclass"]].filter(x => x[0]).flatMap(([p, kind]) => featsAt(p.feats, LEVEL).filter(f => f.opts && picksAt(f, LEVEL)).map(f => ({ f, kind, src: p.n })));
+}
+const choicesDone = c => choiceFeats(c).every(({ f, kind }) => foptChosen(c, kind, f).length >= picksAt(f, LEVEL));
 const chartRow = c => { const k = clsOf(c); return k ? k.chart.filter(r => (r.lv || 1) <= LEVEL).pop() || null : null };
 const skillPoints = c => { const k = clsOf(c); return k ? Math.max(0, parseInt(k.skillPts, 10) || 0) : 0 };
 function grants(c) {
@@ -332,7 +340,8 @@ window.addEventListener("scroll", hideTip, { passive: true, capture: true });
 /* ---------------------------------------------------------------- shared bits of markup */
 const say = m => { $("gmsg").textContent = m || "" };
 const factsHTML = rows => { rows = rows.filter(r => r[1]); return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${rich(v)}</dd>`).join("")}</dl>` : "" };
-const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, rich)).join("")}</div>` : "";
+const optsHTML = f => f.opts ? `<div class="fopts"><p class="fchoose">${esc(choiceLine(f))}</p>${f.opts.map(o => `<div class="fopt"><b>${esc(o.n)}</b>${o.d ? `<p>${rich(o.d)}</p>` : ""}</div>`).join("")}</div>` : "";
+const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, rich) + optsHTML(f)).join("")}</div>` : "";
 const infoBox = (title, tag, body, link) => `<div class="cii"><div class="cih"><span>${esc(title)}</span>${tag ? `<span class="ctag">${esc(tag)}</span>` : ""}</div><div class="cib">${body || `<p class="muted">Nothing written here yet.</p>`}${link || ""}</div></div>`;
 function partInfo(p, tag, link, feats) {
   const row1 = p.chart && p.chart.filter(r => (r.lv || 1) <= LEVEL).pop();
@@ -353,7 +362,7 @@ function spellInfo(s) {
     factsHTML([["Prerequisites", f.pre], ["Class Requirements", f.cls], ["Components", comps], ["Material Cost", f.mat], ["Casting Cost", f.cost], ["Casting Time", f.time], ["Type", f.type], ["Range", f.range]]) +
     (f.desc ? `<div class="clead">${richParas(f.desc)}</div>` : "") + tbl + (f.dmg && !/^n\/?a$/i.test(str(f.dmg)) ? factsHTML([["Damage", f.dmg]]) : "") +
     (tiers.length ? `<div class="sptiers"><h4>Rank benefits</h4>${tiers.map(([i, n, d]) => `<p class="${r != null && r >= i ? "got" : ""}"><b>+${i}</b> ${n && n !== "—" ? `<span class="pdn">${esc(n)}</span> ` : ""}${rich(d)}</p>`).join("")}</div>` : ""),
-    `<a class="glink" href="index.html?show=all#${encodeURIComponent(slugOf(s.n))}" target="_blank" rel="noopener">Open in the spell list</a>`);
+    `<a class="glink" href="spells.html?show=all#${encodeURIComponent(slugOf(s.n))}" target="_blank" rel="noopener">Open in the spell list</a>`);
 }
 function itemInfo(it) {
   return infoBox(it.n, [it.rarity, it.cat].filter(Boolean).join(" · "), factsHTML([["Value", it.value], ["Weight", it.weight], ["Type", [it.sub, it.slot].filter(Boolean).join(", ")], ["Properties", it.props], ["Weapon actions", it.actions]]) +
@@ -370,7 +379,7 @@ function stepOk(c, k) {
   const ps = profState(c);
   switch (k) {
     case "race": { const r = raceOf(c); return !!r && (!r.subs.length || !!subOf(c)) }
-    case "class": { const k2 = clsOf(c); return !!k2 && (!k2.subs.length || !!subclsOf(c)) && (!hasMajor(k2) || !!c.major) && (!hasMinor(k2) || !!c.minor) }
+    case "class": { const k2 = clsOf(c); return !!k2 && (!k2.subs.length || !!subclsOf(c)) && (!hasMajor(k2) || !!c.major) && (!hasMinor(k2) || !!c.minor) && choicesDone(c) }
     case "bg": return !!bgOf(c) || (!CR.backgrounds.length && !!c.seen.bg);
     case "abil": return ABIL.every(([a]) => baseOf(c, a) != null) && asiInfo(c).picks.every((p, i) => !!AB[c.asi[i]]);
     case "skills": return !!c.seen.skills && ps.g.picks.filter(p => p.opts && (p.cat === "skill" || p.cat === "save")).every(p => pickDone(c, p)) && ["skill", "save"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow });
@@ -413,6 +422,15 @@ function schoolPicks(c, k) {
   return `<div class="ccschools"><label data-ik="major"${opp ? "" : ' class="solo"'}><span>${src} Major</span><select data-f="major">${opts(c.major, () => false)}</select><small>The school you've studied most. Its spells start at Rank +${k.schoolStart === "" ? 1 : +k.schoolStart || 0}.</small></label>${opp ? `<div class="ccopp" role="status"><span class="ccoppt">Opposing School</span><b>${esc(opp)}</b><p>The opposite of your Major. Raising the Rank of ${/^[aeiou]/i.test(opp) ? "an" : "a"} ${esc(opp)} spell costs <b>${+k.oppCost || 2} skill points</b> per Rank instead of 1.</p></div>` : ""}` +
     (hasMinor(k) ? `<label data-ik="minor"><span>${src} Minor</span><select data-f="minor">${opts(c.minor, s => lcs(s) === lcs(c.major) || lcs(s) === lcs(opp))}</select><small>Can't be your Major or your Opposing School.</small></label>` : (+k.minorLv ? `<p class="ccnote">You choose your ${src} Minor at level ${+k.minorLv}.</p>` : "")) + `</div>`;
 }
+/* choice features on the Class step, e.g. "Fighting Style: choose 1" */
+function featPicks(c) {
+  return choiceFeats(c).map(({ f, kind, src }) => {
+    const key = foptKey(kind, f), got = foptChosen(c, kind, f), need = picksAt(f, LEVEL);
+    infoMap.set("fopt:" + key, partInfo({ ...f, desc: f.d, feats: [], extra: [] }, `${src} · Level ${f.lv || 1}`));
+    f.opts.forEach(o => infoMap.set("fopt:" + key + "|" + o.n, infoBox(o.n, `${f.n} option`, o.d ? `<div class="clead">${richParas(o.d)}</div>` : "")));
+    return `<h3 class="cch3" data-ik="fopt:${esc(key)}">${esc(f.n)} <small class="ccpickn">choose ${need}${got.length ? ` · ${got.length} chosen` : ""}</small></h3><div class="ccopts sub">${f.opts.map(o => optBtn("fopt:" + key + "|" + o.n, got.includes(o.n), o.n)).join("")}</div>`;
+  }).join("");
+}
 const STEP_VIEWS = {
   race(c) {
     if (!RACE_LIST.length) return `<p class="cempty">No races yet. Add them on the <a href="races.html">Races page</a>.</p>`;
@@ -426,10 +444,10 @@ const STEP_VIEWS = {
     if (!CR.classes.length) return `<p class="cempty">No classes yet.${ADMIN ? ` Add them on the <a href="classes.html">Classes page</a>.` : ""}</p>`;
     const k = clsOf(c), s = subclsOf(c);
     const clink = (x, extra) => `<p class="cclinks"><a class="glink" href="classes.html#${encodeURIComponent(x.id)}" target="_blank" rel="noopener">Open on the Classes page</a>${extra || ""}</p>`;
-    CR.classes.forEach(x => { infoMap.set("class:" + x.id, partInfo(x, "Class", clink(x, x.source ? ` · <a class="glink" href="index.html?class=${encodeURIComponent(lcs(x.n))}" target="_blank" rel="noopener">${esc(x.n)} spells</a>` : ""), featsAt(x.feats, LEVEL))); x.subs.forEach(y => infoMap.set("subcls:" + y.id, partInfo(y, "Subclass of " + x.n, clink(y), featsAt(y.feats, LEVEL)))) });
+    CR.classes.forEach(x => { infoMap.set("class:" + x.id, partInfo(x, "Class", clink(x, x.source ? ` · <a class="glink" href="spells.html?class=${encodeURIComponent(lcs(x.n))}" target="_blank" rel="noopener">${esc(x.n)} spells</a>` : ""), featsAt(x.feats, LEVEL))); x.subs.forEach(y => infoMap.set("subcls:" + y.id, partInfo(y, "Subclass of " + x.n, clink(y), featsAt(y.feats, LEVEL)))) });
     infoDefault = s ? infoMap.get("subcls:" + s.id) : k ? infoMap.get("class:" + k.id) : infoBox("Classes", "", `<p>Your class decides how you fight, what you're trained in and whether you cast spells.</p>`);
     return `<div class="ccopts">${CR.classes.map(x => optBtn("class:" + x.id, k === x, x.n, x.source ? x.source + " magic" : "")).join("")}</div>` +
-      (k && k.subs.length ? `<h3 class="cch3">Subclass</h3><div class="ccopts sub">${k.subs.map(y => optBtn("subcls:" + y.id, s === y, y.n)).join("")}</div>` : "") + schoolPicks(c, k);
+      (k && k.subs.length ? `<h3 class="cch3">Subclass</h3><div class="ccopts sub">${k.subs.map(y => optBtn("subcls:" + y.id, s === y, y.n)).join("")}</div>` : "") + schoolPicks(c, k) + featPicks(c);
   },
   bg(c) {
     const b = c.bg;
@@ -638,7 +656,13 @@ $("ccmain").addEventListener("click", ev => {
     const [kind, id] = o.dataset.ik.split(/:(.*)/s);
     if (kind === "race") { if (c.race !== id) { c.race = id; c.sub = ""; c.asi = []; c.choice = {} } }
     else if (kind === "sub") c.sub = id;
-    else if (kind === "class") { if (c.cls !== id) { c.cls = id; c.subcls = ""; c.spells = []; c.spellUp = {}; c.major = ""; c.minor = ""; c.moneyRoll = null; setLoadout(c, "") } }
+    else if (kind === "class") { if (c.cls !== id) { c.cls = id; c.subcls = ""; c.spells = []; c.spellUp = {}; c.major = ""; c.minor = ""; c.fopt = {}; c.moneyRoll = null; setLoadout(c, "") } }
+    else if (kind === "fopt") {
+      const [key, name] = id.split(/\|(.*)/s), hit = choiceFeats(c).find(x => foptKey(x.kind, x.f) === key); if (!hit) return;
+      const need = picksAt(hit.f, LEVEL); let got = foptChosen(c, hit.kind, hit.f);
+      got = got.includes(name) ? got.filter(n => n !== name) : [...got, name].slice(-need);
+      c.fopt[key] = got;
+    }
     else if (kind === "subcls") c.subcls = id;
     else if (kind === "bg") { c.bg = id; if (id === "custom" && !c.bgCustom) c.bgCustom = { n: "", desc: "" } }
     touch(); renderCreate(); const again = document.querySelector(`.ccopt[data-ik="${CSS.escape(o.dataset.ik)}"]`); if (again) again.focus(); return;

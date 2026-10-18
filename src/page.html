@@ -409,7 +409,7 @@ function canLearn(s,c){
   const tr=CLASSES.find(x=>x[0]===c)[1]; return s.tags.includes(tr);
 }
 function setFilter(v,c){view=v;cls=c;try{localStorage.setItem("crawl-view",view);localStorage.setItem("crawl-class",cls)}catch(e){}
-  if(window.CRAWL_STATIC||window.crawlApp)try{history.replaceState(null,"","index.html"+(cls?"?class="+cls.toLowerCase():view!=="All"?"?source="+view.toLowerCase():""));if(window.crawlNavMark)window.crawlNavMark()}catch(e){}
+  if(window.CRAWL_STATIC||window.crawlApp)try{history.replaceState(null,"","spells.html"+(cls?"?class="+cls.toLowerCase():view!=="All"?"?source="+view.toLowerCase():""));if(window.crawlNavMark)window.crawlNavMark()}catch(e){}
   renderCounts();render()}
 try{const o=JSON.parse(sessionStorage.getItem("crawl-open")||"[]");o.forEach(n=>{const s=SPELLS.find(x=>x.n===n);if(s)openSet.add(s._id)})}catch(e){}
 

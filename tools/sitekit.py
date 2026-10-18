@@ -4,22 +4,24 @@ Used by tools/build.py. The navigation bar is injected into every page, and the
 Glossary and Conditions pages draw their entries from crawl-glossary.json.
 """
 import html
+import json
 import re
 
 # ---------------------------------------------------------------- navigation
 
 # (label, href or None when the section isn't built yet, dropdown items or "glossary")
 NAV_ITEMS = [
+    ("Home", "index.html", None),
     ("Character Creator", "creator.html", None),
     ("Classes", "classes.html", "classes"),
     ("Races", "races.html", "races"),
     ("Backgrounds", "backgrounds.html", "backgrounds"),
     ("Feats", "feats.html", "feats"),
-    ("Spells", "index.html", [("All spells", "index.html?show=all"), ("By magic source", None),
-                              ("Arcane", "index.html?source=arcane"), ("Divine", "index.html?source=divine"), ("Primal", "index.html?source=primal"), ("Occult", "index.html?source=occult"),
+    ("Spells", "spells.html", [("All spells", "spells.html?show=all"), ("By magic source", None),
+                              ("Arcane", "spells.html?source=arcane"), ("Divine", "spells.html?source=divine"), ("Primal", "spells.html?source=primal"), ("Occult", "spells.html?source=occult"),
                               ("By class", None),
-                              ("Wizard", "index.html?class=wizard"), ("Sorcerer", "index.html?class=sorcerer"), ("Cleric", "index.html?class=cleric"), ("Paladin", "index.html?class=paladin"),
-                              ("Druid", "index.html?class=druid"), ("Warlock", "index.html?class=warlock"), ("Bard", "index.html?class=bard")]),
+                              ("Wizard", "spells.html?class=wizard"), ("Sorcerer", "spells.html?class=sorcerer"), ("Cleric", "spells.html?class=cleric"), ("Paladin", "spells.html?class=paladin"),
+                              ("Druid", "spells.html?class=druid"), ("Warlock", "spells.html?class=warlock"), ("Bard", "spells.html?class=bard")]),
     ("Crafting", "crafting.html", [("Blacksmithing", "crafting.html?p=blacksmithing"), ("Tailoring", "crafting.html?p=tailoring"), ("Woodworking", "crafting.html?p=woodworking"), ("Cooking", "crafting.html?p=cooking"), ("Alchemy", "crafting.html?p=alchemy"), ("Leatherworking", "crafting.html?p=leatherworking"), ("Scribing", "crafting.html?p=scribing"), ("Tinkering", "crafting.html?p=tinkering"), ("Goldsmithing", "crafting.html?p=goldsmithing"), ("Enchanting", "crafting.html?p=enchanting")]),
     ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Ammunition", "items.html?c=ammunition"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
                              ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items")]),
@@ -28,7 +30,7 @@ NAV_ITEMS = [
     ("About", None, None),
 ]
 # which nav item each page belongs to
-SECTION = {"creator": "Character Creator", "classes": "Classes", "backgrounds": "Backgrounds", "feats": "Feats", "races": "Races", "spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
+SECTION = {"home": "Home", "creator": "Character Creator", "classes": "Classes", "backgrounds": "Backgrounds", "feats": "Feats", "races": "Races", "spells": "Spells", "glossary": "Glossary", "conditions": "Glossary", "items": "Items", "crafting": "Crafting"}
 
 CARET = '<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 
@@ -46,6 +48,27 @@ def glossary_sections(glossary):
 
 def section_href(sec):
     return "conditions.html" if sec == "Conditions" else "glossary.html?s=" + slug(sec)
+
+
+# Glossary menu groups: a group is a page of its own (glossary.html?s=<slug>) with a flyout of its sections.
+# The sections in a group always exist, even before they have entries. The browser copy of this is CRAWL_GTREE.
+GLOSSARY_TREE = [{"n": "Combat", "slug": "combat", "items": ["Combat Rules", "Combat Systems", {"n": "Actions", "slug": "actions", "items": ["Weapon Actions", "Combat Actions"]}]}]
+
+
+def tree_leaves(items):
+    return [y for x in items for y in ([x] if isinstance(x, str) else tree_leaves(x["items"]))]
+
+
+def glossary_menu(sections):
+    """Conditions, then the groups (Combat ▸ ...), then every other section A to Z."""
+    def node(x):
+        if isinstance(x, str):
+            return f'<a href="{section_href(x)}">{html.escape(x)}</a>'
+        return (f'<div class="navsub"><a href="glossary.html?s={x["slug"]}">{html.escape(x["n"])}{CARET_R}</a>'
+                f'<div class="navfly">{"".join(node(y) for y in x["items"])}</div></div>')
+    grouped = set(tree_leaves(GLOSSARY_TREE))
+    rest = [s for s in sections if s != "Conditions" and s not in grouped]
+    return node("Conditions") + "".join(node(g) for g in GLOSSARY_TREE) + "".join(node(s) for s in rest)
 
 
 LIST_MENUS = {
@@ -95,7 +118,7 @@ def nav_html(active, controls="", sections=("Conditions",), races=None, classes=
         if isinstance(menu, str) and menu in LIST_MENUS:
             items, menu_id = list_menu(menu, lists[menu]), f' id="nav{menu.capitalize()}"'
         elif menu == "glossary":
-            items, menu_id = "".join(f'<a href="{section_href(t)}">{html.escape(t)}</a>' for t in sections), ' id="navGlossary"'
+            items, menu_id = glossary_menu(sections), ' id="navGlossary"'
         else:
             items, menu_id = "".join(f'<a href="{h}">{html.escape(t)}</a>' if h else f'<span class="navmenuh">{html.escape(t)}</span>' for t, h in menu), ""
         parts.append(
@@ -103,7 +126,7 @@ def nav_html(active, controls="", sections=("Conditions",), races=None, classes=
             f'<div class="navmenu"{menu_id}>{items}</div></div>'
         )
     parts.append(f'</div><div class="navctl" id="navctl">{controls}</div></div></nav>')
-    parts.append(f"<script>{NAV_JS}</script>")
+    parts.append(f"<script>{NAV_JS.replace('/*@GTREE@*/null', json.dumps(GLOSSARY_TREE))}</script>")
     return "".join(parts)
 
 
@@ -137,6 +160,7 @@ html.is-admin .navitem.adminonly{display:inline-flex}
 .caretr{width:6px;height:10px;flex:none}
 .navfly{display:none;position:absolute;left:100%;top:-8px;min-width:190px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22);margin-left:4px}
 .navsub:hover>.navfly,.navsub:focus-within>.navfly{display:grid}
+#navGlossary .navfly{left:auto;right:100%;margin:0 4px 0 0}
 @media (hover:none),(max-width:700px){.navfly{display:grid;position:static;border:0;box-shadow:none;padding:0 0 0 14px;margin:0;min-width:0}.caretr{display:none}}
 .navmenuh{display:block;padding:8px 12px 2px;font:800 .62rem var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .navmenu a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
@@ -196,10 +220,14 @@ NAV_JS = """(function(){
     if(!document.getElementById('nav'+kind.charAt(0).toUpperCase()+kind.slice(1)))return;
     fetch('crawl-'+kind+'.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j[kind])window.crawlNavList(kind,j[kind])}).catch(function(){});
   });
+  var GTREE=window.CRAWL_GTREE=/*@GTREE@*/null||[];
+  function leaves(items){var o=[];items.forEach(function(x){if(typeof x==='string')o.push(x);else o=o.concat(leaves(x.items))});return o}
+  function node(x){if(typeof x==='string')return '<a href="'+href(x)+'">'+esc(x)+'</a>';
+    return '<div class="navsub"><a href="glossary.html?s='+x.slug+'">'+esc(x.n)+'<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navfly">'+x.items.map(node).join('')+'</div></div>'}
   window.crawlNavSections=function(list){
-    if(!menu)return;var seen={},out=['Conditions'];seen.conditions=1;
-    (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
-    menu.innerHTML=out.map(function(s){return '<a href="'+href(s)+'">'+esc(s)+'</a>'}).join('');mark();
+    if(!menu)return;var seen={conditions:1},out=[],grouped={};leaves(GTREE).forEach(function(s){grouped[s.toLowerCase()]=1});
+    (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]&&!grouped[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
+    menu.innerHTML=node('Conditions')+GTREE.map(node).join('')+out.map(node).join('');mark();
   };
   mark();
   if(window.CRAWL_STATIC&&menu&&!window.GL_PAGE)fetch('crawl-glossary.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.entries)window.crawlNavSections(j.entries.map(function(e){return e.sec||'Conditions'}))}).catch(function(){});
@@ -286,7 +314,7 @@ def creator_shell(logo_svg, admin_modal):
 </div>
 <div id="ccadmin" hidden>
   <div class="ccadmintop"><h2 class="cch2">Character Creator rules</h2><button type="button" class="btn" id="ccAdminDone">Back to the creator</button></div>
-  <p class="ccnote">Classes are edited on the <a href="classes.html">Classes page</a> and backgrounds on the <a href="backgrounds.html">Backgrounds page</a>; races come from the <a href="races.html">Races page</a>, spells from the <a href="index.html">Spells page</a> and gear from the <a href="items.html">Items page</a>. Proficiencies are read from the text: name skills, weapon types, armor and trade skills, write &ldquo;Either Alchemy or Cooking&rdquo; for a choice, or &ldquo;Two skills of your choice&rdquo; for free picks.</p>
+  <p class="ccnote">Classes are edited on the <a href="classes.html">Classes page</a> and backgrounds on the <a href="backgrounds.html">Backgrounds page</a>; races come from the <a href="races.html">Races page</a>, spells from the <a href="spells.html">Spells page</a> and gear from the <a href="items.html">Items page</a>. Proficiencies are read from the text: name skills, weapon types, armor and trade skills, write &ldquo;Either Alchemy or Cooking&rdquo; for a choice, or &ldquo;Two skills of your choice&rdquo; for free picks.</p>
   <div id="ccAdminList"></div>
 </div>
 </div>
@@ -689,7 +717,31 @@ CONDITIONS_CSS = """
 .subr .gedit,.rbtn{color:var(--ink);border-color:var(--ink);padding:2px 10px;font-size:.72rem}
 .subr .gedit:hover{background:var(--ink);color:var(--paper)}
 .rfeats{display:grid;gap:6px}
+.fopts{display:grid;gap:6px;margin:4px 0 6px}
+.fopts .fchoose{margin:0;font-weight:800;font-size:.86rem}
+.fopt{border-left:3px solid var(--gold,#b7791f);background:var(--page,#f4f4f4);border-radius:0 8px 8px 0;padding:5px 10px}
+.fopt b{color:var(--gold,#b7791f);font-size:.92rem}
+.fopt p{margin:2px 0 0;font-weight:600;font-size:.88rem}
+.foptbox{grid-column:1/-1;border:2px dashed var(--hair,#ccc);border-radius:10px;padding:6px 10px}
+.foptbox summary{cursor:pointer;font-weight:800;font-size:.86rem}
+.foptbox summary small{font-weight:600;color:var(--muted,#666);margin-left:6px}
+.foptctl{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+.foptctl label{display:flex;align-items:center;gap:6px;font-weight:700;font-size:.85rem}
+.foptctl input{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:6px 8px;width:110px}
+.foptctl .fpick{width:64px}
+.folist{display:grid;gap:6px;margin-bottom:6px}
+.forow{display:grid;grid-template-columns:minmax(120px,200px) 1fr auto;gap:8px;align-items:start}
+.forow input,.forow textarea{font:600 .95rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.forow .fon{color:var(--gold,#b7791f);font-weight:800}
+.forow textarea{resize:vertical;field-sizing:content;min-height:2.6em;line-height:1.4}
+@media (max-width:700px){.forow{grid-template-columns:1fr}.forow .xdel{justify-self:start}}
 .rfeats p{margin:0;font-weight:600}
+.fopts{display:grid;gap:6px;margin:4px 0 6px}
+.fopts .fchoose{margin:0;font-weight:800;font-size:.86rem}
+.fopt{border-left:3px solid var(--gold,#b7791f);border-radius:0 8px 8px 0;padding:4px 10px;background:color-mix(in srgb,var(--gold,#b7791f) 8%,transparent)}
+.fopt b{color:var(--gold,#b7791f);font-size:.9rem}
+.fopt p{margin:2px 0 0;font-weight:600;font-size:.86rem}
+.ccpickn{font-size:.72rem;font-weight:700;color:var(--muted,#666);letter-spacing:.04em;text-transform:none;margin-left:6px}
 .rform{display:grid;gap:12px}
 .subs .rform{border:2px dashed var(--ink);border-radius:12px;padding:12px 14px}
 .addsub{justify-self:start}
@@ -1169,4 +1221,56 @@ body.cc-printing .snotes textarea,body.cc-printing .sfeat textarea{resize:none}
   .spage{break-after:page;break-inside:avoid}
   .spage:last-child{break-after:auto}
 }
+"""
+
+
+# ---------------------------------------------------------------- home page (index.html)
+HOME_CARDS = [
+    ("Character Creator", "creator.html", "", "Build a character step by step, from race and class to gear, then print the character sheet."),
+    ("Classes", "classes.html", "classes", "Class charts, features by level, proficiencies and subclasses."),
+    ("Races", "races.html", "races", "The peoples of Crawl, their subraces and what they bring."),
+    ("Backgrounds", "backgrounds.html", "backgrounds", "The life a character lived before adventuring."),
+    ("Feats", "feats.html", "feats", "Special talents every class gains as it levels up."),
+    ("Spells", "spells.html", "spells", "Every spell, by class or magic source, with its +1 to +10 Ranks."),
+    ("Crafting", "crafting.html", "recipes", "Recipes for every trade skill: ingredients, tools and checks."),
+    ("Items", "items.html", "items", "Weapons, armor, consumables, materials and magic items."),
+    ("Combat", "glossary.html?s=combat", "", "Combat rules, the Action Pool, and weapon and combat actions."),
+    ("Glossary", "glossary.html", "entries", "Every rules term in one searchable list, conditions included."),
+]
+
+
+def home_shell(logo_svg, admin_modal, counts):
+    cards = "".join(
+        f'<a class="hcard{" hmain" if i == 0 else ""}" href="{h}"><span class="hct">{html.escape(t)}</span>'
+        f'{f"<span class=hcount data-count={k}>{counts.get(k, 0)}</span>" if k else ""}<span class="hcd">{html.escape(d)}</span></a>'
+        for i, (t, h, k, d) in enumerate(HOME_CARDS))
+    return f"""
+<script>/* old spell links (index.html?class=wizard, index.html#a-spell) now live on spells.html */
+(function(){{var q=location.search,h=location.hash;if(/[?&](show|source|class|q|lvl)=/.test(q)||(h&&h.length>1))location.replace('spells.html'+q+h)}})();</script>
+<div class="wrap condwrap homewrap">
+<header class="intro">
+  {logo_svg}
+  <h1>Crawl 1st Edition</h1>
+  <p>Welcome, adventurer. Everything you need to play Crawl is here: make a character, read up on classes, races, backgrounds and feats, and look up spells, items, crafting and the rules.</p>
+</header>
+<main class="hgrid">{cards}</main>
+</div>
+{admin_modal}
+"""
+
+
+HOME_CSS = """
+.homewrap{max-width:1040px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:22px}
+.hcard{position:relative;display:grid;align-content:start;gap:6px;padding:16px 18px 18px;border:2px solid var(--ink);border-radius:16px;background:var(--paper);color:var(--ink);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+.hcard:hover,.hcard:focus-visible{transform:translateY(-2px);box-shadow:0 8px 0 var(--ink)}
+.hcard:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.hct{font-weight:800;font-size:1.12rem;letter-spacing:.01em;padding-right:56px}
+.hcd{font-weight:600;font-size:.88rem;line-height:1.45;color:var(--muted)}
+.hcount{position:absolute;top:14px;right:14px;min-width:30px;text-align:center;font-weight:800;font-size:.78rem;border:2px solid var(--ink);border-radius:999px;padding:1px 9px}
+.hmain{grid-column:1/-1;background:var(--ink);color:var(--paper);padding:22px 24px}
+.hmain .hct{font-size:1.4rem}
+.hmain .hcd{color:var(--paper);opacity:.85;font-size:.95rem}
+.hmain:hover,.hmain:focus-visible{box-shadow:0 8px 0 var(--red)}
+@media (prefers-reduced-motion:reduce){.hcard{transition:none}.hcard:hover{transform:none}}
 """
