@@ -104,7 +104,9 @@ def nav_html(active, controls="", sections=("Conditions",), races=None, classes=
     lists = {"races": races, "classes": classes, "backgrounds": backgrounds, "feats": feats}
     sec = SECTION.get(active)
     parts = [
-        '<nav class="sitenav" aria-label="Crawl"><div class="navin"><div class="navlinks">',
+        '<nav class="sitenav" aria-label="Crawl"><div class="navin">'
+        '<button type="button" class="navarr l" tabindex="-1" aria-label="Show earlier menu items"><svg viewBox="0 0 8 14" aria-hidden="true"><path d="M7 1L1 7l6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>'
+        '<div class="navlinks">',
     ]
     for label, href, menu in NAV_ITEMS:
         if href is None:
@@ -125,7 +127,8 @@ def nav_html(active, controls="", sections=("Conditions",), races=None, classes=
             f'<div class="navdrop"><a class="navitem" href="{href}"{cur} aria-haspopup="true">{label}{CARET}</a>'
             f'<div class="navmenu"{menu_id}>{items}</div></div>'
         )
-    parts.append(f'</div><div class="navctl" id="navctl">{controls}</div></div></nav>')
+    parts.append('</div><button type="button" class="navarr r" tabindex="-1" aria-label="Show more menu items"><svg viewBox="0 0 8 14" aria-hidden="true"><path d="M1 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>')
+    parts.append(f'<div class="navctl" id="navctl">{controls}</div></div></nav>')
     parts.append(f"<script>{NAV_JS.replace('/*@GTREE@*/null', json.dumps(GLOSSARY_TREE))}</script>")
     return "".join(parts)
 
@@ -170,10 +173,25 @@ html.is-admin .navitem.adminonly{display:inline-flex}
 .nav-c3 .navctl .adminbtn span,.nav-c3 .navctl .modebtn span{display:none}
 .nav-c3 .navctl .adminbtn,.nav-c3 .navctl .modebtn{padding:6px}
 .nav-c4 .navitem{padding-inline:7px;font-size:.72rem;letter-spacing:.04em}
-.nav-c5 .navlinks{flex-wrap:wrap}
+/* when the links still don't fit (phones, half-width windows): one row that scrolls sideways, with arrows */
+.navarr{display:none;flex:none;align-self:stretch;width:28px;border:0;padding:0;background:var(--ink);color:var(--paper);cursor:pointer;align-items:center;justify-content:center;border-radius:6px}
+.navarr svg{width:8px;height:14px}
+.navarr:hover:not([disabled]){background:var(--barhover)}
+.navarr[disabled]{opacity:.22;cursor:default}
+.navscroll .navarr{display:flex}
+.navscroll .navin{gap:2px}
+.navscroll .navlinks{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth;overscroll-behavior-x:contain;position:relative}
+.navscroll .navarr{position:relative;z-index:1}
+.navscroll .navarr:not([disabled])::after{content:"";position:absolute;top:0;bottom:0;width:16px;pointer-events:none}
+.navscroll .navarr.l:not([disabled])::after{left:100%;background:linear-gradient(to right,var(--ink),transparent)}
+.navscroll .navarr.r:not([disabled])::after{right:100%;background:linear-gradient(to left,var(--ink),transparent)}
+.navscroll .navlinks::-webkit-scrollbar{display:none}
+.navscroll .navdrop{position:static}
+.navscroll .navmenu{position:fixed;transform:none}
+@media (prefers-reduced-motion:reduce){.navscroll .navlinks{scroll-behavior:auto}}
 @media (max-width:700px){
   .navin{gap:4px;padding-inline:6px}
-  .navlinks{flex-wrap:wrap;justify-content:center}
+  .navscroll .navmenu{max-height:calc(100vh - var(--navh,48px) - 16px);overflow-y:auto}
   .navitem.soon{display:none}
   .navitem.soon small,.navctl .adminbtn span,.navctl .modebtn span{display:none}
   .navctl .adminbtn,.navctl .modebtn{padding:6px}
@@ -185,14 +203,29 @@ html.is-admin .navitem.adminonly{display:inline-flex}
 
 NAV_JS = """(function(){
   var nav=document.querySelector('.sitenav'),links=nav&&nav.querySelector('.navlinks'),busy=false;
-  var STEPS=['nav-c1','nav-c2','nav-c3','nav-c4','nav-c5'];
+  var STEPS=['nav-c1','nav-c2','nav-c3','nav-c4'],arrL=nav&&nav.querySelector('.navarr.l'),arrR=nav&&nav.querySelector('.navarr.r'),centered=false;
+  var over=function(){return links.scrollWidth>links.clientWidth+1};
+  function arrows(){if(!arrL)return;arrL.disabled=links.scrollLeft<=1;arrR.disabled=links.scrollLeft+links.clientWidth>=links.scrollWidth-1}
   function fit(){
     if(!nav||busy)return;busy=true;
-    STEPS.forEach(function(c){nav.classList.remove(c)});
-    if(window.innerWidth>700){for(var i=0;i<STEPS.length&&links.scrollWidth>links.clientWidth+1;i++)nav.classList.add(STEPS[i])}
+    STEPS.concat('navscroll').forEach(function(c){nav.classList.remove(c)});
+    if(window.innerWidth>700){for(var i=0;i<STEPS.length&&over();i++)nav.classList.add(STEPS[i])}
+    if(over()){nav.classList.add('navscroll');
+      if(!centered){centered=true;var cur=links.querySelector('[aria-current="page"],[data-current]');if(cur){var b=links.style.scrollBehavior;links.style.scrollBehavior='auto';links.scrollLeft=cur.offsetLeft-(links.clientWidth-cur.offsetWidth)/2;links.style.scrollBehavior=b}}}
+    arrows();
     document.documentElement.style.setProperty('--navh',nav.offsetHeight+'px');busy=false;
   }
+  if(links){links.addEventListener('scroll',arrows,{passive:true});
+    [[arrL,-1],[arrR,1]].forEach(function(a){if(a[0])a[0].addEventListener('click',function(){links.scrollBy({left:a[1]*Math.max(120,links.clientWidth*0.7)})})});
+    /* in the scrolling row, menus are fixed under the bar (so the row doesn't clip them), next to their item */
+    var place=function(e){if(!nav.classList.contains('navscroll'))return;var d=e.target.closest&&e.target.closest('.navdrop');if(!d)return;var m=d.querySelector('.navmenu');if(!m)return;
+      var nb=nav.getBoundingClientRect(),r=d.getBoundingClientRect();m.style.top=nb.bottom+'px';
+      if(window.innerWidth>700){var w=m.offsetWidth||220;m.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';m.style.right='auto'}else{m.style.left='';m.style.right=''}};
+    links.addEventListener('mouseover',place);links.addEventListener('focusin',place);
+    links.addEventListener('scroll',function(){var a=document.activeElement;if(a&&a.closest&&a.closest('.navdrop')&&!a.closest('.navmenu'))a.blur()},{passive:true});
+  }
   window.crawlNavFit=fit;fit();window.addEventListener('resize',fit);
+  if(window.MutationObserver)new MutationObserver(function(){requestAnimationFrame(fit)}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
   window.addEventListener('load',fit);
   if(window.MutationObserver&&nav){new MutationObserver(function(){requestAnimationFrame(fit)}).observe(nav.querySelector('.navctl'),{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']})}
