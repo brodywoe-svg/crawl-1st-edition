@@ -191,7 +191,12 @@
    "asi": "+1 Strength",
    "prof": "Athletics,",
    "langs": "Orcish, One Additional Language of your choice",
-   "feats": [],
+   "feats": [
+    {
+     "n": "Sturdy",
+     "d": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You gain 1 Exhaustion Points (EP) when you use this feature and this feature can only be used once per Rest."
+    }
+   ],
    "extra": [
     {
      "k": "Age",
@@ -218,10 +223,6 @@
       {
        "n": "Excessive Brutality",
        "d": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon’s damage dice one additional time and add it to the extra damage of the critical hit."
-      },
-      {
-       "n": "Sturdy",
-       "d": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You gain 1 Exhaustion Points (EP) when you use this feature and this feature can only be used once per Rest."
       },
       {
        "n": "Strong Back",
