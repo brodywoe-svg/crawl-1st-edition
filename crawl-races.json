@@ -194,6 +194,10 @@
    "feats": [],
    "extra": [
     {
+     "k": "Age",
+     "v": "Orcs mature a little faster than humans, reaching adulthood around age 16. They age noticeably faster and rarely live longer than 75 years, but can live up to 120 years old."
+    },
+    {
      "k": "Size",
      "v": "Medium"
     },
@@ -208,7 +212,7 @@
      "n": "Ashblood Orc",
      "desc": "The Ashblood Orcs are the clans of the Ash Fields, a wide, smoldering expanse of grey earth, cinder plains and scorched ridgelines where little grows and nothing comes easy. Their skin ranges from ash grey to a pale, bone white, as though the Fields themselves had marked them. The Ashblood Clans live in stark outposts and great Black Iron fortresses raised from the dark ore found beneath the ash, and every clan defends its territory with fierce, unyielding pride.\n\nAshblood society is built around the warband. Each clan is led by its strongest and most proven warriors, and every member, from smith to scout, is expected to stand for the clan when the war horns sound. Borders between clans are marked, watched and fiercely contested, and an outsider who crosses one without leave is treated as a challenge to be answered. Within a clan, though, the Ashbloods are fiercely loyal. Debts are remembered, oaths are kept, and no one is left behind on the field.\n\nThe Ashblood are best known for their Black Iron. It is a heavy, dark metal smelted in the fortress forges and worked into weapons and armor that are rough, brutal and built to last. To the Ashblood, a Black Iron blade isn’t meant to be beautiful. It’s meant to be honest, and it should still be cutting long after the fight has ended.",
      "asi": "+1 Constitution",
-     "prof": "Blacksmithing",
+     "prof": "Intimidation, Blacksmithing",
      "langs": "",
      "feats": [
       {
