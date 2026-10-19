@@ -2,8 +2,141 @@
  "v": 1,
  "classes": [
   {
+   "id": "class-artificer",
+   "n": "Artificer",
+   "role": "Martial Combatant",
+   "desc": "Artificers are inventive martial specialists who fight with tools, contraptions and gear of their own making.",
+   "source": "",
+   "cast": "",
+   "spells": "",
+   "hd": "d8",
+   "hp": "8 + Constitution Modifier",
+   "saves": "Constitution, Intelligence",
+   "skills": "",
+   "skillPts": "",
+   "prof": "",
+   "langs": "",
+   "chart": [
+    {
+     "lv": 1,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 2,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 3,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 4,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 5,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 6,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 7,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 8,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 9,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 10,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 11,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 12,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 13,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 14,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 15,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 16,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 17,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 18,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 19,
+     "pool": "",
+     "die": ""
+    },
+    {
+     "lv": 20,
+     "pool": "",
+     "die": ""
+    }
+   ],
+   "feats": [],
+   "loadouts": [],
+   "money": "",
+   "moneyRoll": "",
+   "extra": [],
+   "choices": [],
+   "prepared": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
+   "subs": []
+  },
+  {
    "id": "class-barbarian",
    "n": "Barbarian",
+   "role": "Martial Combatant",
    "desc": "Barbarians are fierce warriors who channel a primal fury into battle, shrugging off blows that would fell anyone else.",
    "source": "",
    "cast": "",
@@ -135,6 +268,7 @@
   {
    "id": "class-bard",
    "n": "Bard",
+   "role": "Arcane Half-Caster",
    "desc": "Storytellers, minstrels and silver-tongued wanderers who draw Occult magic from words, music and the hearts of their listeners.\n\nEvery tavern has heard a song that made the room fall silent, and every bard knows why. Words and music carry power, and a bard has learned to pull on the threads that bind a listener’s fear, courage and longing. A ballad steadies a shaking ally’s sword arm. A whispered verse sours an enemy’s luck. A single, perfect note can shatter glass, nerve or bone.\n\nBards draw their magic from the harmonies, magic phrases, and through sheer force of personality rather than study or faith, using Charisma as their spellcasting ability. Where a Wizard pores over spellbooks, a bard learns magic the way a musician learns a tune: by ear, by heart and by performing it for anyone who’ll listen. Their spells are spoken, sung and played, which makes a bard formidable in a crowded hall and helpless with a gag over their mouth.\n\nIn the depths of a crawl, the bard is the party’s voice and nerve. They talk their way past guards, read a rival’s lies, and keep tired companions on their feet when the torches burn low. They are rarely the strongest in a fight, but they are almost always the reason the party survives it.",
    "source": "Arcane",
    "cast": "cha",
@@ -304,6 +438,7 @@
   {
    "id": "class-cleric",
    "n": "Cleric",
+   "role": "Divine Spellcaster",
    "desc": "Clerics channel Divine magic granted by their faith.",
    "source": "Divine",
    "cast": "wis",
@@ -334,6 +469,7 @@
   {
    "id": "class-druid",
    "n": "Druid",
+   "role": "Primal Spellcaster",
    "desc": "Druids draw Primal magic from the wild places of the world.",
    "source": "Primal",
    "cast": "wis",
@@ -364,6 +500,7 @@
   {
    "id": "class-fighter",
    "n": "Fighter",
+   "role": "Martial Combatant",
    "desc": "Fighters are masters of weapons and armor, trained to win any battle through skill, discipline and endurance.",
    "source": "",
    "cast": "",
@@ -643,6 +780,7 @@
   {
    "id": "class-monk",
    "n": "Monk",
+   "role": "Martial Combatant",
    "desc": "Monks are disciplined martial artists who turn body and spirit into weapons, striking with speed and precision.",
    "source": "",
    "cast": "",
@@ -774,6 +912,7 @@
   {
    "id": "class-paladin",
    "n": "Paladin",
+   "role": "Divine Half-Caster",
    "desc": "Paladins are holy warriors who wield Divine magic in service of an oath.",
    "source": "Divine",
    "cast": "cha",
@@ -804,6 +943,7 @@
   {
    "id": "class-ranger",
    "n": "Ranger",
+   "role": "Martial Combatant",
    "desc": "Rangers are hunters and trackers of the wild places, deadly with bow and blade and at home far from civilization.",
    "source": "",
    "cast": "",
@@ -935,6 +1075,7 @@
   {
    "id": "class-rogue",
    "n": "Rogue",
+   "role": "Martial Combatant",
    "desc": "Rogues rely on cunning, stealth and precision, striking where enemies are weakest and slipping away before they can answer.",
    "source": "",
    "cast": "",
@@ -1066,6 +1207,7 @@
   {
    "id": "class-sorcerer",
    "n": "Sorcerer",
+   "role": "Arcane Spellcaster",
    "desc": "Sorcerers carry Arcane magic in their blood.",
    "source": "Arcane",
    "cast": "cha",
@@ -1096,6 +1238,7 @@
   {
    "id": "class-warlock",
    "n": "Warlock",
+   "role": "Occult Spellcaster",
    "desc": "Warlocks bargain with otherworldly patrons for Occult power.",
    "source": "Occult",
    "cast": "cha",
@@ -1126,6 +1269,7 @@
   {
    "id": "class-wizard",
    "n": "Wizard",
+   "role": "Arcane Spellcaster",
    "desc": "Wizards study Arcane magic and record their spells in a spellbook.",
    "source": "Arcane",
    "cast": "int",

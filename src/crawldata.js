@@ -1,6 +1,6 @@
 /* Shared by the Character Creator, Classes and Backgrounds pages.
    crawl-classes.json     = {v:1, classes:[cls]}
-     cls  = {id, n, desc, source, cast, spells, hd, hp, saves, skills, skillPts, prof, langs,
+     cls  = {id, n, role, desc, source, cast, spells, hd, hp, saves, skills, skillPts, prof, langs,
              chart:[{lv, pool, die}], feats:[{n, d, lv}], loadouts:[{n, gear:[gear]}], money, moneyRoll, extra:[{k,v}],
              prepared (formula), startRank, schoolStart, oppCost, majorLv, minorLv, schools:[{s, opp}],
              subs:[{id, n, desc, feats:[{n, d, lv}], extra}]}
@@ -52,7 +52,7 @@ function gearOf(x) {
 const chartOf = x => arr(x).map(r => ({ lv: featLv(r && r.lv), pool: str(r && r.pool), die: str(r && r.die) })).filter(r => r.lv || r.pool || r.die).sort((a, b) => (a.lv || 99) - (b.lv || 99));
 function normClass(p) {
   p = p || {};
-  return { id: str(p.id) || newId("class"), n: str(p.n), desc: str(p.desc), source: SOURCES.includes(str(p.source)) ? str(p.source) : "", cast: AB[str(p.cast)] ? str(p.cast) : "",
+  return { id: str(p.id) || newId("class"), n: str(p.n), role: str(p.role), desc: str(p.desc), source: SOURCES.includes(str(p.source)) ? str(p.source) : "", cast: AB[str(p.cast)] ? str(p.cast) : "",
     spells: str(p.spells), hd: str(p.hd), hp: str(p.hp), saves: str(p.saves), skills: str(p.skills), skillPts: str(p.skillPts), prof: str(p.prof), langs: str(p.langs),
     chart: chartOf(p.chart), feats: featsOf(p.feats), loadouts: arr(p.loadouts).map((l, i) => ({ n: str(l && l.n) || `Loadout ${i + 1}`, gear: gearOf(l && l.gear) })).filter(l => l.gear.length || l.n),
     money: str(p.money), moneyRoll: str(p.moneyRoll), extra: extrasOf(p.extra), choices: choicesOf(p.choices),

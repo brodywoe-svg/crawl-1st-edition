@@ -108,7 +108,7 @@ function form(p, kind, parent) {
   const extras = `<div class="glab">More details <small>Anything else, each with its own label.</small></div><div class="xlist">${d.extra.map(extraRow).join("")}</div><button type="button" class="btn" data-act="xadd">Add a detail</button>`;
   let body = "";
   if (kind === "sub") body = fld("n", "Subclass name", "", inp("n", "e.g. School of Evocation")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) + feats(d.feats, "Subclass features") + extras;
-  else if (kind === "class") body = fld("n", "Class name", "", inp("n", "e.g. Wizard")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) +
+  else if (kind === "class") body = fld("n", "Class name", "", inp("n", "e.g. Wizard")) + fld("role", "Class descriptor", "Shown under the class name in the Character Creator.", inp("role", "e.g. Arcane Spellcaster or Martial Combatant")) + fld("desc", "Description", "Leave a blank line between paragraphs.", area("desc")) +
     `<div class="fgrid">${fld("hd", "Hit die", "", inp("hd", "e.g. 1d8"))}${fld("hp", "Hit points at 1st level", "", inp("hp", "e.g. 8 + Constitution modifier"))}
 ${fld("source", "Magic source", "", sel("source", [["", "None"], ...SOURCES.map(s => [s, s])]))}${fld("cast", "Spellcasting ability", "", sel("cast", [["", "None"], ...ABIL]))}
 ${fld("spells", "Spells at character creation", "Empty = no limit", inp("spells", "e.g. 4"))}${fld("skillPts", "Skill Points", "Spent on skill ranks in the creator", inp("skillPts", "e.g. 4"))}</div>` +

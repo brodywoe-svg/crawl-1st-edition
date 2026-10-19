@@ -439,7 +439,7 @@ const STEP_VIEWS = {
     const clink = (x, extra) => `<p class="cclinks"><a class="glink" href="classes.html#${encodeURIComponent(x.id)}" target="_blank" rel="noopener">Open on the Classes page</a>${extra || ""}</p>`;
     CR.classes.forEach(x => { infoMap.set("class:" + x.id, partInfo(x, "Class", clink(x, x.source ? ` · <a class="glink" href="spells.html?class=${encodeURIComponent(lcs(x.n))}" target="_blank" rel="noopener">${esc(x.n)} spells</a>` : ""), featsAt(x.feats, LEVEL))); x.subs.forEach(y => infoMap.set("subcls:" + y.id, partInfo(y, "Subclass of " + x.n, clink(y), featsAt(y.feats, LEVEL)))) });
     infoDefault = s ? infoMap.get("subcls:" + s.id) : k ? infoMap.get("class:" + k.id) : infoBox("Classes", "", `<p>Your class decides how you fight, what you're trained in and whether you cast spells.</p>`);
-    return `<div class="ccopts">${CR.classes.map(x => optBtn("class:" + x.id, k === x, x.n, x.source ? x.source + " magic" : "")).join("")}</div>` +
+    return `<div class="ccopts">${CR.classes.map(x => optBtn("class:" + x.id, k === x, x.n, x.role || (x.source ? x.source + " Spellcaster" : "Martial Combatant"))).join("")}</div>` +
       (k && k.subs.length ? `<h3 class="cch3">Subclass</h3><div class="ccopts sub">${k.subs.map(y => optBtn("subcls:" + y.id, s === y, y.n)).join("")}</div>` : "") + schoolPicks(c, k) + featPicks(c);
   },
   bg(c) {
