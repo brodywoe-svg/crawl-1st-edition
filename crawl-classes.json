@@ -373,7 +373,7 @@
    "saves": "Strength, Constitution",
    "skills": "",
    "skillPts": "6",
-   "prof": "Light Armor, Medium Armor, Heavy Armor, Shields",
+   "prof": "All Simple and Martial Armor",
    "langs": "",
    "chart": [
     {
@@ -494,11 +494,11 @@
       },
       {
        "n": "Duel-Wielder",
-       "d": "While you are wielding a Light weapon in each hand, once per turn when you hit a creature with a melee weapon attack, you can make an attack with the weapon in your other hand for 1 less AP than normal (minimum 1 AP)."
+       "d": "While you are wielding a Light weapon in each hand, whenever you make a melee weapon attack with a light weapon in your Off-Hand you may add your ability modifier to the damage roll."
       },
       {
        "n": "Two-Handed",
-       "d": "While you are wielding a Two-Handed melee with both hands,"
+       "d": "While you are wielding a Two-Handed melee weapon in both hands, melee weapon  attacks made you make ignore the Heavy Property."
       },
       {
        "n": "Armored",
@@ -546,15 +546,15 @@
       },
       {
        "n": "Cudgels",
-       "d": ""
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Cudgels[/color]:"
       },
       {
        "n": "Firearms",
-       "d": ""
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Firearms[/color]:"
       },
       {
        "n": "Polearms",
-       "d": ""
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Polearms[/color]:"
       },
       {
        "n": "Swords",
@@ -562,15 +562,15 @@
       },
       {
        "n": "Special",
-       "d": ""
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Special[/color]: [color=#8e171c]Haymaker[/color], [color=#8e171c]Dropkick[/color], [color=#8e171c]Sucker Punch[/color]"
       },
       {
        "n": "Miscellaneous",
-       "d": ""
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Miscellaneous[/color]:"
       },
       {
        "n": "Shields",
-       "d": ""
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Shields[/color]:"
       }
      ],
      "pick": 1,
@@ -579,7 +579,12 @@
      ]
     }
    ],
-   "loadouts": [],
+   "loadouts": [
+    {
+     "n": "Mercenary Kit",
+     "gear": []
+    }
+   ],
    "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
