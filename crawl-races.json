@@ -233,6 +233,25 @@
       }
      ],
      "extra": []
+    },
+    {
+     "id": "sub-mvfox2b11qre",
+     "n": "Warrenborn Orc",
+     "desc": "The Warrenborn are orc clans that have left the old territories behind and joined with other peoples, settling among human towns or within the sprawling Warren settlements they share with goblins and hobgoblins. Their skin is green and often ranges toward tan, and most Warrenborn have grown up hearing more languages in a single market street than an Ashblood hears in a lifetime.\n\nThe Warrens are crowded, layered settlements of tunnels, timber halls and stacked homes, built outward and downward wherever space can be found. Life there began as an uneasy alliance. Orc strength, hobgoblin discipline and goblin cunning didn’t always sit well together, and old grudges between the races ran deep. Over generations, though, necessity turned into trust. The Warrens learned that every hand had a place: orcs to haul, build and defend, hobgoblins to organize and keep order, and goblins to tinker, scavenge and trade.\n\nToday the Warrenborn are known for their strong sense of community. A Warrenborn orc’s clan is no longer bound by blood alone. It is the street they grew up on, the neighbors who fed them, and the crew they work beside. Among humans the Warrenborn are often found as laborers, guards, smiths and caravan hands, sometimes met with suspicion, but quick to earn respect through hard work and a fierce defense of the people they call their own.",
+     "asi": "+1 Wisdom",
+     "prof": "Medicine, Alchemy",
+     "langs": "Goblin",
+     "feats": [
+      {
+       "n": "Shoulder to Shoulder",
+       "d": "You grew up where survival meant standing together. While at least one ally is within 5 feet of you, you have Advantage on saving throws against being Frightened."
+      },
+      {
+       "n": "Warrenborn Medicine",
+       "d": "You learn and know the following crafting recipes: [color=#b7791f]Bloodclutch Draught[/color], [color=#b7791f]Clotting Salve[/color]."
+      }
+     ],
+     "extra": []
     }
    ]
   }
