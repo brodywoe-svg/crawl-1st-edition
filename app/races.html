@@ -299,6 +299,13 @@ textarea.v::placeholder{color:var(--placeholder);font-weight:500;font-style:norm
 .gtip .gtb{background:var(--paper);color:var(--ink);border-radius:0 0 12px 12px;padding:10px 14px 12px;display:grid;gap:6px;font-size:.88rem;font-weight:600;line-height:1.4}
 .gtip p{margin:0}
 .gtip .gfrom{font-size:.75rem;color:var(--muted);font-weight:700}
+.gtip.gtipact{background:#8e171c;border-color:#8e171c}
+.gtip.gtipact .gth{color:#fff}
+.gtip .gtkind{font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8e171c}
+:root[data-mode="dark"] .gtip .gtkind{color:#ff6b6b}
+.gtip .gtfacts{display:grid;grid-template-columns:max-content 1fr;gap:2px 10px;margin:0;padding:6px 0 4px;border-bottom:1px solid var(--hair)}
+.gtip .gtfacts dt{font-weight:800}
+.gtip .gtfacts dd{margin:0}
 .tc{color:var(--c)}
 /* dark mode: brighten picked colors without washing them out; Crawl red matches the site's dark red */
 :root[data-mode="dark"] .tc{color:color-mix(in srgb,var(--c),#fff 40%);color:oklch(from var(--c) max(l,0.72) calc(c * 1.25) h)}
@@ -795,6 +802,15 @@ function featBlock(name,desc,fn,tag){
 }
 const plainText=t=>String(t||"").replace(/\[\/?(?:color|link|table)[^\]]*\]/gi,"");
 const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
+/* a glossary word's popup. Weapon Actions and Combat Actions get a special red one: AP cost, the kind of action, and what it needs */
+const ACTION_SECS=["Weapon Actions","Combat Actions"];
+function tipHTML(hit){
+  const e=hit.e,act=ACTION_SECS.includes(e.sec),ap=e.ap?(/^\d+$/.test(e.ap)?e.ap+" AP":e.ap):"";
+  const body=hit.ref?`${paras(hit.ref)}<p class="gfrom">From ${esc(e.n)}</p>`:`${paras(e.lead)}${e.fx.length?`<ul>${e.fx.map(x=>`<li>${richInline(x)}</li>`).join("")}</ul>`:""}`;
+  if(!act)return{act,html:`<div class="gth"><span>${esc(hit.ref?hit.w:e.n)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${body}</div>`};
+  return{act,html:`<div class="gth"><span>${esc(hit.ref?hit.w:e.n)}</span><span class="gtag">${esc(ap||"Action")}</span></div><div class="gtb"><p class="gtkind">${esc(singular(e.sec))}</p>`+
+    `<dl class="gtfacts"><dt>AP cost</dt><dd>${esc(ap||"—")}</dd>${e.req?`<dt>Requires</dt><dd>${richInline(e.req)}</dd>`:""}</dl>${body}</div>`};
+}
 
 /* admin sign-in, shared by every page of the GitHub Pages site. The unlocked key is kept
    in sessionStorage, so the sign-in lasts while this browser tab is open, across pages. */

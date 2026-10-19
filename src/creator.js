@@ -322,8 +322,7 @@ const gtip = document.createElement("div"); gtip.className = "gtip"; gtip.id = "
 let gCur = null;
 function showTip(el) {
   const hit = GL_MAP.get(el.dataset.g); if (!hit) return; const e = hit.e; gCur = el;
-  gtip.innerHTML = hit.ref ? `<div class="gth"><span>${esc(hit.w)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${paras(hit.ref)}<p class="gfrom">From ${esc(e.n)}</p></div>`
-    : `<div class="gth"><span>${esc(e.n)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${paras(e.lead)}${e.fx.length ? `<ul>${e.fx.map(x => `<li>${richInline(x)}</li>`).join("")}</ul>` : ""}</div>`;
+  const tp = tipHTML(hit); gtip.innerHTML = tp.html; gtip.classList.toggle("gtipact", tp.act);
   gtip.hidden = false;
   const r = el.getBoundingClientRect(), w = gtip.offsetWidth, h = gtip.offsetHeight, vw = document.documentElement.clientWidth, vh = window.innerHeight;
   let y = r.bottom + 8; if (y + h > vh - 12 && r.top - h - 8 > 12) y = r.top - h - 8;

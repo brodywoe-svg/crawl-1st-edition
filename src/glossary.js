@@ -81,7 +81,6 @@ function score(e, q) {
 }
 const noteText = e => e.notes.map(n => `${n.l}: ${n.t}`).join("\n");
 /* Weapon Actions and Combat Actions have an AP cost and what they need (a weapon or a feature) */
-const ACTION_SECS = ["Weapon Actions", "Combat Actions"];
 const isAction = sec => ACTION_SECS.includes(String(sec || "").trim());
 const apText = v => /^\d+$/.test(String(v).trim()) ? String(v).trim() + " AP" : String(v).trim();
 /* items and recipes (crawl-items.json), so Properties and Modifiers can list where they're used */
