@@ -494,7 +494,7 @@
       },
       {
        "n": "Duel-Wielder",
-       "d": "While you are wielding a weapon in each hand, you can add you can use the Whirlwind Weapon attack."
+       "d": "While you are wielding a weapon in each hand, you can add you can use the Whirlwind Strikes Weapon attack."
       },
       {
        "n": "Two-Handed",
@@ -515,13 +515,30 @@
      ],
      "pick": 1,
      "more": [
-      5
+      6
      ]
     },
     {
      "n": "Adrenaline",
      "d": "Starting at 2nd level, during Intense moments of duress and stress you’ll sometimes find your body is able to take on more than it can tolerate. During combat on your turn, you can expend 1AP to gain an additional 2 Action Points (AP) for your current turn, At the start of your next turn, you start with one less Action point and gain 1EP (Exhaustion Point). Once this Combat action has been used, it cannot be used for the next 3 rounds of combat.",
      "lv": 2
+    },
+    {
+     "n": "Weapon Specialist",
+     "d": "Starting at 3rd Level choose one of the following Weapon Categories of your Choice; Axes",
+     "lv": 3,
+     "opts": [
+      {
+       "n": "Axes",
+       "d": ""
+      },
+      {
+       "n": "Bows",
+       "d": ""
+      }
+     ],
+     "pick": 1,
+     "more": []
     }
    ],
    "loadouts": [],
