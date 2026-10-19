@@ -203,6 +203,21 @@
    "tip": true
   },
   {
+   "n": "Exploration",
+   "sec": "Game Systems",
+   "lead": "[color=#8e171c]Exploration[/color]\nWhen you aren’t in combat, you’re in Exploration. During Exploration, time flows freely and players act whenever the moment calls for it. You don’t roll your Action Die during Exploration.\n\n[color=#8e171c]Action Points (AP)[/color]. During Exploration, every creature has a steady 2 Action Points (AP). AP spent on an action returns once the action is finished. You can’t take an action during Exploration that costs more than 2 AP.\n\n[color=#8e171c]Exhaustion Points (EP)[/color]. During Exploration, you gain Exhaustion Points (EP) only when an effect or a spell’s cost says so. EP stays in your Action Pool until it’s removed through rest, at a rate of 1 EP for every 2 hours of rest.\n\n[color=#8e171c]Ritual Spells.[/color] Spells with the ritual tag can only be cast during Exploration. They take minutes or sometimes even hours rather than moments and casting them causes a spellcaster to gain Exhaustion Points (EP).\n\n[color=#8e171c]Reactions.[/color] You can use a Reaction during Exploration if its cost is 2 AP or 2 MP or less.\n\n[color=#8e171c]Lingering Effects.[/color] Spells and effects you start during Exploration continue into combat. If a spell requires concentration, you keep concentrating when combat begins. Outside of combat, one round lasts about 6 seconds, for any effect measured in rounds or turns.\n\nEntering Combat. When combat begins, your steady AP and MP are lost and your Action Pool empties, except for EP.",
+   "fx": [],
+   "notes": [
+    {
+     "l": "Note",
+     "t": "This is how AP, MP, and EP function outside of combat. This system is kept in place to keep specific edge cases from breaking certain functions."
+    }
+   ],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Filling",
    "sec": "Properties",
    "lead": "A creature that eats this gains 1 extra slot in its Action Pool until its next rest or camp. This slot can only hold Action Points or Magic Points, never Exhaustion Points.",
