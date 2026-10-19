@@ -56,16 +56,17 @@
   {
    "n": "Ammunition",
    "sec": "Properties",
-   "lead": "You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from it. The numbers after it are the weapon's normal range and long range (for example, Ammunition 80/320). Drawing the ammunition is part of the attack. At the end of a battle, you can recover half the ammunition you used.",
+   "lead": "[color=#8e171c]Ammunition.[/color] You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from the weapon. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack and costs no additional AP (you need a free hand to load a one-handed weapon). When combat ends, you can recover half your expended ammunition by taking a minute to search the battlefield.",
    "fx": [],
-   "notes": [
+   "notes": [],
+   "aka": [
     {
-     "l": "Designer's note",
-     "t": "Draft wording based on the SRD 5.1. Check it against Crawl's Action Pool rules."
+     "w": "Ammunition",
+     "ref": "[color=#8e171c]Ammunition.[/color] You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from the weapon. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack and costs no additional AP (you need a free hand to load a one-handed weapon). When combat ends, you can recover half your expended ammunition by taking a minute to search the battlefield."
     }
    ],
-   "aka": [],
-   "tip": false
+   "tip": false,
+   "hideRefs": true
   },
   {
    "n": "Blackened Cookware",
