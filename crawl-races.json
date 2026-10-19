@@ -125,8 +125,12 @@
      "langs": "Two additional Languages of your choice",
      "feats": [
       {
-       "n": "Arcane Lineage",
-       "d": "Choose a 1st level spell of your choice from the Wizard spell list, you know that spell and may cast it once per day."
+       "n": "Arcane Echoes",
+       "d": "When you are targeted by a spell or are within its Target Area, you absorb some of its lingering magic and gain 1 Magic Point (MP) after the spell resolves. Once you use this feature, roll a d4. You can’t use it again for that many rounds of combat.\n\nMP gained this way can’t exceed your Max Pool. Any excess is lost."
+      },
+      {
+       "n": "Highborn Magic",
+       "d": "You can spend 1 Magic Point (MP) to produce one of the following minor magical effects:\n\n[color=#c2410c]Ignite:[/color] you can produce a small flame at one of the ends of your fingertips, the flame ignites organic material such as paper, straw, fabric, etc.\n[color=#c2410c]Shout:[/color] You can imbue your voice to make whatever you say auditable enough to hear from up to 60 feet away.\n[color=#c2410c]Mend:[/color] A small tear in cloth, a crack in glass, or a snapped string mends itself over the course of a minute.\n[color=#c2410c]Clean:[/color] you can wave your hand and speak a simple arcane word and cleaned dirt, rust, or stains out of your equipment or clothing."
       },
       {
        "n": "Alchemical Dabblings",
