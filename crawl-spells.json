@@ -12,6 +12,7 @@
    "cat": "Necromancy ",
    "cost": "N/A",
    "time": "10 Minutes",
+   "dur": "2 Months",
    "type": "Ritual",
    "range": "5ft (Touch) (Single Target)",
    "desc": "You perform a ritual of Absolution over a corpse, or number of corpses equal to your spellcasting ability Modifier, forgiving them for the sins they committed in life, for the next 2 months the corpse(s) cannot be affected by spells like the Animated dead, Raise Dead, or Resurrection.",
@@ -184,6 +185,7 @@
    "cat": "Abjuration",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "Until the start of your next turn",
    "type": "Reaction",
    "range": "Self",
    "desc": "When you are targeted by a spell cast by a hostile creature, you can cast this spell to create a protective barrier of arcane energy around you. Until the start of your next turn, you gain a +3 bonus to AC against spell attacks and a +3 bonus to Dexterity saving throws against spells. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
@@ -268,6 +270,7 @@
    "cat": "Abjuration",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "Until the start of your next turn",
    "type": "Reaction",
    "range": "Self",
    "desc": "When you are targeted by a weapon attack from a hostile creature, you can cast this spell to raise a shimmering shield of arcane force around you. Until the start of your next turn, you gain a +3 bonus to AC against weapon attacks, including the triggering attack, as long as you maintain concentration. At the start of your next turn, you gain 1 Exhaustion Point (EP).",
@@ -336,6 +339,7 @@
    "cat": "Transmutation",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "1d4 Rounds of Combat",
    "type": "Utility",
    "range": "Self",
    "desc": "You speak an incantation, shaping the air around you into spiny ice armor that covers your torso. For the next 1d4 rounds of combat, whenever a melee attack deals damage to you, your icy armor bursts, firing needles and shards of ice at your attacker and dealing 1d6 Cold damage to it. When you cast this spell, you gain 1 Exhaustion Point (EP).",
@@ -502,6 +506,7 @@
    "cat": "Enchantment",
    "cost": "2MP",
    "time": "Instantaneous",
+   "dur": "1 Minute",
    "type": "Spell Attack (Charisma Save)",
    "range": "30 ft",
    "desc": "You crush a wax effigy in your fist and speak a curse on upon one target creature you can see within range. Each target of this spell must make a Charisma saving throw against your spell save DC. On a failure, the creature is Cursed for 1 minute. Whenever a Cursed creature makes an attack roll or a saving throw, it subtracts 1d4 from the roll.\nA Cursed creature can spend 1 AP on its turn to repeat the saving throw, ending the curse on a success.",
@@ -626,6 +631,7 @@
    "pre": "+1 Religion",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "1d4 Rounds of Combat",
    "type": "Utility",
    "range": "20ft",
    "desc": "You speak a prayer to a deity of your choice, calling down a blessing on yourself or one of your companions. Choose one target. For the next 1d4 rounds of combat, or until your concentration is broken, the target gains a +1 bonus to all saving throws and to the first attack roll it makes each turn. When you cast this spell, you gain 1 Exhaustion Point (EP).",
@@ -730,6 +736,7 @@
    "cat": "Conjuration",
    "cost": "3MP",
    "time": "Instantaneous",
+   "dur": "1 Minute",
    "type": "Spell Attack (Dexterity Save)",
    "range": "Self",
    "desc": "You slam your palm to the ground, and a line of thorned vines bursts from the earth in a 15-foot line, 5 feet wide, starting from you. Each creature in the Target Area must make a Dexterity saving throw against your spell save DC. On a failure, a creature takes 1d6 Piercing damage and is Grappled by the vines. A Grappled creature’s speed is 0. On a success, it takes no damage and isn’t Grappled.\n\nA Grappled creature can spend 1 AP on its turn to make a Strength (Athletics) check against your spell save DC, freeing itself on a success. The vines wither after 1 minute, whenever you cast this spell again, and whenever no creatures remain in its target area."
@@ -840,6 +847,7 @@
   "f": {
    "mat": "1 Vial of Citrus Powder",
    "time": "Instantaneous",
+   "dur": "1d4 Turns",
    "range": "25ft (Single Target)",
    "desc": "You whisper an incantation and blow citrus powder from your palm toward a target, conjuring a sickly sweet yellow-and-orange cloud that fills a 15ft by 15ft circle. Each creature within the cloud must make a Constitution saving throw. On a failure, it takes 2d4 Acid damage and becomes Sickened until the end of its next turn. On a success, it takes half as much damage. A creature that starts its turn within the cloud must succeed on a Constitution saving throw or take 1d4 Acid damage. The cloud lingers for 1d4 turns before dissipating.",
    "cls": "Wizard, Druid",
@@ -936,6 +944,7 @@
    "cat": "Enchantment",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "1 Hour",
    "type": "Spell Attack (Wisdom Save)",
    "range": "10ft (Single Target)",
    "desc": "You catch a humanoid’s eye and speak a few warm, honeyed words laced with magic. The target must be a humanoid that can see and hear you, and it must make a Wisdom saving throw against your spell save DC. It has Advantage on the save if you or your allies are fighting it. On a failure, it is Charmed by you for 1 hour, or until you or your allies do anything harmful to it, and it treats you as a friendly acquaintance. When the spell ends, the creature knows it was charmed and by whom. When you cast this spell, you gain 1 Exhaustion Point (EP)."
@@ -1019,6 +1028,7 @@
    "cat": "Evocation",
    "cost": "3 MP",
    "time": "Instantaneous",
+   "dur": "Instantaneous",
    "type": "Ranged Spell Attack",
    "range": "Self (20ft cone)",
    "desc": "You conjure a concentration of magical light in your palm and force it through a prism splitting it into a roaring wave of color that fans out in a 20-foot cone from you. Choose two color from the Spectrum table. Each creature in the Target Area must make a Dexterity saving throw against your spell save DC, taking 1d8 damage of that color’s type on a failure, or half as much on a success. When you finish casting this spell you gain 1 Exhaustion Point (EP).\n",
@@ -1091,6 +1101,7 @@
    "cat": "Evocation",
    "cost": "3 MP",
    "time": "Instantaneous",
+   "dur": "Instantaneous",
    "type": "Ranged Spell Attack (Attack Roll and Dexterity Save)",
    "range": "30ft (Single Target / Area of Effect)",
    "desc": "You crush a scrap of burnt paper in your fist, and it reforms as a glowing ball of packed cinders, which you send flying at a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 Fire damage. Hit or miss, the ball then bursts in a shower of burning ash: the target and each other creature within 5 feet of it must make a Dexterity saving throw against your spell save DC or take 1d4 Fire damage.",
@@ -1281,6 +1292,7 @@
    "mat": "250G worth of magical Incense that is consumed upon performing the ritual",
    "cat": "Illusion (Ritual)",
    "time": "1 Hour",
+   "dur": "1 Month",
    "range": "5ft (Touch) a Magical Item or Object that weighs less than 10lb.",
    "desc": "For an hour you can perform an arcane ritual on a Magical Item or Object that weighs less than 10lbs and hide it’s magical nature from those who are able to use magic detection spells such as Detect magic. Upon completion of the ritual, the Item becomes Undetectable by magical detection spells for the Next month. Casting this spell on the same item every once a month for a year makes the Magical Item or Object Permanently Undetectable by magic detection spells until the dispel magic spell is cast on it.\n\nIf a spellcaster, other than the item's original Spellcaster, attempts to identify the item, whilst the item is under the effects of this spell, they must roll a d100 and roll above 50 + Original Spellcaster level. Failure to roll high enough results in the Spellcaster being unable to sense any magical presence from the item. On a success, the Item is successfully Identified."
   },
@@ -1613,6 +1625,7 @@
    "cat": "Evocation",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "Instantaneous",
    "type": "Utility",
    "range": "Touch",
    "desc": "You lay a hand on a creature’s wounds, and warm light knits torn flesh back together. The creature regains hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on Undead or Constructs. When you cast this spell, you gain 1 Exhaustion Point (EP).",
@@ -1682,6 +1695,7 @@
    "cat": "Transmutation",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "Instantaneous",
    "type": "Spell Attack (Attack Roll)",
    "range": "40ft",
    "desc": "You seize the air around you and compress it into an invisible blade of wind, then send it flying at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 Slashing damage.",
@@ -1871,6 +1885,7 @@
    "cat": "Divination",
    "cost": "N/A",
    "time": "1 Minute",
+   "dur": "10 Minutes",
    "type": "Ritual",
    "range": "Self (Single Target)",
    "desc": "You spend a minute quieting your mind and attuning your senses to the flow of magic around you. For the next 10 minutes, you sense the presence of magic within 30 feet of you. While the spell lasts, you can focus on a creature or object you can see within that area to see a faint aura around it and learn its school of magic, if any. The spell is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt. When you cast this spell, you gain 1 Exhaustion Point (EP)."
@@ -2003,6 +2018,7 @@
    "mat": "A Monocle or small glass lens",
    "cat": "Abjuration",
    "time": "1 Action",
+   "dur": "Instantaneous",
    "range": "30ft (Area of Effect)",
    "desc": "Choose a 20ft by 20ft cube within range that you can see. Any spell from the Illusion school of 3rd level or lower within that area ends. For each Illusion of 4th level or higher, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.\n\nAt Higher Levels. When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
   },
@@ -2171,6 +2187,7 @@
    "mat": "A quartz crystal",
    "cat": "Transmutation",
    "time": "1 Action",
+   "dur": "Instantaneous",
    "range": "20ft (Area of Effect)",
    "desc": "You hold out your fingers and select a point within range, a spike made of stone erupts from the chosen point. Each creature with 5ft of the erupting spike must make Dexterity Saving throw or take 2d10 Bludgeoning damage, half as much on a successful save. If there is a target directly above the erupting spike, and they fail the Save, they are launched 10ft up in the air taking Falling damage and falling prone upon meeting the ground. If there's a Ceiling above the Launched target, they instead take falling damage for the maximum height of the current room. Immediately after casting the spell and creating the spike, the spike immediately retreats back into the ground.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the bludgeoning damage dealt by the earth spike increases by 1d10 for each slot level above 1st."
   },
@@ -2432,6 +2449,7 @@
    "mat": "10 gp worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier",
    "cat": "Conjuration (Ritual)",
    "time": "1 Hour",
+   "dur": "Until dismissed",
    "range": "10ft (Area of effect)",
    "desc": "You gain the service of a familiar, a spirit that takes an animal form you choose: Bat, Bird, Cat, Crab, Dog, Frog (Toad), Hawk, Lizard, Octopus, Owl, Snake, Fish, Rat, Raven, Spider, or Weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of a beast.\n\nYour familiar acts independently of you, but it always obeys your commands. In combat, your familiar takes their turn immediately after yours. A familiar can’t attack, but it can take other actions as normal.\n\nWhen the familiar drops to 0 hit points, it disappears, leaving behind no physical form. It reappears after you cast this spell again. As an action, you can temporarily dismiss your familiar to a pocket dimension. Alternatively, you can dismiss it forever. As an action while it is temporarily dismissed, you can cause it to reappear in any unoccupied space within 30 feet of you. Whenever the familiar drops to 0 hit points or disappears into the pocket dimension, it leaves behind in its space anything it was wearing or carrying.\n\nWhile your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through your familiar’s eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses that the familiar has. During this time, you are deaf and blind with regard to your own senses.\n\nYou can’t have more than one familiar at a time. If you cast this spell while you already have a familiar, you instead cause it to adopt a new form. Choose one of the forms from the above list. Your familiar transforms into the chosen creature."
   },
@@ -2501,6 +2519,7 @@
    "cat": "Evocation",
    "cost": "2MP",
    "time": "Instantaneous",
+   "dur": "Instantaneous",
    "type": "Ranged Spell Attack",
    "range": "30ft (Straight Line)",
    "desc": "You clap a pinch of flammable powder between your hands and sweep your fingers toward a target, speaking the spell’s command phrase. The powder ignites into a bolt of fire that hurls instantly toward your target.",
@@ -2575,6 +2594,7 @@
    "cat": "Evocation",
    "cost": "3 MP",
    "time": "Instantaneous ",
+   "dur": "Instantaneous",
    "type": "Self",
    "range": "15ft cone (Area of Effect)",
    "desc": "With both hands you conjure a warbling sheet of fire. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one.\n\nThe fire ignites any flammable objects in the area that aren’t being worn or carried.\n",
@@ -2726,6 +2746,7 @@
   "f": {
    "cat": "Necromancy",
    "time": "1 Action",
+   "dur": "Instantaneous",
    "range": "5ft (Touch) (Single Target)",
    "desc": "You extend a hand and touch of a target within 5ft sending a necrotic shiver up your targets spine. Make a melee spell attack towards the target within 5ft of you, On a Hit the target takes 1d8 Necrotic damage."
   },
@@ -2805,6 +2826,7 @@
   "f": {
    "cat": "Transmutation",
    "time": "1 Action",
+   "dur": "Instantaneous",
    "range": "30ft (Single Target)",
    "desc": "You extend a hand project fourth a blasting gust of wind towards target within the spells range. Make a range spell attack, on a hit the target takes 1d4 bludgeoning damage and if the target is medium sized or smaller, they must roll a Strength Saving throw or be pushed backwards 5ft. if the target is small or even tiny sized, they have disadvantage on the Strength save.\n\nIf the target of the spell is an object of Small or Tiny size, it automatically failed the save and takes no damage."
   },
@@ -2903,6 +2925,7 @@
    "cat": "Transmutation",
    "cost": "2 MP",
    "time": "Instantaneous",
+   "dur": "Until your next hit with the weapon",
    "type": "Utility",
    "range": "Self",
    "desc": "You run your hand along your Blade or Sword and speak a single sharp note. The weapon begins to vibrate, letting out a thin, high-pitched hum that sets nearby teeth on edge. While you maintain concentration, the next time you hit a creature with that weapon, the stored vibration releases on impact in a crack of sound: the target takes an extra 1d8 Thunder damage, and each other hostile creature within 5 feet of it must make a Constitution saving throw or take 1d4 Thunder damage. The weapon then falls silent and the spell ends.",
@@ -2981,6 +3004,7 @@
   "f": {
    "cat": "Transmutation",
    "time": "1 Action",
+   "dur": "Instantaneous",
    "range": "30ft (Single Target)",
    "desc": "You swipe the air, gather moisture and project forth a arrow-like barrage of icy needles towards a target within range that you can see. Make a Spell attack roll towards a target, on a hit, the target takes 2d4 cold damage."
   },
@@ -3011,6 +3035,7 @@
    "mat": "A pearl worth at least 100 gp",
    "cat": "Divination (Ritual)",
    "time": "1 Minute",
+   "dur": "Instantaneous",
    "range": "5ft (Touch) (See Description)",
    "desc": "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it. If you instead touch a creature throughout the casting, you learn what spells, if any, are currently affecting it."
   },
@@ -3205,6 +3230,7 @@
    "cat": "Evocation",
    "cost": "4 MP",
    "time": "Instantaneous ",
+   "dur": "Instantaneous",
    "type": "Ranged Spell Attack",
    "range": "30ft (Single Target)",
    "desc": "You send forth a crackling bolt of lightning at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 3d6 lightning damage. If you roll the same number on at least two of the d6s, The Lightning jumps and leaps from the target to a different creature of your choice within 30 feet of it. Make a new attack roll against the new target and a new damage roll, which could cause the Lightning to jump again. A creature can be only be targeted once each round by this spell. The Lightning can only leap up to a total of 3 targets in a single cast.\n"
@@ -4343,6 +4369,7 @@
   "f": {
    "cat": "Enchantment",
    "time": "1 Action",
+   "dur": "1d4 Turns",
    "range": "30ft (Single target)",
    "desc": "You sing a Single Sonorous note and imbue the note with arcane magic that can send a target into a deep but brief slumber. Choose a Single target within range that can hear you. The target must roll a Intelligence Saving throw or fall unconscious for the next 1d4 turns. If the Target succeeds the Intelligence saving throw, they become immune to this spell and its effects for the next 24 hours.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 10 feet of each other when you target them."
   },
@@ -4741,6 +4768,7 @@
    "mat": "A Rose seed",
    "cat": "Conjuration",
    "time": "1 Action",
+   "dur": "Until the start of your next turn",
    "range": "30ft (Single Target)",
    "desc": "You create vines of constricting bramble beneath the feet of an unexpecting enemy, in an attempt to thwart them from moving. Choose a single target within the spells range, the target must roll a Dexterity Saving throw, On a failure the target takes 1d4 piercing damage and is Restrained until the start of your next turn. If fire damage is dealt to the target while restrained by the vines, the target is freed and is no longer restrained."
   },
@@ -5050,6 +5078,7 @@
   "f": {
    "cat": "Conjuration",
    "time": "1 Action",
+   "dur": "Instantaneous",
    "range": "15ft (Single Target)",
    "desc": "You conjure a Tentacle made of water either from your hand or nearby to your target that whips them and tears into their skin. Make a Spell attack towards a single target within range, On a hit, your target takes 1d6 slashing damage."
   },
