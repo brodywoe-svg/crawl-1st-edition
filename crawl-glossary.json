@@ -2,6 +2,29 @@
  "v": 1,
  "entries": [
   {
+   "n": "Action Points, Magic Points, and Exhaustion Points",
+   "sec": "Game Systems",
+   "lead": "[color=#8e171c]Action Points (AP)[/color]\nAction Points are the central resource every creature uses to act. Swinging a sword, throwing an item, using a Weapon Action, Disengaging, and taking a Reaction all cost AP. Action points can be used to cast spells in the place of Magic Points (MP).\n\nIn combat, you gain AP at the start of each of your turns by rolling your Action Die. Class features such as Prowess can add to this. Any AP you haven’t spent by the start of your next turn is lost.\n\nDuring Exploration, you instead have a steady 2 AP, which return after each action. \n\n[color=#8e171c]Magic Points (MP)[/color]\nMagic Points are a fixed resource used only to cast spells. Each spell lists its cost in MP. MP can’t be spent on actions, and AP can’t be spent on spells during combat. Magic Points (MP) cannot be used to perform actions that cost Action Points (AP).\n\nYou gain MP through class features such as Channeling and Somatic Conversion, rather than from the Action Die itself. MP you gain stays in your Action Pool until you spend it or combat ends. MP isn’t generated during Exploration.\n\nDuring Exploration, you do not generate Magic Points (MP).\n\n[color=#8e171c]Exhaustion Points (EP)[/color]\nExhaustion Points represent strain on your body and mind. You gain them from effects, features such as Adrenaline or Sturdy, and spells whose cost includes the player gaining a number of EP, such as Cure Wounds and Rituals spells.\n\nEP takes up space in your Action Pool like any other point, but it can’t be spent and is never lost to overflow. It stays in your pool when combat begins and ends and through unconsciousness. You remove EP by resting, at a rate of 1 EP for every 2 hours of rest, and some effects, such as Hearty food, can remove it too.\n\nIf your Action Pool is ever completely filled with Exhaustion Points, you die.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Action Points (AP)",
+     "ref": "Action Points are the central resource every creature uses to act. Swinging a sword, throwing an item, using a Weapon Action, Disengaging, and taking a Reaction all cost AP. Action points can be used to cast spells in the place of Magic Points (MP).\n\nIn combat, you gain AP at the start of each of your turns by rolling your Action Die. Class features such as Prowess can add to this. Any AP you haven’t spent by the start of your next turn is lost.\n\nDuring Exploration, you instead have a steady 2 AP, which return after each action."
+    },
+    {
+     "w": "Magic Points (MP)",
+     "ref": "[color=#8e171c]Magic Points (MP)[/color]\nMagic Points are a fixed resource used only to cast spells. Each spell lists its cost in MP. MP can’t be spent on actions, and AP can’t be spent on spells during combat. Magic Points (MP) cannot be used to perform actions that cost Action Points (AP).\n\nYou gain MP through class features such as Channeling and Somatic Conversion, rather than from the Action Die itself. MP you gain stays in your Action Pool until you spend it or combat ends. MP isn’t generated during Exploration.\n\nDuring Exploration, you do not generate Magic Points (MP)."
+    },
+    {
+     "w": "Exhaustion Points (EP)",
+     "ref": "[color=#8e171c]Exhaustion Points (EP)[/color]\nExhaustion Points represent strain on your body and mind. You gain them from effects, features such as Adrenaline or Sturdy, and spells whose cost includes the player gaining a number of EP, such as Cure Wounds and Rituals spells.\n\nEP takes up space in your Action Pool like any other point, but it can’t be spent and is never lost to overflow. It stays in your pool when combat begins and ends and through unconsciousness. You remove EP by resting, at a rate of 1 EP for every 2 hours of rest, and some effects, such as Hearty food, can remove it too."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Action Pool",
    "sec": "Game Systems",
    "lead": "[color=#8e171c]The Action Pool[/color]\nYour Action Pool holds all of your Action Points (AP), Magic Points \n(MP) and Exhaustion Points. The combined total can never exceed \nyour Max Pool.\n\n[color=#8e171c]Overflow. [/color]If you would gain points that put you over your Max Pool, \nyou choose which of the new points to keep and which are lost. For \nexample, if you gain both AP and MP, you decide how many of each \nto keep.\n\n[color=#8e171c]Exhaustion.[/color] Exhaustion Points take up space in your pool like any \nother point, but they can’t be spent or lost to overflow. If your pool is \never completely filled with Exhaustion Points, you die.",
