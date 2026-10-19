@@ -359,7 +359,7 @@ function spellInfo(s) {
   const tbl = s.tbl && arr(s.tbl.cells).length ? `<div class="rtablew"><table class="rtable">${s.tbl.cells.map((row, i) => `<tr>${row.map(x => i === 0 && s.tbl.h ? `<th>${rich(x)}</th>` : `<td>${rich(x)}</td>`).join("")}</tr>`).join("")}</table></div>` : "";
   const tiers = arr(s.tiers).map((x, i) => [i + 1, str(x && x[0]), str(x && x[1])]).filter(x => (x[1] && x[1] !== "—") || x[2]);
   return infoBox(s.n, `Level ${s.lv || "?"}`, `<div class="spchips">${arr(s.tags).map(x => `<span>${esc(x)}</span>`).join("")}${schoolOf(s) ? `<span>${esc(schoolOf(s))}</span>` : ""}${s.conc ? "<span>Concentration</span>" : ""}${chosen ? `<span class="on">Your Rank +${r}</span>` : ""}</div>` +
-    factsHTML([["Prerequisites", f.pre], ["Class Requirements", f.cls], ["Components", comps], ["Material Cost", f.mat], ["Casting Cost", f.cost], ["Casting Time", f.time], ["Type", f.type], ["Range", f.range]]) +
+    factsHTML([["Prerequisites", f.pre], ["Class Requirements", f.cls], ["Components", comps], ["Material Cost", f.mat], ["Casting Cost", f.cost], ["Casting Time", f.time], ["Duration", f.dur], ["Type", f.type], ["Range", f.range]]) +
     (f.desc ? `<div class="clead">${richParas(f.desc)}</div>` : "") + tbl + (f.dmg && !/^n\/?a$/i.test(str(f.dmg)) ? factsHTML([["Damage", f.dmg]]) : "") +
     (tiers.length ? `<div class="sptiers"><h4>Rank benefits</h4>${tiers.map(([i, n, d]) => `<p class="${r != null && r >= i ? "got" : ""}"><b>+${i}</b> ${n && n !== "—" ? `<span class="pdn">${esc(n)}</span> ` : ""}${rich(d)}</p>`).join("")}</div>` : ""),
     `<a class="glink" href="spells.html?show=all#${encodeURIComponent(slugOf(s.n))}" target="_blank" rel="noopener">Open in the spell list</a>`);
