@@ -4,7 +4,7 @@
   {
    "id": "class-artificer",
    "n": "Artificer",
-   "role": "Martial Combatant",
+   "role": "Crafting Specialist & Group Utility",
    "desc": "Artificers are inventive martial specialists who fight with tools, contraptions and gear of their own making.",
    "source": "",
    "cast": "",
@@ -136,7 +136,7 @@
   {
    "id": "class-barbarian",
    "n": "Barbarian",
-   "role": "Martial Combatant",
+   "role": "Heavy Specialist Melee Combatant",
    "desc": "Barbarians are fierce warriors who channel a primal fury into battle, shrugging off blows that would fell anyone else.",
    "source": "",
    "cast": "",
@@ -500,7 +500,7 @@
   {
    "id": "class-fighter",
    "n": "Fighter",
-   "role": "Martial Combatant",
+   "role": "Versatile Martial Combatant",
    "desc": "Fighters are masters of weapons and armor, trained to win any battle through skill, discipline and endurance.",
    "source": "",
    "cast": "",
