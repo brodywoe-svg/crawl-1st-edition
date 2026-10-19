@@ -52,7 +52,7 @@ def section_href(sec):
 
 # Glossary menu groups: a group is a page of its own (glossary.html?s=<slug>) with a flyout of its sections.
 # The sections in a group always exist, even before they have entries. The browser copy of this is CRAWL_GTREE.
-GLOSSARY_TREE = [{"n": "Combat", "slug": "combat", "items": ["Combat Rules", {"n": "Actions", "slug": "actions", "items": ["Weapon Actions", "Combat Actions"]}]}]
+GLOSSARY_TREE = [{"n": "Combat", "slug": "combat", "items": ["Combat Rules", {"n": "Actions", "slug": "actions", "items": ["Weapon Actions", "Combat Actions", "General Actions"]}]}]
 
 
 def tree_leaves(items):

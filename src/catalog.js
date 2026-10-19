@@ -155,7 +155,7 @@ function moneyLine(r) {
 function yieldProps(r) { const i = r.makes[0] && itemById(r.makes[0].item); return (i && i.props) || r.props }
 function recipeBody(r) {
   const yp = yieldProps(r);
-  const yieldLine = r.makes.length ? `<p class="rl"><b>Yield:</b> ${r.makes.map(m => itemLink(m.item, m.qty)).join(", ")}${yp ? ` (${richInline(yp)})` : ""}</p>` : "";
+  const yieldLine = r.makes.length ? `<p class="rl"><b>Yield:</b> ${r.makes.map(m => itemLink(m.item, m.qty)).join(", ")}${yp ? ` (${propsHTML(yp, r.makes[0] && itemById(r.makes[0].item))})` : ""}</p>` : "";
   return (r.kind ? `<p class="rkind">${esc(r.kind)}</p>` : "") +
     (r.pre ? `<p class="rl pre"><b>Prerequisites:</b> ${richInline(r.pre)}</p>` : "") +
     `<p class="rl"><b>Material Cost:</b> ${r.ing.length ? r.ing.map(m => itemLink(m.item, m.qty)).join(", ") : "none listed"}${r.matNote ? ", " + richInline(r.matNote) : ""}</p>` +
@@ -173,8 +173,8 @@ function yieldBox(r) {
     const facts = [["Category", (catOf(i.cat) || ["", i.cat])[1] + (i.sub ? " · " + i.sub : "") + (i.slot ? " · " + i.slot : "")], ["Rarity", i.rarity], ["Value", i.value], ["Weight", i.weight], ["Magic", i.magic ? "Yes" : ""]].filter(f => f[1]);
     return `<div class="ybox"><p class="yname"><a class="ilink" href="items.html#${esc(i.id)}">${nameHTML(i)}</a>${i.badge ? PLAYTEST : ""}</p>` +
       `<dl class="yfacts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` +
-      (i.props ? `<p class="rl"><b>Properties:</b> ${richInline(i.props)}</p>` : "") +
-      (i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : "") +
+      (i.props ? `<p class="rl"><b>Properties:</b> ${propsHTML(i.props, i)}</p>` : "") +
+      (i.actions ? `<div class="rfeat">${actionsHTML(i.actions)}</div>` : "") +
       `</div>` }).join("");
 }
 function recipeRow(r, showProf) {
@@ -207,10 +207,10 @@ function itemDetail(i) {
       (r.dc || r.tc ? `<p class="rl"><b>Crafting DC:</b> ${esc(r.dc || "—")} | <b>TC:</b> ${esc(r.tc || "—")}</p>` : "") + `</div>`).join("");
   /* crafting materials show only a description and their recipe */
   const mat = i.cat === "Crafting Material";
-  return (mat ? "" : sec("Properties", i.props ? `<p class="rl">${richInline(i.props)}</p>` : none)) +
+  return (mat ? "" : sec("Properties", i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : none)) +
     sec("Description", (i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
     (!mat && i.pdefs.length ? sec("Properties Defined", `<div class="rfeat">${i.pdefs.map(p => `<p>${p.n ? `<span class="pdn">${esc(p.n)}</span> - ` : ""}${richInline(p.d)}</p>`).join("")}</div>`) : "") +
-    (!mat && (isWeapon(i) || i.actions) ? sec("Weapon actions", i.actions ? `<div class="rfeat">${paras(i.actions)}</div>` : none) : "") +
+    (!mat && (isWeapon(i) || i.actions) ? sec("Weapon actions", i.actions ? `<div class="rfeat">${actionsHTML(i.actions)}</div>` : none) : "") +
     (made.length ? sec("Crafting recipe", recipeBlock) : ADMIN && !i._new ? sec("Crafting recipe", `<p class="muted">No crafting recipe yet. <a class="ilink" href="crafting.html?make=${encodeURIComponent(i.id)}">Create one on the Crafting page</a></p>`) : "") +
     (used.length ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "") +
     (ADMIN && !i._new ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
@@ -542,7 +542,41 @@ AdminHooks.signedIn = quiet => { render(); setTimeout(startRecipeFor); if (!quie
 AdminHooks.signedOut = () => { editing.clear(); drafts.clear(); items = items.filter(x => !x._new); recipes = recipes.filter(x => !x._new); render(); say("Signed out.") };
 
 load(CATALOG);
+/* ---------------------------------------------------------------- glossary tooltips on item Properties (every Properties entry)
+   and in Weapon actions text (Weapon, Combat and General Actions) */
+let PROP_TIPS = { map: new Map(), re: null }, ACT_TIPS = { map: new Map(), re: null };
+function setTips(j) {
+  const a = normGlossary(j) || [];
+  PROP_TIPS = glMapOf(a.filter(e => e.sec === "Properties").map(e => ({ ...e, tip: true })));
+  ACT_TIPS = glMapOf(a.filter(e => ACTION_SECS.includes(e.sec)).map(e => ({ ...e, tip: true })));
+}
+setTips(GLOSSARY);
+const ARMOR_WORDS = ["clothing", "light", "medium", "heavy"];
+function tipMark(html, tips, gm, skip) {
+  if (!tips.re) return html;
+  return html.split(/(<[^>]+>)/).map(s => s.startsWith("<") ? s : s.replace(tips.re, m => skip && skip(m) ? m : `<span class="gl" tabindex="0" data-gm="${gm}" data-g="${esc(m.toLowerCase())}">${m}</span>`)).join("");
+}
+/* on armor, Light/Medium/Heavy are the armor's weight class, not the weapon property */
+function propsHTML(t, item) { return tipMark(richInline(t), PROP_TIPS, "p", item && item.cat === "Armor" ? m => ARMOR_WORDS.includes(m.toLowerCase()) : null) }
+const actionsHTML = t => blocks(t, x => tipMark(richInline(x), ACT_TIPS, "a"));
+const gtip = document.createElement("div"); gtip.className = "gtip"; gtip.id = "gtip"; gtip.setAttribute("role", "tooltip"); gtip.hidden = true; document.body.appendChild(gtip);
+function showTip(el) {
+  const hit = (el.dataset.gm === "a" ? ACT_TIPS : PROP_TIPS).map.get(el.dataset.g); if (!hit) return;
+  const tp = tipHTML(hit); gtip.innerHTML = tp.html; gtip.classList.toggle("gtipact", tp.act); gtip.hidden = false;
+  const r = el.getBoundingClientRect(), w = gtip.offsetWidth, h = gtip.offsetHeight, vw = document.documentElement.clientWidth, vh = window.innerHeight;
+  let y = r.bottom + 8; if (y + h > vh - 12 && r.top - h - 8 > 12) y = r.top - h - 8;
+  gtip.style.left = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), vw - w - 12) + "px"; gtip.style.top = Math.max(12, y) + "px";
+}
+const hideTip = () => { gtip.hidden = true };
+const glAt = t => t && t.closest ? t.closest(".gl") : null;
+document.addEventListener("pointerover", ev => { if (ev.pointerType === "mouse") { const el = glAt(ev.target); if (el) showTip(el) } });
+document.addEventListener("pointerout", ev => { if (ev.pointerType === "mouse") { const el = glAt(ev.target); if (el && !el.contains(ev.relatedTarget)) hideTip() } });
+document.addEventListener("focusin", ev => { const el = glAt(ev.target); if (el) showTip(el) });
+document.addEventListener("click", ev => { const el = glAt(ev.target); if (el) { ev.preventDefault(); showTip(el) } else hideTip() });
+window.addEventListener("scroll", hideTip, { passive: true, capture: true });
+
 if (STATIC) {
+  fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => { if (j) { setTips(j); render() } }).catch(() => { });
   $("adminBtn").hidden = false; showAdminBtn();
   fetch("crawl-items.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null)
     .then(j => { if (j && !dirty) load(j) }).catch(() => { })

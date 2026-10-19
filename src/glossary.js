@@ -116,7 +116,7 @@ function bodyHTML(e) {
     ["Materials", (r.ing || []).map(m => `<a class="ilink" href="items.html#${esc(m.item)}">${m.qty > 1 ? m.qty + " × " : ""}${esc(itemNameById(m.item))}</a>`).join(", ") || "—"],
     ["Crafting", [r.dc && r.dc !== "—" ? "DC " + r.dc : "", r.tc && r.tc !== "—" ? "TC " + r.tc : "", r.time, r.ws].filter(Boolean).map(esc).join(" · ")]
   ]) + `</div>`).join("");
-  const act = isAction(e.sec) ? factsHTML([["AP cost", e.ap ? esc(apText(e.ap)) : ""], ["Requires", e.req ? richInline(e.req) : ""]].filter(r => r[1])) : "";
+  const act = isAction(e.sec) ? factsHTML([["AP cost", e.ap ? esc(apText(e.ap)) : ""], ["Requirements", e.req ? richInline(e.req) : ""]].filter(r => r[1])) : "";
   return act + (e.lead ? `<div class="clead">${paras(e.lead)}</div>` : "") +
     (bullets.length ? `<ul class="cul">${bullets.map(x => `<li>${richInline(x)}</li>`).join("")}</ul>` : "") + factsHTML(facts) + mod + notes +
     (words.length ? `<div class="crefs">${words.map(x => `<div class="cref"><b>${esc(x.w)}</b>${paras(x.ref)}</div>`).join("")}</div>` : "") +
@@ -144,7 +144,7 @@ function form(e) {
 <label class="chk"><input type="checkbox" data-k="tip"${d.tip !== false ? " checked" : ""}> Show as a tooltip in spells</label>
 <label for="${id("sec")}">Section <small>Each section gets its own page and a link in the Glossary menu. Type a new name to start a new section.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
 <div class="gact"${isAction(d.sec) ? "" : " hidden"}><label for="${id("ap")}">AP cost <small>How many Action Points it takes, e.g. 3</small><input type="text" id="${id("ap")}" data-k="ap" value="${esc(d.ap || "")}" placeholder="e.g. 3" autocomplete="off"></label>
-<label for="${id("req")}">Requires <small>The weapon or feature it's tied to</small><input type="text" id="${id("req")}" data-k="req" value="${esc(d.req || "")}" placeholder="e.g. A Blade weapon, or the Fighting Style feature" autocomplete="off"></label></div>
+<label for="${id("req")}">Requirements <small>The weapon or feature it's tied to</small><input type="text" id="${id("req")}" data-k="req" value="${esc(d.req || "")}" placeholder="e.g. A Blade weapon, or the Fighting Style feature" autocomplete="off"></label></div>
 <label for="${id("lead")}">Description <small>Leave a blank line between paragraphs.</small><textarea id="${id("lead")}" data-k="lead" rows="6">${esc(d.lead)}</textarea></label>
 <label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="4">${esc(d.fx)}</textarea></label>
 <label for="${id("notes")}">Notes <small>One per line. Start a line with "Designer's note:" to label it as one.</small><textarea id="${id("notes")}" data-k="notes" rows="2">${esc(d.notes)}</textarea></label>

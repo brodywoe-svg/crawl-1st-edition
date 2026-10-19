@@ -700,6 +700,7 @@ const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,
 function glVariants(w){
   const m=String(w).match(/^(.*?)(\s*\([^)]*\))?$/),base=m[1].trim(),par=m[2]||"",other=/die$/i.test(base)?base.slice(0,-1)+"ce":/dice$/i.test(base)?base.slice(0,-2)+"e":/[^s]s$/i.test(base)?base.slice(0,-1):base+"s",out=[w];
   [base,other].forEach(b=>{out.push(b+par);if(par)out.push(b)});
+  if(/\sX$/.test(base))out.push(base.replace(/\s+X$/,""));
   return [...new Set(out.map(x=>x.trim()))].filter(x=>x.length>1);
 }
 function glMapOf(entries){
@@ -711,13 +712,13 @@ function glMapOf(entries){
   return {map,re:terms.length?new RegExp("(?<![\\w])("+terms.join("|")+")(?![\\w])","gi"):null};
 }
 /* a glossary word's popup. Weapon Actions and Combat Actions get a special red one: AP cost, the kind of action, and what it needs */
-const ACTION_SECS=["Weapon Actions","Combat Actions"];
+const ACTION_SECS=["Weapon Actions","Combat Actions","General Actions"];
 function tipHTML(hit){
   const e=hit.e,act=ACTION_SECS.includes(e.sec),ap=e.ap?(/^\d+$/.test(e.ap)?e.ap+" AP":e.ap):"";
   const body=hit.ref?`${paras(hit.ref)}<p class="gfrom">From ${esc(e.n)}</p>`:`${paras(e.lead)}${e.fx.length?`<ul>${e.fx.map(x=>`<li>${richInline(x)}</li>`).join("")}</ul>`:""}`;
   if(!act)return{act,html:`<div class="gth"><span>${esc(hit.ref?hit.w:e.n)}</span><span class="gtag">${esc(singular(e.sec))}</span></div><div class="gtb">${body}</div>`};
   return{act,html:`<div class="gth"><span>${esc(hit.ref?hit.w:e.n)}</span><span class="gtag">${esc(ap||"Action")}</span></div><div class="gtb"><p class="gtkind">${esc(singular(e.sec))}</p>`+
-    `<dl class="gtfacts"><dt>AP cost</dt><dd>${esc(ap||"—")}</dd>${e.req?`<dt>Requires</dt><dd>${richInline(e.req)}</dd>`:""}</dl>${body}</div>`};
+    `<dl class="gtfacts"><dt>AP cost</dt><dd>${esc(ap||"—")}</dd>${e.req?`<dt>Requirements</dt><dd>${richInline(e.req)}</dd>`:""}</dl>${body}</div>`};
 }
 /*@GLCORE-END@*/
 /* glossary terms in spell text: red underline, with the entry in a popup on hover, focus or tap */
