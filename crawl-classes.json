@@ -490,7 +490,7 @@
      "opts": [
       {
        "n": "Archery",
-       "d": "Your Critical Multiplier with Bows and Crossbows is x2."
+       "d": "While you are wielding a Bow or Crossbow, ranged weapon attack made against targets within 5ft of you don't have disadvantage."
       },
       {
        "n": "Duel-Wielder",
