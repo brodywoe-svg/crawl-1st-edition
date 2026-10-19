@@ -494,7 +494,7 @@
       },
       {
        "n": "Duel-Wielder",
-       "d": "While you are wielding a weapon in each hand,"
+       "d": "While you are wielding a Light weapon in each hand, once per turn when you hit a creature with a melee weapon attack, you can make an attack with the weapon in your other hand for 1 less AP than normal (minimum 1 AP)."
       },
       {
        "n": "Two-Handed",
@@ -509,8 +509,12 @@
        "d": "Whenever you use the Shield Bash weapon action, you can add your Strength Modifier to the Damage total. you gain an additional skill point in Shields."
       },
       {
-       "n": "Weapon Specialist",
-       "d": "Choose a weapon Category of your Choice, You gain a single skill point in that weapon Category."
+       "n": "Brawler",
+       "d": "Your unarmed strikes count as Light, costing 1 AP, and deal 1d4 bludgeoning damage. When you hit a creature with an unarmed strike, you can spend 1 AP to attempt to grapple it."
+      },
+      {
+       "n": "Specialist",
+       "d": "Choose a weapon Category of your Choice; Axes, Blades, Bows, Cudgels, Firearms, Polearms, Swords, Special, Miscellaneous, or Shields, You gain a single skill point in that weapon Category."
       }
      ],
      "pick": 1,
@@ -525,7 +529,7 @@
     },
     {
      "n": "Weapon Specialist",
-     "d": "Starting at 3rd Level choose one of the following Weapon Categories of your Choice; Axes",
+     "d": "Starting at 3rd Level choose one of the following Weapon Categories of your Choice; Axes, Blades, Bows, Cudgels, Firearms, Polearms, Swords, Special, Miscellaneous, or Shields",
      "lv": 3,
      "opts": [
       {
@@ -563,6 +567,10 @@
       {
        "n": "Miscellaneous",
        "d": ""
+      },
+      {
+       "n": "Shields",
+       "d": ""
       }
      ],
      "pick": 1,
@@ -572,7 +580,7 @@
     }
    ],
    "loadouts": [],
-   "money": "25",
+   "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
    "choices": [
@@ -609,7 +617,7 @@
      ]
     },
     {
-     "n": 1,
+     "n": 2,
      "cat": "save",
      "opts": [
       "Strength",
