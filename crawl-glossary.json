@@ -800,6 +800,16 @@
    "tip": false
   },
   {
+   "n": "Whirlwind Strikes",
+   "sec": "Weapon Actions",
+   "lead": "While you are wielding two swords with the light property, you may expend 3AP to unleash a flurry of wild slashes in all directions. Each creature within 5ft of you must roll a dexterity saving throw with a DC equal to 8 + Your Strength or Dexterity Modifier + Swords Rank. On a failed save, creatures take 2d8 slashing damage and are inflicted with the bleeding condition. On a successful save creatures take half damage.",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Whisperweave",
    "sec": "Properties",
    "lead": "This piece weighs nothing, makes no sound as you move, and can't be torn, stained, or soiled by mundane means. This feature doesn't take up a modifier slot.",
