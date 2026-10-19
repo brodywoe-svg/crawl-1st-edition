@@ -1312,9 +1312,8 @@
    "value": "25 (S)",
    "weight": "1 lbs",
    "actions": "",
-   "pdefs": [],
    "props": "Torso, Light, 6% Armor",
-   "feat": "",
+   "pdefs": [],
    "desc": "A simple linen robe, not entirely stylish but keeps you relatively comfortable and warm.",
    "extra": []
   },
@@ -2627,7 +2626,7 @@
    "badge": false,
    "kind": "",
    "prof": "Blacksmithing",
-   "pre": "+3 Blacksmithing, Ash-Forged",
+   "pre": "+3 Blacksmithing, Ashblood Heritage",
    "ing": [
     {
      "item": "i-iron-bar",
@@ -2679,7 +2678,7 @@
    "badge": false,
    "kind": "",
    "prof": "Blacksmithing",
-   "pre": "+2 Blacksmithing, Ash-Forged",
+   "pre": "+2 Blacksmithing, Ashblood Heritage",
    "ing": [
     {
      "item": "i-iron-bar",
