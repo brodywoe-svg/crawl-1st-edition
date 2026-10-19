@@ -780,7 +780,7 @@
   {
    "id": "class-monk",
    "n": "Monk",
-   "role": "Martial Combatant",
+   "role": "Exotic Weapons Specialist & Unarmed Melee Combatant",
    "desc": "Monks are disciplined martial artists who turn body and spirit into weapons, striking with speed and precision.",
    "source": "",
    "cast": "",
@@ -943,7 +943,7 @@
   {
    "id": "class-ranger",
    "n": "Ranger",
-   "role": "Martial Combatant",
+   "role": "Ranged Weapon Specialist & Group Utility",
    "desc": "Rangers are hunters and trackers of the wild places, deadly with bow and blade and at home far from civilization.",
    "source": "",
    "cast": "",
@@ -1075,7 +1075,7 @@
   {
    "id": "class-rogue",
    "n": "Rogue",
-   "role": "Martial Combatant",
+   "role": "Ambush Specialist & Precision Striker",
    "desc": "Rogues rely on cunning, stealth and precision, striking where enemies are weakest and slipping away before they can answer.",
    "source": "",
    "cast": "",
