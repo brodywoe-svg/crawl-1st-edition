@@ -295,16 +295,17 @@
   {
    "n": "Finesse",
    "sec": "Properties",
-   "lead": "When you attack with a Finesse weapon, you choose whether to use your Strength or Dexterity modifier for the attack and damage rolls. You must use the same modifier for both rolls.",
+   "lead": "[color=#8e171c]Finesse.[/color] When you attack with a Finesse weapon, you choose whether to use your Strength or Dexterity modifier for the attack and damage rolls. You must use the same modifier for both rolls.",
    "fx": [],
-   "notes": [
+   "notes": [],
+   "aka": [
     {
-     "l": "Designer's note",
-     "t": "Draft wording based on the SRD 5.1. Check it against Crawl's Action Pool rules."
+     "w": "Finesse",
+     "ref": "[color=#8e171c]Finesse.[/color] When you attack with a Finesse weapon, you choose whether to use your Strength or Dexterity modifier for the attack and damage rolls. You must use the same modifier for both rolls."
     }
    ],
-   "aka": [],
-   "tip": false
+   "tip": false,
+   "hideRefs": true
   },
   {
    "n": "Fire",
