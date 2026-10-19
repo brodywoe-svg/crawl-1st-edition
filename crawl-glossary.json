@@ -379,6 +379,25 @@
    "tip": false
   },
   {
+   "n": "Main Hand and Off-Hand",
+   "sec": "Game Systems",
+   "lead": "Upon creating their character, a player may choose their character’s main hand when you create them (their dominant hand). Attacks with your main-hand weapon add your ability modifier to damage. Attacks with your off-hand weapon don’t, unless the modifier is negative. A weapon wielded with two hands counts as a main-hand weapon.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Main Hand",
+     "ref": "Upon creating their character, a player may choose their character’s main hand when you create them (their dominant hand). Attacks with your main-hand weapon add your ability modifier to damage. Attacks with your off-hand weapon don’t, unless the modifier is negative. A weapon wielded with two hands counts as a main-hand weapon."
+    },
+    {
+     "w": "Off-Hand",
+     "ref": "Upon creating their character, a player may choose their character’s main hand when you create them (their dominant hand). Attacks with your main-hand weapon add your ability modifier to damage. Attacks with your off-hand weapon don’t, unless the modifier is negative. A weapon wielded with two hands counts as a main-hand weapon."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Meals",
    "sec": "Crafting Rules",
    "lead": "During a rest, while the party is at camp, the party designates one member to be the Camp Cook. The cook can prepare one meal, and the recipe determines how many servings it makes. The cook decides who receives each serving. Player Characters and Allies can only benefit from one meal per rest.",
