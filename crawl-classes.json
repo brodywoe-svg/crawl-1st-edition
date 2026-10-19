@@ -373,7 +373,7 @@
    "saves": "Strength, Constitution",
    "skills": "",
    "skillPts": "6",
-   "prof": "",
+   "prof": "Light Armor, Medium Armor, Heavy Armor, Shields",
    "langs": "",
    "chart": [
     {
@@ -530,22 +530,94 @@
      "opts": [
       {
        "n": "Axes",
-       "d": ""
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Axes[/color]:"
+      },
+      {
+       "n": "Blades",
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Blades[/color]:"
       },
       {
        "n": "Bows",
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Bows[/color]:"
+      },
+      {
+       "n": "Cudgels",
+       "d": ""
+      },
+      {
+       "n": "Firearms",
+       "d": ""
+      },
+      {
+       "n": "Polearms",
+       "d": ""
+      },
+      {
+       "n": "Swords",
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Swords[/color]: [color=#8e171c]Whirling Strikes[/color],"
+      },
+      {
+       "n": "Special",
+       "d": ""
+      },
+      {
+       "n": "Miscellaneous",
        "d": ""
       }
      ],
      "pick": 1,
-     "more": []
+     "more": [
+      9
+     ]
     }
    ],
    "loadouts": [],
    "money": "25",
    "moneyRoll": "",
    "extra": [],
-   "choices": [],
+   "choices": [
+    {
+     "n": 2,
+     "cat": "skill",
+     "opts": [
+      "Acrobatics",
+      "Animal Handling",
+      "Athletics",
+      "Insight",
+      "Intimidation",
+      "Investigation",
+      "Lore",
+      "Medicine",
+      "Perception",
+      "Persuasion"
+     ]
+    },
+    {
+     "n": 4,
+     "cat": "weapon",
+     "opts": [
+      "Axes",
+      "Blades",
+      "Bows",
+      "Crossbows",
+      "Cudgels",
+      "Firearms",
+      "Polearms",
+      "Swords",
+      "Special",
+      "Miscellaneous"
+     ]
+    },
+    {
+     "n": 1,
+     "cat": "save",
+     "opts": [
+      "Strength",
+      "Dexterity",
+      "Constitution"
+     ]
+    }
+   ],
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
