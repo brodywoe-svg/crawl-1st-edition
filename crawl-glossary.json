@@ -901,6 +901,21 @@
    "tip": false
   },
   {
+   "n": "Unarmed Attacks and Strikes",
+   "sec": "Combat Rules",
+   "lead": "Unarmed Strike. You can attack with a punch, kick, headbutt or similar strike. An unarmed strike costs 2 AP and deals bludgeoning damage equal to 1 + your Strength modifier. Unarmed strikes belong to the Special weapon category and count as Light for the purpose of fighting with a weapon in each hand.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Unarmed Strike.",
+     "ref": "[color=#8e171c]Unarmed Strike.[/color] You can attack with a punch, kick, headbutt or similar strike. An unarmed strike costs 2 AP and deals bludgeoning damage equal to 1 + your Strength modifier. Unarmed strikes belong to the Special weapon category and count as Light for the purpose of fighting with a weapon in each hand."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Unconscious",
    "sec": "Conditions",
    "lead": "A creature that is asleep, knocked out or held in a fugue state is Unconscious. While Unconscious:",
