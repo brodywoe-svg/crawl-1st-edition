@@ -2849,7 +2849,7 @@
    "badge": false,
    "kind": "",
    "prof": "Alchemy",
-   "pre": "+2 Alchemy, +1 Medicine",
+   "pre": "+2 Alchemy, +1 Medicine, Ashblood Heritage",
    "ing": [
     {
      "item": "i-bundle-of-yarrow",
@@ -2882,7 +2882,7 @@
    ],
    "props": "",
    "grants": "",
-   "feat": "Staunching - Apply this to yourself or a creature within 5 ft. to end the Bleeding condition.",
+   "feat": "[color=#8e171c]Staunching[/color] - Apply this to yourself or a creature within 5 ft. to end the Bleeding condition.",
    "quote": "“Orcs make wounds that won’t close. I make the paste that closes them. Business between us has never been better.” -Isolde Vexmire",
    "extra": []
   },
