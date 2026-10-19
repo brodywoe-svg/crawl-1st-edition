@@ -52,7 +52,7 @@ def section_href(sec):
 
 # Glossary menu groups: a group is a page of its own (glossary.html?s=<slug>) with a flyout of its sections.
 # The sections in a group always exist, even before they have entries. The browser copy of this is CRAWL_GTREE.
-GLOSSARY_TREE = [{"n": "Combat", "slug": "combat", "items": ["Combat Rules", "Combat Systems", {"n": "Actions", "slug": "actions", "items": ["Weapon Actions", "Combat Actions"]}]}]
+GLOSSARY_TREE = [{"n": "Combat", "slug": "combat", "items": ["Combat Rules", {"n": "Actions", "slug": "actions", "items": ["Weapon Actions", "Combat Actions"]}]}]
 
 
 def tree_leaves(items):
@@ -1280,7 +1280,7 @@ HOME_CARDS = [
     ("Spells", "spells.html", "spells", "Every spell, by class or magic source, with its +1 to +10 Ranks."),
     ("Crafting", "crafting.html", "recipes", "Recipes for every trade skill: ingredients, tools and checks."),
     ("Items", "items.html", "items", "Weapons, armor, consumables, materials and magic items."),
-    ("Combat", "glossary.html?s=combat", "", "Combat rules, the Action Pool, and weapon and combat actions."),
+    ("Combat", "glossary.html?s=combat", "", "Combat rules, and weapon and combat actions."),
     ("Glossary", "glossary.html", "entries", "Every rules term in one searchable list, conditions included."),
 ]
 

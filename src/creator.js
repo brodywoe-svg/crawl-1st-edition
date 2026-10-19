@@ -308,13 +308,7 @@ const spellLimit = c => { const k = clsOf(c); const n = k && parseInt(k.spells, 
 
 /* ---------------------------------------------------------------- glossary tooltips (red underline, popup on hover or tap) */
 let GL_RE = null; const GL_MAP = new Map();
-(function () {
-  const a = normGlossary(GLOSSARY) || []; const tips = a.filter(e => e.tip);
-  tips.forEach(e => { const k = e.n.toLowerCase(); if (!GL_MAP.has(k)) GL_MAP.set(k, { e, w: e.n, ref: "" }) });
-  tips.forEach(e => e.aka.forEach(x => { const k = x.w.toLowerCase(); if (!GL_MAP.has(k)) GL_MAP.set(k, { e, w: x.w, ref: x.ref }) }));
-  const terms = [...GL_MAP.keys()].sort((x, y) => y.length - x.length).map(t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  GL_RE = terms.length ? new RegExp("\\b(" + terms.join("|") + ")\\b", "gi") : null;
-})();
+(function () { const g = glMapOf(normGlossary(GLOSSARY) || []); g.map.forEach((v, k) => GL_MAP.set(k, v)); GL_RE = g.re })();
 /* rich text with glossary words marked, without touching the inside of tags */
 function rich(t) { const h = richInline(t); return GL_RE ? h.split(/(<[^>]+>)/).map(s => s.startsWith("<") ? s : s.replace(GL_RE, m => `<span class="gl" tabindex="0" data-g="${m.toLowerCase()}">${m}</span>`)).join("") : h }
 function richParas(t) { return blocks(t, rich) }

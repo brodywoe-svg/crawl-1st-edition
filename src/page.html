@@ -695,6 +695,21 @@ function featBlock(name,desc,fn,tag){
 }
 const plainText=t=>String(t||"").replace(/\[\/?(?:color|link|table)[^\]]*\]/gi,"");
 const singular=s=>/ies$/i.test(s)?s.slice(0,-3)+"y":/[^s]s$/i.test(s)?s.slice(0,-1):s;
+/* glossary words in text. A word also matches its singular or plural ("Exhaustion Point (EP)" for "Exhaustion Points (EP)")
+   and, when it ends in brackets, the same word without them ("Action Points"). Words may end in punctuation such as ")". */
+function glVariants(w){
+  const m=String(w).match(/^(.*?)(\s*\([^)]*\))?$/),base=m[1].trim(),par=m[2]||"",other=/die$/i.test(base)?base.slice(0,-1)+"ce":/dice$/i.test(base)?base.slice(0,-2)+"e":/[^s]s$/i.test(base)?base.slice(0,-1):base+"s",out=[w];
+  [base,other].forEach(b=>{out.push(b+par);if(par)out.push(b)});
+  return [...new Set(out.map(x=>x.trim()))].filter(x=>x.length>1);
+}
+function glMapOf(entries){
+  const map=new Map(),tips=entries.filter(e=>e.tip),all=[];
+  tips.forEach(e=>all.push({e,w:e.n,ref:""}));tips.forEach(e=>e.aka.forEach(x=>all.push({e,w:x.w,ref:x.ref})));
+  all.forEach(h=>{const k=h.w.toLowerCase();const o=map.get(k);if(!o||(h.ref&&!o.ref&&o.e===h.e))map.set(k,h)});
+  all.forEach(h=>glVariants(h.w).forEach(v=>{const k=v.toLowerCase();if(!map.has(k))map.set(k,{...h,w:v})}));
+  const terms=[...map.keys()].sort((x,y)=>y.length-x.length).map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+  return {map,re:terms.length?new RegExp("(?<![\\w])("+terms.join("|")+")(?![\\w])","gi"):null};
+}
 /* a glossary word's popup. Weapon Actions and Combat Actions get a special red one: AP cost, the kind of action, and what it needs */
 const ACTION_SECS=["Weapon Actions","Combat Actions"];
 function tipHTML(hit){
@@ -709,12 +724,8 @@ function tipHTML(hit){
 let GL_RE=null, GL_MAP=new Map();
 function setGlossary(j){
   const a=normGlossary(j); if(!a)return false;
-  GLOSSARY={v:1,entries:a}; GL_MAP=new Map();
-  const tips=a.filter(e=>e.tip);
-  tips.forEach(e=>{const k=e.n.toLowerCase();if(!GL_MAP.has(k))GL_MAP.set(k,{e,w:e.n,ref:""})});
-  tips.forEach(e=>e.aka.forEach(x=>{const k=x.w.toLowerCase();if(!GL_MAP.has(k)||(x.ref&&!GL_MAP.get(k).ref&&GL_MAP.get(k).e===e))GL_MAP.set(k,{e,w:x.w,ref:x.ref})}));
-  const terms=[...GL_MAP.keys()].sort((x,y)=>y.length-x.length).map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
-  GL_RE=terms.length?new RegExp("\\b("+terms.join("|")+")\\b","gi"):null;
+  GLOSSARY={v:1,entries:a};
+  const g=glMapOf(a); GL_MAP=g.map; GL_RE=g.re;
   return true;
 }
 setGlossary(GLOSSARY);
