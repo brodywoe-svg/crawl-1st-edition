@@ -486,6 +486,21 @@
    "tip": false
   },
   {
+   "n": "Opportunity Attacks",
+   "sec": "Combat Rules",
+   "lead": "Opportunity Attack. When a hostile creature you can see leaves your reach, you can make a melee weapon attack against it as a Reaction. The attack costs the AP it normally would for that weapon. A creature that spends 1 AP to Disengage doesn’t provoke Opportunity Attacks for the rest of its turn.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Opportunity Attack",
+     "ref": "When a hostile creature you can see leaves your reach, you can make a melee weapon attack against it as a Reaction. The attack costs the AP it normally would for that weapon. A creature that spends 1 AP to Disengage doesn’t provoke Opportunity Attacks for the rest of its turn."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Paralyzed",
    "sec": "Conditions",
    "lead": "Paralysis can be caused by many things, from a creature's toxic venom to a wizard's spell. While Paralyzed:",
