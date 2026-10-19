@@ -385,6 +385,26 @@
    "tip": false
   },
   {
+   "n": "Loading",
+   "sec": "Properties",
+   "lead": "[color=#8e171c]Loading.[/color] This weapon must be reloaded after each shot. Reloading it costs 1 AP and requires your off hand to be free. A Two-Handed weapon with this property can be reloaded while you hold it, as long as you hold nothing else. Reloading a weapon with the Loading property outside of combat costs no AP, so a loaded weapon can be carried into combat ready to fire.",
+   "fx": [],
+   "notes": [
+    {
+     "l": "Note",
+     "t": "Loading Property for Bows & Crossbows. Requires Main Hand and Off-Hand to be free in most cases."
+    }
+   ],
+   "aka": [
+    {
+     "w": "Loading",
+     "ref": "This weapon must be reloaded after each shot. Reloading it costs 1 AP and requires your off hand to be free. A Two-Handed weapon with this property can be reloaded while you hold it, as long as you hold nothing else. Reloading a weapon with the Loading property outside of combat costs no AP, so a loaded weapon can be carried into combat ready to fire."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Luminous",
    "sec": "Modifiers",
    "lead": "As a free action, you can speak this weapon’s Command Word to make it shed bright light in a 20 ft. radius and dim light for an additional 20 ft., or speak it again to stop.",
