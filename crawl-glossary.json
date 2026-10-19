@@ -635,6 +635,21 @@
    "tip": false
   },
   {
+   "n": "Range",
+   "sec": "Properties",
+   "lead": "[color=#8e171c]Range.[/color] A weapon that can make ranged attacks lists its range after its Ammunition or Thrown property as two numbers, for example (Range 80/320). The first number is the weapon’s normal range in feet, and the second is its long range. Attacks against a target beyond normal range have Disadvantage. You can’t attack a target beyond the weapon’s long range.\n\nYou have Disadvantage on ranged attack rolls while a hostile creature is within 5 feet of you.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Range",
+     "ref": "[color=#8e171c]Range.[/color] A weapon that can make ranged attacks lists its range after its Ammunition or Thrown property as two numbers, for example (Range 80/320). The first number is the weapon’s normal range in feet, and the second is its long range. Attacks against a target beyond normal range have Disadvantage. You can’t attack a target beyond the weapon’s long range.\n\nYou have Disadvantage on ranged attack rolls while a hostile creature is within 5 feet of you."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Resist X",
    "sec": "Modifiers",
    "lead": "When you take mundane damage, reduce that damage by X. You can only benefit from the Resist property on one piece of equipment at a time.",
