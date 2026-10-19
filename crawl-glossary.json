@@ -665,6 +665,21 @@
    "hideRefs": true
   },
   {
+   "n": "Reach",
+   "sec": "Properties",
+   "lead": "Reach. This weapon adds 5 feet to your reach when you attack with it, including when you make Opportunity Attacks.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Reach",
+     "ref": "[color=#8e171c]Reach.[/color] A weapon with the reach property adds 5 feet to your reach when you attack with it, including when you make Opportunity Attacks."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Resist X",
    "sec": "Modifiers",
    "lead": "When you take mundane damage, reduce that damage by X. You can only benefit from the Resist property on one piece of equipment at a time.",
