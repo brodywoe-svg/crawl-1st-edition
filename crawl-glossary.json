@@ -343,16 +343,22 @@
   {
    "n": "Light",
    "sec": "Properties",
-   "lead": "A Light weapon is small and easy to handle, making it ideal for fighting with a weapon in each hand.",
+   "lead": "Light. A Light weapon is small and easy to handle, ideal for fighting with a weapon in each hand. While you are wielding a Light weapon in each hand, whenever you make a weapon attack with your main-hand weapon, your next attack with your off-hand weapon during the same turn costs only 1 AP.",
    "fx": [],
    "notes": [
     {
-     "l": "Designer's note",
-     "t": "Draft wording based on the SRD 5.1. Check it against Crawl's Action Pool rules."
+     "l": "Note",
+     "t": "Weapon attacks with Light weapons cost 2AP Normal, this fixes the issues with Duel wielders in the game."
     }
    ],
-   "aka": [],
-   "tip": false
+   "aka": [
+    {
+     "w": "Light",
+     "ref": "A Light weapon is small and easy to handle, ideal for fighting with a weapon in each hand. While you are wielding a Light weapon in each hand, whenever you make a weapon attack with your main-hand weapon, your next attack with your off-hand weapon during the same turn costs only 1 AP."
+    }
+   ],
+   "tip": false,
+   "hideRefs": true
   },
   {
    "n": "Livingwood",
