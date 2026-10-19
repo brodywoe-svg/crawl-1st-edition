@@ -960,7 +960,7 @@ function entryOf(cat, i) {
   if (cat === "backgrounds") { const s = arr(d.backgrounds.backgrounds)[i]; return { title: s.n, sub: "Background", html: blocks(s.desc) + facts([["Skills", list(s.skills)], ["Weapons", list(s.weapons)], ["Armor", list(s.armor)], ["Trades", list(s.trades)], ["Languages", list(s.langs)], ["Gear", list(s.gear)], ["Money", s.wealth]]) + featsH(s.feats), text: plain(s.desc) } }
   if (cat === "feats") { const s = arr(d.feats.feats)[i]; return { title: s.n, sub: s.cat ? s.cat + " feat" : "Feat", html: facts([["Prerequisite", s.pre], ...arr(s.extra).map(x => [x.k, x.v])]) + blocks(s.desc), text: [s.pre && "Prerequisite: " + s.pre, plain(s.desc)].filter(Boolean).join("\n\n") } }
   const s = arr(d.glossary.entries)[i];
-  return { title: s.n, sub: s.sec, html: blocks(s.lead) + (arr(s.fx).length ? `<ul>${arr(s.fx).map(x => `<li>${rich(x)}</li>`).join("")}</ul>` : "") + blocks(s.notes) + (s.tip ? `<p class="muted small">${rich(s.tip)}</p>` : ""), text: [plain(s.lead), arr(s.fx).map(x => "• " + plain(x)).join("\n")].filter(Boolean).join("\n\n") };
+  return { title: s.n, sub: s.sec, html: facts([["AP cost", s.ap ? (/^\d+$/.test(s.ap) ? s.ap + " AP" : s.ap) : ""], ["Requires", s.req]]) + blocks(s.lead) + (arr(s.fx).length ? `<ul>${arr(s.fx).map(x => `<li>${rich(x)}</li>`).join("")}</ul>` : "") + blocks(s.notes) + (s.tip ? `<p class="muted small">${rich(s.tip)}</p>` : ""), text: [plain(s.lead), arr(s.fx).map(x => "• " + plain(x)).join("\n")].filter(Boolean).join("\n\n") };
 }
 function openEntry(cat, i) {
   let e; try { e = entryOf(cat, i) } catch (x) { console.error(x); toast("That entry couldn't be shown."); return }

@@ -161,10 +161,13 @@ html.is-admin .navitem.adminonly{display:inline-flex}
 .navsub{position:relative}
 .navsub>a{display:flex!important;align-items:center;justify-content:space-between;gap:10px}
 .caretr{width:6px;height:10px;flex:none}
-.navfly{display:none;position:absolute;left:100%;top:-8px;min-width:190px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22);margin-left:4px}
-.navsub:hover>.navfly,.navsub:focus-within>.navfly{display:grid}
-#navGlossary .navfly{left:auto;right:100%;margin:0 4px 0 0}
-@media (hover:none),(max-width:700px){.navfly{display:grid;position:static;border:0;box-shadow:none;padding:0 0 0 14px;margin:0;min-width:0}.caretr{display:none}}
+/* flyouts open to the right and stay open for a moment after the pointer leaves, so moving onto them is easy */
+.navfly{display:grid;visibility:hidden;opacity:0;position:absolute;left:100%;top:-8px;min-width:190px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22);margin-left:2px;z-index:1;transition:opacity .12s ease .3s,visibility 0s linear .42s}
+.navfly::before{content:"";position:absolute;top:-8px;bottom:-8px;left:-16px;width:16px}
+.navsub:hover>.navfly,.navsub:focus-within>.navfly{visibility:visible;opacity:1;z-index:2;transition-delay:0s}
+.navsub:hover>a{background:var(--soft)}
+@media (prefers-reduced-motion:reduce){.navfly{transition:visibility 0s linear .35s}}
+@media (hover:none),(max-width:700px){.navfly{visibility:visible;opacity:1;transition:none;position:static;border:0;box-shadow:none;padding:0 0 0 14px;margin:0;min-width:0}.navfly::before{display:none}.caretr{display:none}}
 .navmenuh{display:block;padding:8px 12px 2px;font:800 .62rem var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .navmenu a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
 /* NAV_JS steps through these until the links fit on one row beside the buttons */
@@ -218,10 +221,16 @@ NAV_JS = """(function(){
   if(links){links.addEventListener('scroll',arrows,{passive:true});
     [[arrL,-1],[arrR,1]].forEach(function(a){if(a[0])a[0].addEventListener('click',function(){links.scrollBy({left:a[1]*Math.max(120,links.clientWidth*0.7)})})});
     /* in the scrolling row, menus are fixed under the bar (so the row doesn't clip them), next to their item */
-    var place=function(e){if(!nav.classList.contains('navscroll'))return;var d=e.target.closest&&e.target.closest('.navdrop');if(!d)return;var m=d.querySelector('.navmenu');if(!m)return;
-      var nb=nav.getBoundingClientRect(),r=d.getBoundingClientRect();m.style.top=nb.bottom+'px';
-      if(window.innerWidth>700){var w=m.offsetWidth||220;m.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';m.style.right='auto'}else{m.style.left='';m.style.right=''}};
-    links.addEventListener('mouseover',place);links.addEventListener('focusin',place);
+    /* a menu sits under its item, moved left when needed so it and its flyouts (which open to the right) fit on screen */
+    var chainW=function(el){var best=0;[].forEach.call(el.children,function(c){if(!c.classList.contains('navsub'))return;var f=c.querySelector(':scope>.navfly');if(f)best=Math.max(best,f.offsetWidth+2+chainW(f))});return best};
+    var place=function(e){var d=e.target.closest&&e.target.closest('.navdrop');if(!d)return;var m=d.querySelector('.navmenu');if(!m)return;
+      var scroll=nav.classList.contains('navscroll'),wide=window.innerWidth>700;
+      if(!wide){m.style.left='';m.style.right='';m.style.transform='';m.style.top=scroll?nav.getBoundingClientRect().bottom+'px':'';return}
+      var r=d.getBoundingClientRect(),w=m.offsetWidth||220,need=w+chainW(m)+8;
+      var x=Math.max(8,Math.min(window.innerWidth-need-8,r.left+r.width/2-w/2));
+      if(scroll){m.style.top=nav.getBoundingClientRect().bottom+'px';m.style.left=x+'px'}else{m.style.top='';m.style.left=(x-r.left)+'px'}
+      m.style.right='auto';m.style.transform='none'};
+    nav.addEventListener('mouseover',place);nav.addEventListener('focusin',place);
     links.addEventListener('scroll',function(){var a=document.activeElement;if(a&&a.closest&&a.closest('.navdrop')&&!a.closest('.navmenu'))a.blur()},{passive:true});
   }
   window.crawlNavFit=fit;fit();window.addEventListener('resize',fit);
@@ -536,6 +545,10 @@ def catalog_shell(page, logo_svg, admin_modal):
 
 
 CONDITIONS_CSS = """
+.ctag.apc{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.gact{display:grid;grid-template-columns:120px 1fr;gap:10px}
+.gact[hidden]{display:none}
+@media (max-width:560px){.gact{grid-template-columns:1fr}}
 .condwrap{padding-block:28px 60px}
 .cbar{position:sticky;top:var(--navh,0px);z-index:5;background:var(--page);padding-block:12px;margin-top:12px!important}
 .cbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:24px}

@@ -80,6 +80,10 @@ function score(e, q) {
   return wordStart(text) ? 20 : 10;
 }
 const noteText = e => e.notes.map(n => `${n.l}: ${n.t}`).join("\n");
+/* Weapon Actions and Combat Actions have an AP cost and what they need (a weapon or a feature) */
+const ACTION_SECS = ["Weapon Actions", "Combat Actions"];
+const isAction = sec => ACTION_SECS.includes(String(sec || "").trim());
+const apText = v => /^\d+$/.test(String(v).trim()) ? String(v).trim() + " AP" : String(v).trim();
 /* items and recipes (crawl-items.json), so Properties and Modifiers can list where they're used */
 let CAT = (typeof CATALOG !== "undefined" && CATALOG) || { items: [], recipes: [] };
 const lcs = x => String(x || "").toLowerCase();
@@ -113,14 +117,16 @@ function bodyHTML(e) {
     ["Materials", (r.ing || []).map(m => `<a class="ilink" href="items.html#${esc(m.item)}">${m.qty > 1 ? m.qty + " × " : ""}${esc(itemNameById(m.item))}</a>`).join(", ") || "—"],
     ["Crafting", [r.dc && r.dc !== "—" ? "DC " + r.dc : "", r.tc && r.tc !== "—" ? "TC " + r.tc : "", r.time, r.ws].filter(Boolean).map(esc).join(" · ")]
   ]) + `</div>`).join("");
-  return (e.lead ? `<div class="clead">${paras(e.lead)}</div>` : "") +
+  const act = isAction(e.sec) ? factsHTML([["AP cost", e.ap ? esc(apText(e.ap)) : ""], ["Requires", e.req ? richInline(e.req) : ""]].filter(r => r[1])) : "";
+  return act + (e.lead ? `<div class="clead">${paras(e.lead)}</div>` : "") +
     (bullets.length ? `<ul class="cul">${bullets.map(x => `<li>${richInline(x)}</li>`).join("")}</ul>` : "") + factsHTML(facts) + mod + notes +
     (words.length ? `<div class="crefs">${words.map(x => `<div class="cref"><b>${esc(x.w)}</b>${paras(x.ref)}</div>`).join("")}</div>` : "") +
-    (!e.lead && !e.fx.length && !notes && !words.length && !mod ? `<p class="clead">No description yet.</p>` : "");
+    (!e.lead && !e.fx.length && !notes && !words.length && !mod && !act ? `<p class="clead">No description yet.</p>` : "");
 }
 function card(e, tag) {
   if (editing.has(e._id)) return form(e);
   return `<section class="cond" data-id="${e._id}"><h2 class="chead"><span>${esc(e.n)}</span><span class="chr">` +
+    (isAction(e.sec) && e.ap ? `<span class="ctag apc" title="Action Point cost">${esc(apText(e.ap))}</span>` : "") +
     (tag ? `<span class="ctag">${esc(singular(e.sec))}</span>` : "") +
     (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(e.n)}">Edit</button>` : "") +
     `</span></h2><div class="cbody">${bodyHTML(e)}</div></section>`;
@@ -131,13 +137,15 @@ function wordRow(x) {
     `<button type="button" class="btn gwdel">Remove</button></div>`;
 }
 function form(e) {
-  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka, tip: e.tip, hideRefs: e.hideRefs };
+  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka, tip: e.tip, hideRefs: e.hideRefs, ap: e.ap || "", req: e.req || "" };
   const id = k => `g${k}-${e._id}`;
   return `<section class="cond gediting" data-id="${e._id}"><div class="chead"><span>${e._new ? "New entry" : "Editing " + esc(e.n)}</span></div>
 <div class="cbody gform">
 <label for="${id("n")}">Name<input type="text" id="${id("n")}" data-k="n" value="${esc(d.n)}" autocomplete="off"></label>
 <label class="chk"><input type="checkbox" data-k="tip"${d.tip !== false ? " checked" : ""}> Show as a tooltip in spells</label>
 <label for="${id("sec")}">Section <small>Each section gets its own page and a link in the Glossary menu. Type a new name to start a new section.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
+<div class="gact"${isAction(d.sec) ? "" : " hidden"}><label for="${id("ap")}">AP cost <small>How many Action Points it takes, e.g. 3</small><input type="text" id="${id("ap")}" data-k="ap" value="${esc(d.ap || "")}" placeholder="e.g. 3" autocomplete="off"></label>
+<label for="${id("req")}">Requires <small>The weapon or feature it's tied to</small><input type="text" id="${id("req")}" data-k="req" value="${esc(d.req || "")}" placeholder="e.g. A Blade weapon, or the Fighting Style feature" autocomplete="off"></label></div>
 <label for="${id("lead")}">Description <small>Leave a blank line between paragraphs.</small><textarea id="${id("lead")}" data-k="lead" rows="6">${esc(d.lead)}</textarea></label>
 <label for="${id("fx")}">Effects <small>One per line. Each line becomes a bullet point.</small><textarea id="${id("fx")}" data-k="fx" rows="4">${esc(d.fx)}</textarea></label>
 <label for="${id("notes")}">Notes <small>One per line. Start a line with "Designer's note:" to label it as one.</small><textarea id="${id("notes")}" data-k="notes" rows="2">${esc(d.notes)}</textarea></label>
@@ -160,6 +168,7 @@ function parseNotes(t) {
 }
 function fromDraft(d) {
   return {
+    n: String(d.n || ""), ap: String(d.ap || "").trim(), req: String(d.req || "").trim(), sec: d.sec,
     lead: d.lead.trim(), fx: d.fx.split("\n").map(x => x.replace(/^\s*[-•*]\s*/, "").trim()).filter(Boolean),
     notes: parseNotes(d.notes), aka: d.aka.map(x => ({ w: x.w.trim().replace(/\s+/g, " "), ref: x.ref.trim() })).filter(x => x.w)
   };
@@ -219,13 +228,15 @@ $("clist").addEventListener("click", ev => {
     for (const x of p.aka) { const k = x.w.toLowerCase(); if (seen.has(k)) { err(`"${x.w}" is listed twice under Tooltip words.`); return } seen.add(k) }
     e.n = name; e.sec = d.sec.trim().replace(/\s+/g, " ") || FIRST;
     e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka; e.tip = d.tip !== false; if (d.hideRefs) e.hideRefs = true; else delete e.hideRefs;
+    if (isAction(e.sec) && p.ap) e.ap = p.ap; else delete e.ap;
+    if (isAction(e.sec) && p.req) e.req = p.req; else delete e.req;
     delete e._new; editing.delete(e._id); drafts.delete(e._id);
     render(); markDirty();
     const was = only(); navUpdate();
     say(was && e.sec !== was ? `${e.n} is now in the ${e.sec} section, so it shows on that section's page instead.` : "");
   }
 });
-$("clist").addEventListener("input", ev => { const f = ev.target.closest(".gediting"); if (f) preview(f) });
+$("clist").addEventListener("input", ev => { const f = ev.target.closest(".gediting"); if (!f) return; if (ev.target.dataset.k === "sec") { const g = f.querySelector(".gact"); if (g) g.hidden = !isAction(ev.target.value) } preview(f) });
 $("clist").addEventListener("click", ev => {
   const f = ev.target.closest(".gediting"); if (!f) return;
   if (ev.target.closest(".gwadd")) { f.querySelector(".gwlist").insertAdjacentHTML("beforeend", wordRow({ w: "", ref: "" })); f.querySelector(".gword:last-child .gw").focus(); return }

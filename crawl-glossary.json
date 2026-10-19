@@ -139,7 +139,9 @@
    "notes": [],
    "aka": [],
    "tip": true,
-   "hideRefs": true
+   "hideRefs": true,
+   "ap": "3",
+   "req": "A [color=#8e171c]Blade[/color] weapon, as part of a melee weapon attack"
   },
   {
    "n": "Deafened",
@@ -817,7 +819,9 @@
    "notes": [],
    "aka": [],
    "tip": true,
-   "hideRefs": true
+   "hideRefs": true,
+   "ap": "3",
+   "req": "Two [color=#8e171c]Swords[/color] with the Light property"
   },
   {
    "n": "Whisperweave",
