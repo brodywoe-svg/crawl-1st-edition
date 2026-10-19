@@ -39,8 +39,15 @@ def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
+# sections whose menu item gets a flyout listing each of its entries (linking to glossary.html?s=<section>#g-<entry>)
+FLY_SECTIONS = ["Damage Types"]
+SECTION_ENTRIES = {}
+
+
 def glossary_sections(glossary):
-    """Section names in menu order: Conditions first, then A to Z."""
+    """Section names in menu order: Conditions first, then A to Z. Also notes each flyout section's entries."""
+    for s in FLY_SECTIONS:
+        SECTION_ENTRIES[s] = sorted((e.get("n", "") for e in glossary.get("entries", []) if (e.get("sec") or "").strip() == s), key=lambda n: (not n.lower().endswith(" damage") or n.lower() == "bleeding damage", n.lower()))
     secs = {(e.get("sec") or "Conditions").strip() or "Conditions" for e in glossary.get("entries", [])}
     secs.add("Conditions")
     return sorted(secs, key=lambda x: (x != "Conditions", x.lower()))
@@ -62,6 +69,9 @@ def tree_leaves(items):
 def glossary_menu(sections):
     """Conditions, then the groups (Combat ▸ ...), then every other section A to Z."""
     def node(x):
+        if isinstance(x, str) and SECTION_ENTRIES.get(x):
+            return (f'<div class="navsub"><a href="{section_href(x)}">{html.escape(x)}{CARET_R}</a><div class="navfly{" cols2" if len(SECTION_ENTRIES[x]) > 10 else ""}">'
+                    + "".join(f'<a href="{section_href(x)}#g-{slug(n)}">{html.escape(n)}</a>' for n in SECTION_ENTRIES[x]) + '</div></div>')
         if isinstance(x, str):
             return f'<a href="{section_href(x)}">{html.escape(x)}</a>'
         return (f'<div class="navsub"><a href="glossary.html?s={x["slug"]}">{html.escape(x["n"])}{CARET_R}</a>'
@@ -129,7 +139,7 @@ def nav_html(active, controls="", sections=("Conditions",), races=None, classes=
         )
     parts.append('</div><button type="button" class="navarr r" tabindex="-1" aria-label="Show more menu items"><svg viewBox="0 0 8 14" aria-hidden="true"><path d="M1 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>')
     parts.append(f'<div class="navctl" id="navctl">{controls}</div></div></nav>')
-    parts.append(f"<script>{NAV_JS.replace('/*@GTREE@*/null', json.dumps(GLOSSARY_TREE))}</script>")
+    parts.append(f"<script>{NAV_JS.replace('/*@GTREE@*/null', json.dumps(GLOSSARY_TREE)).replace('/*@FLY@*/null', json.dumps(FLY_SECTIONS))}</script>")
     return "".join(parts)
 
 
@@ -166,6 +176,7 @@ html.is-admin .navitem.adminonly{display:inline-flex}
 .navfly::before{content:"";position:absolute;top:-8px;bottom:-8px;left:-16px;width:16px}
 .navsub:hover>.navfly,.navsub:focus-within>.navfly{visibility:visible;opacity:1;z-index:2;transition-delay:0s}
 .navsub:hover>a{background:var(--soft)}
+.navfly.cols2{grid-template-columns:repeat(2,minmax(150px,1fr));column-gap:2px}
 @media (prefers-reduced-motion:reduce){.navfly{transition:visibility 0s linear .35s}}
 @media (hover:none),(max-width:700px){.navfly{visibility:visible;opacity:1;transition:none;position:static;border:0;box-shadow:none;padding:0 0 0 14px;margin:0;min-width:0}.navfly::before{display:none}.caretr{display:none}}
 .navmenuh{display:block;padding:8px 12px 2px;font:800 .62rem var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
@@ -264,15 +275,17 @@ NAV_JS = """(function(){
   });
   var GTREE=window.CRAWL_GTREE=/*@GTREE@*/null||[];
   function leaves(items){var o=[];items.forEach(function(x){if(typeof x==='string')o.push(x);else o=o.concat(leaves(x.items))});return o}
-  function node(x){if(typeof x==='string')return '<a href="'+href(x)+'">'+esc(x)+'</a>';
+  var FLY=/*@FLY@*/null||[],FLYE={};
+  function node(x){if(typeof x==='string'&&FLYE[x]&&FLYE[x].length)return '<div class="navsub"><a href="'+href(x)+'">'+esc(x)+'<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navfly'+(FLYE[x].length>10?' cols2':'')+'">'+FLYE[x].map(function(n){return '<a href="'+href(x)+'#g-'+slug(n)+'">'+esc(n)+'</a>'}).join('')+'</div></div>';
+    if(typeof x==='string')return '<a href="'+href(x)+'">'+esc(x)+'</a>';
     return '<div class="navsub"><a href="glossary.html?s='+x.slug+'">'+esc(x.n)+'<svg class="caretr" viewBox="0 0 6 10" aria-hidden="true"><path d="M1 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="navfly">'+x.items.map(node).join('')+'</div></div>'}
-  window.crawlNavSections=function(list){
-    if(!menu)return;var seen={conditions:1},out=[],grouped={};leaves(GTREE).forEach(function(s){grouped[s.toLowerCase()]=1});
+  window.crawlNavSections=function(list,ents){
+    if(!menu)return;if(ents){FLYE={};FLY.forEach(function(s){FLYE[s]=ents.filter(function(e){return String(e.sec||'').trim()===s}).map(function(e){return e.n}).sort(function(a,b){var k=function(n){n=n.toLowerCase();return (/ damage$/.test(n)&&n!=='bleeding damage'?'0':'1')+n};return k(a).localeCompare(k(b))})})}var seen={conditions:1},out=[],grouped={};leaves(GTREE).forEach(function(s){grouped[s.toLowerCase()]=1});
     (list||[]).slice().sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase())}).forEach(function(s){s=String(s||'').trim();if(s&&!seen[s.toLowerCase()]&&!grouped[s.toLowerCase()]){seen[s.toLowerCase()]=1;out.push(s)}});
     menu.innerHTML=node('Conditions')+GTREE.map(node).join('')+out.map(node).join('');mark();
   };
   mark();
-  if(window.CRAWL_STATIC&&menu&&!window.GL_PAGE)fetch('crawl-glossary.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.entries)window.crawlNavSections(j.entries.map(function(e){return e.sec||'Conditions'}))}).catch(function(){});
+  if(window.CRAWL_STATIC&&menu&&!window.GL_PAGE)fetch('crawl-glossary.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.entries)window.crawlNavSections(j.entries.map(function(e){return e.sec||'Conditions'}),j.entries)}).catch(function(){});
 })();"""
 
 # ---------------------------------------------------------------- glossary pages
@@ -546,6 +559,8 @@ def catalog_shell(page, logo_svg, admin_modal):
 
 CONDITIONS_CSS = """
 .ctag.apc{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.cond[id^="g-"]{scroll-margin-top:calc(var(--navh,48px) + 14px)}
+.cond.gflash{animation:flash 1.6s ease-out}
 .gact{display:grid;grid-template-columns:120px 1fr;gap:10px}
 .gact[hidden]{display:none}
 @media (max-width:560px){.gact{grid-template-columns:1fr}}

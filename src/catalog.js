@@ -547,7 +547,7 @@ load(CATALOG);
 let PROP_TIPS = { map: new Map(), re: null }, ACT_TIPS = { map: new Map(), re: null };
 function setTips(j) {
   const a = normGlossary(j) || [];
-  PROP_TIPS = glMapOf(a.filter(e => e.sec === "Properties").map(e => ({ ...e, tip: true })));
+  PROP_TIPS = glMapOf(a.filter(e => e.sec === "Properties" || e.sec === "Damage Types").map(e => ({ ...e, tip: true })));
   ACT_TIPS = glMapOf(a.filter(e => ACTION_SECS.includes(e.sec)).map(e => ({ ...e, tip: true })));
 }
 setTips(GLOSSARY);

@@ -2,6 +2,20 @@
  "v": 1,
  "entries": [
   {
+   "n": "Acid",
+   "sec": "Damage Types",
+   "lead": "Corrosive damage from acids, caustic sprays and digestive juices that eat away at flesh and gear.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Acid Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
    "n": "Action Points, Magic Points, and Exhaustion Points",
    "sec": "Game Systems",
    "lead": "[color=#8e171c]Action Points (AP)[/color]\nAction Points are the central resource every creature uses to act. Swinging a sword, throwing an item, using a Weapon Action, Disengaging, and taking a Reaction all cost AP. Action points can be used to cast spells in the place of Magic Points (MP).\n\nIn combat, you gain AP at the start of each of your turns by rolling your Action Die. Class features such as Prowess can add to this. Any AP you haven’t spent by the start of your next turn is lost.\n\nDuring Exploration, you instead have a steady 3 AP, which return after each action. \n\n[color=#8e171c]Magic Points (MP)[/color]\nMagic Points are a fixed resource used only to cast spells. Each spell lists its cost in MP. MP can’t be spent on actions, and AP can’t be spent on spells during combat. Magic Points (MP) cannot be used to perform actions that cost Action Points (AP).\n\nYou gain MP through class features such as Channeling and Somatic Conversion, rather than from the Action Die itself. MP you gain stays in your Action Pool until you spend it or combat ends. MP isn’t generated during Exploration.\n\nDuring Exploration, you do not generate Magic Points (MP).\n\n[color=#8e171c]Exhaustion Points (EP)[/color]\nExhaustion Points represent strain on your body and mind. You gain them from effects, features such as Adrenaline or Sturdy, and spells whose cost includes the player gaining a number of EP, such as Cure Wounds and Rituals spells.\n\nEP takes up space in your Action Pool like any other point, but it can’t be spent and is never lost to overflow. It stays in your pool when combat begins and ends and through unconsciousness. You remove EP by resting, at a rate of 1 EP for every 2 hours of rest, and some effects, such as Hearty food, can remove it too.\n\nIf your Action Pool is ever completely filled with Exhaustion Points, you die.",
@@ -83,6 +97,15 @@
    "tip": true
   },
   {
+   "n": "Bleeding Damage",
+   "sec": "Damage Types",
+   "lead": "Damage from blood loss, most often from the Bleeding condition. Creatures without blood, such as Constructs, don't take Bleeding damage.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": false
+  },
+  {
    "n": "Blinded",
    "sec": "Conditions",
    "lead": "Certain creatures and spells can impair a creature's sight, leaving it Blinded. While Blinded:",
@@ -94,6 +117,20 @@
    "notes": [],
    "aka": [],
    "tip": true
+  },
+  {
+   "n": "Bludgeoning",
+   "sec": "Damage Types",
+   "lead": "Blunt force: hammers, clubs, fists, falling, being crushed or slammed into a wall.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Bludgeoning Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
   },
   {
    "n": "Charmed",
@@ -132,6 +169,20 @@
    "fx": [],
    "notes": [],
    "aka": [],
+   "tip": false
+  },
+  {
+   "n": "Cold",
+   "sec": "Damage Types",
+   "lead": "Freezing damage from ice, frost and chilling magic.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Cold Damage",
+     "ref": ""
+    }
+   ],
    "tip": false
   },
   {
@@ -253,6 +304,34 @@
     }
    ],
    "aka": [],
+   "tip": false
+  },
+  {
+   "n": "Fire",
+   "sec": "Damage Types",
+   "lead": "Flames and searing heat, from burning oil to a fire spell.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Fire Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
+   "n": "Force",
+   "sec": "Damage Types",
+   "lead": "Raw magical energy shaped into a blow. Very few creatures resist Force damage.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Force Damage",
+     "ref": ""
+    }
+   ],
    "tip": false
   },
   {
@@ -400,6 +479,20 @@
    "hideRefs": true
   },
   {
+   "n": "Lightning",
+   "sec": "Damage Types",
+   "lead": "Electricity, from a lightning strike or a crackling spell.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Lightning Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
    "n": "Livingwood",
    "sec": "Properties",
    "lead": "This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
@@ -436,6 +529,15 @@
    "notes": [],
    "aka": [],
    "tip": false
+  },
+  {
+   "n": "Magical Damage",
+   "sec": "Damage Types",
+   "lead": "Damage from a spell, a magic item's magical effect, or another magical source, whatever its damage type.\n\nEffects that reduce magical damage, such as the [color=#8e171c]Warding[/color] modifier, apply to it, and effects that only reduce mundane damage don't. An item with the Enchanted property doesn't deal magical damage unless one of its enchantments says it does.",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": true
   },
   {
    "n": "Main Hand and Off-Hand",
@@ -484,6 +586,15 @@
    "tip": true
   },
   {
+   "n": "Mundane Damage",
+   "sec": "Damage Types",
+   "lead": "Damage from a nonmagical source: an ordinary weapon, a fall, a trap, a natural fire or a common poison.\n\nEffects that reduce mundane damage, such as the [color=#8e171c]Resist[/color] modifier, apply to it. Bludgeoning, Piercing and Slashing damage are usually mundane, but damage of any type can be.",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": true
+  },
+  {
    "n": "Muted",
    "sec": "Conditions",
    "lead": "A creature can be Muted by many things, from magical spells to having its tongue cut out. While Muted:",
@@ -499,6 +610,20 @@
    ],
    "aka": [],
    "tip": true
+  },
+  {
+   "n": "Necrotic",
+   "sec": "Damage Types",
+   "lead": "Life-draining energy that withers flesh, used by the undead and by dark magic.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Necrotic Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
   },
   {
    "n": "Nourishing",
@@ -608,6 +733,34 @@
    "tip": false
   },
   {
+   "n": "Piercing",
+   "sec": "Damage Types",
+   "lead": "Puncturing and impaling damage: arrows, spears, daggers, fangs and spikes.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Piercing Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
+   "n": "Poison",
+   "sec": "Damage Types",
+   "lead": "Damage from venoms, toxins and noxious gases.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Poison Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
    "n": "Poisoned",
    "sec": "Conditions",
    "lead": "A creature that has been exposed to a toxin can become Poisoned. While Poisoned:",
@@ -646,6 +799,20 @@
    "tip": true
   },
   {
+   "n": "Psychic",
+   "sec": "Damage Types",
+   "lead": "Mental assaults that wound the mind rather than the body.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Psychic Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
    "n": "Quick Bite",
    "sec": "Properties",
    "lead": "You can eat this outside of a rest by spending 1 AP, regaining hit points equal to the cook’s Cooking Rank. A creature can only benefit from one Quick Bite between rests.",
@@ -668,6 +835,20 @@
    "aka": [
     {
      "w": "Quick Draw",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
+   "n": "Radiant",
+   "sec": "Damage Types",
+   "lead": "Searing light, often holy or celestial in origin.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Radiant Damage",
      "ref": ""
     }
    ],
@@ -842,6 +1023,20 @@
    "tip": false
   },
   {
+   "n": "Slashing",
+   "sec": "Damage Types",
+   "lead": "Cuts and gashes from swords, axes, claws and other edges.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Slashing Damage",
+     "ref": ""
+    }
+   ],
+   "tip": false
+  },
+  {
    "n": "Slumbering",
    "sec": "Properties",
    "lead": "A humanoid that drinks this must succeed on a DC 14 Constitution saving throw or fall Unconscious for 1 hour. The creature wakes early if it takes damage or another creature uses an action to shake it awake. The brew is colorless and nearly tasteless when mixed into another drink.",
@@ -906,6 +1101,20 @@
     {
      "w": "Thrown",
      "ref": "You can expend 2 Action Points (AP) to throw a weapon or item that has the Thrown property, when you do, make a ranged attack. The numbers after it are the normal range and long range (for example, Thrown 20/60). If it's a melee weapon, you use the same modifier for the attack and damage rolls that you would use for a melee attack with it. If it's an Item such a Alchemist fire, you make a Dexterity Ranged attack against a target."
+    }
+   ],
+   "tip": false
+  },
+  {
+   "n": "Thunder",
+   "sec": "Damage Types",
+   "lead": "A concussive burst of sound strong enough to bruise and deafen.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Thunder Damage",
+     "ref": ""
     }
    ],
    "tip": false

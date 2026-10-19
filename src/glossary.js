@@ -37,7 +37,14 @@ function pageHeading() {
     p.innerHTML = `There's no glossary section with that name any more, so here's the whole Glossary.`;
   }
 }
-function navUpdate() { if (window.crawlNavSections) window.crawlNavSections(sections()) }
+function navUpdate() { if (window.crawlNavSections) window.crawlNavSections(sections(), entries.filter(e => !e._new).map(e => ({ n: e.n, sec: e.sec }))) }
+/* glossary.html?s=damage-types#g-slashing: scroll to that entry and flash it */
+let hashDone = false;
+function showHash() {
+  if (hashDone || !location.hash.startsWith("#g-")) return; const el = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (!el) return;
+  hashDone = true; el.scrollIntoView({ block: "start" }); el.classList.add("gflash"); setTimeout(() => el.classList.remove("gflash"), 1600);
+}
+window.addEventListener("hashchange", () => { hashDone = false; showHash() });
 
 function load(j) {
   const a = normGlossary(j); if (!a) return false;
@@ -124,7 +131,7 @@ function bodyHTML(e) {
 }
 function card(e, tag) {
   if (editing.has(e._id)) return form(e);
-  return `<section class="cond" data-id="${e._id}"><h2 class="chead"><span>${esc(e.n)}</span><span class="chr">` +
+  return `<section class="cond" data-id="${e._id}" id="g-${esc(slugOf(e.n))}"><h2 class="chead"><span>${esc(e.n)}</span><span class="chr">` +
     (isAction(e.sec) && e.ap ? `<span class="ctag apc" title="Action Point cost">${esc(apText(e.ap))}</span>` : "") +
     (tag ? `<span class="ctag">${esc(singular(e.sec))}</span>` : "") +
     (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(e.n)}">Edit</button>` : "") +
@@ -289,6 +296,6 @@ if (STATIC) {
   fetch("crawl-items.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => { if (j && Array.isArray(j.items)) { CAT = j; render() } }).catch(() => { });
   fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null)
     .then(j => { if (j && !dirty) load(j) }).catch(() => { })
-    .finally(() => { render(); navUpdate(); restoreAdmin() });
+    .finally(() => { render(); navUpdate(); restoreAdmin(); showHash() });
 }
-render();
+render(); showHash();
