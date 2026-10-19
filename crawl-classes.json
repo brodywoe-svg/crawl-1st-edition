@@ -494,18 +494,18 @@
       },
       {
        "n": "Duel-Wielder",
-       "d": "While you are wielding a weapon in each hand, you can add you can use the Whirlwind Strikes Weapon attack."
+       "d": "While you are wielding a weapon in each hand,"
       },
       {
        "n": "Two-Handed",
-       "d": "While you are wielding a melee in both hands, Weapon actions costs are reduced by 1AP and whenever you roll a die for weapon damage, if you roll a 1, you may choose to reroll that die."
+       "d": "While you are wielding a Two-Handed melee with both hands,"
+      },
+      {
+       "n": "Armored",
+       "d": "While you are wearing a Helmet in addition to either Medium or heavy Armor, you gain an additional +1 to your Armor Class."
       },
       {
        "n": "Bulwark",
-       "d": "While you are wearing a Helmet and either Medium or heavy Armor, you gain an additional +1 to your Armor Class."
-      },
-      {
-       "n": "Defender",
        "d": "Whenever you use the Shield Bash weapon action, you can add your Strength Modifier to the Damage total. you gain an additional skill point in Shields."
       },
       {
@@ -554,7 +554,7 @@
       },
       {
        "n": "Swords",
-       "d": "You learn the Following Weapon attacks for [color=#8e171c]Swords[/color]: [color=#8e171c]Whirling Strikes[/color],"
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Swords[/color]: [color=#8e171c]Whirlwind Strikes[/color],"
       },
       {
        "n": "Special",
