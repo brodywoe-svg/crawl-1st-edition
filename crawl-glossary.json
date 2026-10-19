@@ -314,6 +314,21 @@
    "tip": false
   },
   {
+   "n": "Heavy",
+   "sec": "Properties",
+   "lead": "[color=#8e171c]Heavy.[/color] A Heavy weapon is large and cumbersome, and each swing takes your whole body behind it. Attacking with a Heavy weapon costs 3 AP. Small creatures have Disadvantage on attack rolls with Heavy weapons.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Heavy",
+     "ref": "A weapon with the Heavy property is large and cumbersome, and each swing takes your whole body behind it. Attacking with a Heavy weapon costs 3 AP. Small creatures have Disadvantage on attack rolls with Heavy weapons."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Incapacitated",
    "sec": "Conditions",
    "lead": "A creature that is impaired and unable to use certain limbs or act clearly becomes Incapacitated. While Incapacitated:",
