@@ -489,7 +489,7 @@
     },
     {
      "w": "Round",
-     "ref": "[color=#8e171c]Combat Rounds.[/color] In initiative order, from highest to lowest, each creature starts its turn by rolling its Action Die and gaining points (Prowess, Channeling and Somatic Conversion apply). It then spends points and ends its turn."
+     "ref": "[color=#8e171c]Combat Rounds.[/color] Once Combat begins and initiative order for each creature, a round of combat begins. Each round starts with the player and/or creature that rolled the highest Initiative, and a round ends with the player and/or creature that rolled the lowest concludes their turn."
     },
     {
      "w": "End of Combat",
