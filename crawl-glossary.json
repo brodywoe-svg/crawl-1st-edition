@@ -1172,16 +1172,17 @@
   {
    "n": "Versatile",
    "sec": "Properties",
-   "lead": "This weapon can be used with one or two hands. The damage after the property (for example, Versatile 1d10) is the weapon's damage when you use it with two hands to make a melee attack.",
+   "lead": "[color=#8e171c]Versatile.[/color] This weapon can be used with one or two hands. The damage after the property (for example, Versatile 1d10) is the weapon’s damage when you attack with it in two hands. While you use it two-handed, both hands are occupied and it counts as a main-hand weapon. Switching between a one-handed and two-handed grip costs no AP.",
    "fx": [],
-   "notes": [
+   "notes": [],
+   "aka": [
     {
-     "l": "Designer's note",
-     "t": "Draft wording based on the SRD 5.1. Check it against Crawl's Action Pool rules."
+     "w": "Versatile",
+     "ref": "[color=#8e171c]Versatile.[/color] This weapon can be used with one or two hands. The damage after the property (for example, Versatile 1d10) is the weapon’s damage when you attack with it in two hands. While you use it two-handed, both hands are occupied and it counts as a main-hand weapon. Switching between a one-handed and two-handed grip costs no AP."
     }
    ],
-   "aka": [],
-   "tip": false
+   "tip": false,
+   "hideRefs": true
   },
   {
    "n": "Volatile",
