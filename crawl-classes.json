@@ -124,6 +124,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -256,6 +257,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -426,6 +428,11 @@
      ]
     }
    ],
+   "ptypes": {
+    "a": {
+     "Light Armor": "P"
+    }
+   },
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -433,12 +440,7 @@
    "majorLv": "",
    "minorLv": "",
    "schools": [],
-   "subs": [],
-   "ptypes": {
-    "a": {
-     "Light Armor": "P"
-    }
-   }
+   "subs": []
   },
   {
    "id": "class-cleric",
@@ -462,6 +464,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -493,6 +496,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -640,7 +644,7 @@
       },
       {
        "n": "Two-Handed",
-       "d": "While you are wielding a Two-Handed melee weapon in both hands, melee weapon  attacks made you make ignore the Heavy Property."
+       "d": "While you are wielding a Two-Handed melee weapon in both hands, you ignore the Heavy Property if the weapon you are wielding has it."
       },
       {
        "n": "Armored",
@@ -773,14 +777,6 @@
      ]
     }
    ],
-   "prepared": "",
-   "startRank": "",
-   "schoolStart": "",
-   "oppCost": "",
-   "majorLv": "",
-   "minorLv": "",
-   "schools": [],
-   "subs": [],
    "ptypes": {
     "a": {
      "Light Armor": "P",
@@ -788,7 +784,15 @@
      "Heavy Armor": "P",
      "Shields": "P"
     }
-   }
+   },
+   "prepared": "",
+   "startRank": "",
+   "schoolStart": "",
+   "oppCost": "",
+   "majorLv": "",
+   "minorLv": "",
+   "schools": [],
+   "subs": []
   },
   {
    "id": "class-monk",
@@ -913,6 +917,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -944,6 +949,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1076,6 +1082,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1208,6 +1215,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1239,6 +1247,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1270,6 +1279,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1466,6 +1476,12 @@
      ]
     }
    ],
+   "ptypes": {
+    "w": {
+     "Blades": "S",
+     "Polearms": "S"
+    }
+   },
    "prepared": "max(1, INT + floor(level / 2))",
    "startRank": "0",
    "schoolStart": "1",
@@ -1506,13 +1522,7 @@
      "opp": "Enchantment"
     }
    ],
-   "subs": [],
-   "ptypes": {
-    "w": {
-     "Blades": "S",
-     "Polearms": "S"
-    }
-   }
+   "subs": []
   }
  ]
 }
