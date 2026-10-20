@@ -983,7 +983,7 @@
    "value": "2 (G)",
    "weight": "1 lbs",
    "actions": "",
-   "props": "1d4 piercing, Finesse, Light, Thrown 20/60",
+   "props": "1d4 slashing, Finesse, Light, Thrown 20/60",
    "pdefs": [],
    "desc": "A short, double-edged iron blade, light enough to hide in a boot and balanced enough to throw. Every smith's first weapon, and the one they're judged by.",
    "extra": []
@@ -2508,12 +2508,12 @@
    "value": "2 (S)",
    "weight": "2 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d4 Bludgeoning, Light",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-dagger",
@@ -2528,12 +2528,12 @@
    "value": "2 (G)",
    "weight": "1 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d4 Slashing, Finesse, Light, Thrown (20/60)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-flail",
@@ -2548,12 +2548,12 @@
    "value": "25 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "2",
    "props": "1d8 Bludgeoning",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-glaive",
@@ -2568,12 +2568,12 @@
    "value": "40 (G)",
    "weight": "6 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "3",
    "props": "1d10 Slashing, Heavy, Reach, Two-Handed",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "3"
+   "extra": []
   },
   {
    "id": "p-greatclub",
@@ -2588,12 +2588,12 @@
    "value": "10 (G)",
    "weight": "10 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d8 Bludgeoning, Two-Handed",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-guan-dao",
@@ -2608,12 +2608,12 @@
    "value": "150 (G)",
    "weight": "6 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "2",
    "props": "1d8 Slashing, Versatile (1d10)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-halberd",
@@ -2628,12 +2628,12 @@
    "value": "75 (G)",
    "weight": "8 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "3",
    "props": "1d10 Slashing, Heavy, Reach, Two-Handed",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "3"
+   "extra": []
   },
   {
    "id": "p-javelin",
@@ -2648,12 +2648,12 @@
    "value": "2 (S)",
    "weight": "2 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d6 Piercing, Thrown (30/120)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-lance",
@@ -2668,12 +2668,12 @@
    "value": "100 (G)",
    "weight": "6 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "3",
    "props": "1d12 Piercing, Heavy, Reach, Special",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "3"
+   "extra": []
   },
   {
    "id": "p-light-hammer",
@@ -2688,12 +2688,12 @@
    "value": "2 (G)",
    "weight": "2 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d4 Bludgeoning, Light, Thrown (20/60)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-mace",
@@ -2708,12 +2708,12 @@
    "value": "5 (G)",
    "weight": "4 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d6 Bludgeoning",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-maul",
@@ -2728,12 +2728,12 @@
    "value": "75 (G)",
    "weight": "10 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "3",
    "props": "2d6 Bludgeoning, Heavy, Two-Handed",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "3"
+   "extra": []
   },
   {
    "id": "p-morningstar",
@@ -2748,12 +2748,12 @@
    "value": "50 (G)",
    "weight": "5 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "3",
    "props": "1d10 Bludgeoning, Heavy",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "3"
+   "extra": []
   },
   {
    "id": "p-naginata",
@@ -2768,12 +2768,12 @@
    "value": "100 (G)",
    "weight": "6 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "3",
    "props": "1d10 Slashing, Heavy, Reach, Two-Handed",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "3"
+   "extra": []
   },
   {
    "id": "p-net",
@@ -2788,12 +2788,12 @@
    "value": "1 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "2",
    "props": "Special, Thrown (5/15)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-nunchaku",
@@ -2808,12 +2808,12 @@
    "value": "25 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "2",
    "props": "1d4 Bludgeoning, Finesse, Versatile (1d8)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-quarterstaff",
@@ -2828,12 +2828,12 @@
    "value": "2 (S)",
    "weight": "4 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d6 Bludgeoning, Versatile (1d8)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-sai",
@@ -2848,12 +2848,12 @@
    "value": "25 (G)",
    "weight": "2 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "2",
    "props": "1d4 Piercing, Finesse, Light, Thrown (20/60)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-scythe",
@@ -2868,12 +2868,12 @@
    "value": "50 (G)",
    "weight": "8 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "3",
    "props": "1d8 Slashing, Heavy, Reach, Versatile (1d10)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "3"
+   "extra": []
   },
   {
    "id": "p-sickle",
@@ -2888,12 +2888,12 @@
    "value": "2 (G)",
    "weight": "2 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d4 Slashing, Light",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-spear",
@@ -2908,12 +2908,12 @@
    "value": "15 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Simple",
+   "ap": "2",
    "props": "1d6 Piercing, Thrown (20/60), Versatile (1d8)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Simple",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-tanto",
@@ -2928,12 +2928,12 @@
    "value": "50 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "2",
    "props": "1d4 Slashing, Finesse, Light",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-tetsubo",
@@ -2948,12 +2948,12 @@
    "value": "10 (G)",
    "weight": "10 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "2",
    "props": "1d8 Bludgeoning, Two-Handed",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-tonfa",
@@ -2968,12 +2968,12 @@
    "value": "50 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Exotic",
+   "ap": "2",
    "props": "1d4 Bludgeoning, Light",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Exotic",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-unarmed-strike",
@@ -2988,11 +2988,11 @@
    "value": "",
    "weight": "",
    "actions": "",
+   "ap": "2",
    "props": "1 + Strength Bludgeoning, Counts as Light",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-warhammer",
@@ -3007,12 +3007,12 @@
    "value": "25 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "2",
    "props": "1d8 Bludgeoning, Versatile (1d10)",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "p-warpick",
@@ -3027,12 +3027,12 @@
    "value": "30 (G)",
    "weight": "3 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "2",
    "props": "1d8 Piercing",
    "pdefs": [],
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "2"
+   "extra": []
   }
  ],
  "recipes": [
