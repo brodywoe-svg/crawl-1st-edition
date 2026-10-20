@@ -570,6 +570,25 @@
    "tip": true
   },
   {
+   "n": "Misfire X",
+   "sec": "Properties",
+   "lead": "[color=#8e171c]Misfire X.[/color] When you make an attack roll with a firearm and the d20 shows a number equal to or lower than its Misfire score, the weapon misfires. The attack misses, and the firearm breaks and Requires Repair. A broken firearm can’t be fired until it’s repaired.\n\nA broken firearm can only be repaired outside of combat, with a successful Tinkering check (DC 8 + the Misfire score). Its small, intricate mechanisms are too complex to be mended by magic. A creature that isn’t proficient with firearms increases the weapon’s Misfire score by 1.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Misfire X",
+     "ref": "[color=#8e171c]Misfire X.[/color] When you make an attack roll with a firearm and the d20 shows a number equal to or lower than its Misfire score, the weapon misfires. The attack misses, and the firearm breaks and Requires Repair. A broken firearm can’t be fired until it’s repaired.\n\nA broken firearm can only be repaired outside of combat, with a successful Tinkering check (DC 8 + the Misfire score). Its small, intricate mechanisms are too complex to be mended by magic. A creature that isn’t proficient with firearms increases the weapon’s Misfire score by 1."
+    },
+    {
+     "w": "Repairing a Firearm",
+     "ref": "A broken firearm can only be repaired outside of combat, with a successful Tinkering check (DC 8 + the Misfire score). Its small, intricate mechanisms are too complex to be mended by magic. A creature that isn’t proficient with firearms increases the weapon’s Misfire score by 1."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
    "n": "Modifier Slots",
    "sec": "Crafting Rules",
    "lead": "Every item has modifier slots based on the Tier badge of its recipe: Basic items have 1 slot, Advanced items have 2, and Mastery items have 3.\n\n[color=#8e171c]At Creation[/color]: If your crafting roll meets the TC, you can add a modifier to an open slot. You can also choose to leave the slot open.\n\n[color=#8e171c]Filling Slots Later[/color]: An open slot can be filled later with an Enchantment Modifier or a Craftable Modifier, such as Silvered Edge.\n\n[color=#8e171c]Mundane by Default[/color]: Most modifiers are mundane bonuses or features. An item with modifiers isn’t magical unless a modifier specifically says it is.\n\n[color=#8e171c]Innate Properties[/color]: Anything listed in a recipe’s Yield line when the item is created is an innate property, and doesn’t count toward its modifier slots.",
@@ -881,6 +900,21 @@
     {
      "w": "Reach",
      "ref": "[color=#8e171c]Reach.[/color] A weapon with the reach property adds 5 feet to your reach when you attack with it, including when you make Opportunity Attacks."
+    }
+   ],
+   "tip": true,
+   "hideRefs": true
+  },
+  {
+   "n": "Reload X",
+   "sec": "Properties",
+   "lead": "[color=#8e171c]Reload X.[/color] This firearm can be fired a number of times equal to its Reload score before it must be reloaded. Reloading costs 1 AP for each shot you reload and requires your off hand to be free. A Two-Handed firearm can be reloaded while you hold it, as long as you hold nothing else. Reloading outside of combat costs no AP.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Reload X",
+     "ref": "[color=#8e171c]Reload X.[/color] This firearm can be fired a number of times equal to its Reload score before it must be reloaded. Reloading costs 1 AP for each shot you reload and requires your off hand to be free. A Two-Handed firearm can be reloaded while you hold it, as long as you hold nothing else. Reloading outside of combat costs no AP."
     }
    ],
    "tip": true,
