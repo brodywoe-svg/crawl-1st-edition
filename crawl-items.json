@@ -1276,18 +1276,17 @@
    "value": "75 (G)",
    "weight": "10 lbs",
    "actions": "",
+   "tier": "Martial",
+   "ap": "2",
+   "props": "2d6 Bludgeoning, Heavy, Two-Handed, Lightweight",
    "pdefs": [
     {
      "n": "Lightweight",
      "d": "a weapon with the lightweight property ignores the heavy Property. If the Weapon doesn't have the heavy Property, it count's as a light weapon."
     }
    ],
-   "props": "2d6 Bludgeoning, Heavy, Two-Handed, Lightweight",
-   "feat": "",
    "desc": "",
-   "extra": [],
-   "tier": "Martial",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-linen-bolt",
@@ -1511,6 +1510,32 @@
    ],
    "desc": "A colorless, nearly tasteless sleeping brew of the dark elf Matriarchs. Slipped into a cup of wine, it puts a humanoid to sleep for an hour, and sometimes for good.",
    "extra": []
+  },
+  {
+   "id": "i-mvg2qrltb8wa",
+   "n": "Ornate Bell Spear",
+   "nc": "#1f5fbf",
+   "cat": "Weapon",
+   "sub": "Polearms",
+   "slot": "",
+   "badge": true,
+   "rarity": "Uncommon",
+   "magic": false,
+   "value": "30 (G)",
+   "weight": "3 lbs",
+   "actions": "",
+   "pdefs": [
+    {
+     "n": "Focus (Divine)",
+     "d": "A weapon with the Focus property is able to be used as a spellcasting focus for a specific Source of magic; either Arcane, Primal, Divine, or Occult. The item functions similarly as if it was a staff or a wand."
+    }
+   ],
+   "props": "1d6 Piercing, Thrown (20/60), Versatile (1d8), Focus (Divine)",
+   "feat": "",
+   "desc": "This Ornately crafted spear was created for members of a clergy to act as a Divine magic focus and double as a staff. Below the head of the spear is a ring and hanging from that ring is a bell. Bells have long been connected to the divine as tools for holy purposes and rituals.",
+   "extra": [],
+   "tier": "Simple",
+   "ap": "2"
   },
   {
    "id": "i-padded-gambeson",
