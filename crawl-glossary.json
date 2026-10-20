@@ -56,13 +56,13 @@
   {
    "n": "Ammunition",
    "sec": "Properties",
-   "lead": "[color=#8e171c]Ammunition.[/color] You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from the weapon. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack and costs no additional AP (you need a free hand to load a one-handed weapon). When combat ends, you can recover half your expended ammunition by taking a minute to search the battlefield.",
+   "lead": "[color=#8e171c]Ammunition.[/color] You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from the weapon. Each time you attack with the weapon, you expend one piece of ammunition.\n\nFor most Ammunition weapons, drawing the ammunition from a quiver, case, or other container is part of the attack and costs no additional AP. Weapons that also have the Loading or Reload property must be reloaded instead, following those rules.\n\nWhen combat ends, you can recover half your expended ammunition by taking a minute to search the battlefield. Firearm ammunition is consumed when fired and can’t be recovered.",
    "fx": [],
    "notes": [],
    "aka": [
     {
      "w": "Ammunition",
-     "ref": "[color=#8e171c]Ammunition.[/color] You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from the weapon. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack and costs no additional AP (you need a free hand to load a one-handed weapon). When combat ends, you can recover half your expended ammunition by taking a minute to search the battlefield."
+     "ref": "[color=#8e171c]Ammunition.[/color] You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from the weapon. Each time you attack with the weapon, you expend one piece of ammunition.\n\nFor most Ammunition weapons, drawing the ammunition from a quiver, case, or other container is part of the attack and costs no additional AP. Weapons that also have the Loading or Reload property must be reloaded instead, following those rules.\n\nWhen combat ends, you can recover half your expended ammunition by taking a minute to search the battlefield. Firearm ammunition is consumed when fired and can’t be recovered."
     }
    ],
    "tip": false,
