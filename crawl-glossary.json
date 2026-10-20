@@ -515,6 +515,21 @@
    "tip": false
   },
   {
+   "n": "Lightweight",
+   "sec": "Properties",
+   "lead": "[color=#8e171c]Lightweight[/color] - a weapon with the lightweight property ignores the heavy Property. If the Weapon doesn't have the heavy Property, it count's as a light weapon.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Lightweight",
+     "ref": "[color=#8e171c]Lightweight[/color] - a weapon with the lightweight property ignores the heavy Property. If the Weapon doesn't have the heavy Property, it count's as a light weapon."
+    }
+   ],
+   "tip": false,
+   "hideRefs": true
+  },
+  {
    "n": "Livingwood",
    "sec": "Properties",
    "lead": "This weapon weighs half as much, never rots or warps, and mends itself of mundane damage over a long rest. This feature doesn’t take up a modifier slot.",
