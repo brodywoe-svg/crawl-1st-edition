@@ -1,5 +1,8 @@
 /* Items and Crafting pages. Both read and write crawl-items.json:
-     {v:2, items:[item], recipes:[recipe]}
+     {v:2, items:[item], recipes:[recipe], presets:[item]}
+     presets: weapon templates (e.g. the base Club, Mace, Glaive) only the admin sees; "Add item" can start from one.
+              They're kept in items[] here with preset:true and saved back to presets[], so other pages never see them.
+     weapons also have tier (Simple | Martial | Exotic) and ap (AP cost of one attack)
      item   = {id, n, nc, cat, sub, slot, badge, rarity, magic, value, weight, actions, props, pdefs:[{n,d}], desc, extra:[{k,v}]}
               nc: name color (#hex or ""); magic: true if the item is magical
               actions: weapon actions; props: the properties line; pdefs: Properties Defined (name shown in red, then what it does)
@@ -28,6 +31,7 @@ const TIERS = ["Basic", "Advanced", "Mastery"];
 const RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "(Varies)"];
 const HEX = /^#[0-9a-f]{3,8}$/i;
 const KINDS = ["", "Craftable Modifier", "Enchantment Modifier"];
+const WTIERS = ["Simple", "Martial", "Exotic"];
 let items = [], recipes = [], original = "", dirty = false, uid = 0;
 const editing = new Set(), drafts = new Map(), open = new Set();
 
@@ -48,6 +52,7 @@ function normItem(i) {
   const cat = catOf(str(i.cat)) ? str(i.cat) : (/weapon/i.test(i.type) ? "Weapon" : /armor|shield/i.test(i.type) ? "Armor" : /potion|food/i.test(i.type) ? "Consumable" : "Crafting Material");
   return {
     id: str(i.id) || newId("i"), n: str(i.n), nc: HEX.test(str(i.nc)) ? str(i.nc) : "", cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, rarity: str(i.rarity), magic: !!i.magic, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
+    ...(WTIERS.includes(str(i.tier)) ? { tier: str(i.tier) } : {}), ...(str(i.ap) ? { ap: str(i.ap) } : {}), ...(i.preset ? { preset: true } : {}),
     props: str(i.props && !Array.isArray(i.props) ? i.props : ""), pdefs: Array.isArray(i.pdefs) ? i.pdefs.map(x => ({ n: str(x && x.n), d: str(x && x.d) })).filter(x => x.n || x.d) : pdefsFrom(str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : ""))), desc: str(i.desc), extra: extras(i.extra)
   };
 }
@@ -61,7 +66,7 @@ function normRecipe(r) {
 }
 function load(j) {
   if (!j || typeof j !== "object") return false;
-  items = list(j.items).filter(i => i && str(i.n)).map(i => ({ ...normItem(i), _id: ++uid }));
+  items = [...list(j.items), ...list(j.presets).map(p => ({ ...p, preset: true }))].filter(i => i && str(i.n)).map(i => ({ ...normItem(i), _id: ++uid }));
   recipes = list(j.recipes).filter(r => r && (str(r.n) || list(r.makes).length)).map(r => ({ ...normRecipe(r), _id: ++uid }));
   original = JSON.stringify(clean()); return true;
 }
@@ -69,7 +74,8 @@ const strip = o => { const { _id, _new, _score, ...x } = o; return x };
 const lc = s => s.toLowerCase();
 const byName = (a, b) => lc(a.n).localeCompare(lc(b.n));
 function clean() {
-  return { v: 2, items: items.filter(x => !x._new).map(strip).sort(byName), recipes: recipes.filter(x => !x._new).map(strip).sort((a, b) => lc(recipeName(a)).localeCompare(lc(recipeName(b)))) };
+  const keep = items.filter(x => !x._new).map(strip).sort(byName), pre = keep.filter(x => x.preset).map(({ preset, ...x }) => x);
+  return { v: 2, items: keep.filter(x => !x.preset), ...(pre.length ? { presets: pre } : {}), recipes: recipes.filter(x => !x._new).map(strip).sort((a, b) => lc(recipeName(a)).localeCompare(lc(recipeName(b)))) };
 }
 const itemById = id => items.find(i => i.id === id);
 const itemByName = n => items.find(i => !i._new && lc(i.n) === lc(str(n)));
@@ -96,7 +102,7 @@ function score(x, q) {
   return wordStart(text) ? 20 : 10;
 }
 function visible() {
-  let l = rows().filter(x => !x._new || editing.has(x._id));
+  let l = rows().filter(x => (!x._new || editing.has(x._id)) && (!x.preset || ADMIN));
   const f = $("cfilter").value;
   if (f) l = l.filter(x => (KIND === "items" ? x.cat : x.prof) === f || editing.has(x._id));
   const q = query();
@@ -207,7 +213,11 @@ function itemDetail(i) {
       (r.dc || r.tc ? `<p class="rl"><b>Crafting DC:</b> ${esc(r.dc || "—")} | <b>TC:</b> ${esc(r.tc || "—")}</p>` : "") + `</div>`).join("");
   /* crafting materials show only a description and their recipe */
   const mat = i.cat === "Crafting Material";
-  return (mat ? "" : sec("Properties", i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : none)) +
+  const wstats = isWeapon(i) && (i.tier || i.ap) ? `<p class="rl"><b>Proficiency:</b> ${esc(i.tier || "—")} &nbsp;·&nbsp; <b>AP per attack:</b> ${esc(i.ap || "—")}</p>` : "";
+  if (i.preset) return `<p class="rl muted">A preset. Only you can see it. Click Add item and choose it under "Start from a preset" to make a new weapon with these stats.</p>` +
+    sec("Properties", wstats + (i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : none)) + (i.desc ? sec("Description", paras(i.desc)) : "") +
+    (ADMIN && !i._new ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
+  return (mat ? "" : sec("Properties", wstats + (i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : (wstats ? "" : none)))) +
     sec("Description", (i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
     (!mat && i.pdefs.length ? sec("Properties Defined", `<div class="rfeat">${i.pdefs.map(p => `<p>${p.n ? `<span class="pdn">${esc(p.n)}</span> - ` : ""}${richInline(p.d)}</p>`).join("")}</div>`) : "") +
     (!mat && (isWeapon(i) || i.actions) ? sec("Weapon actions", i.actions ? `<div class="rfeat">${actionsHTML(i.actions)}</div>` : none) : "") +
@@ -228,7 +238,7 @@ function itemsChart(l) {
   if (query()) return `<div class="ghead gres"><h2>Best matches first</h2></div><table class="ichart">${head}${l.map(i => itemRow(i, true)).join("")}</table>`;
   let h = "";
   for (const [cat, label, subs] of CATS) {
-    const inCat = l.filter(i => i.cat === cat); if (!inCat.length) continue;
+    const all = l.filter(i => i.cat === cat), pre = all.filter(i => i.preset), inCat = all.filter(i => !i.preset); if (!all.length) continue;
     const groups = [...subs, ...[...new Set(inCat.map(i => i.sub))].filter(s => s && !subs.includes(s)).sort()];
     let body = "";
     for (const sub of groups) {
@@ -239,7 +249,12 @@ function itemsChart(l) {
     }
     const loose = inCat.filter(i => !i.sub);
     if (loose.length) body += `<tbody class="isub"><tr><th colspan="5">Other</th></tr></tbody>` + loose.sort(byName).map(i => itemRow(i, false)).join("");
-    h += `<section class="icat"><h2 class="icath">${esc(label)} <span>${plural(inCat.length, "item", "items")}</span></h2><table class="ichart">${head}${body}</table></section>`;
+    if (pre.length) {
+      const ord = i => [groups.indexOf(i.sub) < 0 ? 99 : groups.indexOf(i.sub), WTIERS.indexOf(i.tier) < 0 ? 9 : WTIERS.indexOf(i.tier)];
+      pre.sort((a, b) => ord(a)[0] - ord(b)[0] || ord(a)[1] - ord(b)[1] || byName(a, b));
+      body += `<tbody class="isub ipre"><tr><th colspan="5">${esc(cat)} presets <small>Only you can see these. Use one when you add a new ${esc(lc(cat))}.</small></th></tr></tbody>` + pre.map(i => itemRow(i, true)).join("");
+    }
+    h += `<section class="icat"><h2 class="icath">${esc(label)} <span>${plural(inCat.length, "item", "items")}${pre.length ? ` · ${plural(pre.length, "preset", "presets")}` : ""}</span></h2><table class="ichart">${head}${body}</table></section>`;
   }
   return h;
 }
@@ -266,6 +281,12 @@ function nameColorPicker(nc) {
 }
 const pdefRow = x => `<div class="prow"><input type="text" class="pn" value="${esc(x.n)}" placeholder="Property name, e.g. Serrated" aria-label="Property name" autocomplete="off"><textarea class="pd" rows="2" placeholder="What the property does" aria-label="What the property does">${esc(x.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
 const topBtns = `<div class="gbtns gtop"><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>`;
+/* new items can start from a preset: its stats are copied in, then you rename it and change what's different */
+function presetPicker(i, d) {
+  const ps = items.filter(x => x.preset && !x._new).sort((a, b) => a.cat.localeCompare(b.cat) || a.sub.localeCompare(b.sub) || byName(a, b)); if (!ps.length) return "";
+  const groups = [...new Set(ps.map(p => p.cat + (p.sub ? " · " + p.sub : "")))];
+  return `<label class="ipresetpick">Start from a preset <small>Copies its stats into this item. Then rename it and change what's different.</small><select class="presetsel"><option value="">Choose a preset…</option>${groups.map(g => `<optgroup label="${esc(g)}">${ps.filter(p => p.cat + (p.sub ? " · " + p.sub : "") === g).map(p => `<option value="${esc(p.id)}"${d.from === p.id ? " selected" : ""}>${esc(p.n)}${p.tier ? ` (${esc(p.tier)})` : ""}</option>`).join("")}</optgroup>`).join("")}</select></label>`;
+}
 function itemForm(i) {
   const id = k => `c${k}-${i._id}`, d = drafts.get(i._id) || i;
   const subs = (catOf(d.cat) || CATS[3])[2];
@@ -275,6 +296,8 @@ ${fld(id("n"), "Name", "", inp(id("n"), "n", d.n))}
 ${nameColorPicker(d.nc || "")}
 <label class="chk"><input type="checkbox" data-k="magic"${d.magic ? " checked" : ""}> Magic item</label>
 <label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> ${FLASK} Needs playtesting</label>
+<label class="chk"><input type="checkbox" data-k="preset"${d.preset ? " checked" : ""}> Preset <small>(only you see it; use it to start new items)</small></label>
+${i._new && !d.preset ? presetPicker(i, d) : ""}
 <div class="grid3">
 ${fld(id("cat"), "Category", "", sel(id("cat"), "cat", d.cat, CATS.map(c => [c[0], c[1]])))}
 ${fld(id("sub"), d.cat === "Weapon" ? "Weapon type" : d.cat === "Armor" ? "Armor type" : "Group", "", inp(id("sub"), "sub", d.sub, ` list="subs-${i._id}"`) + `<datalist id="subs-${i._id}">${subs.map(s => `<option value="${esc(s)}">`).join("")}</datalist>`)}
@@ -282,6 +305,7 @@ ${d.cat === "Armor" ? fld(id("slot"), "Slot", "", sel(id("slot"), "slot", d.slot
 ${fld(id("rarity"), "Rarity", "", sel(id("rarity"), "rarity", d.rarity || "", [["", "None"], ...RARITIES.map(r => [r, r]), ...(d.rarity && !RARITIES.includes(d.rarity) ? [[d.rarity, d.rarity]] : [])]))}
 ${fld(id("value"), "Value", "", inp(id("value"), "value", d.value, ' placeholder="e.g. 15 gp"'))}
 ${fld(id("weight"), "Weight", "", inp(id("weight"), "weight", d.weight, ' placeholder="e.g. 3 lb"'))}
+${d.cat === "Weapon" ? fld(id("tier"), "Proficiency", "", sel(id("tier"), "tier", d.tier || "", [["", "None"], ...WTIERS.map(t => [t, t])])) + fld(id("ap"), "AP per attack", "", inp(id("ap"), "ap", d.ap || "", ' placeholder="e.g. 2"')) : ""}
 </div>
 ${d.cat === "Crafting Material" ? "" : fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
@@ -331,7 +355,8 @@ function readForm(f) {
   return d;
 }
 function fromDraft(d, x) {
-  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight), actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
+  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight),
+    tier: d.cat === "Weapon" && WTIERS.includes(d.tier) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
     ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote ?? x.matNote), applies: str(d.applies),
@@ -344,8 +369,10 @@ function preview(f) {
   const p = fromDraft(readForm(f), x);
   b.innerHTML = KIND === "items" ? `<p class="pvname">${nameHTML(p)}${p.magic ? ' <span class="ctag2">Magic</span>' : ""}${p.rarity ? ` <span class="ctag2">${esc(p.rarity)}</span>` : ""}</p>` + itemDetail({ ...p, _new: true }).replace(/<div class="dbtns">[\s\S]*$/, "") : recipeBody(p);
 }
+let keepDraft = 0;
 function saveDrafts() {
   document.querySelectorAll(".gediting").forEach(f => {
+    if (+f.dataset.id === keepDraft) return;
     const d = readForm(f); if (KIND === "recipes" && "ql" in d) { /* keep select values */ }
     drafts.set(+f.dataset.id, d);
   });
@@ -422,6 +449,13 @@ $("clist").addEventListener("change", ev => {
     return;
   }
   if (ev.target.classList.contains("ncpick")) { setNameColor(ev.target.closest(".gediting"), ev.target.value); return }
+  if (ev.target.classList.contains("presetsel")) {
+    const f = ev.target.closest(".gediting"), x = rowOf(ev.target), p = items.find(i => i.id === ev.target.value); if (!f || !x || !p) return;
+    const { id, _id, _new, preset, n, ...stats } = p;
+    drafts.set(x._id, { ...readForm(f), ...stats, n, pdefs: p.pdefs.map(q => ({ ...q })), extra: p.extra.map(q => ({ ...q })), from: p.id, preset: false });
+    keepDraft = x._id; render(); keepDraft = 0; const nm = document.querySelector(`.gediting[data-id="${x._id}"] [data-k="n"]`); if (nm) { nm.focus(); nm.select() }
+    say(`Started from the ${p.n} preset. Rename it and change what's different, then click Done.`); return;
+  }
   const f = ev.target.closest(".gediting");
   if (f && (ev.target.dataset.k === "cat" || ev.target.dataset.k === "prof")) { render(); return }
   if (f) preview(f);
