@@ -82,6 +82,10 @@ function readForm(f) {
 function saveDrafts() { document.querySelectorAll(".rform").forEach(f => drafts.set(+f.dataset.id, readForm(f))) }
 
 /* ---------------------------------------------------------------- page */
+/* glossary tooltips: entries set to "Show as a tooltip in Classes and Races" */
+let RACE_TIPS = glMapOf(normGlossary(GLOSSARY) || [], "classes");
+tipRuntime(el => RACE_TIPS.map.get(el.dataset.g));
+if (STATIC) fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => { if (j) { RACE_TIPS = glMapOf(normGlossary(j) || [], "classes"); render() } }).catch(() => { });
 function render() {
   saveDrafts();
   if (window.crawlNavRaces) window.crawlNavRaces({ races });
@@ -92,6 +96,7 @@ function render() {
   const n = list.filter(r => !r._new).length;
   $("ccount").textContent = `${n} ${n === 1 ? "race" : "races"}`;
   $("clist").innerHTML = list.length ? `<div class="rlist2">${list.map(r => raceHTML(r, q)).join("")}</div>` : "";
+  markTips($("clist"), RACE_TIPS);
   sideShow(editing.size > 0);
   const total = races.filter(r => !r._new).length;
   $("cempty").hidden = list.length > 0;

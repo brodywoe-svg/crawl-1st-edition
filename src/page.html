@@ -668,7 +668,7 @@ function normGlossary(j){
     fx:list(e.fx).map(x=>String(x).trim()).filter(Boolean),
     notes:list(e.notes).filter(n=>n&&String(n.t||"").trim()).map(n=>({l:String(n.l||"Note").trim()||"Note",t:String(n.t).trim()})),
     aka:list(e.aka).map(x=>typeof x==="string"?{w:x,ref:""}:{w:String(x&&x.w||""),ref:String(x&&x.ref||"")}).map(x=>({w:x.w.trim(),ref:x.ref.trim()})).filter(x=>x.w),
-    tip:e.tip!==false,...(e.hideRefs?{hideRefs:true}:{}),...(String(e.ap||"").trim()?{ap:String(e.ap).trim()}:{}),...(String(e.req||"").trim()?{req:String(e.req).trim()}:{})}));
+    tip:e.tip!==false,...Object.fromEntries(["tipItems","tipClasses","tipFeats","tipCreator"].filter(k=>typeof e[k]==="boolean").map(k=>[k,e[k]])),...(e.hideRefs?{hideRefs:true}:{}),...(String(e.ap||"").trim()?{ap:String(e.ap).trim()}:{}),...(String(e.req||"").trim()?{req:String(e.req).trim()}:{})}));
 }
 /* glossary text: blank lines start a new paragraph, [color=#hex]text[/color] colors text */
 const COLOR_RE=/\[color=(#[0-9a-f]{3,8})\]([\s\S]*?)\[\/color\]/gi;
@@ -703,13 +703,43 @@ function glVariants(w){
   if(/\sX$/.test(base))out.push(base.replace(/\s+X$/,""));
   return [...new Set(out.map(x=>x.trim()))].filter(x=>x.length>1);
 }
-function glMapOf(entries){
-  const map=new Map(),tips=entries.filter(e=>e.tip),all=[];
+/* where an entry shows as a tooltip: tip = Spells; the others default to following Spells,
+   except Items, which defaults to on for Properties, Damage Types and the Actions sections */
+const TIP_ITEM_SECS=["Properties","Damage Types","Weapon Actions","Combat Actions","General Actions"];
+function tipOn(e,scope){
+  if(scope==="items")return typeof e.tipItems==="boolean"?e.tipItems:TIP_ITEM_SECS.includes(e.sec);
+  const k={classes:"tipClasses",feats:"tipFeats",creator:"tipCreator"}[scope];
+  return k&&typeof e[k]==="boolean"?e[k]:e.tip!==false;
+}
+function glMapOf(entries,scope){
+  const map=new Map(),tips=entries.filter(e=>tipOn(e,scope||"spells")),all=[];
   tips.forEach(e=>all.push({e,w:e.n,ref:""}));tips.forEach(e=>e.aka.forEach(x=>all.push({e,w:x.w,ref:x.ref})));
   all.forEach(h=>{const k=h.w.toLowerCase();const o=map.get(k);if(!o||(h.ref&&!o.ref&&o.e===h.e))map.set(k,h)});
   all.forEach(h=>glVariants(h.w).forEach(v=>{const k=v.toLowerCase();if(!map.has(k))map.set(k,{...h,w:v})}));
   const terms=[...map.keys()].sort((x,y)=>y.length-x.length).map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
   return {map,re:terms.length?new RegExp("(?<![\\w])("+terms.join("|")+")(?![\\w])","gi"):null};
+}
+/* tooltips for pages built from data (Items, Classes, Races, Backgrounds, Feats): mark glossary words in rendered text,
+   and show the popup on hover, focus or tap */
+const TIP_SKIP="a,button,input,textarea,select,option,label,.gl,.pdn,h1,h2,h3,h4,.chead,.gediting,.gform,.cform,.rform,.navmenu,.sitenav,.gtip,.savebar,script,style";
+function markTips(root,g,skip){
+  if(!root||!g||!g.re)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];
+  while(w.nextNode()){const n=w.currentNode;if(n.nodeValue.trim()&&!(n.parentElement&&n.parentElement.closest(TIP_SKIP)))nodes.push(n)}
+  nodes.forEach(n=>{const t=n.nodeValue;g.re.lastIndex=0;if(!g.re.test(t))return;g.re.lastIndex=0;
+    const f=document.createDocumentFragment();let i=0;t.replace(g.re,(m,_x,at)=>{if(skip&&skip(m,n))return m;f.append(t.slice(i,at));const s=document.createElement("span");s.className="gl";s.tabIndex=0;s.dataset.g=m.toLowerCase();s.textContent=m;f.append(s);i=at+m.length;return m});
+    f.append(t.slice(i));n.replaceWith(f)});
+}
+function tipRuntime(lookup){
+  let tip=document.getElementById("gtip");if(!tip){tip=document.createElement("div");tip.className="gtip";tip.id="gtip";tip.setAttribute("role","tooltip");tip.hidden=true;document.body.appendChild(tip)}
+  const show=el=>{const hit=lookup(el);if(!hit)return;const tp=tipHTML(hit);tip.innerHTML=tp.html;tip.classList.toggle("gtipact",tp.act);tip.hidden=false;
+    const r=el.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight,vw=document.documentElement.clientWidth,vh=window.innerHeight;let y=r.bottom+8;if(y+h>vh-12&&r.top-h-8>12)y=r.top-h-8;
+    tip.style.left=Math.min(Math.max(12,r.left+r.width/2-w/2),vw-w-12)+"px";tip.style.top=Math.max(12,y)+"px"};
+  const hide=()=>{tip.hidden=true},at=t=>t&&t.closest?t.closest(".gl"):null;
+  document.addEventListener("pointerover",ev=>{if(ev.pointerType==="mouse"){const el=at(ev.target);if(el)show(el)}});
+  document.addEventListener("pointerout",ev=>{if(ev.pointerType==="mouse"){const el=at(ev.target);if(el&&!el.contains(ev.relatedTarget))hide()}});
+  document.addEventListener("focusin",ev=>{const el=at(ev.target);if(el)show(el)});
+  document.addEventListener("click",ev=>{const el=at(ev.target);if(el){ev.preventDefault();show(el)}else hide()});
+  window.addEventListener("scroll",hide,{passive:true,capture:true});
 }
 /* a glossary word's popup. Weapon Actions and Combat Actions get a special red one: AP cost, the kind of action, and what it needs */
 const ACTION_SECS=["Weapon Actions","Combat Actions","General Actions"];

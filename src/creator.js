@@ -308,7 +308,7 @@ const spellLimit = c => { const k = clsOf(c); const n = k && parseInt(k.spells, 
 
 /* ---------------------------------------------------------------- glossary tooltips (red underline, popup on hover or tap) */
 let GL_RE = null; const GL_MAP = new Map();
-(function () { const g = glMapOf(normGlossary(GLOSSARY) || []); g.map.forEach((v, k) => GL_MAP.set(k, v)); GL_RE = g.re })();
+(function () { const g = glMapOf(normGlossary(GLOSSARY) || [], "creator"); g.map.forEach((v, k) => GL_MAP.set(k, v)); GL_RE = g.re })();
 /* rich text with glossary words marked, without touching the inside of tags */
 function rich(t) { const h = richInline(t); return GL_RE ? h.split(/(<[^>]+>)/).map(s => s.startsWith("<") ? s : s.replace(GL_RE, m => `<span class="gl" tabindex="0" data-g="${m.toLowerCase()}">${m}</span>`)).join("") : h }
 function richParas(t) { return blocks(t, rich) }

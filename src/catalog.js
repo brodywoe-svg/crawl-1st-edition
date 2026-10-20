@@ -218,8 +218,8 @@ function itemDetail(i) {
     sec("Properties", wstats + (i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : none)) + (i.desc ? sec("Description", paras(i.desc)) : "") +
     (ADMIN && !i._new ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
   return (mat ? "" : sec("Properties", wstats + (i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : (wstats ? "" : none)))) +
-    sec("Description", (i.desc ? paras(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
-    (!mat && i.pdefs.length ? sec("Properties Defined", `<div class="rfeat">${i.pdefs.map(p => `<p>${p.n ? `<span class="pdn">${esc(p.n)}</span> - ` : ""}${richInline(p.d)}</p>`).join("")}</div>`) : "") +
+    sec("Description", (i.desc ? descHTML(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
+    (!mat && i.pdefs.length ? sec("Properties Defined", `<div class="rfeat">${i.pdefs.map(p => `<p>${p.n ? `<span class="pdn">${esc(p.n)}</span> - ` : ""}${tipMark(richInline(p.d))}</p>`).join("")}</div>`) : "") +
     (!mat && (isWeapon(i) || i.actions) ? sec("Weapon actions", i.actions ? `<div class="rfeat">${actionsHTML(i.actions)}</div>` : none) : "") +
     (made.length ? sec("Crafting recipe", recipeBlock) : ADMIN && !i._new ? sec("Crafting recipe", `<p class="muted">No crafting recipe yet. <a class="ilink" href="crafting.html?make=${encodeURIComponent(i.id)}">Create one on the Crafting page</a></p>`) : "") +
     (used.length ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "") +
@@ -233,12 +233,29 @@ function itemRow(i, showCat) {
 <tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${nameHTML(i)}${i.badge ? PLAYTEST : ""}${tag}</button>${ADMIN && !editing.has(i._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(i.n)}">Edit</button>` : ""}</div></td><td>${esc(i.rarity || "—")}</td><td class="imagic"><input type="checkbox" class="magicbox" aria-label="${esc(i.n)} is magic"${i.magic ? " checked" : ""}${ADMIN && !editing.has(i._id) ? "" : " disabled"}></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
 ${isOpen ? `<tr class="idet"><td colspan="5">${editing.has(i._id) ? itemForm(i) : itemDetail(i)}</td></tr>` : ""}</tbody>`;
 }
+/* Presets: their own section (admin only), which opens and closes; the choice is remembered in this browser */
+let presetsOpen = true;
+try { presetsOpen = localStorage.getItem("crawl-presets-open") !== "0" } catch (e) { }
+function presetsSection(pre, head) {
+  if (!pre.length) return "";
+  let body = "";
+  for (const [cat, label, subs] of CATS) {
+    const inCat = pre.filter(i => i.cat === cat); if (!inCat.length) continue;
+    const groups = [...subs, ...[...new Set(inCat.map(i => i.sub))].filter(s => !subs.includes(s)).sort()];
+    for (const sub of groups) {
+      const g = inCat.filter(i => (i.sub || "") === (sub || "")).sort((a, b) => (WTIERS.indexOf(a.tier) + 9) % 9 - (WTIERS.indexOf(b.tier) + 9) % 9 || byName(a, b)); if (!g.length) continue;
+      body += `<tbody class="isub"><tr><th colspan="5">${esc(label)}${sub ? " · " + esc(sub) : ""}</th></tr></tbody>` + g.map(i => itemRow(i, false)).join("");
+    }
+  }
+  return `<section class="icat ipresets${presetsOpen ? " open" : ""}"><h2 class="icath"><button type="button" class="pretoggle" aria-expanded="${presetsOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Presets</button> <span>${plural(pre.length, "preset", "presets")} · only you can see these</span></h2>` +
+    (presetsOpen ? `<p class="prenote">Click Add item and choose one under "Start from a preset" to make a new item with its stats.</p><table class="ichart">${head}${body}</table>` : "") + `</section>`;
+}
 function itemsChart(l) {
   const head = `<thead><tr><th>Item</th><th>Rarity</th><th><span class="hl">Magic?</span><span class="hs" aria-hidden="true">Magic</span></th><th>Value</th><th><span class="hl">Weight</span><span class="hs" aria-hidden="true">Wt.</span></th></tr></thead>`;
   if (query()) return `<div class="ghead gres"><h2>Best matches first</h2></div><table class="ichart">${head}${l.map(i => itemRow(i, true)).join("")}</table>`;
   let h = "";
   for (const [cat, label, subs] of CATS) {
-    const all = l.filter(i => i.cat === cat), pre = all.filter(i => i.preset), inCat = all.filter(i => !i.preset); if (!all.length) continue;
+    const inCat = l.filter(i => i.cat === cat && !i.preset); if (!inCat.length) continue;
     const groups = [...subs, ...[...new Set(inCat.map(i => i.sub))].filter(s => s && !subs.includes(s)).sort()];
     let body = "";
     for (const sub of groups) {
@@ -249,14 +266,9 @@ function itemsChart(l) {
     }
     const loose = inCat.filter(i => !i.sub);
     if (loose.length) body += `<tbody class="isub"><tr><th colspan="5">Other</th></tr></tbody>` + loose.sort(byName).map(i => itemRow(i, false)).join("");
-    if (pre.length) {
-      const ord = i => [groups.indexOf(i.sub) < 0 ? 99 : groups.indexOf(i.sub), WTIERS.indexOf(i.tier) < 0 ? 9 : WTIERS.indexOf(i.tier)];
-      pre.sort((a, b) => ord(a)[0] - ord(b)[0] || ord(a)[1] - ord(b)[1] || byName(a, b));
-      body += `<tbody class="isub ipre"><tr><th colspan="5">${esc(cat)} presets <small>Only you can see these. Use one when you add a new ${esc(lc(cat))}.</small></th></tr></tbody>` + pre.map(i => itemRow(i, true)).join("");
-    }
-    h += `<section class="icat"><h2 class="icath">${esc(label)} <span>${plural(inCat.length, "item", "items")}${pre.length ? ` · ${plural(pre.length, "preset", "presets")}` : ""}</span></h2><table class="ichart">${head}${body}</table></section>`;
+    h += `<section class="icat"><h2 class="icath">${esc(label)} <span>${plural(inCat.length, "item", "items")}</span></h2><table class="ichart">${head}${body}</table></section>`;
   }
-  return h;
+  return h + presetsSection(l.filter(i => i.preset), head);
 }
 
 /* ---------------------------------------------------------------- forms */
@@ -402,7 +414,7 @@ function fillFilter() {
 }
 function render() {
   saveDrafts(); fillFilter(); catHeading();
-  const l = visible(), n = l.filter(x => !x._new).length;
+  const l = visible(), n = l.filter(x => !x._new && !x.preset).length;
   $("ccount").textContent = KIND === "items" ? plural(n, "item", "items") : plural(n, "recipe", "recipes");
   let h = "";
   if (KIND === "items") h = itemsChart(l);
@@ -462,6 +474,7 @@ $("clist").addEventListener("change", ev => {
 });
 $("clist").addEventListener("click", ev => {
   const b = ev.target.closest("button"); if (!b) return;
+  if (b.classList.contains("pretoggle")) { presetsOpen = !presetsOpen; try { localStorage.setItem("crawl-presets-open", presetsOpen ? "1" : "0") } catch (e) { } render(); const t = document.querySelector(".pretoggle"); if (t) t.focus(); return }
   const f = b.closest(".gediting");
   if (f && b.classList.contains("xadd")) { f.querySelector(".xlist").insertAdjacentHTML("beforeend", extraRow({ k: "", v: "" })); f.querySelector(".xrow:last-child .xk").focus(); return }
   if (f && b.classList.contains("qadd")) { const c = b.dataset.q; f.querySelector(c === "makes" ? ".qmakes" : ".qing").insertAdjacentHTML("beforeend", qtyRow({ qty: 1, name: "" }, c)); f.querySelector(`.qrow.${c}:last-child .qi`).focus(); return }
@@ -576,38 +589,21 @@ AdminHooks.signedIn = quiet => { render(); setTimeout(startRecipeFor); if (!quie
 AdminHooks.signedOut = () => { editing.clear(); drafts.clear(); items = items.filter(x => !x._new); recipes = recipes.filter(x => !x._new); render(); say("Signed out.") };
 
 load(CATALOG);
-/* ---------------------------------------------------------------- glossary tooltips on item Properties (every Properties entry)
-   and in Weapon actions text (Weapon, Combat and General Actions) */
-let PROP_TIPS = { map: new Map(), re: null }, ACT_TIPS = { map: new Map(), re: null };
-function setTips(j) {
-  const a = normGlossary(j) || [];
-  PROP_TIPS = glMapOf(a.filter(e => e.sec === "Properties" || e.sec === "Damage Types").map(e => ({ ...e, tip: true })));
-  ACT_TIPS = glMapOf(a.filter(e => ACTION_SECS.includes(e.sec)).map(e => ({ ...e, tip: true })));
-}
+/* ---------------------------------------------------------------- glossary tooltips: entries set to show in Items and Equipment
+   (by default Properties, Damage Types and the Actions sections) */
+let ITEM_TIPS = { map: new Map(), re: null };
+function setTips(j) { ITEM_TIPS = glMapOf(normGlossary(j) || [], "items") }
 setTips(GLOSSARY);
 const ARMOR_WORDS = ["clothing", "light", "medium", "heavy"];
-function tipMark(html, tips, gm, skip) {
-  if (!tips.re) return html;
-  return html.split(/(<[^>]+>)/).map(s => s.startsWith("<") ? s : s.replace(tips.re, m => skip && skip(m) ? m : `<span class="gl" tabindex="0" data-gm="${gm}" data-g="${esc(m.toLowerCase())}">${m}</span>`)).join("");
+function tipMark(html, skip) {
+  if (!ITEM_TIPS.re) return html;
+  return html.split(/(<[^>]+>)/).map(s => s.startsWith("<") ? s : s.replace(ITEM_TIPS.re, m => skip && skip(m) ? m : `<span class="gl" tabindex="0" data-g="${esc(m.toLowerCase())}">${m}</span>`)).join("");
 }
 /* on armor, Light/Medium/Heavy are the armor's weight class, not the weapon property */
-function propsHTML(t, item) { return tipMark(richInline(t), PROP_TIPS, "p", item && item.cat === "Armor" ? m => ARMOR_WORDS.includes(m.toLowerCase()) : null) }
-const actionsHTML = t => blocks(t, x => tipMark(richInline(x), ACT_TIPS, "a"));
-const gtip = document.createElement("div"); gtip.className = "gtip"; gtip.id = "gtip"; gtip.setAttribute("role", "tooltip"); gtip.hidden = true; document.body.appendChild(gtip);
-function showTip(el) {
-  const hit = (el.dataset.gm === "a" ? ACT_TIPS : PROP_TIPS).map.get(el.dataset.g); if (!hit) return;
-  const tp = tipHTML(hit); gtip.innerHTML = tp.html; gtip.classList.toggle("gtipact", tp.act); gtip.hidden = false;
-  const r = el.getBoundingClientRect(), w = gtip.offsetWidth, h = gtip.offsetHeight, vw = document.documentElement.clientWidth, vh = window.innerHeight;
-  let y = r.bottom + 8; if (y + h > vh - 12 && r.top - h - 8 > 12) y = r.top - h - 8;
-  gtip.style.left = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), vw - w - 12) + "px"; gtip.style.top = Math.max(12, y) + "px";
-}
-const hideTip = () => { gtip.hidden = true };
-const glAt = t => t && t.closest ? t.closest(".gl") : null;
-document.addEventListener("pointerover", ev => { if (ev.pointerType === "mouse") { const el = glAt(ev.target); if (el) showTip(el) } });
-document.addEventListener("pointerout", ev => { if (ev.pointerType === "mouse") { const el = glAt(ev.target); if (el && !el.contains(ev.relatedTarget)) hideTip() } });
-document.addEventListener("focusin", ev => { const el = glAt(ev.target); if (el) showTip(el) });
-document.addEventListener("click", ev => { const el = glAt(ev.target); if (el) { ev.preventDefault(); showTip(el) } else hideTip() });
-window.addEventListener("scroll", hideTip, { passive: true, capture: true });
+function propsHTML(t, item) { return tipMark(richInline(t), item && item.cat === "Armor" ? m => ARMOR_WORDS.includes(m.toLowerCase()) : null) }
+const actionsHTML = t => blocks(t, x => tipMark(richInline(x)));
+const descHTML = t => blocks(t, x => tipMark(richInline(x)));
+tipRuntime(el => ITEM_TIPS.map.get(el.dataset.g));
 
 if (STATIC) {
   fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => { if (j) { setTips(j); render() } }).catch(() => { });

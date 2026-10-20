@@ -562,6 +562,14 @@ CONDITIONS_CSS = """
 .cond[id^="g-"]{scroll-margin-top:calc(var(--navh,48px) + 14px)}
 .cond.gflash{animation:flash 1.6s ease-out}
 .gact{display:grid;grid-template-columns:120px 1fr;gap:10px}
+.pretoggle{display:inline-flex;align-items:center;gap:8px;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+.pretoggle svg{width:12px;height:8px;transform:rotate(-90deg);transition:transform .15s}
+.ipresets.open .pretoggle svg{transform:none}
+.pretoggle:focus-visible{outline:3px solid var(--red);outline-offset:3px;border-radius:6px}
+.prenote{margin:0 0 8px;font-weight:600;font-size:.88rem;color:var(--muted)}
+.gtips{border:2px solid var(--hair);border-radius:10px;padding:6px 12px 8px;margin:0;display:flex;flex-wrap:wrap;gap:4px 18px}
+.gtips legend{font-weight:800;font-size:.85rem;padding:0 4px}
+.gtips .chk{margin:0}
 .gact[hidden]{display:none}
 @media (max-width:560px){.gact{grid-template-columns:1fr}}
 .condwrap{padding-block:28px 60px}

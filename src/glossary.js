@@ -143,12 +143,14 @@ function wordRow(x) {
     `<button type="button" class="btn gwdel">Remove</button></div>`;
 }
 function form(e) {
-  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka, tip: e.tip, hideRefs: e.hideRefs, ap: e.ap || "", req: e.req || "" };
+  const d = drafts.get(e._id) || { n: e.n, sec: e.sec, lead: e.lead, fx: e.fx.join("\n"), notes: noteText(e), aka: e.aka, tip: e.tip, tipItems: tipOn(e, "items"), tipClasses: tipOn(e, "classes"), tipFeats: tipOn(e, "feats"), tipCreator: tipOn(e, "creator"), hideRefs: e.hideRefs, ap: e.ap || "", req: e.req || "" };
   const id = k => `g${k}-${e._id}`;
   return `<section class="cond gediting" data-id="${e._id}"><div class="chead"><span>${e._new ? "New entry" : "Editing " + esc(e.n)}</span></div>
 <div class="cbody gform">
 <label for="${id("n")}">Name<input type="text" id="${id("n")}" data-k="n" value="${esc(d.n)}" autocomplete="off"></label>
-<label class="chk"><input type="checkbox" data-k="tip"${d.tip !== false ? " checked" : ""}> Show as a tooltip in spells</label>
+<fieldset class="gtips"><legend>Show as a tooltip in</legend>
+${[["tip", "Spells"], ["tipItems", "Items and Equipment"], ["tipClasses", "Classes and Races"], ["tipFeats", "Feats"], ["tipCreator", "Character Creator"]].map(([k, l]) => `<label class="chk"><input type="checkbox" data-k="${k}"${d[k] !== false && (k === "tip" || d[k]) ? " checked" : ""}> ${l}</label>`).join("")}
+</fieldset>
 <label for="${id("sec")}">Section <small>Each section gets its own page and a link in the Glossary menu. Type a new name to start a new section.</small><input type="text" id="${id("sec")}" data-k="sec" list="gsecs" value="${esc(d.sec)}" autocomplete="off"></label>
 <div class="gact"${isAction(d.sec) ? "" : " hidden"}><label for="${id("ap")}">AP cost <small>How many Action Points it takes, e.g. 3</small><input type="text" id="${id("ap")}" data-k="ap" value="${esc(d.ap || "")}" placeholder="e.g. 3" autocomplete="off"></label>
 <label for="${id("req")}">Requirements <small>The weapon or feature it's tied to</small><input type="text" id="${id("req")}" data-k="req" value="${esc(d.req || "")}" placeholder="e.g. A Blade weapon, or the Fighting Style feature" autocomplete="off"></label></div>
@@ -233,7 +235,7 @@ $("clist").addEventListener("click", ev => {
     const p = fromDraft(d), seen = new Set();
     for (const x of p.aka) { const k = x.w.toLowerCase(); if (seen.has(k)) { err(`"${x.w}" is listed twice under Tooltip words.`); return } seen.add(k) }
     e.n = name; e.sec = d.sec.trim().replace(/\s+/g, " ") || FIRST;
-    e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka; e.tip = d.tip !== false; if (d.hideRefs) e.hideRefs = true; else delete e.hideRefs;
+    e.lead = p.lead; e.fx = p.fx; e.notes = p.notes; e.aka = p.aka; e.tip = d.tip !== false; e.tipItems = !!d.tipItems; e.tipClasses = !!d.tipClasses; e.tipFeats = !!d.tipFeats; e.tipCreator = !!d.tipCreator; if (d.hideRefs) e.hideRefs = true; else delete e.hideRefs;
     if (isAction(e.sec) && p.ap) e.ap = p.ap; else delete e.ap;
     if (isAction(e.sec) && p.req) e.req = p.req; else delete e.req;
     delete e._new; editing.delete(e._id); drafts.delete(e._id);

@@ -17,6 +17,10 @@ function load(j) {
 original = JSON.stringify(clean());
 const findPart = id => { for (const p of list) { if (p._id === id) return { part: p, top: p }; const s = (p.subs || []).find(x => x._id === id); if (s) return { part: s, top: p } } return null };
 const say = m => { $("gmsg").textContent = m || "" };
+/* glossary tooltips: Classes and Backgrounds follow "Show as a tooltip in Classes and Races"; the Feats page follows "in Feats" */
+let PAGE_TIPS = glMapOf(normGlossary(GLOSSARY) || [], IS_FEAT ? "feats" : "classes");
+tipRuntime(el => PAGE_TIPS.map.get(el.dataset.g));
+if (STATIC) fetch("crawl-glossary.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => { if (j) { PAGE_TIPS = glMapOf(normGlossary(j) || [], IS_FEAT ? "feats" : "classes"); render() } }).catch(() => { });
 
 /* ---------------------------------------------------------------- view */
 const query = () => lcs($("cq").value.trim()).replace(/\s+/g, " ");
@@ -168,6 +172,7 @@ function render() {
   const n = list.filter(p => !p._new).length;
   $("ccount").textContent = `${n} ${n === 1 ? WHAT : WHATS}`;
   $("clist").innerHTML = ITEM_LIST() + (shown.length ? `<div class="rlist2">${shown.map(p => cardHTML(p, q)).join("")}</div>` : "");
+  markTips($("clist"), PAGE_TIPS);
   sideShow(editing.size > 0);
   $("cempty").hidden = shown.length > 0;
   $("cempty").textContent = n ? "Nothing matches. Try a different word, or clear the search." : `No ${WHATS} yet.` + (ADMIN ? ` Click Add ${WHAT} to create the first one.` : "");
