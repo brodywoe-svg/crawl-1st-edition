@@ -1264,6 +1264,32 @@
    "extra": []
   },
   {
+   "id": "i-mvfyu8isid98",
+   "n": "Lightweight Maul",
+   "nc": "#1f5fbf",
+   "cat": "Weapon",
+   "sub": "Cudgels",
+   "slot": "",
+   "badge": true,
+   "rarity": "Common",
+   "magic": false,
+   "value": "75 (G)",
+   "weight": "10 lbs",
+   "actions": "",
+   "pdefs": [
+    {
+     "n": "Lightweight",
+     "d": "a weapon with the lightweight property ignores the heavy Property. If the Weapon doesn't have the heavy Property, it count's as a light weapon."
+    }
+   ],
+   "props": "2d6 Bludgeoning, Heavy, Two-Handed, Lightweight",
+   "feat": "",
+   "desc": "",
+   "extra": [],
+   "tier": "Martial",
+   "ap": "2"
+  },
+  {
    "id": "i-linen-bolt",
    "n": "Linen Bolt",
    "nc": "",
