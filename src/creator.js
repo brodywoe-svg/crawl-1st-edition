@@ -71,6 +71,7 @@ function parseProf(text, src, key) {
     const names = findNames(p);
     if (/\beither\b|\bor\b/i.test(p) && names.length >= 2) { out.picks.push({ key: key + i, cat: names[0].cat, n: 1, opts: names.map(x => x.name), src }); return }
     if (CHOICE_RE.test(p) && !names.length) { const cat = catIn(p); if (cat && cat !== "lang") out.picks.push({ key: key + i, cat, n: numberIn(p), src }); return }
+    if (!names.length && /\ball\b/i.test(p) && /weapons?|armou?r|shields?/i.test(p)) { const list = /weapon/i.test(p) ? WEAPONS.map(n => ({ cat: "weapon", name: n })) : ARMORS.map(n => ({ cat: "armor", name: n })); list.forEach(x => out.fixed.push({ cat: x.cat, name: x.name, tiers: tiersIn(p, x.cat), src })); return }
     names.forEach(x => out.fixed.push({ cat: x.cat, name: x.name, tiers: x.cat === "weapon" || x.cat === "armor" || x.cat === "trade" ? tiersIn(p, x.cat) : [], src }));
   });
   return out;
@@ -134,20 +135,33 @@ const chartRow = c => { const k = clsOf(c); return k ? k.chart.filter(r => (r.lv
 const skillPoints = c => { const k = clsOf(c); return k ? Math.max(0, parseInt(k.skillPts, 10) || 0) : 0 };
 function grants(c) {
   const fixed = new Map(), picks = [];
-  const add = (f, src) => { const k = f.cat + "|" + f.name; const g = fixed.get(k) || { cat: f.cat, name: f.name, tiers: new Set(), src: [] }; f.tiers.forEach(t => g.tiers.add(t)); if (!g.src.includes(src)) g.src.push(src); fixed.set(k, g) };
+  /* a weapon or armor type includes the ones below it: Martial = Simple and Martial */
+  const upTo = (cat, tiers) => cat === "weapon" || cat === "armor" ? TIER_ORDER.slice(0, Math.max(...tiers.map(t => TIER_ORDER.indexOf(t))) + 1) : tiers;
+  const add = (f, src) => { const k = f.cat + "|" + f.name; const g = fixed.get(k) || { cat: f.cat, name: f.name, tiers: new Set(), src: [] }; upTo(f.cat, f.tiers).forEach(t => g.tiers.add(t)); if (!g.src.includes(src)) g.src.push(src); fixed.set(k, g) };
   for (const s of sources(c)) {
+    const pt = s.p.ptypes || {};
+    [["w", "weapon"], ["a", "armor"], ["t", "trade"]].forEach(([k, cat]) => Object.entries(pt[k] || {}).forEach(([name, t]) => add({ cat, name, tiers: [t] }, s.label)));
     const parts = [["skills", "s"], ["weapons", "w"], ["armor", "a"], ["trades", "t"], ["prof", "p"]].map(([f, k]) => parseProf(s.p[f] || "", s.label, s.kind + ":" + k));
     arr(s.p.choices).forEach((ch, i) => {
       if (ch.cat === "lang") return;
       const key = s.kind + ":c" + i, pick = { key, cat: ch.cat, n: ch.n, opts: ch.opts, src: s.label, multi: true };
-      chosenOf(c, pick).forEach(o => add({ cat: ch.cat, name: ch.cat === "save" ? lcs(o).slice(0, 3) : o, tiers: ch.cat === "trade" ? ["B"] : ch.cat === "weapon" || ch.cat === "armor" ? ["S"] : [] }, s.label + " (your choice)"));
+      chosenOf(c, pick).forEach(o => add({ cat: ch.cat, name: ch.cat === "save" ? lcs(o).slice(0, 3) : o, tiers: ch.cat === "trade" ? [ch.tier || "B"] : ch.cat === "weapon" || ch.cat === "armor" ? [ch.tier || "S"] : [] }, s.label + " (your choice)"));
       picks.push(pick);
     });
     s.feats.forEach((f, i) => { const m = f.d.match(/proficien\w*\s+(?:in|with)\s+([^.]+)/i); if (m) parts.push(parseProf(m[1], `${s.label} (${f.n})`, s.kind + ":f" + i)) });
-    if (s.kind === "class") abilsIn(s.p.saves).forEach(k => add({ cat: "save", name: k, tiers: [] }, s.label));
+    /* the class's own choice list wins over the same choice written in its text, so it isn't offered twice */
+    const hasChoice = cat => arr(s.p.choices).some(ch => ch.cat === cat);
+    if (s.kind === "class" && !hasChoice("save")) {
+      const ks = abilsIn(s.p.saves);
+      if (/\bchoose\b|\bof the following\b|\beither\b|\bor\b/i.test(plainText(s.p.saves || "")) && ks.length > 1) {
+        { const pick = { key: s.kind + ":sv", cat: "save", n: numberIn(plainText(s.p.saves)), opts: ks.map(k => (ABIL.find(x => x[0] === k) || [k, k])[1]), src: s.label, multi: true };
+          chosenOf(c, pick).forEach(o => add({ cat: "save", name: lcs(o).slice(0, 3), tiers: [] }, s.label + " (your choice)")); picks.push(pick) }
+      } else ks.forEach(k => add({ cat: "save", name: k, tiers: [] }, s.label));
+    }
     for (const pr of parts) {
       pr.fixed.forEach(f => add(f, s.label));
       pr.picks.forEach(p => {
+        if (!p.opts && hasChoice(p.cat)) return;
         if (p.opts) { const ch = c.choice[p.key]; if (ch && p.opts.includes(ch)) add({ cat: p.cat, name: ch, tiers: [p.cat === "trade" ? "B" : p.cat === "skill" ? "" : "S"].filter(Boolean) }, s.label + " (your choice)"); }
         picks.push(p);
       });
@@ -261,7 +275,7 @@ function boughtSaves(c, ps) {
   return Math.max(0, manual - pickCount(c, ps, "save").allow);
 }
 function spentParts(c, ps) {
-  const out = { skills: 0, saves: 0, prof: 0, spells: spellSpent(c), saveBuy: boughtSaves(c, ps) * saveCost(), tierBuy: boughtTiers(c, ps) * tierCost() };
+  const out = { skills: 0, saves: 0, prof: 0, spells: spellSpent(c), saveBuy: boughtSaves(c, ps) * saveCost(), tierBuy: 0 };
   rankables(c, ps).forEach(([key, prof, part]) => { const r = c.rank[key]; if (r != null && prof) out[part] += Math.max(0, +r - baseRank(c, key, ps)) });
   out.total = out.skills + out.saves + out.prof + out.spells + out.saveBuy + out.tierBuy;
   return out;
@@ -490,7 +504,7 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
   prof(c) {
     const ps = profState(c), lg = langGrants(c);
     const pts = skillPoints(c);
-    infoDefault = infoBox("Proficiencies", "", `<p><b>Weapon and Armor Proficiencies</b> have three types: S (Simple), M (Martial) and E (Exotic).</p><p><b>Trade Skill Proficiencies</b> have three tiers: B, A and M. They decide which crafting recipes you can make.</p><p>The gold star means you're proficient. The letters show exactly what in: S (Simple), M (Martial) or E (Exotic), or the trade tier.</p><p>You can buy weapon and armor proficiency for <b>${tierCost()} skill points</b> each: Simple first, then Martial, then Exotic. Bought proficiency starts at rank +0.</p><p>Anything given by your race, class or background is already marked.</p>${pts ? `<p>Click the circles to raise the rank (+1 to +10) of anything you're proficient in. Each rank costs 1 skill point from the same pool as your skills.</p>` : ""}`);
+    infoDefault = infoBox("Proficiencies", "", `<p><b>Weapon and Armor Proficiencies</b> have three types: S (Simple), M (Martial) and E (Exotic).</p><p><b>Trade Skill Proficiencies</b> have three tiers: B, A and M. They decide which crafting recipes you can make.</p><p>The gold star means you're proficient. The letters show exactly what in: S (Simple), M (Martial) or E (Exotic), or the trade tier.</p><p>Your race, class and background give your proficiency types; they're already marked and don't cost skill points. If one lets you choose (for example "Two weapon proficiencies of your choice"), click the letters to pick.</p>${pts ? `<p>Click the circles to raise the rank (+1 to +10) of anything you're proficient in. Each rank costs 1 skill point from the same pool as your skills.</p>` : ""}`);
     const head = (h, typeLabel) => `<div class="ccprow cchead"><h3>${h}</h3><span class="ccbh">Prof.</span><span>${typeLabel}</span>${RANK_HEAD}</div>`;
     const badge = (cat, n, on, g) => `<button type="button" class="cbadge${on ? " on" : ""}${g ? " given" : ""}" data-badge="${cat}" data-n="${esc(n)}" aria-pressed="${on}" aria-label="Proficient in ${esc(n)}" title="${on ? (g ? "Proficient (from " + esc(g.src.join(", ")) + ")" : "Proficient. Click to remove") : "Not proficient. Click to become proficient"}">${STAR}</button>`;
     const tierRow = (cat, n, tiers) => { const t = ps.tiers(cat, n), g = ps.given(cat, n); return `<div class="ccprow"><span>${esc(n)}${g ? `<small>${esc(g.src.join(", "))}</small>` : ""}</span>${badge(cat, n, t.size > 0, g)}<span class="cctiers">${tiers.map(([x, l]) => { const lock = g && g.tiers.has(x); return `<button type="button" class="ctier${t.has(x) ? " on" : ""}" data-f="${cat}" data-n="${esc(n)}" data-t="${x}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${t.has(x)}"${lock ? " disabled" : ""}>${x}</button>` }).join("")}</span>${rankBar(c, ps, (cat === "weapon" ? "w:" : "a:") + n, n)}</div>` };
@@ -701,7 +715,7 @@ $("ccmain").addEventListener("click", ev => {
   if (b.dataset.badge) {
     const cat = b.dataset.badge, n = b.dataset.n, ps = profState(c), g = ps.given(cat, n), key = (cat === "weapon" ? "w:" : cat === "armor" ? "a:" : "t:") + n;
     if (g) { say(`${n} comes from your ${g.src.join(", ")}.`); return }
-    if (cat === "trade") c.prof.trade[n] = c.prof.trade[n] ? "" : "B";
+    if (cat === "trade") { if (!c.prof.trade[n] && !tradePickLeft(c, ps)) { tradeNo(n, ps); return } c.prof.trade[n] = c.prof.trade[n] ? "" : "B" }
     else c.prof[cat][n] = Object.values(c.prof[cat][n] || {}).some(Boolean) ? {} : { S: true };
     if (!isProf(c, profState(c), key)) delete c.rank[key];
     touch(); renderCreate(); focusSel(`[data-badge="${cat}"][data-n="${CSS.escape(n)}"]`); return;
@@ -719,7 +733,7 @@ $("ccmain").addEventListener("click", ev => {
   }
   if (b.classList.contains("ctier")) {
     const cat = b.dataset.f, n = b.dataset.n, t = b.dataset.t;
-    if (cat === "trade") c.prof.trade[n] = c.prof.trade[n] === t ? "" : t;
+    if (cat === "trade") { const ps0 = profState(c), g0 = ps0.given("trade", n); if (t !== "B" || g0) { popup("Trade tier", `${esc(n)} at the ${t === "A" ? "Advanced" : t === "M" ? "Master" : "Basic"} tier comes from your class or background.`, "", "OK"); return } if (!c.prof.trade[n] && !tradePickLeft(c, ps0)) { tradeNo(n, ps0); return } c.prof.trade[n] = c.prof.trade[n] ? "" : "B" }
     else { const o2 = c.prof[cat][n] = { ...(c.prof[cat][n] || {}) }; o2[t] = !o2[t] }
     { const key = (cat === "weapon" ? "w:" : cat === "armor" ? "a:" : "t:") + n; if (!isProf(c, profState(c), key)) delete c.rank[key] }
     touch(); renderCreate(); const f = document.querySelector(`.ctier[data-f="${cat}"][data-n="${CSS.escape(n)}"][data-t="${t}"]`); if (f) f.focus(); return;
@@ -795,17 +809,18 @@ function loadPortrait(file) {
   img.src = url;
 }
 /* weapon and armor proficiency: Simple first, then Martial, then Exotic; each costs skill points unless a free pick covers it */
+/* weapon and armor types come from the race, class and background; the player can only add them with a free pick
+   ("Two weapon proficiencies of your choice"). They never cost skill points. */
 function buyTier(c, cat, n, t, sel) {
   const ps = profState(c), have = ps.tiers(cat, n), need = TIER_ORDER[TIER_ORDER.indexOf(t) - 1];
   if (have.has(t)) return;
   if (need && !have.has(need)) { popup("Not yet", `You need <b>${TIER_NAME[need]}</b> proficiency in ${esc(n)} before ${TIER_NAME[t]}.`, "", "OK"); return }
-  const apply = () => { c.prof[cat][n] = { ...(c.prof[cat][n] || {}), [t]: true }; touch(); renderCreate(); focusSel(sel) };
-  if (manualTiers(c, ps, cat) < pickCount(c, ps, cat).allow) { apply(); return }
-  const cost = tierCost(), left = pointsLeft(c, ps);
-  if (left < cost) { popup("Not enough skill points", `${TIER_NAME[t]} proficiency in ${esc(n)} costs <b>${cost} skill points</b>. You have ${Math.max(0, left)} left.`, "", "OK"); return }
-  popup(`${TIER_NAME[t]} proficiency`, `${TIER_NAME[t]} proficiency in ${esc(n)} costs <b>${cost} skill points</b>. You have ${left} left. It starts at rank +0; you can raise its rank once you're proficient.`, `Spend ${cost} points`, "Cancel").then(ok => { if (ok) apply() });
+  if (manualTiers(c, ps, cat) < pickCount(c, ps, cat).allow) { c.prof[cat][n] = { ...(c.prof[cat][n] || {}), [t]: true }; touch(); renderCreate(); focusSel(sel); return }
+  popup(`${TIER_NAME[t]} proficiency`, `${TIER_NAME[t]} proficiency in ${esc(n)} comes from your race, class or background. ${pickCount(c, ps, cat).allow ? "You've used all of your free picks." : "Yours doesn't give it."}`, "", "OK");
 }
 /* a small in-page popup; resolves true when the main button is clicked */
+const tradePickLeft = (c, ps) => { const p = pickCount(c, ps, "trade"); return p.chosen < p.allow };
+const tradeNo = (n, ps) => popup("Trade skill", `${esc(n)} comes from your class or background. ${pickCount(cur, ps, "trade").allow ? "You've used all of your free trade skill picks." : "Yours doesn't give it."}`, "", "OK");
 function popup(title, html, okLabel, cancelLabel) {
   return new Promise(res => {
     const box = document.createElement("div"); box.className = "ccpop"; box.setAttribute("role", "dialog"); box.setAttribute("aria-modal", "true"); box.setAttribute("aria-labelledby", "ccpopT");
@@ -1061,7 +1076,7 @@ function show(v, quiet) {
 
 /* ---------------------------------------------------------------- admin: rules (classes and backgrounds have their own pages) */
 const adminDirty = () => JSON.stringify(cleanCreator()) !== RULES_ORIG;
-const RULE_FIELDS = [["wealth", "Standard starting wealth", "Used when a class doesn't set its own Starting Currency, e.g. 25 (G)"], ["rank", "Starting rank for a proficient skill", "e.g. 1"], ["spellRank", "Highest spell level at character creation", "e.g. 1"], ["saveCost", "Skill points to become proficient in a saving throw", "e.g. 3"], ["tierCost", "Skill points for each weapon or armor proficiency type (Simple, Martial, Exotic)", "e.g. 3"],
+const RULE_FIELDS = [["wealth", "Standard starting wealth", "Used when a class doesn't set its own Starting Currency, e.g. 25 (G)"], ["rank", "Starting rank for a proficient skill", "e.g. 1"], ["spellRank", "Highest spell level at character creation", "e.g. 1"], ["saveCost", "Skill points to become proficient in a saving throw", "e.g. 3"],
   ["featEvery", "Feat every N levels", "Every class gains a feat at each multiple of this level (2 = 2nd, 4th, 6th…). 0 turns it off. e.g. 2"], ["passive", "Passive skill base", "Passive DC = this + the skill's bonus, e.g. 10"], ["langs", "Languages to suggest", "Comma separated. Languages written on races are added automatically."]];
 function fieldHTML(d, [k, label, help], id) {
   const ph = /^e\.g\./.test(help) ? help : "", h = ph ? "" : help;

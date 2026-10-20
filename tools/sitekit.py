@@ -421,6 +421,11 @@ def list_shell(page, logo_svg, admin_modal):
 
 
 CLASSES_CSS = """
+.ptgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;border:2px solid var(--hair);border-radius:12px;padding:10px 12px}
+.ptcol{display:grid;gap:4px;align-content:start}
+.ptcol>b{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+.ptrow{display:grid!important;grid-template-columns:1fr 128px;align-items:center;gap:8px;font-weight:600;font-size:.9rem;margin:0!important}
+.ptrow select{font:700 .85rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:4px 6px;width:100%}
 :root{--gold:#b7791f}
 :root[data-mode="dark"]{--gold:#e8b350}
 .clswrap{max-width:1100px}

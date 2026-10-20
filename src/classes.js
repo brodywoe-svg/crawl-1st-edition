@@ -49,7 +49,7 @@ function chartHTML(k) {
 }
 function classBody(k) {
   return (k.desc ? `<div class="clead">${paras(k.desc)}</div>` : "") + chartHTML(k) +
-    factsHTML([["Hit die", k.hd], ["Hit points at 1st level", k.hp], ["Saving Throws", k.saves], ["Starting Skill Proficiencies", k.skills], ["Skill Points", k.skillPts], ["Other Proficiencies", k.prof], ...k.choices.map(ch => ["Proficiency choice", choiceText(ch)]),
+    factsHTML([["Hit die", k.hd], ["Hit points at 1st level", k.hp], ["Saving Throws", k.saves], ["Starting Skill Proficiencies", k.skills], ["Skill Points", k.skillPts], ...PT_KINDS.map(([x, , label]) => [label, ptypeText(k.ptypes, x)]), ["Other Proficiencies", k.prof], ...k.choices.map(ch => ["Proficiency choice", choiceText(ch)]),
       ["Languages", k.langs], ["Magic source", k.source], ["Spellcasting ability", k.cast && AB[k.cast]], ["Spells at character creation", k.spells], ["Prepared spells", k.prepared], ...spellRankFacts(k), ...k.extra.map(x => [x.k || "Detail", x.v])]) +
     `<div class="clsload"><h3>Equipment Loadout</h3><div class="loadgrid">${k.loadouts.map(l => `<div class="loadc"><b>${esc(l.n)}</b>${gearHTML(l.gear)}</div>`).join("")}<div class="loadc money"><b>Or buy your own</b><p>Starting Currency: <b>${esc(moneyText(k))}</b></p></div></div></div>`;
 }
@@ -62,7 +62,7 @@ function spellRankFacts(k) {
 }
 function bgBody(b) {
   return (b.desc ? `<div class="clead">${paras(b.desc)}</div>` : "") +
-    factsHTML([["Skill Proficiencies", b.skills], ["Weapon Proficiencies", b.weapons], ["Armor Proficiencies", b.armor], ["Trade Skill Proficiencies", b.trades], ["Other Proficiencies", b.prof], ["Language Proficiencies", b.langs],
+    factsHTML([["Skill Proficiencies", b.skills], ["Weapon Proficiencies", [b.weapons, ptypeText(b.ptypes, "w")].filter(Boolean).join(", ")], ["Armor Proficiencies", [b.armor, ptypeText(b.ptypes, "a")].filter(Boolean).join(", ")], ["Trade Skill Proficiencies", [b.trades, ptypeText(b.ptypes, "t")].filter(Boolean).join(", ")], ["Other Proficiencies", b.prof], ["Language Proficiencies", b.langs],
       ...b.choices.map(ch => ["Proficiency choice", choiceText(ch)]), ["Starting wealth", b.wealth], ...b.extra.map(x => [x.k || "Detail", x.v])]) +
     (b.gear.length ? `<div class="clsload"><h3>Starting equipment</h3>${gearHTML(b.gear)}</div>` : "") + featHTML(b.feats);
 }
@@ -95,11 +95,15 @@ const chartRowHTML = r => `<div class="chrow"><input type="number" class="cl" mi
 const kindSelect = cat => `<select class="chk" aria-label="What to choose">${CHOICE_KINDS.map(([v, one, many]) => `<option value="${v}"${v === cat ? " selected" : ""}>${many}</option>`).join("")}</select>`;
 const choiceOptsHTML = (cat, opts) => cat === "lang" ? `<input type="text" class="chtext" value="${esc(opts.join(", "))}" placeholder="Languages, comma separated, e.g. Dwarvish, Elvish, Gnomish" aria-label="Languages to choose from" autocomplete="off">`
   : choiceOptions(cat).map(o => `<label class="chopt"><input type="checkbox" value="${esc(o)}"${opts.includes(o) ? " checked" : ""}><span>${esc(o)}</span></label>`).join("");
-const choiceRowHTML = ch => `<div class="choicerow"><div class="chtop"><span>Choose</span><input type="number" class="chn" min="1" max="20" value="${ch.n || 1}" aria-label="How many"><span class="chk-wrap">${kindSelect(ch.cat)}</span><span>from:</span><button type="button" class="btn xdel">Remove</button></div><div class="chopts">${choiceOptsHTML(ch.cat, ch.opts || [])}</div></div>`;
+const choiceTierSel = (cat, tier) => CHOICE_TIERS[cat] ? `<select class="cht" aria-label="Which type it gives">${CHOICE_TIERS[cat].map(([t, l]) => `<option value="${t}"${t === (tier || CHOICE_TIERS[cat][0][0]) ? " selected" : ""}>${l}</option>`).join("")}</select>` : "";
+const choiceRowHTML = ch => `<div class="choicerow"><div class="chtop"><span>Choose</span><input type="number" class="chn" min="1" max="20" value="${ch.n || 1}" aria-label="How many"><span class="chk-wrap">${kindSelect(ch.cat)}</span><span class="cht-wrap">${choiceTierSel(ch.cat, ch.tier)}</span><span>from:</span><button type="button" class="btn xdel">Remove</button></div><div class="chopts">${choiceOptsHTML(ch.cat, ch.opts || [])}</div></div>`;
 const choicesEditor = d => `<div class="glab">Proficiency choices <small>Let the player pick from a group you set, e.g. choose 1 skill from Athletics, Thievery, Lore or Occult.</small></div><div class="chlist2">${arr(d.choices).map(choiceRowHTML).join("")}</div><button type="button" class="btn" data-act="chadd">Add a choice</button>`;
 const schoolRowHTML = r => `<div class="schrow"><input type="text" class="ss" list="schoolNames" value="${esc(r.s)}" placeholder="School, e.g. Abjuration" aria-label="School" autocomplete="off"><input type="text" class="so" list="schoolNames" value="${esc(r.opp)}" placeholder="Its Opposing School" aria-label="Opposing School" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
 const gearRowHTML = g => `<div class="grow"><input type="text" class="gn" list="itemNames" value="${esc(g.n)}" placeholder="Item, e.g. Leather Jerkin" aria-label="Item" autocomplete="off"><input type="number" class="gq" min="1" max="999" value="${g.qty || 1}" aria-label="How many"><button type="button" class="btn xdel">Remove</button></div>`;
 const loadoutHTML = l => `<div class="lrow"><div class="lhead"><input type="text" class="ln" value="${esc(l.n)}" placeholder="Loadout name, e.g. Loadout A" aria-label="Loadout name" autocomplete="off"><button type="button" class="btn xdel">Remove loadout</button></div><div class="glist">${l.gear.map(gearRowHTML).join("")}</div><button type="button" class="btn" data-act="gadd">Add gear</button></div>`;
+/* pick a proficiency type for each weapon type, armor and trade skill: S/M/E or B/A/M */
+const ptypesEditor = d => `<div class="glab">Proficiency types <small>Pick what this gives for each weapon type, armor and trade skill. Martial includes Simple, and Exotic includes both. The Character Creator gives these automatically.</small></div><div class="ptgrid">` +
+  PT_KINDS.map(([k, cat, label, tiers]) => `<div class="ptcol"><b>${label.replace(" Proficiencies", "")}</b>${choiceOptions(cat).map(n => { const v = ((d.ptypes || {})[k] || {})[n] || ""; return `<label class="ptrow"><span>${esc(n)}</span><select class="ptsel" data-pk="${k}" data-pn="${esc(n)}" aria-label="${esc(n)}">${[["", "—"], ...tiers].map(([t, l]) => `<option value="${t}"${t === v ? " selected" : ""}>${t ? t + " · " + l : "—"}</option>`).join("")}</select></label>` }).join("")}</div>`).join("") + `</div>`;
 function form(p, kind, parent) {
   const d = drafts.get(p._id) || p, id = k => `f${k}-${p._id}`;
   const fld = (k, label, help, inner) => `<label for="${id(k)}">${label}${help ? ` <small>${help}</small>` : ""}${inner}</label>`;
@@ -118,7 +122,8 @@ ${fld("source", "Magic source", "", sel("source", [["", "None"], ...SOURCES.map(
 ${fld("spells", "Spells at character creation", "Empty = no limit", inp("spells", "e.g. 4"))}${fld("skillPts", "Skill Points", "Spent on skill ranks in the creator", inp("skillPts", "e.g. 4"))}</div>` +
     fld("saves", "Saving Throws", "", inp("saves", "e.g. Intelligence, Wisdom")) +
     fld("skills", "Starting Skill Proficiencies", "Name skills, or write “Two skills of your choice” or “Either Arcane or Lore”.", inp("skills", "e.g. Arcane, Two skills of your choice")) +
-    fld("prof", "Other Proficiencies", "Weapon types, armor and trade skills, e.g. simple Blades, Light Armor, Either Alchemy or Scribing.", inp("prof", "e.g. simple Blades, Light Armor")) +
+    ptypesEditor(d) +
+    fld("prof", "Other Proficiencies", "Anything the pickers above can't say, e.g. Either Alchemy or Scribing, or Two weapon proficiencies of your choice.", inp("prof", "e.g. Either Alchemy or Scribing")) +
     fld("langs", "Languages", "", inp("langs", "e.g. One additional Language of your choice")) + choicesEditor(d) +
     `<div class="glab">Class chart <small>One row per level: its Max Pool and Action Die. Features are added to the right level automatically, and so is a Feat at every ${featEvery() ? ordinal(featEvery()) : "Nth"} level (set in the Character Creator's rules).</small></div><div class="chlist"><div class="chrow chh"><span>Level</span><span>Max Pool</span><span>Action Die</span><span></span></div>${d.chart.map(chartRowHTML).join("")}</div>
 <div class="gbtns"><button type="button" class="btn" data-act="cadd">Add a level</button><button type="button" class="btn" data-act="cfill">Fill in levels 1 to 20</button></div>` +
@@ -140,7 +145,7 @@ ${fld("oppCost", "Skill points per Rank for an Opposing School spell", "", inp("
     `<div class="glab">Starting proficiencies <small>Name what the background gives. Write "Either Lore or Occult" for a pick of one, or "Two skills of your choice" for free picks. Use Proficiency choices below to let the player pick from a group you set.</small></div>
 <div class="fgrid">${fld("skills", "Skill Proficiencies", "", inp("skills", "e.g. Persuasion, Appraisal"))}${fld("weapons", "Weapon Proficiencies", "", inp("weapons", "e.g. Simple and Martial Swords"))}
 ${fld("armor", "Armor Proficiencies", "", inp("armor", "e.g. Light Armor"))}${fld("trades", "Trade Skill Proficiencies", "", inp("trades", "e.g. Cooking"))}</div>
-${fld("langs", "Language Proficiencies", "", inp("langs", "e.g. One additional Language of your choice"))}${d.prof ? fld("prof", "Other Proficiencies", "", inp("prof", "")) : ""}` + choicesEditor(d) +
+${fld("langs", "Language Proficiencies", "", inp("langs", "e.g. One additional Language of your choice"))}${d.prof ? fld("prof", "Other Proficiencies", "", inp("prof", "")) : ""}` + ptypesEditor(d) + choicesEditor(d) +
     `<div class="glab">Starting equipment <small>Item names from the Items page link to them.</small></div><div class="glist">${d.gear.map(gearRowHTML).join("")}</div><button type="button" class="btn" data-act="gadd">Add gear</button>` +
     fld("wealth", "Starting wealth", "Added to the player's purse in the creator.", inp("wealth", "e.g. 10 (G)")) +
     `<div class="glab">Features</div><div class="plist">${d.feats.map(bgFeatRow).join("")}</div><button type="button" class="btn" data-act="fadd">Add a feature</button>` + extras;
@@ -152,9 +157,10 @@ function readForm(f) {
   d.feats = own(f, ".prow").map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value, lv: r.querySelector(".pl") ? r.querySelector(".pl").value : "",
     ...(r.querySelector(".foptbox") ? { opts: [...r.querySelectorAll(".forow")].map(o => ({ n: o.querySelector(".fon").value, d: o.querySelector(".fod").value })), pick: r.querySelector(".fpick").value, more: r.querySelector(".fmore").value } : {}) }));
   d.extra = own(f, ".xrow").map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
+  d.ptypes = {}; own(f, ".ptsel").forEach(s => { if (s.value) (d.ptypes[s.dataset.pk] = d.ptypes[s.dataset.pk] || {})[s.dataset.pn] = s.value });
   d.chart = own(f, ".chrow:not(.chh)").map(r => ({ lv: r.querySelector(".cl").value, pool: r.querySelector(".cp").value, die: r.querySelector(".cd").value }));
   d.loadouts = own(f, ".lrow").map(l => ({ n: l.querySelector(".ln").value, gear: [...l.querySelectorAll(".grow")].map(g => ({ n: g.querySelector(".gn").value, qty: g.querySelector(".gq").value })) }));
-  d.choices = own(f, ".choicerow").map(r => { const cat = r.querySelector(".chk").value; return { n: r.querySelector(".chn").value, cat, opts: cat === "lang" ? (r.querySelector(".chtext") ? r.querySelector(".chtext").value.split(/[,;]+/).map(s => s.trim()).filter(Boolean) : []) : [...r.querySelectorAll(".chopt input:checked")].map(i => i.value) } });
+  d.choices = own(f, ".choicerow").map(r => { const cat = r.querySelector(".chk").value; return { n: r.querySelector(".chn").value, cat, tier: r.querySelector(".cht") ? r.querySelector(".cht").value : "", opts: cat === "lang" ? (r.querySelector(".chtext") ? r.querySelector(".chtext").value.split(/[,;]+/).map(s => s.trim()).filter(Boolean) : []) : [...r.querySelectorAll(".chopt input:checked")].map(i => i.value) } });
   d.schools = own(f, ".schrow").map(r => ({ s: r.querySelector(".ss").value, opp: r.querySelector(".so").value }));
   d.gear = own(f, ".glist").filter(g => !g.closest(".lrow")).flatMap(g => [...g.querySelectorAll(".grow")].map(r => ({ n: r.querySelector(".gn").value, qty: r.querySelector(".gq").value })));
   return d;
@@ -237,7 +243,7 @@ $("clist").addEventListener("click", ev => {
 });
 $("clist").addEventListener("change", ev => {
   const s = ev.target.closest(".chk"); if (!s) return;
-  const row = s.closest(".choicerow"); row.querySelector(".chopts").innerHTML = choiceOptsHTML(s.value, []);
+  const row = s.closest(".choicerow"); row.querySelector(".chopts").innerHTML = choiceOptsHTML(s.value, []); row.querySelector(".cht-wrap").innerHTML = choiceTierSel(s.value, "");
 });
 $("gAdd").addEventListener("click", () => {
   const p = IS_CLS ? normClass({ n: "" }) : IS_FEAT ? normFeat({ n: "" }) : normBg({ n: "" }); p._new = true;

@@ -278,7 +278,7 @@
    "saves": "Choose two of the following: Charisma, Wisdom, or Dexterity",
    "skills": "Four skills of your choice",
    "skillPts": "7",
-   "prof": "Choose two weapon proficiencies of your choice, simple and martial light armor,",
+   "prof": "",
    "langs": "two additional languages of your choice",
    "chart": [
     {
@@ -433,7 +433,12 @@
    "majorLv": "",
    "minorLv": "",
    "schools": [],
-   "subs": []
+   "subs": [],
+   "ptypes": {
+    "a": {
+     "Light Armor": "M"
+    }
+   }
   },
   {
    "id": "class-cleric",
@@ -510,7 +515,7 @@
    "saves": "Strength, Constitution",
    "skills": "",
    "skillPts": "6",
-   "prof": "All Simple and Martial Armor",
+   "prof": "",
    "langs": "",
    "chart": [
     {
@@ -775,7 +780,15 @@
    "majorLv": "",
    "minorLv": "",
    "schools": [],
-   "subs": []
+   "subs": [],
+   "ptypes": {
+    "a": {
+     "Light Armor": "M",
+     "Medium Armor": "M",
+     "Heavy Armor": "M",
+     "Shields": "M"
+    }
+   }
   },
   {
    "id": "class-monk",
@@ -1279,7 +1292,7 @@
    "saves": "Intelligence, Wisdom",
    "skills": "",
    "skillPts": "8",
-   "prof": "Simple Blades, Simple Polearms",
+   "prof": "",
    "langs": "Two additional Languages of your choice",
    "chart": [
     {
@@ -1493,7 +1506,13 @@
      "opp": "Enchantment"
     }
    ],
-   "subs": []
+   "subs": [],
+   "ptypes": {
+    "w": {
+     "Blades": "S",
+     "Polearms": "S"
+    }
+   }
   }
  ]
 }

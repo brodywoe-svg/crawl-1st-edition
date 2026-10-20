@@ -50,19 +50,29 @@ function gearOf(x) {
   });
 }
 const chartOf = x => arr(x).map(r => ({ lv: featLv(r && r.lv), pool: str(r && r.pool), die: str(r && r.die) })).filter(r => r.lv || r.pool || r.die).sort((a, b) => (a.lv || 99) - (b.lv || 99));
+/* proficiency types set with the pickers on the Classes and Backgrounds pages:
+   ptypes = {w: {Blades: "M"}, a: {"Light Armor": "S"}, t: {Alchemy: "B"}}. A weapon or armor type includes the ones below it
+   (Martial = Simple and Martial); a trade tier is the highest tier the character can craft. */
+const PT_KINDS = [["w", "weapon", "Weapon Proficiencies", [["S", "Simple"], ["M", "Martial"], ["E", "Exotic"]]], ["a", "armor", "Armor Proficiencies", [["S", "Simple"], ["M", "Martial"], ["E", "Exotic"]]], ["t", "trade", "Trade Skill Proficiencies", [["B", "Basic"], ["A", "Advanced"], ["M", "Master"]]]];
+function ptypesOf(x) {
+  const out = {};
+  PT_KINDS.forEach(([k, cat, , tiers]) => { const m = {}, src = (x && typeof x === "object" && x[k]) || {}; choiceOptions(cat).forEach(n => { const v = str(src[n]); if (tiers.some(t => t[0] === v)) m[n] = v }); if (Object.keys(m).length) out[k] = m });
+  return out;
+}
+const ptypeText = (pt, k) => { const kind = PT_KINDS.find(x => x[0] === k), m = (pt || {})[k] || {}; return Object.keys(m).map(n => `${n} (${(kind[3].find(t => t[0] === m[n]) || ["", m[n]])[1]})`).join(", ") };
 function normClass(p) {
   p = p || {};
   return { id: str(p.id) || newId("class"), n: str(p.n), role: str(p.role), desc: str(p.desc), source: SOURCES.includes(str(p.source)) ? str(p.source) : "", cast: AB[str(p.cast)] ? str(p.cast) : "",
     spells: str(p.spells), hd: str(p.hd), hp: str(p.hp), saves: str(p.saves), skills: str(p.skills), skillPts: str(p.skillPts), prof: str(p.prof), langs: str(p.langs),
     chart: chartOf(p.chart), feats: featsOf(p.feats), loadouts: arr(p.loadouts).map((l, i) => ({ n: str(l && l.n) || `Loadout ${i + 1}`, gear: gearOf(l && l.gear) })).filter(l => l.gear.length || l.n),
-    money: str(p.money), moneyRoll: str(p.moneyRoll), extra: extrasOf(p.extra), choices: choicesOf(p.choices),
+    money: str(p.money), moneyRoll: str(p.moneyRoll), extra: extrasOf(p.extra), choices: choicesOf(p.choices), ptypes: ptypesOf(p.ptypes),
     prepared: str(p.prepared), startRank: str(p.startRank), schoolStart: str(p.schoolStart), oppCost: str(p.oppCost), majorLv: str(p.majorLv), minorLv: str(p.minorLv),
     schools: arr(p.schools).map(r => ({ s: str(r && r.s), opp: str(r && r.opp) })).filter(r => r.s),
     subs: arr(p.subs).filter(s => s && str(s.n)).map(s => ({ id: str(s.id) || newId("sub"), n: str(s.n), desc: str(s.desc), feats: featsOf(s.feats), extra: extrasOf(s.extra), _id: ++uid })).sort(byName), _id: ++uid };
 }
 function normBg(p) {
   p = p || {};
-  return { id: str(p.id) || newId("bg"), n: str(p.n), desc: str(p.desc), skills: str(p.skills), weapons: str(p.weapons), armor: str(p.armor), trades: str(p.trades), prof: str(p.prof), langs: str(p.langs), choices: choicesOf(p.choices),
+  return { id: str(p.id) || newId("bg"), n: str(p.n), desc: str(p.desc), skills: str(p.skills), weapons: str(p.weapons), armor: str(p.armor), trades: str(p.trades), prof: str(p.prof), langs: str(p.langs), choices: choicesOf(p.choices), ptypes: ptypesOf(p.ptypes),
     gear: gearOf(p.gear).concat(p.equip && !arr(p.gear).length ? gearOf(String(p.equip).split(/[,;\n]+/)) : []), wealth: str(p.wealth), feats: featsOf(p.feats), extra: extrasOf(p.extra), _id: ++uid };
 }
 /* "choose from" groups: the player picks n of the listed options */
@@ -75,11 +85,15 @@ function choiceOptions(cat) {
   if (cat === "trade") return [...new Set(["Alchemy", "Blacksmithing", "Cooking", "Enchanting", "Goldsmithing", "Leatherworking", "Scribing", "Tailoring", "Tinkering", "Woodworking", ...arr(typeof CATALOG !== "undefined" && CATALOG ? CATALOG.recipes : []).map(r => str(r && r.prof))].filter(Boolean))].sort();
   return [];
 }
-const choicesOf = x => arr(x).map(ch => ({ n: Math.max(1, Math.min(20, parseInt(ch && ch.n, 10) || 1)), cat: CHOICE_KINDS.some(k => k[0] === (ch && ch.cat)) ? ch.cat : "skill", opts: [...new Set(arr(ch && ch.opts).map(str).filter(Boolean))] })).filter(ch => ch.opts.length);
+/* weapon, armor and trade choices can say which type they give: S/M/E, or B/A/M for trades (default Simple / Basic) */
+const CHOICE_TIERS = { weapon: [["S", "Simple"], ["M", "Martial"], ["E", "Exotic"]], armor: [["S", "Simple"], ["M", "Martial"], ["E", "Exotic"]], trade: [["B", "Basic"], ["A", "Advanced"], ["M", "Master"]] };
+const choicesOf = x => arr(x).map(ch => { const cat = CHOICE_KINDS.some(k => k[0] === (ch && ch.cat)) ? ch.cat : "skill", tl = CHOICE_TIERS[cat], tier = tl && tl.some(t => t[0] === str(ch && ch.tier)) ? str(ch.tier) : "";
+  return { n: Math.max(1, Math.min(20, parseInt(ch && ch.n, 10) || 1)), cat, opts: [...new Set(arr(ch && ch.opts).map(str).filter(Boolean))], ...(tier && tier !== tl[0][0] ? { tier } : {}) } }).filter(ch => ch.opts.length);
 function choiceText(ch) {
   const k = CHOICE_KINDS.find(x => x[0] === ch.cat) || CHOICE_KINDS[0], words = ["", "one", "two", "three", "four", "five", "six"];
   const list = ch.opts.length > 1 ? ch.opts.slice(0, -1).join(", ") + " or " + ch.opts[ch.opts.length - 1] : ch.opts[0];
-  return `Choose ${words[ch.n] || ch.n} ${ch.n === 1 ? k[1] : k[2]} from ${list}`;
+  const tl = CHOICE_TIERS[ch.cat], tier = tl && ch.tier ? (tl.find(t => t[0] === ch.tier) || [])[1] : "";
+  return `Choose ${words[ch.n] || ch.n} ${tier ? tier + " " : ""}${ch.n === 1 ? k[1] : k[2]} from ${list}`;
 }
 const normClasses = j => arr(j && j.classes).filter(c => c && str(c.n)).map(normClass).sort(byName);
 const normBgs = j => arr(j && j.backgrounds).filter(b => b && str(b.n)).map(normBg).sort(byName);
