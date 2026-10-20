@@ -459,7 +459,7 @@
       "Bows",
       "Crossbows",
       "Swords",
-      "Special"
+      "Unarmed"
      ]
     }
    ],
@@ -693,7 +693,7 @@
       },
       {
        "n": "Specialist",
-       "d": "Choose a weapon Category of your Choice; Axes, Blades, Bows, Cudgels, Firearms, Polearms, Swords, Special, Miscellaneous, or Shields, You gain a single skill point in that weapon Category."
+       "d": "Choose a weapon Category of your Choice; Axes, Blades, Bows, Cudgels, Firearms, Polearms, Swords, Unarmed, Miscellaneous, or Shields, You gain a single skill point in that weapon Category."
       }
      ],
      "pick": 1,
@@ -740,8 +740,8 @@
        "d": "You learn the Following Weapon attacks for [color=#8e171c]Swords[/color]: [color=#8e171c]Whirlwind Strikes[/color],"
       },
       {
-       "n": "Special",
-       "d": "You learn the Following Weapon attacks for [color=#8e171c]Special[/color]: [color=#8e171c]Haymaker[/color], [color=#8e171c]Dropkick[/color], [color=#8e171c]Sucker Punch[/color]"
+       "n": "Unarmed",
+       "d": "You learn the Following Weapon attacks for [color=#8e171c]Unarmed[/color]: [color=#8e171c]Haymaker[/color], [color=#8e171c]Dropkick[/color], [color=#8e171c]Sucker Punch[/color]"
       },
       {
        "n": "Miscellaneous",
@@ -796,7 +796,7 @@
       "Firearms",
       "Polearms",
       "Swords",
-      "Special",
+      "Unarmed",
       "Miscellaneous"
      ]
     },

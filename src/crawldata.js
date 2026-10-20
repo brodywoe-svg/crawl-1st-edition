@@ -56,11 +56,14 @@ const chartOf = x => arr(x).map(r => ({ lv: featLv(r && r.lv), pool: str(r && r.
    a trade's letter is the highest tier the character can craft. */
 const W_TIERS = [["S", "Simple"], ["M", "Martial"], ["E", "Exotic"]], T_TIERS = [["B", "Basic"], ["A", "Advanced"], ["M", "Master"]], P_TIER = [["P", "Proficient"]];
 const PT_KINDS = [["v", "save", "Saving Throws", P_TIER], ["s", "skill", "Skill Proficiencies", P_TIER], ["w", "weapon", "Weapon Proficiencies", W_TIERS], ["a", "armor", "Armor Proficiencies", P_TIER], ["t", "trade", "Trade Skill Proficiencies", T_TIERS]];
-const tierVal = (cat, v) => { v = str(v); return cat === "weapon" ? W_TIERS.map(t => t[0]).filter(t => v.includes(t)).join("") : cat === "trade" ? (T_TIERS.some(t => t[0] === v) ? v : "") : v ? "P" : "" };
+/* Unarmed and Miscellaneous weapons have no Simple/Martial/Exotic: proficient or not, like armor ("P") */
+const UNTYPED_W = ["Unarmed", "Miscellaneous"];
+const untyped = (cat, n) => cat === "weapon" && UNTYPED_W.includes(n);
+const tierVal = (cat, v, n) => { v = str(v); if (untyped(cat, n)) return v ? "P" : ""; return cat === "weapon" ? W_TIERS.map(t => t[0]).filter(t => v.includes(t)).join("") : cat === "trade" ? (T_TIERS.some(t => t[0] === v) ? v : "") : v ? "P" : "" };
 const tierWords = (cat, v) => (cat === "weapon" ? W_TIERS : cat === "trade" ? T_TIERS : []).filter(t => str(v).includes(t[0])).map(t => t[1]).join(", ");
 function ptypesOf(x) {
   const out = {};
-  PT_KINDS.forEach(([k, cat]) => { const m = {}, src = (x && typeof x === "object" && x[k]) || {}; choiceOptions(cat).forEach(n => { const v = tierVal(cat, src[n]); if (v) m[n] = v }); if (Object.keys(m).length) out[k] = m });
+  PT_KINDS.forEach(([k, cat]) => { const m = {}, src = (x && typeof x === "object" && x[k]) || {}; choiceOptions(cat).forEach(n => { const v = tierVal(cat, src[n], n); if (v) m[n] = v }); if (Object.keys(m).length) out[k] = m });
   return out;
 }
 const ptypeText = (pt, k) => { const cat = PT_KINDS.find(x => x[0] === k)[1], m = (pt || {})[k] || {}; return Object.keys(m).map(n => { const w = tierWords(cat, m[n]); return w ? `${n} (${w})` : n }).join(", ") };
@@ -87,7 +90,7 @@ const CHOICE_KINDS = [["skill", "skill", "skills"], ["save", "saving throw", "sa
 function choiceOptions(cat) {
   if (cat === "skill") return ["Acrobatics", "Animal Handling", "Appraisal", "Arcane", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Lore", "Medicine", "Nature", "Occult", "Perception", "Performance", "Persuasion", "Religion", "Stealth", "Thievery"];
   if (cat === "save") return ABIL.map(a => a[1]);
-  if (cat === "weapon") return ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Special", "Miscellaneous"];
+  if (cat === "weapon") return ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Unarmed", "Miscellaneous"];
   if (cat === "armor") return ["Light Armor", "Medium Armor", "Heavy Armor", "Shields"];
   if (cat === "trade") return [...new Set(["Alchemy", "Blacksmithing", "Cooking", "Enchanting", "Goldsmithing", "Leatherworking", "Scribing", "Tailoring", "Tinkering", "Woodworking", ...arr(typeof CATALOG !== "undefined" && CATALOG ? CATALOG.recipes : []).map(r => str(r && r.prof))].filter(Boolean))].sort();
   return [];
@@ -96,16 +99,16 @@ function choiceOptions(cat) {
    The old one-type-for-the-whole-list "tier" (Martial meant Simple and Martial) is turned into ot. */
 const CHOICE_TIERS = { weapon: W_TIERS, trade: T_TIERS };
 const choiceDefault = cat => cat === "weapon" ? "S" : cat === "trade" ? "B" : "";
-const optTier = (ch, o) => (ch.ot && ch.ot[o]) || choiceDefault(ch.cat);
+const optTier = (ch, o) => untyped(ch.cat, o) ? "" : (ch.ot && ch.ot[o]) || choiceDefault(ch.cat);
 const choicesOf = x => arr(x).map(ch => { const cat = CHOICE_KINDS.some(k => k[0] === (ch && ch.cat)) ? ch.cat : "skill", opts = [...new Set(arr(ch && ch.opts).map(str).filter(Boolean))], ot = {};
   if (CHOICE_TIERS[cat]) { const t = str(ch && ch.tier), old = cat === "weapon" ? { M: "SM", E: "SME" }[t] || "" : tierVal(cat, t);
-    opts.forEach(o => { const v = tierVal(cat, ((ch && ch.ot) || {})[o]) || old; if (v && v !== choiceDefault(cat)) ot[o] = v }) }
+    opts.filter(o => !untyped(cat, o)).forEach(o => { const v = tierVal(cat, ((ch && ch.ot) || {})[o]) || old; if (v && v !== choiceDefault(cat)) ot[o] = v }) }
   return { n: Math.max(1, Math.min(20, parseInt(ch && ch.n, 10) || 1)), cat, opts, ...(Object.keys(ot).length ? { ot } : {}) } }).filter(ch => ch.opts.length);
 function choiceText(ch) {
   const k = CHOICE_KINDS.find(x => x[0] === ch.cat) || CHOICE_KINDS[0], words = ["", "one", "two", "three", "four", "five", "six"];
   /* one type for every option goes in front ("Choose one Simple and Martial weapon proficiency"); otherwise the ones that differ from Simple/Basic say so after their name */
-  const ts = [...new Set(ch.opts.map(o => optTier(ch, o)))], same = ts.length === 1, lead = same && ts[0] !== choiceDefault(ch.cat) ? tierWords(ch.cat, ts[0]).replace(/, (?=[^,]*$)/, " and ") + " " : "";
-  const names = ch.opts.map(o => same || !CHOICE_TIERS[ch.cat] || optTier(ch, o) === choiceDefault(ch.cat) ? o : `${o} (${tierWords(ch.cat, optTier(ch, o))})`);
+  const typed = ch.opts.filter(o => !untyped(ch.cat, o)), ts = [...new Set(typed.map(o => optTier(ch, o)))], same = ts.length <= 1, lead = same && ts.length && ts[0] !== choiceDefault(ch.cat) ? tierWords(ch.cat, ts[0]).replace(/, (?=[^,]*$)/, " and ") + " " : "";
+  const names = ch.opts.map(o => same || !CHOICE_TIERS[ch.cat] || untyped(ch.cat, o) || optTier(ch, o) === choiceDefault(ch.cat) ? o : `${o} (${tierWords(ch.cat, optTier(ch, o))})`);
   const list = names.length > 1 ? names.slice(0, -1).join(", ") + " or " + names[names.length - 1] : names[0];
   return `Choose ${words[ch.n] || ch.n} ${lead}${ch.n === 1 ? k[1] : k[2]} from ${list}`;
 }

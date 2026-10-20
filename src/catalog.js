@@ -15,7 +15,7 @@
    Runs after the shared admin code and src/editkit.js. */
 const KIND = window.GL_PAGE === "crafting" ? "recipes" : "items";
 const CATS = [
-  ["Weapon", "Weapons", ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Special", "Miscellaneous"]],
+  ["Weapon", "Weapons", ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Unarmed", "Miscellaneous"]],
   ["Ammunition", "Ammunition", ["Arrows", "Bolts", "Shot", "Other"]],
   ["Armor", "Armor", ["Clothing", "Light", "Medium", "Heavy", "Accessories"]],
   ["Consumable", "Consumables", ["Food", "Potions", "Alchemical", "Scrolls and Documents", "Tools"]],
@@ -34,6 +34,8 @@ const RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "(Varies)"]
 const HEX = /^#[0-9a-f]{3,8}$/i;
 const KINDS = ["", "Craftable Modifier", "Enchantment Modifier"];
 const WTIERS = ["Simple", "Martial", "Exotic"];
+/* weapon groups with no Simple/Martial/Exotic */
+const NO_WTIER = ["Unarmed", "Miscellaneous"];
 let items = [], recipes = [], original = "", dirty = false, uid = 0;
 const editing = new Set(), drafts = new Map(), open = new Set();
 
@@ -54,7 +56,7 @@ function normItem(i) {
   const cat = catOf(str(i.cat)) ? str(i.cat) : (/weapon/i.test(i.type) ? "Weapon" : /armor|shield/i.test(i.type) ? "Armor" : /potion|food/i.test(i.type) ? "Consumable" : "Crafting Material");
   return {
     id: str(i.id) || newId("i"), n: str(i.n), nc: HEX.test(str(i.nc)) ? str(i.nc) : "", cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, rarity: str(i.rarity), magic: !!i.magic, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
-    ...(WTIERS.includes(str(i.tier)) ? { tier: str(i.tier) } : {}), ...(str(i.ap) ? { ap: str(i.ap) } : {}), ...(i.preset ? { preset: true } : {}),
+    ...(WTIERS.includes(str(i.tier)) && !NO_WTIER.includes(str(i.sub)) ? { tier: str(i.tier) } : {}), ...(str(i.ap) ? { ap: str(i.ap) } : {}), ...(i.preset ? { preset: true } : {}),
     props: str(i.props && !Array.isArray(i.props) ? i.props : ""), pdefs: Array.isArray(i.pdefs) ? i.pdefs.map(x => ({ n: str(x && x.n), d: str(x && x.d) })).filter(x => x.n || x.d) : pdefsFrom(str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : ""))), desc: str(i.desc), extra: extras(i.extra)
   };
 }
@@ -370,7 +372,7 @@ function readForm(f) {
 }
 function fromDraft(d, x) {
   if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight),
-    tier: d.cat === "Weapon" && WTIERS.includes(d.tier) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
+    tier: d.cat === "Weapon" && WTIERS.includes(d.tier) && !NO_WTIER.includes(str(d.sub ?? x.sub)) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
     ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote ?? x.matNote), applies: str(d.applies),

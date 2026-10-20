@@ -13,7 +13,7 @@ const LEVEL = 1;
 /* ---------------------------------------------------------------- the rules on the sheet */
 const SKILLS = { str: ["Athletics"], dex: ["Acrobatics", "Thievery", "Stealth"], con: [], int: ["Appraisal", "Arcane", "Investigation", "Lore", "Nature"], wis: ["Animal Handling", "Insight", "Medicine", "Perception", "Religion"], cha: ["Deception", "Intimidation", "Occult", "Performance", "Persuasion"] };
 const SKILL_AB = Object.fromEntries(ABIL.flatMap(([k]) => SKILLS[k].map(n => [n, k])));
-const WEAPONS = ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Special", "Miscellaneous"];
+const WEAPONS = ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Unarmed", "Miscellaneous"];
 const ARMORS = ["Light Armor", "Medium Armor", "Heavy Armor", "Shields"];
 const TRADES = [...new Set(["Alchemy", "Blacksmithing", "Cooking", "Enchanting", "Goldsmithing", "Leatherworking", "Scribing", "Tailoring", "Tinkering", "Woodworking",
   ...arr(CATALOG.recipes).map(r => str(r && r.prof))].filter(Boolean))].sort();
@@ -147,7 +147,7 @@ function grants(c) {
   for (const s of sources(c)) {
     const pt = s.p.ptypes || {};
     /* the pickers: weapon letters are exactly the types given; a trade has its tier */
-    PT_KINDS.forEach(([k, cat]) => Object.entries(pt[k] || {}).forEach(([name, t]) => add({ cat, name: cat === "save" ? lcs(name).slice(0, 3) : name, tiers: cat === "weapon" ? [...t] : cat === "trade" ? [t] : [] }, s.label)));
+    PT_KINDS.forEach(([k, cat]) => Object.entries(pt[k] || {}).forEach(([name, t]) => add({ cat, name: cat === "save" ? lcs(name).slice(0, 3) : name, tiers: cat === "weapon" ? (untyped(cat, name) ? ["S"] : [...t]) : cat === "trade" ? [t] : [] }, s.label)));
     const parts = [["skills", "s"], ["weapons", "w"], ["armor", "a"], ["trades", "t"], ["prof", "p"]].map(([f, k]) => parseProf(s.p[f] || "", s.label, s.kind + ":" + k));
     arr(s.p.choices).forEach((ch, i) => {
       if (ch.cat === "lang") return;
@@ -180,7 +180,7 @@ function grants(c) {
 /* choose-from lists leave out what the character already has from somewhere else: hidden when another source gives it
    (every weapon type it would give, or the same trade tier or better), or another list already took it.
    Two lists that both took it keep it in the first. */
-const pickTiers = (p, o) => p.cat === "weapon" ? [...((p.ot && p.ot[o]) || "S")] : p.cat === "trade" ? [(p.ot && p.ot[o]) || "B"] : p.cat === "armor" ? ["S"] : [];
+const pickTiers = (p, o) => p.cat === "weapon" ? (untyped("weapon", o) ? ["S"] : [...((p.ot && p.ot[o]) || "S")]) : p.cat === "trade" ? [(p.ot && p.ot[o]) || "B"] : p.cat === "armor" ? ["S"] : [];
 const covers = (cat, have, need) => cat === "trade" ? Math.max(-1, ...[...have].map(t => "BAM".indexOf(t))) >= "BAM".indexOf(need[0]) : need.every(t => have.has(t));
 function hidePicks(c, list, given) {
   list.forEach((p, i) => { const mine = chosenOf(c, p); p.hide = new Set(p.opts.filter(o => given(p, o) || list.some((q, j) => j !== i && q.cat === p.cat && covers(p.cat, new Set(pickTiers(q, o)), pickTiers(p, o)) && chosenOf(c, q).includes(o) && !(mine.includes(o) && i < j)))) });
@@ -533,7 +533,7 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
     const langs = `<div class="ccsec"><h3 class="cclh">Language Proficiencies</h3>${lg.choices.map(p => choiceSet(c, p)).join("")}<p class="ccnote">${lg.fixed.length ? "You speak " + esc(lg.fixed.map(f => f.name).join(", ")) + "." : "No languages given yet."}${lg.picks ? ` Choose ${lg.picks} more (${esc(lg.from.join(", "))}).` : ""}</p>
 <datalist id="cclangs">${known.map(l => `<option value="${esc(l)}">`).join("")}</datalist><div class="cclangs">${Array.from({ length: nLang }, (_, i) => `<input type="text" list="cclangs" data-f="lang" data-i="${i}" value="${esc(c.langs[i] || "")}" placeholder="Language" aria-label="Language ${i + 1}" autocomplete="off">`).join("")}<button type="button" class="btn" data-act="addlang">Add a language</button></div></div>`;
     return eitherHTML(c, ps, p => p.cat !== "skill" && p.cat !== "save") + counter("weapon", pickCount(c, ps, "weapon"), "weapon proficiency", "weapon proficiencies") + counter("armor", pickCount(c, ps, "armor"), "armor proficiency", "armor proficiencies") + counter("trade", pickCount(c, ps, "trade"), "trade skill") + pointsLine(c, ps) +
-      `<div class="ccsec ccprof">${head("Weapon Proficiencies", "Type")}${WEAPONS.map(n => tierRow("weapon", n, WTIERS)).join("")}</div>
+      `<div class="ccsec ccprof">${head("Weapon Proficiencies", "Type")}${WEAPONS.map(n => tierRow("weapon", n, untyped("weapon", n) ? [] : WTIERS)).join("")}</div>
 <div class="ccsec ccprof">${head("Armor Proficiencies", "")}${ARMORS.map(n => tierRow("armor", n, [])).join("")}</div>
 <div class="ccsec ccprof">${head("Trade Skill Proficiencies", "Tier")}${TRADES.map(tradeRow).join("")}</div>${langs}`;
   },
@@ -836,7 +836,7 @@ function buyTier(c, cat, n, t, sel) {
   if (have.has(t)) return;
   if (need && !have.has(need)) { popup("Not yet", `You need <b>${TIER_NAME[need]}</b> proficiency in ${esc(n)} before ${TIER_NAME[t]}.`, "", "OK"); return }
   if (manualTiers(c, ps, cat) < pickCount(c, ps, cat).allow) { c.prof[cat][n] = { ...(c.prof[cat][n] || {}), [t]: true }; touch(); renderCreate(); focusSel(sel); return }
-  if (cat === "armor") { popup("Armor proficiency", `${esc(n)} proficiency comes from your race, class or background. ${pickCount(c, ps, cat).allow ? "You've used all of your free picks." : "Yours doesn't give it."}`, "", "OK"); return }
+  if (cat === "armor" || untyped(cat, n)) { popup(cat === "armor" ? "Armor proficiency" : "Weapon proficiency", `${esc(n)} proficiency comes from your race, class or background. ${pickCount(c, ps, cat).allow ? "You've used all of your free picks." : "Yours doesn't give it."}`, "", "OK"); return }
   popup(`${TIER_NAME[t]} proficiency`, `${TIER_NAME[t]} proficiency in ${esc(n)} comes from your race, class or background. ${pickCount(c, ps, cat).allow ? "You've used all of your free picks." : "Yours doesn't give it."}`, "", "OK");
 }
 /* a small in-page popup; resolves true when the main button is clicked */
@@ -908,7 +908,7 @@ function snapshot(c) {
     passive: Object.fromEntries(PASSIVE.map(n => [n, (parseInt(CR.rules.passive, 10) || 10) + skillTotal(c, n, ps)])),
     cast: k && k.cast ? { ab: AB[k.cast], mod: castMod, prepared: fml(c, k.prepared), major: c.major || "", minor: c.minor || "", opp: c.major ? oppOf(k, c.major) : "" } : null,
     spells, weapons,
-    profs: { weapons: WEAPONS.filter(n => ps.tiers("weapon", n).size).map(n => `${n} (${[...ps.tiers("weapon", n)].join("")})`), armor: ARMORS.filter(n => ps.tiers("armor", n).size), trades: TRADES.filter(n => ps.trade(n)).map(n => `${n} (${ps.trade(n)})`) },
+    profs: { weapons: WEAPONS.filter(n => ps.tiers("weapon", n).size).map(n => untyped("weapon", n) ? n : `${n} (${[...ps.tiers("weapon", n)].join("")})`), armor: ARMORS.filter(n => ps.tiers("armor", n).size), trades: TRADES.filter(n => ps.trade(n)).map(n => `${n} (${ps.trade(n)})`) },
     langs: [...langGrants(c).fixed.map(f => f.name), ...c.langs.filter(Boolean)],
     inv: c.inv.map(x => { const it = x.iid && itemById(x.iid); return { n: invName(x), qty: x.qty || 1, slot: x.slot || "", weight: it ? it.weight : "", value: it ? it.value : "", iid: x.iid || "" } }),
     wealth: fmtC(startingWealth(c) - spentC(c)),
@@ -973,7 +973,7 @@ ${Array.from({ length: atkN }, (_, i) => { const a = atk[i] || {}; return `<div 
   const page2 = `<section class="spage"><div class="scols">
 <div class="sleft"><div class="sblock ssq"><div class="sbar">Proficiencies</div>
 <div class="srowh sprofh"><span>Category</span><span>Type</span><span>Prof.</span><span class="sscalew"><small>Skill rank</small>${RANK_SCALE}</span><span>Total</span></div>
-<div class="sgroup">Weapons</div>${WEAPONS.map(n => { const t = ps.tiers("weapon", n); return profRow("weapon", n, "w:" + n, t, WTIERS, t.size > 0) }).join("")}
+<div class="sgroup">Weapons</div>${WEAPONS.map(n => { const t = ps.tiers("weapon", n); return profRow("weapon", n, "w:" + n, t, untyped("weapon", n) ? [] : WTIERS, t.size > 0) }).join("")}
 <div class="sgroup">Armor</div>${ARMORS.map(n => { const t = ps.tiers("armor", n); return profRow("armor", n, "a:" + n, t, [], t.size > 0) }).join("")}
 <div class="sgroup">Trade skills</div>${TRADES.map(n => { const t = ps.trade(n); return profRow("trade", n, "t:" + n, t, TTIERS, !!t) }).join("")}</div>
 <div class="sbox"><div class="stab">Languages</div>${lines("lang", 6, [...lg.fixed.map(f => f.name), ...c.langs.filter(Boolean)])}</div>

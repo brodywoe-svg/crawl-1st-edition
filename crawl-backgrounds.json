@@ -846,7 +846,7 @@
       "Firearms",
       "Polearms",
       "Swords",
-      "Special",
+      "Unarmed",
       "Miscellaneous"
      ]
     }
@@ -2017,8 +2017,9 @@
    ],
    "ptypes": {
     "w": {
-     "Special": "SM",
-     "Polearms": "S"
+     "Polearms": "S",
+     "Unarmed": "P",
+     "Miscellaneous": "P"
     },
     "s": {
      "Athletics": "P"
@@ -2324,7 +2325,7 @@
       "Firearms",
       "Polearms",
       "Swords",
-      "Special",
+      "Unarmed",
       "Miscellaneous"
      ],
      "ot": {
@@ -2335,9 +2336,7 @@
       "Cudgels": "SM",
       "Firearms": "SM",
       "Polearms": "SM",
-      "Swords": "SM",
-      "Special": "SM",
-      "Miscellaneous": "SM"
+      "Swords": "SM"
      }
     }
    ],
@@ -2461,7 +2460,7 @@
       "Firearms",
       "Polearms",
       "Swords",
-      "Special",
+      "Unarmed",
       "Miscellaneous"
      ]
     }

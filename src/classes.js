@@ -94,7 +94,7 @@ const kindSelect = cat => `<select class="chk" aria-label="What to choose">${CHO
 /* S/M/E (or B/A/M) bubbles; weapons can have any mix, a trade has one tier */
 const tierBtns = (cat, n, v) => CHOICE_TIERS[cat].map(([t, l]) => `<button type="button" class="pgb${str(v).includes(t) ? " on" : ""}" data-pt="${t}" title="${l}" aria-label="${esc(n)}: ${l}" aria-pressed="${str(v).includes(t)}">${t}</button>`).join("");
 const choiceOptsHTML = (cat, opts, ot) => cat === "lang" ? `<input type="text" class="chtext" value="${esc(opts.join(", "))}" placeholder="Languages, comma separated, e.g. Dwarvish, Elvish, Gnomish" aria-label="Languages to choose from" autocomplete="off">`
-  : choiceOptions(cat).map(o => CHOICE_TIERS[cat]
+  : choiceOptions(cat).map(o => CHOICE_TIERS[cat] && !untyped(cat, o)
     ? `<span class="chopt tiered" data-cat="${cat}"><label><input type="checkbox" value="${esc(o)}"${opts.includes(o) ? " checked" : ""}><span>${esc(o)}</span></label><span class="chtiers">${tierBtns(cat, o, (ot || {})[o] || choiceDefault(cat))}</span></span>`
     : `<label class="chopt"><input type="checkbox" value="${esc(o)}"${opts.includes(o) ? " checked" : ""}><span>${esc(o)}</span></label>`).join("");
 const choiceRowHTML = ch => `<div class="choicerow"><div class="chtop"><span>Choose</span><input type="number" class="chn" min="1" max="20" value="${ch.n || 1}" aria-label="How many"><span class="chk-wrap">${kindSelect(ch.cat)}</span><span>from:</span><button type="button" class="btn xdel">Remove</button></div><div class="chopts">${choiceOptsHTML(ch.cat, ch.opts || [], ch.ot)}</div></div>`;
@@ -105,9 +105,9 @@ const loadoutHTML = l => `<div class="lrow"><div class="lhead"><input type="text
 /* the whole proficiency block for a class or background: what it always gives (click to turn on), languages, then the
    player's choices. Old written-in text only shows while it still has something in it, so it can be moved and cleared. */
 const PG_LABEL = { save: "Saving throws", skill: "Skills", weapon: "Weapons", armor: "Armor", trade: "Trade skills" };
-const profEditor = (d, what, fld, inp) => `<div class="glab">Proficiencies <small>Click everything a character with this ${what} always gets. For weapons, click S, M and/or E on each type it gives; each letter is separate, so click S and M to give both. For trade skills, click the tier.</small></div><div class="pgive">` +
+const profEditor = (d, what, fld, inp) => `<div class="glab">Proficiencies <small>Click everything a character with this ${what} always gets. For weapons, click S, M and/or E on each type it gives; each letter is separate, so click S and M to give both (Unarmed and Miscellaneous have no types). For trade skills, click the tier.</small></div><div class="pgive">` +
   PT_KINDS.map(([k, cat]) => `<div class="pgrow"><span class="pglab">${PG_LABEL[cat]}</span><div class="pgchips">${choiceOptions(cat).map(n => { const v = ((d.ptypes || {})[k] || {})[n] || "";
-    return CHOICE_TIERS[cat] ? `<span class="pgc tiered${v ? " on" : ""}" data-pk="${k}" data-pn="${esc(n)}" data-cat="${cat}"><span class="pgn">${esc(n)}</span>${tierBtns(cat, n, v)}</span>`
+    return CHOICE_TIERS[cat] && !untyped(cat, n) ? `<span class="pgc tiered${v ? " on" : ""}" data-pk="${k}" data-pn="${esc(n)}" data-cat="${cat}"><span class="pgn">${esc(n)}</span>${tierBtns(cat, n, v)}</span>`
       : `<button type="button" class="pgc${v ? " on" : ""}" data-pk="${k}" data-pn="${esc(n)}" aria-pressed="${!!v}">${esc(n)}</button>` }).join("")}</div></div>`).join("") + `</div>` +
   [["saves", "Saving Throws"], ["skills", "Skill Proficiencies"], ["weapons", "Weapon Proficiencies"], ["armor", "Armor Proficiencies"], ["trades", "Trade Skill Proficiencies"], ["prof", "Other Proficiencies"]].filter(([k]) => str(d[k]))
     .map(([k, l]) => fld(k, l + " (written in)", "Old text. Set it with the pickers above or below, then clear this box.", inp(k, ""))).join("") +
