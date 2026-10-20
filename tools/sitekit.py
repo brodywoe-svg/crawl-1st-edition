@@ -24,7 +24,7 @@ NAV_ITEMS = [
                               ("Druid", "spells.html?class=druid"), ("Warlock", "spells.html?class=warlock"), ("Bard", "spells.html?class=bard")]),
     ("Crafting", "crafting.html", [("Blacksmithing", "crafting.html?p=blacksmithing"), ("Tailoring", "crafting.html?p=tailoring"), ("Woodworking", "crafting.html?p=woodworking"), ("Cooking", "crafting.html?p=cooking"), ("Alchemy", "crafting.html?p=alchemy"), ("Leatherworking", "crafting.html?p=leatherworking"), ("Scribing", "crafting.html?p=scribing"), ("Tinkering", "crafting.html?p=tinkering"), ("Goldsmithing", "crafting.html?p=goldsmithing"), ("Enchanting", "crafting.html?p=enchanting")]),
     ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Ammunition", "items.html?c=ammunition"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
-                             ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items"), ("Junk", "items.html?c=junk")]),
+                             ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items"), ("Miscellaneous", "items.html?c=miscellaneous")]),
     ("Glossary", "glossary.html", "glossary"),
     ("Tabletop", "https://brodywoe-svg.github.io/crawl-1st-edition/tabletop/", None),
     ("About", None, None),
