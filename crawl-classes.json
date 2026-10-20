@@ -436,7 +436,7 @@
    "subs": [],
    "ptypes": {
     "a": {
-     "Light Armor": "M"
+     "Light Armor": "P"
     }
    }
   },
@@ -783,10 +783,10 @@
    "subs": [],
    "ptypes": {
     "a": {
-     "Light Armor": "M",
-     "Medium Armor": "M",
-     "Heavy Armor": "M",
-     "Shields": "M"
+     "Light Armor": "P",
+     "Medium Armor": "P",
+     "Heavy Armor": "P",
+     "Shields": "P"
     }
    }
   },
