@@ -5,7 +5,7 @@
    "id": "bg-dz19quve175u",
    "n": "Academy Dropout",
    "desc": "You once walked the halls of an arcane academy, filling notebooks with formulas, diagrams and half-understood theory. Whether through failed exams, a scandal you'd rather not discuss, or simply running out of coin for tuition, you left before earning your mantle.\n\nYou know just enough magic to be dangerous and just enough theory to argue with real mages. Some dropouts carry a grudge against the masters who turned them away. Others still hope to prove they belonged there all along.",
-   "skills": "Arcane",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -25,6 +25,9 @@
    "ptypes": {
     "t": {
      "Scribing": "B"
+    },
+    "s": {
+     "Arcane": "P"
     }
    },
    "gear": [
@@ -108,7 +111,7 @@
    "id": "bg-sxszaggtknjl",
    "n": "Acolyte",
    "desc": "You were raised or trained within the walls of a temple, tending its candles, reciting its rites and serving the faithful who came seeking comfort. You know the hymns, the holy days and the proper words for blessings, burials and oaths.\n\nWhether you left to spread your faith, to answer a calling you couldn't ignore, or because you began to question what you'd been taught, the temple's teachings still shape how you see the world.",
-   "skills": "Religion, Insight",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -118,6 +121,10 @@
    "ptypes": {
     "w": {
      "Cudgels": "S"
+    },
+    "s": {
+     "Religion": "P",
+     "Insight": "P"
     }
    },
    "gear": [
@@ -151,7 +158,7 @@
    "id": "bg-cswuhud2sn9a",
    "n": "Apprentice Scribe",
    "desc": "You spent your youth bent over a writing desk, copying ledgers, letters, contracts and old texts for a scholar, temple or guild. Your hand is steady, your letters are clean, and you've read far more than anyone meant you to, from forgotten histories to secrets scrawled in the margins.\n\nPerhaps your master died, perhaps you copied something you shouldn't have, or perhaps you simply grew tired of writing about the world instead of seeing it. Either way, you set down the quill and stepped out to find stories of your own.",
-   "skills": "Lore, Investigation",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -161,6 +168,10 @@
    "ptypes": {
     "t": {
      "Scribing": "B"
+    },
+    "s": {
+     "Lore": "P",
+     "Investigation": "P"
     }
    },
    "gear": [
@@ -256,7 +267,7 @@
    "id": "bg-yuaj1ex5yyhu",
    "n": "Bounty Hunter",
    "desc": "You made your coin bringing people in, whether they were thieves, deserters, murderers or simply someone who owed the wrong person money. You learned to read a trail, question a tavern full of liars, and tell the difference between a frightened fugitive and a dangerous one.\n\nSome bounty hunters follow a strict code and only take honest contracts. Others will hunt anyone if the price is right. Either way, you know that everyone runs eventually, and everyone leaves something behind.",
-   "skills": "Investigation",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -280,6 +291,9 @@
     },
     "a": {
      "Light Armor": "P"
+    },
+    "s": {
+     "Investigation": "P"
     }
    },
    "gear": [
@@ -313,7 +327,7 @@
    "id": "bg-vvfacppfmlia",
    "n": "Caravan Hand",
    "desc": "You spent years on the trade roads with merchant caravans, loading crates, driving pack animals, mending harnesses and standing watch through long nights at camp. You've crossed deserts, mountain passes and border towns, and you've seen how much of the realm runs on the goods carried by people like you.\n\nPerhaps you traveled with the Gold Dwarf trade clans, or with a human merchant house. Either way, you know the roads, the rest stops and the price of everything, and you've learned that the most dangerous part of any journey is usually the people waiting along it.",
-   "skills": "Athletics, Animal Handling",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -326,6 +340,10 @@
     },
     "t": {
      "Leatherworking": "B"
+    },
+    "s": {
+     "Athletics": "P",
+     "Animal Handling": "P"
     }
    },
    "gear": [
@@ -359,7 +377,7 @@
    "id": "bg-h77d1ugc69eq",
    "n": "Cartographer",
    "desc": "You've spent your life measuring the world and putting it on paper. You've traced coastlines from the decks of ships, sketched mountain passes by firelight, and crawled through ruined halls with a lantern and a measuring cord, marking every turn so the next explorer wouldn't get lost.\n\nGuilds, nobles and treasure-seekers paid well for accurate maps, and you learned that a good map is worth more than a sword in the wrong tunnel. Now you're heading into places no one has charted, to fill in the empty spaces yourself.",
-   "skills": "Perception",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -379,6 +397,9 @@
    "ptypes": {
     "t": {
      "Scribing": "B"
+    },
+    "s": {
+     "Perception": "P"
     }
    },
    "gear": [
@@ -416,7 +437,7 @@
    "id": "bg-vxn9sd46h43r",
    "n": "Charlatan",
    "desc": "You've sold miracle cures that were only colored water, deeds to land that didn't exist, and noble titles you made up on the spot. You've worn a dozen names and told a hundred stories, and you've learned that people will believe almost anything if it's what they want to hear.\n\nMaybe a con went wrong and you had to leave town in a hurry, or maybe you've decided to turn your talents toward bigger prizes. Either way, somewhere out there are people who'd very much like a word with whichever version of you robbed them.",
-   "skills": "Deception",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -441,7 +462,11 @@
      ]
     }
    ],
-   "ptypes": {},
+   "ptypes": {
+    "s": {
+     "Deception": "P"
+    }
+   },
    "gear": [
     {
      "n": "Set of fine clothes",
@@ -527,7 +552,7 @@
    "id": "bg-p8fkjbzp2eyg",
    "n": "Courtier",
    "desc": "You spent your life in the halls of power, though not always as one of the powerful. Perhaps you were a lord's advisor, a herald, a lady-in-waiting or simply a well-connected attendant. You learned to read a room, flatter the right person and smile at your enemies while they smiled back.\n\nCourt life taught you that words are sharper than swords, and that every favor has a price. Whether you fell out of favor, fled a scandal or were sent away on some delicate errand, you carry the manners and the cunning of the court with you.",
-   "skills": "Insight, Persuasion",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -537,6 +562,10 @@
    "ptypes": {
     "w": {
      "Blades": "S"
+    },
+    "s": {
+     "Insight": "P",
+     "Persuasion": "P"
     }
    },
    "gear": [
@@ -570,7 +599,7 @@
    "id": "bg-3dcfdaui9t2l",
    "n": "Cult Escapee",
    "desc": "You were raised in a secretive cult, or drawn into one when you were young and desperate. You chanted its prayers, kept its secrets and watched its rituals in the dark, believing for a time that you were part of something greater.\n\nThen something broke the spell, whether a ritual that went too far, an order you couldn't follow or a truth you were never meant to see. You ran, and you've been running ever since. You still know their signs and their songs, and you suspect they haven't stopped looking for you.",
-   "skills": "Occult",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -590,6 +619,9 @@
    "ptypes": {
     "w": {
      "Blades": "S"
+    },
+    "s": {
+     "Occult": "P"
     }
    },
    "gear": [
@@ -619,7 +651,7 @@
    "id": "bg-xfrn9k5n0a3x",
    "n": "Deserter",
    "desc": "You once marched under a banner, drilled in formation and slept in the mud with your company. Then, at some point, you threw down your colors and walked away. Maybe you refused an order you couldn't stomach, maybe you saw a battle you knew was already lost, or maybe you were simply tired of dying for someone else's war.\n\nWhatever the reason, the army calls it desertion, and the punishment is rarely kind. You've learned to keep your head down, avoid patrols and never stay too long in one place, but the habits of a soldier haven't left you.",
-   "skills": "Stealth",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -643,6 +675,9 @@
     },
     "a": {
      "Light Armor": "P"
+    },
+    "s": {
+     "Stealth": "P"
     }
    },
    "gear": [
@@ -735,7 +770,7 @@
    "id": "bg-n6oyd75avlom",
    "n": "Executioner",
    "desc": "You carried out the final sentences of lords, magistrates and city courts. You stood on the scaffold before silent crowds, hooded or bare-faced, and did the work that others were glad to leave to someone else. You learned the anatomy of a clean end, and you learned to live with the stares that followed you through the streets.\n\nPerhaps you executed someone you came to believe was innocent, perhaps your lord fell and took your position with them, or perhaps you simply couldn't lift the axe again. Whatever happened, people still remember your face, and few of them remember it fondly.",
-   "skills": "Intimidation, Medicine",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -744,7 +779,11 @@
    "choices": [],
    "ptypes": {
     "w": {
-     "Axes": "M"
+     "Axes": "SM"
+    },
+    "s": {
+     "Intimidation": "P",
+     "Medicine": "P"
     }
    },
    "gear": [
@@ -812,7 +851,6 @@
      ]
     }
    ],
-   "ptypes": {},
    "gear": [
     {
      "n": "Traveler's cloak",
@@ -840,7 +878,7 @@
    "id": "bg-rvyef65imse6",
    "n": "Farmhand",
    "desc": "You grew up working the land, rising before dawn to tend fields, mend fences, haul water and drive stubborn animals to pasture. The work was hard and the seasons were harsher, but it gave you a strong back, steady hands and a plain, honest way of seeing the world.\n\nMaybe a bad harvest drove you off the farm, maybe raiders burned it down, or maybe you simply looked at the road leading out of the village and wondered where it went. Either way, you've traded the plow for the open road, but you still know the value of a hard day's work and a hot meal.",
-   "skills": "Athletics, Animal Handling",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -853,6 +891,10 @@
     },
     "t": {
      "Cooking": "B"
+    },
+    "s": {
+     "Athletics": "P",
+     "Animal Handling": "P"
     }
    },
    "gear": [
@@ -886,7 +928,7 @@
    "id": "bg-8otf4kx7glh9",
    "n": "Fence",
    "desc": "You ran the quiet back room where stolen goods changed hands. Thieves brought you jewels, silverware and the occasional priceless heirloom, and you paid them a fraction of what it was worth before selling it on to buyers who never asked where it came from. You learned to judge a gem by its weight and a client by their nerves.\n\nMaybe the watch finally caught up with your shop, maybe a deal went bad with the wrong people, or maybe you bought something you never should have touched. Whatever the reason, you've closed up shop and taken your keen eye for value on the road.",
-   "skills": "Appraisal, Deception",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -899,6 +941,10 @@
     },
     "t": {
      "Goldsmithing": "B"
+    },
+    "s": {
+     "Appraisal": "P",
+     "Deception": "P"
     }
    },
    "gear": [
@@ -932,7 +978,7 @@
    "id": "bg-6oi23yh9fl70",
    "n": "Folk Hero",
    "desc": "You came from humble beginnings, but when danger came to your village, you were the one who stood up to it. Maybe you drove off a band of raiders, slew a beast that had been taking livestock, or defied a cruel lord's tax collectors in front of the whole town square. Whatever you did, the people haven't forgotten.\n\nYour story is told around hearths and sung in taverns, and it grows a little grander with each telling. Now you've set out to see if you can live up to the legend, or to find out whether you were ever really a hero at all.",
-   "skills": "Athletics",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -952,6 +998,9 @@
    "ptypes": {
     "a": {
      "Light Armor": "P"
+    },
+    "s": {
+     "Athletics": "P"
     }
    },
    "gear": [
@@ -981,7 +1030,7 @@
    "id": "bg-q4swab0j31eg",
    "n": "Forge Apprentice",
    "desc": "You grew up in the heat and noise of a smithy, working the bellows, hauling ore and hammering out nails, hinges and horseshoes until your arms ached. Over the years your master trusted you with finer work, like blades, tools and armor fittings, and you learned to tell good metal from bad by its ring under the hammer.\n\nMaybe you trained in a Black Iron fortress, a Mountain Dwarf hall or a simple village forge. Either way, you've left the anvil to see the world, and perhaps to find the rare ores and legendary techniques you've only heard about from old smiths' stories.",
-   "skills": "Athletics, Appraisal",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -994,6 +1043,10 @@
     },
     "t": {
      "Blacksmithing": "B"
+    },
+    "s": {
+     "Athletics": "P",
+     "Appraisal": "P"
     }
    },
    "gear": [
@@ -1027,7 +1080,7 @@
    "id": "bg-65vbheg4m986",
    "n": "Gambler",
    "desc": "You lived by the roll of the dice and the turn of a card. Smoky back rooms, riverboat tables and noble card parties were your hunting grounds, and you learned to read a bluff in the twitch of a lip and to slip away before a losing streak turned violent.\n\nFortune has carried you to great heights and dropped you into deep holes more times than you can count. Now you're betting on the biggest game of all, adventure, where the stakes are life and death and the payout could be a fortune.",
-   "skills": "Deception, Insight",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1037,6 +1090,10 @@
    "ptypes": {
     "w": {
      "Blades": "S"
+    },
+    "s": {
+     "Deception": "P",
+     "Insight": "P"
     }
    },
    "gear": [
@@ -1074,7 +1131,7 @@
    "id": "bg-6kfz2glo0uwy",
    "n": "Guild Artisan",
    "desc": "You earned your place in a craft guild through years of apprenticeship, careful work and a masterpiece judged by the guild's elders. Whether you're a smith, tailor, alchemist, woodworker or jeweler, your guild's seal on your work means quality, and your name is written in the guild's rolls.\n\nGuild membership brings privileges, connections and protection, but also dues, politics and obligations. Maybe you've left to find rare materials for your craft, to escape guild politics, or to build a reputation that reaches beyond the city walls.",
-   "skills": "Appraisal, Persuasion",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1098,7 +1155,12 @@
      ]
     }
    ],
-   "ptypes": {},
+   "ptypes": {
+    "s": {
+     "Appraisal": "P",
+     "Persuasion": "P"
+    }
+   },
    "gear": [
     {
      "n": "Set of tools for your chosen trade",
@@ -1126,7 +1188,7 @@
    "id": "bg-lbdi3bpt5o1c",
    "n": "Gunsmith's Apprentice",
    "desc": "You learned your trade in a cramped workshop that smelled of oil, brimstone and hot brass, perhaps under a Gnomish craftsman, perhaps in a Gold Dwarf trading house that dealt in firearms. You spent years filing tiny springs, fitting locks and triggers, and measuring powder by the grain, learning that one careless mistake could cost a hand or a life.\n\nFirearms are rare, expensive and feared, and few people truly understand how they work. You do, or at least you understand enough to know how much you've yet to learn. Now you've set out to find rare materials, new designs, or simply a chance to see what your craft can really do.",
-   "skills": "Investigation",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1148,6 +1210,9 @@
     },
     "t": {
      "Tinkering": "B"
+    },
+    "s": {
+     "Investigation": "P"
     }
    },
    "gear": [
@@ -1189,7 +1254,7 @@
    "id": "bg-4rync85ka3nn",
    "n": "Hedge Mage",
    "desc": "You never set foot in an academy. Your magic came in scraps: a few words learned from a wandering spellcaster, a battered spellbook bought from a peddler, charms and folk magic passed down from a village wise-woman. You learned by trial, error and the occasional singed eyebrow.\n\nTrained mages may sneer at your methods, but your magic is practical, earthy and stubborn, built for mending fences, warding off pests and surviving in places where no scholar would set foot. What you lack in polish, you make up for in grit and creativity.",
-   "skills": "Arcane, Nature",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1202,6 +1267,10 @@
     },
     "t": {
      "Alchemy": "B"
+    },
+    "s": {
+     "Arcane": "P",
+     "Nature": "P"
     }
    },
    "gear": [
@@ -1239,7 +1308,7 @@
    "id": "bg-l59jow7y97st",
    "n": "Heir",
    "desc": "You stand to inherit something of great value: a title, a parcel of land, a merchant fortune or the leadership of a proud family. Unfortunately, someone else wants it too. Perhaps a scheming relative, a rival house, or a usurper has pushed you out, and your claim is worth little unless you can survive long enough to press it.\n\nYou were raised with tutors, manners and expectations, but you've had to leave comfort behind. Whether you're gathering allies, proving yourself worthy, or simply staying out of reach of assassins, you carry your family's name and its burdens with you.",
-   "skills": "Persuasion",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1259,6 +1328,9 @@
    "ptypes": {
     "w": {
      "Swords": "S"
+    },
+    "s": {
+     "Persuasion": "P"
     }
    },
    "gear": [
@@ -1292,7 +1364,7 @@
    "id": "bg-148sj11woy5f",
    "n": "Herbalist",
    "desc": "You spent years in fields, forests and marshes gathering roots, leaves, flowers and fungi, learning which ones soothe a fever, which ones stop bleeding and which ones can stop a heart. You know plants by their smell, their bark and the way they grow, and you trust nature's remedies far more than any priest's prayers.\n\nVillagers once came to you for poultices and teas, and the occasional desperate patient came for something stronger. Now you travel in search of rare plants that grow only in dangerous places, ones whispered about in old herb-lore but seldom seen.",
-   "skills": "Nature, Medicine",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1302,6 +1374,10 @@
    "ptypes": {
     "t": {
      "Alchemy": "B"
+    },
+    "s": {
+     "Nature": "P",
+     "Medicine": "P"
     }
    },
    "gear": [
@@ -1396,7 +1472,7 @@
    "id": "bg-j6do572spfiu",
    "n": "Inquisitor",
    "desc": "You served a church as one of its hunters, rooting out heretics, cultists, demon-worshippers and practitioners of forbidden magic. You've interrogated the guilty and the innocent alike, burned profane books and walked into places where the faithful feared to go. Your faith is a weapon, and you were taught to wield it without mercy.\n\nPerhaps you're still on a holy mission, hunting a heresy that slipped through your church's grasp. Or perhaps you've begun to doubt the orders you were given and the people you condemned. Either way, the darkness you've hunted hasn't forgotten you.",
-   "skills": "Religion",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1425,6 +1501,9 @@
     "w": {
      "Cudgels": "S",
      "Crossbows": "S"
+    },
+    "s": {
+     "Religion": "P"
     }
    },
    "gear": [
@@ -1462,7 +1541,7 @@
    "id": "bg-n36lr9kjhdpa",
    "n": "Investigator",
    "desc": "You made your living solving problems others couldn't, like missing persons, stolen heirlooms, unexplained deaths and crimes the city watch had given up on. Maybe you wore the watch's badge, or maybe you worked privately for anyone who could pay. You learned to notice the scuff on a boot, the lie in a nervous smile and the detail that doesn't fit.\n\nOne case still haunts you, an answer you never found or a culprit who slipped away. You've taken to the road partly for work and partly because, somewhere out there, the trail of that case might finally lead somewhere.",
-   "skills": "Investigation, Insight",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1472,6 +1551,10 @@
    "ptypes": {
     "w": {
      "Blades": "S"
+    },
+    "s": {
+     "Investigation": "P",
+     "Insight": "P"
     }
    },
    "gear": [
@@ -1505,7 +1588,7 @@
    "id": "bg-xmtdmgt98z0i",
    "n": "Knight Errant",
    "desc": "You were knighted once, or trained to be, and swore oaths of courage, protection and honor. But you serve no lord's court. Instead you ride, or more often walk, from place to place, bound to a cause of your own: defending the helpless, hunting a great evil, fulfilling a vow made at a deathbed, or seeking redemption for a past failure.\n\nYour armor may be dented and your surcoat faded, but your oath still burns bright. Some see you as a relic of a nobler age, others as a fool chasing legends. You simply see a road, a wrong to right, and the next town that needs a sword.",
-   "skills": "Athletics",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1524,7 +1607,10 @@
    ],
    "ptypes": {
     "w": {
-     "Swords": "M"
+     "Swords": "SM"
+    },
+    "s": {
+     "Athletics": "P"
     }
    },
    "gear": [
@@ -1558,14 +1644,19 @@
    "id": "bg-v5waka3iin2h",
    "n": "Miner",
    "desc": "You spent your days deep underground, swinging a pick by lamplight, hauling carts of ore and listening to the groan of timber supports holding back the weight of the mountain. Maybe you worked the dwarven halls, the iron seams beneath the Ash Fields, or a rough human mine where the pay was poor and the ceiling was worse.\n\nYou've seen tunnels collapse, gas flare and things crawl out of the dark that no miner ever wanted to find. You know rock, ore and the dark better than most, and you've decided that if you're going to risk your life underground, you might as well go looking for treasure instead of iron.",
-   "skills": "Athletics, Appraisal",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
    "prof": "",
    "langs": "",
    "choices": [],
-   "ptypes": {},
+   "ptypes": {
+    "s": {
+     "Athletics": "P",
+     "Appraisal": "P"
+    }
+   },
    "gear": [
     {
      "n": "Miner's pick",
@@ -1680,7 +1771,7 @@
    "id": "bg-mv94nfvwuxuw",
    "n": "Noble",
    "desc": "You were born into a noble house, raised among banners, banquets and the endless business of land, titles and alliances. Tutors taught you history, etiquette, heraldry and the proper way to address a duke, and you grew up knowing that your family's name opened doors that stayed shut to everyone else.\n\nBut privilege comes with expectations. Perhaps you were sent out to prove yourself, to restore your house's fading honor, or to escape a marriage arranged for you. Or perhaps you simply wanted a life that was more than ceremony. You carry your family's name wherever you go, for better or worse.",
-   "skills": "Persuasion, Lore",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1690,6 +1781,10 @@
    "ptypes": {
     "w": {
      "Swords": "S"
+    },
+    "s": {
+     "Persuasion": "P",
+     "Lore": "P"
     }
    },
    "gear": [
@@ -1723,7 +1818,7 @@
    "id": "bg-kokbe0fgngv6",
    "n": "Outlander",
    "desc": "You were raised far from walls and roads, among nomadic clans, frontier settlers or a remote tribe at the edge of the known world. You learned to read the weather, follow game trails, find water in dry country and sleep under open skies in any season. Cities still feel loud, cramped and strange to you.\n\nSomething drew you away from the wilds, whether a duty to your people, a disaster that scattered them, or simple curiosity about the world beyond the horizon. You bring with you the instincts of the wild and a quiet confidence that you can survive where others would falter.",
-   "skills": "Nature, Perception",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1734,6 +1829,10 @@
     "w": {
      "Bows": "S",
      "Crossbows": "S"
+    },
+    "s": {
+     "Nature": "P",
+     "Perception": "P"
     }
    },
    "gear": [
@@ -1771,7 +1870,7 @@
    "id": "bg-9063sf7mckcf",
    "n": "Performer",
    "desc": "You've sung in smoky taverns, juggled in market squares, told stories by roadside fires and played for nobles who barely looked up from their wine. Whether you're a musician, actor, acrobat, storyteller or fire-eater, you know how to hold a crowd, and how to leave town quickly when a performance goes badly.\n\nThe stage taught you to read an audience, wear a mask and make people believe, if only for a moment. Now you're chasing a greater stage: adventures worth singing about, and perhaps a legend of your own.",
-   "skills": "Performance",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1791,6 +1890,9 @@
    "ptypes": {
     "t": {
      "Tailoring": "B"
+    },
+    "s": {
+     "Performance": "P"
     }
    },
    "gear": [
@@ -1836,7 +1938,7 @@
    "id": "bg-h2n8j08u20qi",
    "n": "Pilgrim",
    "desc": "You're on a long journey toward a holy place: a distant temple, a saint's tomb, a sacred mountain or a shrine said to grant visions to the worthy. Perhaps you walk to fulfill a vow, to seek forgiveness, to find healing for someone you love, or simply because your faith called you to the road.\n\nYou've worn out more than one pair of boots, shared fires with strangers of every kind and learned that the journey changes you as much as the destination. Your road has now taken a detour into danger, but you trust it still leads where you need to go.",
-   "skills": "Religion",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1856,6 +1958,9 @@
    "ptypes": {
     "w": {
      "Polearms": "S"
+    },
+    "s": {
+     "Religion": "P"
     }
    },
    "gear": [
@@ -1893,7 +1998,7 @@
    "id": "bg-nu8lraxo2wog",
    "n": "Pit Fighter",
    "desc": "You fought for money and the roar of the crowd, in fighting pits dug beneath taverns, chalk circles in back alleys and grand arenas where nobles placed bets from shaded boxes. You've faced brawlers, beasts and trained gladiators, armed with whatever the organizers handed you, whether a net, a spear or just your fists.\n\nMaybe you won your freedom, maybe you fled a pit master who claimed you were his property, or maybe you simply decided that if you're going to bleed, you'd rather bleed for treasure. The crowd still chants your fighting name in your dreams.",
-   "skills": "Athletics",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -1912,8 +2017,11 @@
    ],
    "ptypes": {
     "w": {
-     "Special": "M",
+     "Special": "SM",
      "Polearms": "S"
+    },
+    "s": {
+     "Athletics": "P"
     }
    },
    "gear": [
@@ -2017,7 +2125,7 @@
    "id": "bg-k9qcz7p4eolx",
    "n": "Sage",
    "desc": "You've devoted your life to the pursuit of knowledge, spending years among dusty archives, crumbling scrolls and the debates of learned colleagues. Whether your passion is ancient history, the stars, forgotten languages, strange beasts or the nature of magic itself, you know more about your chosen field than nearly anyone alive.\n\nBut books can only take you so far. The answers you seek lie in lost ruins, sealed vaults and places no scholar has dared to go. Now you've set out to find them yourself, armed with your mind, your notes and a growing suspicion that the truth is stranger than any book suggests.",
-   "skills": "Lore",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2038,6 +2146,9 @@
    "ptypes": {
     "t": {
      "Scribing": "B"
+    },
+    "s": {
+     "Lore": "P"
     }
    },
    "gear": [
@@ -2075,7 +2186,7 @@
    "id": "bg-7ldlap1oiyic",
    "n": "Sailor",
    "desc": "You've worked the decks of merchant cogs, fishing boats, river barges or perhaps a ship with a darker trade. You climbed the rigging in storms, hauled nets until your hands bled and learned a hundred knots, a dozen shanties and every sailor's superstition. The sea gave you a strong back, a steady balance and very little patience for landlubbers.\n\nMaybe your ship sank, maybe your captain cheated the crew, or maybe you simply grew tired of seeing ports only from the docks. Now you've traded the open sea for open roads and dark tunnels, though you still miss the salt air.",
-   "skills": "Athletics, Acrobatics",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2088,6 +2199,10 @@
     },
     "t": {
      "Woodworking": "B"
+    },
+    "s": {
+     "Athletics": "P",
+     "Acrobatics": "P"
     }
    },
    "gear": [
@@ -2125,7 +2240,7 @@
    "id": "bg-p69rg03i0u9f",
    "n": "Scavenger",
    "desc": "You survived on what others threw away. You picked through rubbish heaps, battlefields, flooded cellars and abandoned houses, salvaging scrap metal, broken tools and the occasional forgotten treasure. You learned that almost anything can be fixed, sold or made into something useful, if you know how to look.\n\nPeople called you a rag-picker, a gutter-diver or worse, but you know the value of things better than most merchants. Now you've set your sights on the richest scrap heaps of all: ruins and dungeons where entire fortunes lie abandoned in the dark.",
-   "skills": "Appraisal, Perception",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2135,6 +2250,10 @@
    "ptypes": {
     "t": {
      "Tinkering": "B"
+    },
+    "s": {
+     "Appraisal": "P",
+     "Perception": "P"
     }
    },
    "gear": [
@@ -2208,10 +2327,20 @@
       "Special",
       "Miscellaneous"
      ],
-     "tier": "M"
+     "ot": {
+      "Axes": "SM",
+      "Blades": "SM",
+      "Bows": "SM",
+      "Crossbows": "SM",
+      "Cudgels": "SM",
+      "Firearms": "SM",
+      "Polearms": "SM",
+      "Swords": "SM",
+      "Special": "SM",
+      "Miscellaneous": "SM"
+     }
     }
    ],
-   "ptypes": {},
    "gear": [
     {
      "n": "One weapon from your chosen category worth no more than 15 (G)",
@@ -2243,7 +2372,7 @@
    "id": "bg-scdpqwug4k3i",
    "n": "Smuggler",
    "desc": "You moved goods that weren't supposed to move: untaxed wine, forbidden books, stolen relics, Gold Dwarf firearms and the occasional passenger who needed to leave town unseen. You knew the hidden coves, the forgotten tunnels beneath the city walls and which customs officers could be bribed, and which ones would get you hanged.\n\nMaybe a shipment went wrong, maybe a rival crew sold you out, or maybe the watch finally learned your face. You've slipped away with your skills and a few dangerous contacts, and you're ready to take on cargo of a different kind: treasure hauled out of the deep places of the world.",
-   "skills": "Stealth",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2263,6 +2392,9 @@
    "ptypes": {
     "w": {
      "Crossbows": "S"
+    },
+    "s": {
+     "Stealth": "P"
     }
    },
    "gear": [
@@ -2334,7 +2466,6 @@
      ]
     }
    ],
-   "ptypes": {},
    "gear": [
     {
      "n": "Torn and salt-stained pack from your lost company",
@@ -2366,7 +2497,7 @@
    "id": "bg-xj0lpgufjhtv",
    "n": "Spy",
    "desc": "You gathered secrets for a crown, a noble house, a guild or a rival power. You've worn false names, forged friendships with people you were sent to betray, and slipped stolen letters into hidden pockets at grand balls and back-alley meetings alike. You learned that the most dangerous weapon in the realm is information in the right hands.\n\nMaybe your cover was blown, maybe your masters cast you aside, or maybe you learned a secret so dangerous that both sides now want you silenced. Whatever happened, you still think like a spy: you watch the exits, trust no one fully, and always have a story ready.",
-   "skills": "Deception, Stealth",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2379,6 +2510,10 @@
     },
     "t": {
      "Tailoring": "B"
+    },
+    "s": {
+     "Deception": "P",
+     "Stealth": "P"
     }
    },
    "gear": [
@@ -2420,7 +2555,7 @@
    "id": "bg-h3sbpybnihj3",
    "n": "Squire",
    "desc": "You served a knight, carrying their arms, polishing their armor, tending their horse and following them into tournaments and battles. You learned the code of chivalry by watching it lived, or broken, and you've dreamed of the day you'd earn your own spurs.\n\nPerhaps your knight fell in battle, perhaps they sent you out to prove yourself, or perhaps you left after seeing a side of knighthood you couldn't stomach. Either way, you carry your knight's lessons with you, and you know how to keep a warrior and their gear in fighting shape.",
-   "skills": "Athletics, Animal Handling",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2433,6 +2568,10 @@
     },
     "t": {
      "Leatherworking": "B"
+    },
+    "s": {
+     "Athletics": "P",
+     "Animal Handling": "P"
     }
    },
    "gear": [
@@ -2466,7 +2605,7 @@
    "id": "bg-gp5ictumvot4",
    "n": "Street Urchin",
    "desc": "You grew up alone on the city streets, sleeping in doorways, under bridges and in forgotten corners of crowded slums. You learned to pick pockets, dodge the watch, find food where no one else would look and run before trouble caught up with you. Every alley was a hiding place and every rooftop a road.\n\nThe streets made you quick, clever and hard to fool, but they also taught you that no one looks out for you except yourself, and perhaps the other children who shared your scraps. Now you've found a way out of the gutter, and you don't intend to go back.",
-   "skills": "Thievery, Stealth",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2476,6 +2615,10 @@
    "ptypes": {
     "w": {
      "Blades": "S"
+    },
+    "s": {
+     "Thievery": "P",
+     "Stealth": "P"
     }
    },
    "gear": [
@@ -2513,7 +2656,7 @@
    "id": "bg-qje5z38j6nl2",
    "n": "Tavern Keeper",
    "desc": "You ran an inn or tavern, pouring ale, cooking stew, breaking up fights and listening to every traveler who passed through your door. You've heard confessions, boasts, rumors and secrets, and you've learned to read a customer's mood before they've finished their first drink. Your tavern was the beating heart of its little corner of the world.\n\nMaybe a rival bought you out, maybe the place burned down, or maybe the stories your customers told finally convinced you to go see the world for yourself. Your tavern may be behind you, but you still know how to keep a crowd fed, cheerful and talking.",
-   "skills": "Insight",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2535,6 +2678,9 @@
     },
     "t": {
      "Cooking": "B"
+    },
+    "s": {
+     "Insight": "P"
     }
    },
    "gear": [
@@ -2638,7 +2784,7 @@
    "id": "bg-2xpwpxpw472d",
    "n": "Trapper",
    "desc": "You lived by snares, skins and patience, spending long seasons alone in the wilds setting lines, checking traps and hauling furs to distant trading posts. You learned the habits of every creature in your territory, where they drink, where they sleep and where they run when frightened, and you learned to move so quietly that they never knew you were there.\n\nMaybe the fur trade dried up, maybe something in the woods began emptying your traps before you could, or maybe a long winter alone finally drove you to seek company. Whatever the reason, you've brought your quiet skills and keen eyes out of the wilds and into a far more dangerous kind of hunting ground.",
-   "skills": "Nature, Stealth",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2651,6 +2797,10 @@
     },
     "t": {
      "Leatherworking": "B"
+    },
+    "s": {
+     "Nature": "P",
+     "Stealth": "P"
     }
    },
    "gear": [
@@ -2696,7 +2846,7 @@
    "id": "bg-oj9v6fycmwhl",
    "n": "Undertaker",
    "desc": "You prepared the dead for their final rest, washing and dressing bodies, building coffins, digging graves and speaking the rites that send souls on their way. Death came to your door every day, and you learned to meet it calmly, with steady hands and a quiet respect that comforted the grieving.\n\nYou've also seen things most people never do: bodies that didn't rest easy, graves found empty, and deaths that were no accident. Perhaps one of those mysteries has drawn you out into the world, or perhaps you've decided it's time to deal with the dead before they come looking for the living.",
-   "skills": "Medicine, Religion",
+   "skills": "",
    "weapons": "",
    "armor": "",
    "trades": "",
@@ -2706,6 +2856,10 @@
    "ptypes": {
     "t": {
      "Woodworking": "B"
+    },
+    "s": {
+     "Medicine": "P",
+     "Religion": "P"
     }
    },
    "gear": [

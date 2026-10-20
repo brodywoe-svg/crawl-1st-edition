@@ -421,6 +421,21 @@ def list_shell(page, logo_svg, admin_modal):
 
 
 CLASSES_CSS = """
+.pgive{display:grid;gap:10px;border:2px solid var(--hair);border-radius:12px;padding:10px 12px;margin-bottom:12px}
+.pgrow{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:start}
+.pglab{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding-top:7px}
+.pgchips{display:flex;flex-wrap:wrap;gap:6px}
+.pgc{display:inline-flex;align-items:center;gap:4px;font:600 .85rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--hair);border-radius:999px;padding:3px 10px;cursor:pointer;line-height:1.3}
+.pgc.tiered{cursor:default;padding:2px 3px 2px 10px}
+.pgc.on{border-color:var(--ink);background:var(--soft);font-weight:800}
+.pgb{width:24px;height:24px;border-radius:50%;border:2px solid var(--hair);background:var(--paper);color:var(--muted,#777);font:800 .72rem var(--font);cursor:pointer;padding:0;display:inline-grid;place-items:center}
+.pgb.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.pgb:focus-visible,.pgc:focus-visible{outline:3px solid var(--accent,#c58b1b);outline-offset:1px}
+.chopt.tiered{padding:2px 3px 2px 6px;gap:4px}
+.chopt.tiered>label{display:inline-flex;align-items:center;gap:6px;margin:0;cursor:pointer;font-size:.85rem}
+.chopt.tiered .chtiers{display:none;gap:2px}
+.chopt.tiered:has(input:checked) .chtiers{display:inline-flex}
+@media (max-width:560px){.pgrow{grid-template-columns:1fr;gap:4px}.pglab{padding-top:0}}
 .ptgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;border:2px solid var(--hair);border-radius:12px;padding:10px 12px}
 .ptcol{display:grid;gap:4px;align-content:start}
 .ptcol>b{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}

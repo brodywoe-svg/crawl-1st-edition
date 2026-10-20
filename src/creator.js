@@ -57,7 +57,12 @@ function catIn(p) {
   p = lcs(p);
   return /trade skill|tool|profession|craft/.test(p) ? "trade" : /saving throw|\bsaves?\b/.test(p) ? "save" : /skill/.test(p) ? "skill" : /weapon/.test(p) ? "weapon" : /armou?r|shield/.test(p) ? "armor" : /language/.test(p) ? "lang" : "";
 }
+/* in written-in text, "Martial Swords" still means Simple and Martial */
 function tiersIn(p, cat) {
+  if (cat === "weapon") { const t = tiersIn0(p, cat); return ["S", "M", "E"].slice(0, Math.max(...t.map(x => ["S", "M", "E"].indexOf(x))) + 1) }
+  return tiersIn0(p, cat);
+}
+function tiersIn0(p, cat) {
   const w = cat === "trade" ? [["B", /basic|novice|apprentice/i], ["A", /advanced|adept|journeyman/i], ["M", /master/i]] : [["S", /simple/i], ["M", /martial/i], ["E", /exotic/i]];
   const t = w.filter(([, re]) => re.test(p)).map(x => x[0]);
   return t.length ? t : [cat === "trade" ? "B" : "S"];
@@ -135,20 +140,19 @@ const chartRow = c => { const k = clsOf(c); return k ? k.chart.filter(r => (r.lv
 const skillPoints = c => { const k = clsOf(c); return k ? Math.max(0, parseInt(k.skillPts, 10) || 0) : 0 };
 function grants(c) {
   const fixed = new Map(), picks = [];
-  /* a weapon or armor type includes the ones below it: Martial = Simple and Martial */
-  const upTo = (cat, tiers) => cat === "weapon" || cat === "armor" ? TIER_ORDER.slice(0, Math.max(...tiers.map(t => TIER_ORDER.indexOf(t))) + 1) : tiers;
   /* armor has no Simple/Martial/Exotic: proficient or not (kept inside as "S") */
   const base = new Map();
-  const add = (f, src) => { const k = f.cat + "|" + f.name, tiers = f.cat === "armor" ? ["S"] : f.tiers; const g = fixed.get(k) || { cat: f.cat, name: f.name, tiers: new Set(), src: [] }; upTo(f.cat, tiers).forEach(t => g.tiers.add(t)); if (!g.src.includes(src)) g.src.push(src); fixed.set(k, g);
-    if (!/\(your choice\)$/.test(src)) { const b = base.get(k) || new Set(); upTo(f.cat, tiers).forEach(t => b.add(t)); base.set(k, b) } };
+  const add = (f, src) => { const k = f.cat + "|" + f.name, tiers = f.cat === "armor" ? ["S"] : f.tiers; const g = fixed.get(k) || { cat: f.cat, name: f.name, tiers: new Set(), src: [] }; tiers.forEach(t => g.tiers.add(t)); if (!g.src.includes(src)) g.src.push(src); fixed.set(k, g);
+    if (!/\(your choice\)$/.test(src)) { const b = base.get(k) || new Set(); tiers.forEach(t => b.add(t)); base.set(k, b) } };
   for (const s of sources(c)) {
     const pt = s.p.ptypes || {};
-    [["w", "weapon"], ["a", "armor"], ["t", "trade"]].forEach(([k, cat]) => Object.entries(pt[k] || {}).forEach(([name, t]) => add({ cat, name, tiers: [t] }, s.label)));
+    /* the pickers: weapon letters are exactly the types given; a trade has its tier */
+    PT_KINDS.forEach(([k, cat]) => Object.entries(pt[k] || {}).forEach(([name, t]) => add({ cat, name: cat === "save" ? lcs(name).slice(0, 3) : name, tiers: cat === "weapon" ? [...t] : cat === "trade" ? [t] : [] }, s.label)));
     const parts = [["skills", "s"], ["weapons", "w"], ["armor", "a"], ["trades", "t"], ["prof", "p"]].map(([f, k]) => parseProf(s.p[f] || "", s.label, s.kind + ":" + k));
     arr(s.p.choices).forEach((ch, i) => {
       if (ch.cat === "lang") return;
-      const key = s.kind + ":c" + i, pick = { key, cat: ch.cat, n: ch.n, opts: ch.opts, src: s.label, multi: true, pt: ch.cat === "trade" ? ch.tier || "B" : ch.cat === "weapon" ? ch.tier || "S" : "" };
-      chosenOf(c, pick).forEach(o => add({ cat: ch.cat, name: ch.cat === "save" ? lcs(o).slice(0, 3) : o, tiers: ch.cat === "trade" ? [ch.tier || "B"] : ch.cat === "weapon" || ch.cat === "armor" ? [ch.tier || "S"] : [] }, s.label + " (your choice)"));
+      const key = s.kind + ":c" + i, pick = { key, cat: ch.cat, n: ch.n, opts: ch.opts, src: s.label, multi: true, ot: ch.ot };
+      chosenOf(c, pick).forEach(o => add({ cat: ch.cat, name: ch.cat === "save" ? lcs(o).slice(0, 3) : o, tiers: pickTiers(pick, o) }, s.label + " (your choice)"));
       picks.push(pick);
     });
     s.feats.forEach((f, i) => { const m = f.d.match(/proficien\w*\s+(?:in|with)\s+([^.]+)/i); if (m) parts.push(parseProf(m[1], `${s.label} (${f.n})`, s.kind + ":f" + i)) });
@@ -170,15 +174,16 @@ function grants(c) {
       });
     }
   }
-  hidePicks(c, picks.filter(p => p.opts), (p, o) => { const b = base.get(p.cat + "|" + (p.cat === "save" ? lcs(o).slice(0, 3) : o)); return !!b && (!TIERED[p.cat] || Math.max(-1, ...[...b].map(t => TIERED[p.cat].indexOf(t))) >= tierRank(p)) });
+  hidePicks(c, picks.filter(p => p.opts), (p, o) => { const b = base.get(p.cat + "|" + (p.cat === "save" ? lcs(o).slice(0, 3) : o)); return !!b && covers(p.cat, b, pickTiers(p, o)) });
   return { fixed, picks };
 }
 /* choose-from lists leave out what the character already has from somewhere else: hidden when another source gives it
-   (at the same type or better), or another list already took it. Two lists that both took it keep it in the first. */
-const TIERED = { weapon: ["S", "M", "E"], trade: ["B", "A", "M"] };
-const tierRank = p => TIERED[p.cat] ? Math.max(0, TIERED[p.cat].indexOf(p.pt || TIERED[p.cat][0])) : 0;
+   (every weapon type it would give, or the same trade tier or better), or another list already took it.
+   Two lists that both took it keep it in the first. */
+const pickTiers = (p, o) => p.cat === "weapon" ? [...((p.ot && p.ot[o]) || "S")] : p.cat === "trade" ? [(p.ot && p.ot[o]) || "B"] : p.cat === "armor" ? ["S"] : [];
+const covers = (cat, have, need) => cat === "trade" ? Math.max(-1, ...[...have].map(t => "BAM".indexOf(t))) >= "BAM".indexOf(need[0]) : need.every(t => have.has(t));
 function hidePicks(c, list, given) {
-  list.forEach((p, i) => { const mine = chosenOf(c, p); p.hide = new Set(p.opts.filter(o => given(p, o) || list.some((q, j) => j !== i && q.cat === p.cat && tierRank(q) >= tierRank(p) && chosenOf(c, q).includes(o) && !(mine.includes(o) && i < j)))) });
+  list.forEach((p, i) => { const mine = chosenOf(c, p); p.hide = new Set(p.opts.filter(o => given(p, o) || list.some((q, j) => j !== i && q.cat === p.cat && covers(p.cat, new Set(pickTiers(q, o)), pickTiers(p, o)) && chosenOf(c, q).includes(o) && !(mine.includes(o) && i < j)))) });
 }
 const shownOpts = p => p.opts.filter(o => !(p.hide && p.hide.has(o)));
 const chosenOf = (c, p) => arr(Array.isArray(c.choice[p.key]) ? c.choice[p.key] : c.choice[p.key] ? [c.choice[p.key]] : []).filter(o => p.opts.includes(o)).slice(0, p.n);

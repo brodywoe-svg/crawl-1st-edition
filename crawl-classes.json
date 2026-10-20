@@ -11,7 +11,7 @@
    "spells": "",
    "hd": "d8",
    "hp": "8 + Constitution Modifier",
-   "saves": "Constitution, Intelligence",
+   "saves": "",
    "skills": "",
    "skillPts": "",
    "prof": "",
@@ -124,7 +124,12 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
+   "ptypes": {
+    "v": {
+     "Constitution": "P",
+     "Intelligence": "P"
+    }
+   },
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -144,7 +149,7 @@
    "spells": "",
    "hd": "d12",
    "hp": "12 + Constitution Modifier",
-   "saves": "Strength, Constitution",
+   "saves": "",
    "skills": "",
    "skillPts": "",
    "prof": "",
@@ -257,7 +262,12 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
+   "ptypes": {
+    "v": {
+     "Strength": "P",
+     "Constitution": "P"
+    }
+   },
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -277,8 +287,8 @@
    "spells": "2",
    "hd": "d8",
    "hp": "8 + Constitution Modifier",
-   "saves": "Choose two of the following: Charisma, Wisdom, or Dexterity",
-   "skills": "Four skills of your choice",
+   "saves": "",
+   "skills": "",
    "skillPts": "7",
    "prof": "",
    "langs": "two additional languages of your choice",
@@ -407,6 +417,31 @@
    "extra": [],
    "choices": [
     {
+     "n": 4,
+     "cat": "skill",
+     "opts": [
+      "Acrobatics",
+      "Animal Handling",
+      "Appraisal",
+      "Arcane",
+      "Athletics",
+      "Deception",
+      "Insight",
+      "Intimidation",
+      "Investigation",
+      "Lore",
+      "Medicine",
+      "Nature",
+      "Occult",
+      "Perception",
+      "Performance",
+      "Persuasion",
+      "Religion",
+      "Stealth",
+      "Thievery"
+     ]
+    },
+    {
      "n": 2,
      "cat": "save",
      "opts": [
@@ -464,7 +499,6 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -496,7 +530,6 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -516,7 +549,7 @@
    "spells": "",
    "hd": "d10",
    "hp": "10 + Constitution Modifier",
-   "saves": "Strength, Constitution",
+   "saves": "",
    "skills": "",
    "skillPts": "6",
    "prof": "",
@@ -804,7 +837,7 @@
    "spells": "",
    "hd": "d8",
    "hp": "8 + Constitution Modifier",
-   "saves": "Strength, Dexterity",
+   "saves": "",
    "skills": "",
    "skillPts": "",
    "prof": "",
@@ -917,7 +950,12 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
+   "ptypes": {
+    "v": {
+     "Strength": "P",
+     "Dexterity": "P"
+    }
+   },
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -949,7 +987,6 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -969,7 +1006,7 @@
    "spells": "",
    "hd": "d10",
    "hp": "10 + Constitution Modifier",
-   "saves": "Strength, Dexterity",
+   "saves": "",
    "skills": "",
    "skillPts": "",
    "prof": "",
@@ -1082,7 +1119,12 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
+   "ptypes": {
+    "v": {
+     "Strength": "P",
+     "Dexterity": "P"
+    }
+   },
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1102,7 +1144,7 @@
    "spells": "",
    "hd": "d8",
    "hp": "8 + Constitution Modifier",
-   "saves": "Dexterity, Intelligence",
+   "saves": "",
    "skills": "",
    "skillPts": "",
    "prof": "",
@@ -1215,7 +1257,12 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
+   "ptypes": {
+    "v": {
+     "Dexterity": "P",
+     "Intelligence": "P"
+    }
+   },
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1247,7 +1294,6 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1279,7 +1325,6 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
-   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1299,7 +1344,7 @@
    "spells": "4",
    "hd": "d6",
    "hp": "6 + Constitution Modifier",
-   "saves": "Intelligence, Wisdom",
+   "saves": "",
    "skills": "",
    "skillPts": "8",
    "prof": "",
@@ -1480,6 +1525,10 @@
     "w": {
      "Blades": "S",
      "Polearms": "S"
+    },
+    "v": {
+     "Intelligence": "P",
+     "Wisdom": "P"
     }
    },
    "prepared": "max(1, INT + floor(level / 2))",
