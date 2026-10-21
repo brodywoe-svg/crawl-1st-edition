@@ -256,7 +256,11 @@
       },
       {
        "n": "Undergrowth Dweller",
-       "d": "While in a forest, you have Advantage on Stealth checks, and dense plant growth doesn’t slow your movement."
+       "d": "While you are in Forest Terrain, you have Advantage on Stealth checks, and dense plant growth doesn’t slow your movement."
+      },
+      {
+       "n": "Canopy Climber",
+       "d": "While you are in Forest Terrain, your Climb Speed is equal to your Ground Speed."
       }
      ],
      "extra": []
