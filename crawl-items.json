@@ -338,13 +338,8 @@
    "value": "",
    "weight": "2 lbs",
    "actions": "",
-   "props": "Off-Hand, Shield, 5% Armor, Parry",
-   "pdefs": [
-    {
-     "n": "Parry",
-     "d": "When a creature you can see hits you with a melee attack while you're wielding a Buckler, you can spend 1 AP as a Reaction to deflect the blow, gaining a +2 bonus to your AC against that attack, which may cause it to miss. Requires Shield proficiency."
-    }
-   ],
+   "props": "Off-Hand, Shield, 5% Armor",
+   "pdefs": [],
    "desc": "A small, round shield held in the fist and used to knock aside blows rather than hide behind.",
    "extra": []
   },
@@ -4134,13 +4129,8 @@
    "value": "",
    "weight": "2 lbs",
    "actions": "",
-   "props": "Off-Hand, Shield, 5% Armor, Parry",
-   "pdefs": [
-    {
-     "n": "Parry",
-     "d": "When a creature you can see hits you with a melee attack while you're wielding a Buckler, you can spend 1 AP as a Reaction to deflect the blow, gaining a +2 bonus to your AC against that attack, which may cause it to miss. Requires Shield proficiency."
-    }
-   ],
+   "props": "Off-Hand, Shield, 5% Armor",
+   "pdefs": [],
    "desc": "A small, round shield held in the fist and used to knock aside blows rather than hide behind.",
    "extra": []
   },

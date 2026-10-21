@@ -866,6 +866,9 @@ CONDITIONS_CSS = """
 .subs .rform{border:2px dashed var(--ink);border-radius:12px;padding:12px 14px}
 .addsub{justify-self:start}
 .gres h2{font-size:1rem}
+.gres.gpre{margin-top:28px}
+.gres.gpre h2 small{font-size:.75rem;font-weight:600;color:var(--muted);margin-left:6px}
+.ichart.ipre{border-style:dashed}
 .glab{display:grid;gap:5px;font-size:.85rem;font-weight:800}
 .gwords{display:grid;gap:8px}
 .gwlist{display:grid;gap:8px}

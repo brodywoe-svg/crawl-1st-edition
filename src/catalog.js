@@ -87,7 +87,7 @@ function clean() {
   return { v: 2, items: keep.filter(x => !x.preset), ...(pre.length ? { presets: pre } : {}), recipes: recipes.filter(x => !x._new).map(strip).sort((a, b) => lc(recipeName(a)).localeCompare(lc(recipeName(b)))) };
 }
 const itemById = id => items.find(i => i.id === id);
-const itemByName = n => items.find(i => !i._new && lc(i.n) === lc(str(n)));
+const itemByName = n => items.find(i => !i._new && !i.preset && lc(i.n) === lc(str(n))) || items.find(i => !i._new && lc(i.n) === lc(str(n)));
 const itemName = id => (itemById(id) || { n: "(missing item)" }).n;
 const recipeName = r => r.n || (r.makes[0] ? itemName(r.makes[0].item) : "Untitled recipe");
 const rows = () => KIND === "items" ? items : recipes;
@@ -223,15 +223,13 @@ function itemDetail(i) {
   /* crafting materials show only a description and their recipe */
   const mat = i.cat === "Crafting Material";
   const wstats = isWeapon(i) && (i.tier || i.ap) ? `<p class="rl"><b>Proficiency:</b> ${esc(i.tier || "—")} &nbsp;·&nbsp; <b>AP per attack:</b> ${esc(i.ap || "—")}</p>` : "";
-  if (i.preset) return `<p class="rl muted">A preset. Only you can see it. Click Add item and choose it under "Start from a preset" to make a new weapon with these stats.</p>` +
-    sec("Properties", wstats + (i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : none)) + (i.desc ? sec("Description", paras(i.desc)) : "") +
-    (ADMIN && !i._new ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
-  return (mat ? "" : sec("Properties", wstats + (i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : (wstats ? "" : none)))) +
+  /* a preset shows like an item (without crafting), under a note */
+  return (i.preset ? `<p class="rl muted">A preset. Only you can see it. Edit it to change the template; items already made from it don't change. Click Add item and choose it under "Start from a preset" to make a new item with these stats.</p>` : "") + (mat ? "" : sec("Properties", wstats + (i.props ? `<p class="rl">${propsHTML(i.props, i)}</p>` : (wstats ? "" : none)))) +
     sec("Description", (i.desc ? descHTML(i.desc) : `<p class="muted">No description yet.</p>`) + i.extra.map(r => line(esc(r.k || "Detail"), r.v)).join("")) +
     (!mat && i.pdefs.length ? sec("Properties Defined", `<div class="rfeat">${i.pdefs.map(p => `<p>${p.n ? `<span class="pdn">${esc(p.n)}</span> - ` : ""}${tipMark(richInline(p.d))}</p>`).join("")}</div>`) : "") +
     (!mat && (isWeapon(i) || i.actions || i.wacts.length) ? sec("Weapon actions", i.actions || i.wacts.length ? `<div class="wacts">${actionsBlock(i)}</div>` : none) : "") +
-    (made.length ? sec("Crafting recipe", recipeBlock) : ADMIN && !i._new ? sec("Crafting recipe", `<p class="muted">No crafting recipe yet. <a class="ilink" href="crafting.html?make=${encodeURIComponent(i.id)}">Create one on the Crafting page</a></p>`) : "") +
-    (used.length ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "") +
+    (i.preset ? "" : made.length ? sec("Crafting recipe", recipeBlock) : ADMIN && !i._new ? sec("Crafting recipe", `<p class="muted">No crafting recipe yet. <a class="ilink" href="crafting.html?make=${encodeURIComponent(i.id)}">Create one on the Crafting page</a></p>`) : "") +
+    (used.length && !i.preset ? `<p class="rl dused"><b>Ingredient in:</b> ${used.map(recipeLink).join(", ")}</p>` : "") +
     (ADMIN && !i._new ? `<div class="dbtns"><button type="button" class="btn gedit">Edit ${esc(i.n)}</button></div>` : "");
 }
 const nameHTML = i => `<span class="iname${i.nc ? " tc" : ""}"${i.nc ? ` style="--c:${i.nc}"` : ""}>${esc(i.n || "New item")}</span>`;
@@ -261,7 +259,9 @@ function presetsSection(pre, head) {
 }
 function itemsChart(l) {
   const head = `<thead><tr><th>Item</th><th>Slot</th><th>Type</th><th>Rarity</th><th><span class="hl">Magic?</span><span class="hs" aria-hidden="true">Magic</span></th><th>Value</th><th><span class="hl">Weight</span><span class="hs" aria-hidden="true">Wt.</span></th></tr></thead>`;
-  if (query()) return `<div class="ghead gres"><h2>Best matches first</h2></div><table class="ichart itab">${head}${l.map(i => itemRow(i, true)).join("")}</table>`;
+  if (query()) { const its = l.filter(i => !i.preset), pre = l.filter(i => i.preset);
+    return (its.length ? `<div class="ghead gres"><h2>Items: best matches first</h2></div><table class="ichart itab">${head}${its.map(i => itemRow(i, true)).join("")}</table>` : `<p class="muted">No items match.</p>`) +
+      (pre.length ? `<div class="ghead gres gpre"><h2>Presets <small>only you can see these</small></h2></div><table class="ichart itab ipre">${head}${pre.map(i => itemRow(i, true)).join("")}</table>` : "") }
   let h = "";
   for (const [cat, label, subs] of CATS) {
     const inCat = l.filter(i => i.cat === cat && !i.preset); if (!inCat.length) continue;
@@ -522,7 +522,8 @@ $("clist").addEventListener("click", ev => {
     const name = str(d.n).replace(/\s+/g, " ");
     if (KIND === "items") {
       if (!name) { err("Give the item a name."); return }
-      if (items.some(y => y !== x && !y._new && lc(y.n) === lc(name))) { err(`There's already an item called ${name}.`); return }
+      const asPreset = !!d.preset;
+      if (items.some(y => y !== x && !y._new && !!y.preset === asPreset && lc(y.n) === lc(name))) { err(`There's already ${asPreset ? "a preset" : "an item"} called ${name}.`); return }
       Object.assign(x, fromDraft(d, x));
     } else {
       const named = l => l.filter(r => str(r.name));
