@@ -241,6 +241,25 @@
       }
      ],
      "extra": []
+    },
+    {
+     "id": "sub-mvibowzn1dsq",
+     "n": "Wildling Halfling",
+     "desc": "Wilding Halflings live far from roads and villages, in small clans hidden in the undergrowth of the deepest forests. They carve their homes into the living trunks of giant trees and speak to the spirits of root, stream and stone as if they were family. Many are shamans and ritualists who mark the seasons with offerings, chants and carved totems, keeping old rites that other peoples have long forgotten.\n\nTo outsiders, Wilding Halflings can seem strange and secretive. Among their own, they’re bound by deep traditions and a closeness to primal magic that most halflings have never felt.",
+     "asi": "+1 Wisdom",
+     "prof": "Nature, Either Alchemy or Woodworking",
+     "langs": "One additional language of your choice",
+     "feats": [
+      {
+       "n": "Spirit Rites",
+       "d": "You learn one 1st-level Ritual spell from the Primal spell list. You can cast it as a Ritual even if you don’t have the Spellcasting feature, gaining EP as normal for a Ritual."
+      },
+      {
+       "n": "Undergrowth Dweller",
+       "d": "While in a forest, you have Advantage on Stealth checks, and dense plant growth doesn’t slow your movement."
+      }
+     ],
+     "extra": []
     }
    ]
   },
