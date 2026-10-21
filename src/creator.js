@@ -391,7 +391,7 @@ function spellInfo(s) {
     `<a class="glink" href="spells.html?show=all#${encodeURIComponent(slugOf(s.n))}" target="_blank" rel="noopener">Open in the spell list</a>`);
 }
 function itemInfo(it) {
-  return infoBox(it.n, [it.rarity, it.cat].filter(Boolean).join(" · "), factsHTML([["Value", it.value], ["Weight", it.weight], ["Type", [it.sub, it.slot].filter(Boolean).join(", ")], ["Properties", it.props], ["Weapon actions", it.actions]]) +
+  return infoBox(it.n, [it.rarity, it.cat].filter(Boolean).join(" · "), factsHTML([["Value", it.value], ["Weight", it.weight], ["Type", [it.sub, it.slot].filter(Boolean).join(", ")], ["Properties", it.props], ["Weapon actions", [it.actions, ...wactsOfItem(it).map(wactText)].filter(Boolean).join("; ")]]) +
     (it.desc ? `<div class="clead">${richParas(it.desc)}</div>` : "") + featHTML(arr(it.pdefs).map(p => ({ n: p.n, d: p.d }))), `<a class="glink" href="items.html#${encodeURIComponent(it.id)}" target="_blank" rel="noopener">Open on the Items page</a>`);
 }
 
@@ -645,6 +645,9 @@ function setLoadout(c, v) {
   if (!buying(c)) c.inv = c.inv.filter(x => !x.paid || startingWealth(c) - spentC(c) >= 0);
 }
 function gearFrom(text) { return ITEMS.filter(i => new RegExp("\\b" + i.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(plainText(text))) }
+/* an item's weapon actions: [{n, ap, dmg, type, d}] */
+const wactsOfItem = it => (Array.isArray(it && it.wacts) ? it.wacts : []).map(a => ({ n: str(a.n), ap: str(a.ap), dmg: str(a.dmg), type: str(a.type), d: str(a.d) })).filter(a => a.n || a.dmg || a.d);
+const wactText = a => `${a.n || "Weapon action"}${a.ap ? ` (${a.ap} AP)` : ""}${a.dmg || a.type ? `: ${[a.dmg, a.type].filter(Boolean).join(" ")}` : ""}${a.d ? `. ${a.d}` : ""}`;
 function defaultSlot(c, it) {
   const used = new Set(c.inv.map(x => x.slot).filter(Boolean));
   const s = lcs(it.slot), want = s === "off-hand" ? ["off"] : s === "main hand" || s === "both hands" ? ["main"] : s === "main or off-hand" || it.cat === "Weapon" ? ["main", "off"] : /shield/i.test(it.n + " " + it.sub) ? ["off"] : s === "rings" ? ["ring1", "ring2"] : s === "other" ? ["other"] : SLOTS.some(x => x[0] === s) ? [s] : [];
@@ -896,7 +899,7 @@ function snapshot(c) {
   const num = v => { const n = parseInt(v, 10); return Number.isFinite(n) ? n : null };
   const acParts = ["Natural", "Armored", "Shield"].map(x => num(sv("ac:" + x))).filter(x => x != null);
   const spells = c.spells.map(spellByName).filter(Boolean).map(sp => { const rk = spellRankOf(c, sp); return { n: sp.n, lv: sp.lv, rank: rk, school: schoolOf(sp), cost: str(sp.f.cost), time: str(sp.f.time), range: str(sp.f.range), dmg: /^n\/?a$/i.test(str(sp.f.dmg)) ? "" : str(sp.f.dmg), desc: str(sp.f.desc), conc: !!sp.conc, atk: castMod != null ? rk + castMod : null, dc: castMod != null ? 8 + rk + castMod : null } });
-  const weapons = c.inv.filter(x => x.slot === "main" || x.slot === "off").map(x => { const it = x.iid && itemById(x.iid); return { n: invName(x), props: it ? str(it.props) : "", actions: it ? str(it.actions) : "", sub: it ? str(it.sub) : "" } });
+  const weapons = c.inv.filter(x => x.slot === "main" || x.slot === "off").map(x => { const it = x.iid && itemById(x.iid); return { n: invName(x), props: it ? str(it.props) : "", actions: it ? [str(it.actions), ...wactsOfItem(it).map(wactText)].filter(Boolean).join("\n") : "", acts: it ? wactsOfItem(it) : [], sub: it ? str(it.sub) : "" } });
   return {
     v: 1, at: Date.now(), name: str(c.name) || "Unnamed character", level: LEVEL, portrait: c.details.portrait || "",
     race: [r && r.n, s && s.n].filter(Boolean).join(" / "), cls: [k && k.n, sk && sk.n].filter(Boolean).join(" / "), bg: b ? b.n : "",

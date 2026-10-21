@@ -767,6 +767,18 @@ CONDITIONS_CSS = """
 .prow .pn{color:var(--red);font-weight:800}
 .prow textarea{resize:vertical;field-sizing:content;min-height:2.6em;line-height:1.4}
 .pdn{color:var(--red);font-weight:800}
+.wacts{display:grid;gap:10px;margin-top:6px}
+.wact p{margin:0}
+.wact .wah{font-weight:700}
+.wact .wam{font-weight:700;color:var(--muted);margin-left:6px}
+.wact .wah+p,.wact .wah+*{margin-top:3px}
+.walist{display:grid;gap:10px;margin-bottom:8px}
+.warow{display:grid;gap:6px;border:2px solid var(--hair);border-radius:12px;padding:10px}
+.wagrid{display:grid;grid-template-columns:2fr 80px 1.2fr 1.2fr;gap:6px}
+.warow .wan{color:var(--red);font-weight:800}
+.wahead{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:-2px}
+.warow .xdel{justify-self:start}
+@media (max-width:600px){.wagrid{grid-template-columns:1fr 1fr}.wahead{display:none}}
 @media (max-width:600px){.prow{grid-template-columns:1fr}.prow .xdel{justify-self:start}}
 @media (max-width:600px){
   .xrow{grid-template-columns:1fr}.xrow .xdel{justify-self:start}.xrow input,.qrow input,.gform select{font-size:16px}
