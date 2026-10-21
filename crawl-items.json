@@ -6931,6 +6931,41 @@
    "extra": []
   },
   {
+   "id": "r-mvi9af6so0fi",
+   "n": "Chilling 1",
+   "tier": "Basic",
+   "badge": false,
+   "kind": "Enchantment Modifier",
+   "prof": "Enchanting",
+   "pre": "+1 Enchanting",
+   "ing": [
+    {
+     "item": "i-pinch-of-arcane-dust",
+     "qty": 2
+    },
+    {
+     "item": "i-flask-of-spring-water",
+     "qty": 1
+    }
+   ],
+   "matNote": "",
+   "applies": "Any weapon",
+   "ws": "Enchanting Table",
+   "time": "3 Hours",
+   "dc": "14",
+   "tc": "21",
+   "qty": {
+    "l": "",
+    "v": ""
+   },
+   "makes": [],
+   "props": "",
+   "grants": "Enchanted: Chilling 1, or Chilling 2 on TC, fills 1 open modifier slot",
+   "feat": "[color=#8e171c]Chilling X[/color] - This weapon deals an additional X magical cold damage on a hit.",
+   "quote": "“Cold is patient. Fire burns out and lightning is gone in an instant, but cold simply waits until you stop moving.” – Professor Vigo Brasamonte, Lecturer of Evocation",
+   "extra": []
+  },
+  {
    "id": "r-clotting-salve",
    "n": "Clotting Salve",
    "tier": "Basic",
