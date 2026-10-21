@@ -210,7 +210,31 @@
      "v": "Halfling, albeit short, live to up to 200 years old."
     }
    ],
-   "subs": []
+   "subs": [
+    {
+     "id": "sub-mvib9iofn4fp",
+     "n": "Hillborn Halfling",
+     "desc": "Hillborn Halflings are the warm, chatty heart of every village they call home. They live in round-doored burrows and tidy cottages in halfling shires, or shoulder to shoulder with humans and Hill Dwarves in valley towns. Nobody throws a better festival, tells a better story or remembers more birthdays. A Hillborn Halfling never meets a stranger, only a friend they haven’t fed yet.",
+     "asi": "+1 Charisma",
+     "prof": "Persuasion, Cooking",
+     "langs": "One additional language of your choice",
+     "feats": [
+      {
+       "n": "Lucky",
+       "d": "When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll."
+      },
+      {
+       "n": "Brave at Heart",
+       "d": "You are Immune to the Frightened Condition and cannot be terrified by dangerous creatures and beasts."
+      },
+      {
+       "n": "Hillborn Culture",
+       "d": "You learn and know the following crafting recipes: [color=#b7791f]Honeycake[/color], [color=#b7791f]Spiced Cider[/color]."
+      }
+     ],
+     "extra": []
+    }
+   ]
   },
   {
    "id": "race-mv8cd5bkhvv1",
