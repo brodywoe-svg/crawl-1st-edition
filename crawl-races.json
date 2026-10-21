@@ -208,6 +208,10 @@
     {
      "k": "Age",
      "v": "Halfling, albeit short, live to up to 200 years old."
+    },
+    {
+     "k": "Speed",
+     "v": "Your Ground speed is 25ft."
     }
    ],
    "subs": [
