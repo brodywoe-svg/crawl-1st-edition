@@ -163,7 +163,9 @@
    "weight": "4 lbs",
    "actions": "",
    "tier": "Martial",
+   "ap": "2",
    "wacts": [],
+   "from": "p-longsword",
    "props": "1d8 slashing, Versatile 1d10, Serrated",
    "pdefs": [
     {
@@ -172,9 +174,7 @@
     }
    ],
    "desc": "A longsword hammered black in the Ash-Forged way of the Black Boughs, its edge left barbed and rough rather than polished. Not beautiful, but brutally honest: its wounds keep bleeding long after the fight.",
-   "extra": [],
-   "from": "p-longsword",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-black-iron-spear",
@@ -190,7 +190,9 @@
    "weight": "2 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-spear",
    "props": "1d6 piercing, Thrown 20/60, Versatile 1d8, Serrated",
    "pdefs": [
     {
@@ -199,9 +201,7 @@
     }
    ],
    "desc": "An Ash-Forged spear with a blackened, barbed iron head on a long haft. Made by the orcs of the Black Boughs to leave wounds that don't close cleanly.",
-   "extra": [],
-   "from": "p-spear",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-block-of-beeswax",
@@ -361,6 +361,7 @@
    "wacts": [
     {
      "n": "Parry (Reaction)",
+     "at": "",
      "ap": "1",
      "dmg": "N/A",
      "type": "N/A",
@@ -368,11 +369,11 @@
      "p": true
     }
    ],
+   "from": "p-buckler",
    "props": "Off-Hand, Shield, 5% Armor",
    "pdefs": [],
    "desc": "A small, round shield held in the fist and used to knock aside blows rather than hide behind.",
-   "extra": [],
-   "from": "p-buckler"
+   "extra": []
   },
   {
    "id": "i-bundle-of-charcoal-root",
@@ -782,7 +783,9 @@
    "weight": "8 lbs",
    "actions": "",
    "tier": "Martial",
+   "ap": "2",
    "wacts": [],
+   "from": "p-battleaxe",
    "props": "1d8 slashing, Versatile 1d10, Dwarven Durability",
    "pdefs": [
     {
@@ -791,9 +794,7 @@
     }
    ],
    "desc": "A heavy, broad-bladed axe on a long ash haft, bearing the resilience of the Mountain Dwarves. It never rusts, corrodes or breaks. Every dwarf child learns the axe before the pick, and this is the axe they learn on.",
-   "extra": [],
-   "from": "p-battleaxe",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-dwarven-iron-hand-axe",
@@ -809,7 +810,9 @@
    "weight": "4 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-handaxe",
    "props": "1d6 slashing, Light, Thrown 20/60, Dwarven Durability",
    "pdefs": [
     {
@@ -818,9 +821,7 @@
     }
    ],
    "desc": "A hand axe forged in the Mountain-Forged tradition, its head bonded so tightly to the haft that rust, acid and sundering blows can't touch it. Dwarves make them to outlast their owners, and their grandchildren's owners too.",
-   "extra": [],
-   "from": "p-handaxe",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-family-token",
@@ -1359,11 +1360,11 @@
    "weight": "6 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-close-helm",
    "props": "Head, Heavy, 9% Armor",
    "pdefs": [],
    "desc": "A fully enclosed iron helm with a hinged visor.",
-   "extra": [],
-   "from": "p-iron-close-helm"
+   "extra": []
   },
   {
    "id": "i-iron-dagger",
@@ -1379,13 +1380,13 @@
    "weight": "1 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-dagger",
    "props": "1d4 slashing, Finesse, Light, Thrown 20/60",
    "pdefs": [],
    "desc": "A short, double-edged iron blade, light enough to hide in a boot and balanced enough to throw. Every smith's first weapon, and the one they're judged by.",
-   "extra": [],
-   "from": "p-dagger",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-iron-gear",
@@ -1420,13 +1421,13 @@
    "weight": "2 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-handaxe",
    "props": "1d6 slashing, Light, Thrown 20/60",
    "pdefs": [],
    "desc": "A short iron axe on an ash haft, as handy for splitting firewood as it is for splitting shields. Light enough to throw, sturdy enough to swing all day.",
-   "extra": [],
-   "from": "p-handaxe",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-mvhe9m2yctga",
@@ -1461,13 +1462,13 @@
    "weight": "3 lbs",
    "actions": "",
    "tier": "Martial",
+   "ap": "2",
    "wacts": [],
+   "from": "p-longsword",
    "props": "1d8 slashing, Versatile 1d10",
    "pdefs": [],
    "desc": "A straight, double-edged iron sword with a cross-shaped hilt, long enough to keep foes at a distance and light enough for one hand. The plain, reliable weapon of soldiers, guards and sellswords everywhere.",
-   "extra": [],
-   "from": "p-longsword",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-iron-mail-boots",
@@ -1483,11 +1484,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-boots",
    "props": "Feet, Medium, 5% Armor",
    "pdefs": [],
    "desc": "Leather boots sheathed in iron rings.",
-   "extra": [],
-   "from": "p-iron-mail-boots"
+   "extra": []
   },
   {
    "id": "i-iron-mail-chausses",
@@ -1503,11 +1504,11 @@
    "weight": "6 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-chausses",
    "props": "Legs, Medium, 7% Armor",
    "pdefs": [],
    "desc": "Leggings of iron rings tied to a belt beneath the armor.",
-   "extra": [],
-   "from": "p-iron-mail-chausses"
+   "extra": []
   },
   {
    "id": "i-iron-mail-coif",
@@ -1523,11 +1524,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-coif",
    "props": "Neck, Medium, 4% Armor",
    "pdefs": [],
    "desc": "A hood of interlocking iron rings that covers the neck and shoulders.",
-   "extra": [],
-   "from": "p-iron-mail-coif"
+   "extra": []
   },
   {
    "id": "i-iron-mail-fauld",
@@ -1543,11 +1544,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-fauld",
    "props": "Waist, Medium, 3% Armor",
    "pdefs": [],
    "desc": "A skirt of iron rings that hangs from the waist to guard the hips.",
-   "extra": [],
-   "from": "p-iron-mail-fauld"
+   "extra": []
   },
   {
    "id": "i-iron-mail-mantle",
@@ -1563,11 +1564,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-mantle",
    "props": "Shoulders, Medium, 4% Armor",
    "pdefs": [],
    "desc": "A short cape of iron rings that drapes over the shoulders.",
-   "extra": [],
-   "from": "p-iron-mail-mantle"
+   "extra": []
   },
   {
    "id": "i-iron-mail-mittens",
@@ -1583,11 +1584,11 @@
    "weight": "1 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-mittens",
    "props": "Hands, Medium, 3% Armor",
    "pdefs": [],
    "desc": "Mittens of fine iron rings with leather palms.",
-   "extra": [],
-   "from": "p-iron-mail-mittens"
+   "extra": []
   },
   {
    "id": "i-iron-mail-shirt",
@@ -1603,11 +1604,11 @@
    "weight": "15 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-shirt",
    "props": "Torso, Medium, 14% Armor",
    "pdefs": [],
    "desc": "A shirt of thousands of riveted iron rings, worn over padding.",
-   "extra": [],
-   "from": "p-iron-mail-shirt"
+   "extra": []
   },
   {
    "id": "i-iron-mail-sleeves",
@@ -1623,11 +1624,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-mail-sleeves",
    "props": "Arms, Medium, 5% Armor",
    "pdefs": [],
    "desc": "Sleeves of iron rings laced to the shoulders.",
-   "extra": [],
-   "from": "p-iron-mail-sleeves"
+   "extra": []
   },
   {
    "id": "i-iron-nasal-helm",
@@ -1643,11 +1644,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-nasal-helm",
    "props": "Head, Medium, 5% Armor",
    "pdefs": [],
    "desc": "A conical iron helm with a bar that guards the nose.",
-   "extra": [],
-   "from": "p-iron-nasal-helm"
+   "extra": []
   },
   {
    "id": "i-iron-plate-cuirass",
@@ -1663,11 +1664,11 @@
    "weight": "22 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-cuirass",
    "props": "Torso, Heavy, 21% Armor",
    "pdefs": [],
    "desc": "A breastplate and backplate of shaped iron that can turn aside all but the heaviest blows.",
-   "extra": [],
-   "from": "p-iron-plate-cuirass"
+   "extra": []
   },
   {
    "id": "i-iron-plate-gauntlets",
@@ -1683,11 +1684,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-gauntlets",
    "props": "Hands, Heavy, 5% Armor",
    "pdefs": [],
    "desc": "Jointed iron gauntlets with plated fingers.",
-   "extra": [],
-   "from": "p-iron-plate-gauntlets"
+   "extra": []
   },
   {
    "id": "i-iron-plate-gorget",
@@ -1703,11 +1704,11 @@
    "weight": "2 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-gorget",
    "props": "Neck, Heavy, 6% Armor",
    "pdefs": [],
    "desc": "A collar of shaped iron plates that guards the throat.",
-   "extra": [],
-   "from": "p-iron-plate-gorget"
+   "extra": []
   },
   {
    "id": "i-iron-plate-greaves",
@@ -1723,11 +1724,11 @@
    "weight": "7 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-greaves",
    "props": "Legs, Heavy, 11% Armor",
    "pdefs": [],
    "desc": "Iron plates that encase the legs from thigh to ankle.",
-   "extra": [],
-   "from": "p-iron-plate-greaves"
+   "extra": []
   },
   {
    "id": "i-iron-plate-pauldrons",
@@ -1743,11 +1744,11 @@
    "weight": "7 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-pauldrons",
    "props": "Shoulders, Heavy, 8% Armor",
    "pdefs": [],
    "desc": "Heavy, curved iron plates that cap the shoulders.",
-   "extra": [],
-   "from": "p-iron-plate-pauldrons"
+   "extra": []
   },
   {
    "id": "i-iron-plate-sabatons",
@@ -1763,11 +1764,11 @@
    "weight": "4 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-sabatons",
    "props": "Feet, Heavy, 7% Armor",
    "pdefs": [],
    "desc": "Armored iron shoes of overlapping plates.",
-   "extra": [],
-   "from": "p-iron-plate-sabatons"
+   "extra": []
   },
   {
    "id": "i-iron-plate-tassets",
@@ -1783,11 +1784,11 @@
    "weight": "5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-tassets",
    "props": "Waist, Heavy, 5% Armor",
    "pdefs": [],
    "desc": "Overlapping iron plates that hang from the cuirass to guard the thighs.",
-   "extra": [],
-   "from": "p-iron-plate-tassets"
+   "extra": []
   },
   {
    "id": "i-iron-plate-vambraces",
@@ -1803,11 +1804,11 @@
    "weight": "5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-plate-vambraces",
    "props": "Arms, Heavy, 8% Armor",
    "pdefs": [],
    "desc": "Articulated iron plates that encase the arms.",
-   "extra": [],
-   "from": "p-iron-plate-vambraces"
+   "extra": []
   },
   {
    "id": "i-iron-rivet",
@@ -1842,11 +1843,11 @@
    "weight": "4 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-boots",
    "props": "Feet, Medium, 7% Armor",
    "pdefs": [],
    "desc": "Boots covered in overlapping iron scales.",
-   "extra": [],
-   "from": "p-iron-scale-boots"
+   "extra": []
   },
   {
    "id": "i-iron-scale-coat",
@@ -1862,11 +1863,11 @@
    "weight": "20 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-coat",
    "props": "Torso, Medium, 17% Armor",
    "pdefs": [],
    "desc": "A coat of overlapping iron scales sewn onto a leather backing, like the hide of some great beast.",
-   "extra": [],
-   "from": "p-iron-scale-coat"
+   "extra": []
   },
   {
    "id": "i-iron-scale-gloves",
@@ -1882,11 +1883,11 @@
    "weight": "1.5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-gloves",
    "props": "Hands, Medium, 4% Armor",
    "pdefs": [],
    "desc": "Leather gloves with small iron scales riveted across the back.",
-   "extra": [],
-   "from": "p-iron-scale-gloves"
+   "extra": []
   },
   {
    "id": "i-iron-scale-gorget",
@@ -1902,11 +1903,11 @@
    "weight": "2 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-gorget",
    "props": "Neck, Medium, 5% Armor",
    "pdefs": [],
    "desc": "A collar of overlapping iron scales that protects the throat.",
-   "extra": [],
-   "from": "p-iron-scale-gorget"
+   "extra": []
   },
   {
    "id": "i-iron-scale-greaves",
@@ -1922,11 +1923,11 @@
    "weight": "7 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-greaves",
    "props": "Legs, Medium, 8% Armor",
    "pdefs": [],
    "desc": "Leg guards of iron scales sewn onto leather.",
-   "extra": [],
-   "from": "p-iron-scale-greaves"
+   "extra": []
   },
   {
    "id": "i-iron-scale-helm",
@@ -1942,11 +1943,11 @@
    "weight": "4 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-helm",
    "props": "Head, Medium, 7% Armor",
    "pdefs": [],
    "desc": "An iron helm with a curtain of small overlapping scales at the back and sides.",
-   "extra": [],
-   "from": "p-iron-scale-helm"
+   "extra": []
   },
   {
    "id": "i-iron-scale-skirt",
@@ -1962,11 +1963,11 @@
    "weight": "4 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-skirt",
    "props": "Waist, Medium, 4% Armor",
    "pdefs": [],
    "desc": "A skirt of iron scales that guards the hips and thighs.",
-   "extra": [],
-   "from": "p-iron-scale-skirt"
+   "extra": []
   },
   {
    "id": "i-iron-scale-spaulders",
@@ -1982,11 +1983,11 @@
    "weight": "5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-spaulders",
    "props": "Shoulders, Medium, 6% Armor",
    "pdefs": [],
    "desc": "Layered iron scales that cover the shoulders and upper arms.",
-   "extra": [],
-   "from": "p-iron-scale-spaulders"
+   "extra": []
   },
   {
    "id": "i-iron-scale-vambraces",
@@ -2002,11 +2003,11 @@
    "weight": "4 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-iron-scale-vambraces",
    "props": "Arms, Medium, 7% Armor",
    "pdefs": [],
    "desc": "Forearm guards covered in overlapping iron scales.",
-   "extra": [],
-   "from": "p-iron-scale-vambraces"
+   "extra": []
   },
   {
    "id": "i-iron-shortsword",
@@ -2022,13 +2023,13 @@
    "weight": "2 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-shortsword",
    "props": "1d6 piercing, Finesse, Light",
    "pdefs": [],
    "desc": "A short, straight iron sword built for quick thrusts in close quarters. A well-balanced one moves with its wielder instead of fighting them.",
-   "extra": [],
-   "from": "p-shortsword",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-iron-spring",
@@ -2103,6 +2104,7 @@
    "wacts": [
     {
      "n": "Shield Bash",
+     "at": "",
      "ap": "1",
      "dmg": "1d4",
      "type": "Bludgeoning",
@@ -2110,11 +2112,11 @@
      "p": true
     }
    ],
+   "from": "p-kite-shield",
    "props": "Off-Hand, Shield, 15% Armor",
    "pdefs": [],
    "desc": "A tall, tapered shield that guards the body from shoulder to knee.",
-   "extra": [],
-   "from": "p-kite-shield"
+   "extra": []
   },
   {
    "id": "i-large-axe-haft",
@@ -2206,11 +2208,11 @@
    "weight": "1 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-belt-skirt",
    "props": "Waist, Light, 2% Armor",
    "pdefs": [],
    "desc": "A broad belt hung with overlapping leather strips to guard the hips.",
-   "extra": [],
-   "from": "p-leather-belt-skirt"
+   "extra": []
   },
   {
    "id": "i-leather-boots",
@@ -2226,11 +2228,11 @@
    "weight": "2 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-boots",
    "props": "Feet, Light, 3% Armor",
    "pdefs": [],
    "desc": "Sturdy, knee-high boots of thick leather.",
-   "extra": [],
-   "from": "p-leather-boots"
+   "extra": []
   },
   {
    "id": "i-leather-bracers",
@@ -2246,11 +2248,11 @@
    "weight": "1 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-bracers",
    "props": "Arms, Light, 3% Armor",
    "pdefs": [],
    "desc": "Stiff leather guards laced around the forearms. An archer's first lesson is the bowstring slapping their wrist; their second is buying a pair of these.",
-   "extra": [],
-   "from": "p-leather-bracers"
+   "extra": []
   },
   {
    "id": "i-leather-cap",
@@ -2266,11 +2268,11 @@
    "weight": "1 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-cap",
    "props": "Head, Light, 3% Armor",
    "pdefs": [],
    "desc": "A close-fitting cap of boiled leather.",
-   "extra": [],
-   "from": "p-leather-cap"
+   "extra": []
   },
   {
    "id": "i-leather-collar",
@@ -2286,11 +2288,11 @@
    "weight": "0.5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-collar",
    "props": "Neck, Light, 2% Armor",
    "pdefs": [],
    "desc": "A stiff leather collar buckled around the throat.",
-   "extra": [],
-   "from": "p-leather-collar"
+   "extra": []
   },
   {
    "id": "i-leather-gloves",
@@ -2306,11 +2308,11 @@
    "weight": "0.5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-gloves",
    "props": "Hands, Light, 2% Armor",
    "pdefs": [],
    "desc": "Thick leather gloves with a reinforced back.",
-   "extra": [],
-   "from": "p-leather-gloves"
+   "extra": []
   },
   {
    "id": "i-leather-jerkin",
@@ -2326,11 +2328,11 @@
    "weight": "6 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-jerkin",
    "props": "Torso, Light, 7% Armor",
    "pdefs": [],
    "desc": "A sleeveless leather vest lined with linen. Tough on the outside and comfortable on the inside, so it can be worn for days on the road.",
-   "extra": [],
-   "from": "p-leather-jerkin"
+   "extra": []
   },
   {
    "id": "i-leather-leggings",
@@ -2346,11 +2348,11 @@
    "weight": "3 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-leggings",
    "props": "Legs, Light, 5% Armor",
    "pdefs": [],
    "desc": "Fitted leggings of boiled leather.",
-   "extra": [],
-   "from": "p-leather-leggings"
+   "extra": []
   },
   {
    "id": "i-leather-map-case",
@@ -2385,11 +2387,11 @@
    "weight": "1 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-leather-pauldrons",
    "props": "Shoulders, Light, 3% Armor",
    "pdefs": [],
    "desc": "Shaped leather plates strapped over each shoulder.",
-   "extra": [],
-   "from": "p-leather-pauldrons"
+   "extra": []
   },
   {
    "id": "i-leather-quiver",
@@ -2469,6 +2471,7 @@
    "tier": "Martial",
    "ap": "3",
    "wacts": [],
+   "from": "p-maul",
    "props": "2d6 Bludgeoning, Heavy, Two-Handed, Lightweight",
    "pdefs": [
     {
@@ -2477,8 +2480,7 @@
     }
    ],
    "desc": "",
-   "extra": [],
-   "from": "p-maul"
+   "extra": []
   },
   {
    "id": "i-linen-bolt",
@@ -2513,11 +2515,11 @@
    "weight": "0.25 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-linen-collar",
    "props": "Neck, Light, 1% Armor",
    "pdefs": [],
    "desc": "A thick quilted collar that wraps the throat and softens a cut to the neck.",
-   "extra": [],
-   "from": "p-linen-collar"
+   "extra": []
   },
   {
    "id": "i-linen-hood",
@@ -2533,11 +2535,11 @@
    "weight": "0.5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-linen-hood",
    "props": "Head, Light, 2% Armor",
    "pdefs": [],
    "desc": "A simple linen hood that keeps out the rain, the cold and the eyes of strangers.",
-   "extra": [],
-   "from": "p-linen-hood"
+   "extra": []
   },
   {
    "id": "i-linen-mantle",
@@ -2553,11 +2555,11 @@
    "weight": "0.5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-linen-mantle",
    "props": "Shoulders, Light, 1% Armor",
    "pdefs": [],
    "desc": "A short padded cape of quilted linen draped over the shoulders.",
-   "extra": [],
-   "from": "p-linen-mantle"
+   "extra": []
   },
   {
    "id": "i-mv933s37shd0",
@@ -2592,11 +2594,11 @@
    "weight": "0.5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-linen-sash",
    "props": "Waist, Light, 1% Armor",
    "pdefs": [],
    "desc": "A wide, layered sash bound tight around the waist.",
-   "extra": [],
-   "from": "p-linen-sash"
+   "extra": []
   },
   {
    "id": "i-linen-shoes",
@@ -2612,11 +2614,11 @@
    "weight": "1 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-linen-shoes",
    "props": "Feet, Light, 1% Armor",
    "pdefs": [],
    "desc": "Soft cloth shoes with layered soles.",
-   "extra": [],
-   "from": "p-linen-shoes"
+   "extra": []
   },
   {
    "id": "i-linen-wraps",
@@ -2632,11 +2634,11 @@
    "weight": "0.25 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-linen-wraps",
    "props": "Hands, Light, 1% Armor",
    "pdefs": [],
    "desc": "Strips of linen wound around the hands and knuckles.",
-   "extra": [],
-   "from": "p-linen-wraps"
+   "extra": []
   },
   {
    "id": "i-livingwood-quarterstaff",
@@ -2652,7 +2654,9 @@
    "weight": "2 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-quarterstaff",
    "props": "1d6 bludgeoning, Finesse, Versatile 1d8, Livingwood",
    "pdefs": [
     {
@@ -2661,9 +2665,7 @@
     }
    ],
    "desc": "A staff of silverbark, shaped by elves from a living branch the tree agreed to give. It weighs half as much as a common staff, never rots or warps, and slowly mends its own nicks and cracks.",
-   "extra": [],
-   "from": "p-quarterstaff",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-livingwood-shortbow",
@@ -2679,7 +2681,9 @@
    "weight": "2 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-shortbow",
    "props": "1d6 piercing, Ammunition 100/400, Two-Handed, Livingwood",
    "pdefs": [
     {
@@ -2688,9 +2692,7 @@
     }
    ],
    "desc": "A shortbow grown, not cut, from a living silverbark branch and finished by an elven bowyer. It's lighter, shoots farther than a common bow, and heals its own small damage.",
-   "extra": [],
-   "from": "p-shortbow",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-lockpick",
@@ -2875,6 +2877,7 @@
    "tier": "Simple",
    "ap": "2",
    "wacts": [],
+   "from": "p-spear",
    "props": "1d6 Piercing, Thrown (20/60), Versatile (1d8), Focus (Divine)",
    "pdefs": [
     {
@@ -2883,8 +2886,7 @@
     }
    ],
    "desc": "This Ornately crafted spear was created for members of a clergy to act as a Divine magic focus and double as a staff. Below the head of the spear is a ring and hanging from that ring is a bell. Bells have long been connected to the divine as tools for holy purposes and rituals.",
-   "extra": [],
-   "from": "p-spear"
+   "extra": []
   },
   {
    "id": "i-padded-gambeson",
@@ -2900,11 +2902,11 @@
    "weight": "5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-padded-gambeson",
    "props": "Torso, Light, 5% Armor",
    "pdefs": [],
    "desc": "A thick coat of quilted linen and wool. Worn alone it turns aside glancing blows; worn under plate, it's what keeps knights alive.",
-   "extra": [],
-   "from": "p-padded-gambeson"
+   "extra": []
   },
   {
    "id": "i-padded-sleeves",
@@ -2920,11 +2922,11 @@
    "weight": "0.5 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-padded-sleeves",
    "props": "Arms, Light, 1% Armor",
    "pdefs": [],
    "desc": "Quilted sleeves that lace onto a gambeson or tunic.",
-   "extra": [],
-   "from": "p-padded-sleeves"
+   "extra": []
   },
   {
    "id": "i-padded-trousers",
@@ -2940,11 +2942,11 @@
    "weight": "2 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-padded-trousers",
    "props": "Legs, Light, 2% Armor",
    "pdefs": [],
    "desc": "Heavy quilted trousers stitched in thick rows.",
-   "extra": [],
-   "from": "p-padded-trousers"
+   "extra": []
   },
   {
    "id": "i-painted-stage-mask",
@@ -3302,13 +3304,13 @@
    "weight": "2 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-quarterstaff",
    "props": "1d6 bludgeoning, Versatile 1d8",
    "pdefs": [],
    "desc": "A sturdy length of ash wood, shod at both ends. A walking stick on the road, and a reason to keep walking for anyone who tries to stop you.",
-   "extra": [],
-   "from": "p-quarterstaff",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-quill",
@@ -3364,6 +3366,7 @@
    "wacts": [
     {
      "n": "Shield Bash",
+     "at": "",
      "ap": "1",
      "dmg": "1d4",
      "type": "Bludgeoning",
@@ -3371,11 +3374,11 @@
      "p": true
     }
    ],
+   "from": "p-round-shield",
    "props": "Off-Hand, Shield, 10% Armor",
    "pdefs": [],
    "desc": "A wooden shield rimmed with iron, carried on the forearm.",
-   "extra": [],
-   "from": "p-round-shield"
+   "extra": []
   },
   {
    "id": "i-runner-s-badge",
@@ -3486,13 +3489,13 @@
    "weight": "3 lbs",
    "actions": "",
    "tier": "Simple",
+   "ap": "2",
    "wacts": [],
+   "from": "p-shortbow",
    "props": "1d6 piercing, Ammunition 80/320, Two-Handed",
    "pdefs": [],
    "desc": "A compact yew bow, short enough to draw from horseback or a crowded corridor. Yew remembers the shape it's given, so a well-made one keeps its aim for years.",
-   "extra": [],
-   "from": "p-shortbow",
-   "ap": "2"
+   "extra": []
   },
   {
    "id": "i-silk-bolt",
@@ -3974,11 +3977,11 @@
    "weight": "9 lbs",
    "actions": "",
    "wacts": [],
+   "from": "p-studded-leather-vest",
    "props": "Torso, Light, 9% Armor",
    "pdefs": [],
    "desc": "A leather vest reinforced with rows of iron rivets.",
-   "extra": [],
-   "from": "p-studded-leather-vest"
+   "extra": []
   },
   {
    "id": "i-tanned-hide",
@@ -4034,6 +4037,7 @@
    "wacts": [
     {
      "n": "Brace (Reaction)",
+     "at": "",
      "ap": "2",
      "dmg": "N/A",
      "type": "N/A",
@@ -4041,11 +4045,11 @@
      "p": true
     }
    ],
+   "from": "p-tower-shield",
    "props": "Off-Hand, Shield, 25% Armor",
    "pdefs": [],
    "desc": "A massive shield nearly as tall as its bearer, built to hold a line.",
-   "extra": [],
-   "from": "p-tower-shield"
+   "extra": []
   },
   {
    "id": "i-traveler-s-hardtack",
@@ -4460,6 +4464,7 @@
    "wacts": [
     {
      "n": "Parry (Reaction)",
+     "at": "",
      "ap": "1",
      "dmg": "N/A",
      "type": "N/A",
@@ -5382,6 +5387,7 @@
    "wacts": [
     {
      "n": "Shield Bash",
+     "at": "",
      "ap": "1",
      "dmg": "1d4",
      "type": "Bludgeoning",
@@ -6106,6 +6112,7 @@
    "wacts": [
     {
      "n": "Shield Bash",
+     "at": "",
      "ap": "1",
      "dmg": "1d4",
      "type": "Bludgeoning",
@@ -6402,6 +6409,7 @@
    "wacts": [
     {
      "n": "Brace (Reaction)",
+     "at": "",
      "ap": "2",
      "dmg": "N/A",
      "type": "N/A",
@@ -6584,6 +6592,45 @@
    "grants": "",
    "feat": "Cleansing - A creature that drinks this ends the Poisoned condition and has advantage on saving throws against poison for 1 hour.",
    "quote": "“The secret to curing poison is a little of the poison itself. The secret to staying alive as an alchemist is knowing exactly how little.” -Isolde Vexmire",
+   "extra": []
+  },
+  {
+   "id": "r-mvi8hl9y8zmy",
+   "n": "Arcane Focus",
+   "tier": "Basic",
+   "badge": false,
+   "kind": "Enchantment Modifier",
+   "prof": "Enchanting",
+   "pre": "+1 Enchanting, Arcane Spellcasting, Highborn Enchanting",
+   "ing": [
+    {
+     "item": "i-pinch-of-arcane-dust",
+     "qty": 2
+    },
+    {
+     "item": "i-silver-wire",
+     "qty": 1
+    },
+    {
+     "item": "i-vial-of-lampblack-ink",
+     "qty": 1
+    }
+   ],
+   "matNote": "",
+   "applies": "Spears, Quarterstaffs, Rapiers, or Daggers",
+   "ws": "Enchantment Table",
+   "time": "4 Hours",
+   "dc": "15",
+   "tc": "",
+   "qty": {
+    "l": "",
+    "v": ""
+   },
+   "makes": [],
+   "props": "",
+   "grants": "Enchanted: Arcane Focus, fills 1 open modifier slot",
+   "feat": "[color=#8e171c]Arcane Focus.[/color] This weapon can be used as an Arcane spellcasting focus. The secret of weaving a focus into steel and wood is closely guarded by the High Elves and rarely shared with outsiders.",
+   "quote": "“A human mage carries a wand in one hand and a sword in the other, and does both poorly. We simply taught the sword to listen.” – Aelindra Moonweave",
    "extra": []
   },
   {
