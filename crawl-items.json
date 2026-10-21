@@ -4348,7 +4348,7 @@
    "wacts": [
     {
      "n": "Parry (Reaction)",
-     "ap": "1AP",
+     "ap": "1",
      "dmg": "N/A",
      "type": "N/A",
      "d": "While you are wielding a Buckler, when a creature you can see hits you with a melee attack, you may expend 1 AP to try to deflect the blow. You gain a +2 bonus to your Armor Class against that attack, which may cause it to miss. You must be proficient with Shields to use this action."
@@ -5270,7 +5270,7 @@
    "wacts": [
     {
      "n": "Shield Bash",
-     "ap": "2AP",
+     "ap": "1",
      "dmg": "1d4",
      "type": "Bludgeoning",
      "d": "You may expend 1 AP to make a melee attack with your shield against a creature within 5 feet of you, using your Strength modifier for the attack roll. On a hit, the target takes 1d4 bludgeoning damage. You can use Shield Bash only once per turn. You must be proficient with Shields to use this action."
@@ -5991,7 +5991,15 @@
    "value": "",
    "weight": "6 lbs",
    "actions": "",
-   "wacts": [],
+   "wacts": [
+    {
+     "n": "Shield Bash",
+     "ap": "1",
+     "dmg": "1d4",
+     "type": "Bludgeoning",
+     "d": "You may expend 1 AP to make a melee attack with your shield against a creature within 5 feet of you, using your Strength modifier for the attack roll. On a hit, the target takes 1d4 bludgeoning damage. You can use Shield Bash only once per turn. You must be proficient with Shields to use this action."
+    }
+   ],
    "props": "Off-Hand, Shield, 10% Armor",
    "pdefs": [],
    "desc": "A wooden shield rimmed with iron, carried on the forearm.",
@@ -6279,7 +6287,15 @@
    "value": "",
    "weight": "15 lbs",
    "actions": "",
-   "wacts": [],
+   "wacts": [
+    {
+     "n": "Brace (Reaction)",
+     "ap": "2",
+     "dmg": "N/A",
+     "type": "N/A",
+     "d": "While you are wielding a Tower Shield, when a creature you can see targets you or an ally directly behind you with a ranged attack, you may expend 2 AP to raise and plant your shield, facing the attacker. Until the start of your next turn, ranged attacks made from in front of you against you or any ally directly behind you within 5 feet have Disadvantage, and you can’t be pushed or knocked Prone. You must be proficient with Shields to use this action."
+    }
+   ],
    "props": "Off-Hand, Shield, 25% Armor",
    "pdefs": [],
    "desc": "A massive shield nearly as tall as its bearer, built to hold a line.",
