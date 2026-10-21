@@ -15,7 +15,7 @@
     },
     {
      "n": "Sturdy",
-     "d": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You gain 1 Exhaustion Points (EP) when you use this feature and this feature can only be used once per Rest."
+     "d": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You gain 1 Exhaustion Point (EP) when you use this feature and this feature can only be used once per Rest."
     }
    ],
    "extra": [
@@ -24,7 +24,7 @@
      "v": "Medium"
     },
     {
-     "k": "Darkvsion",
+     "k": "Darkvison",
      "v": "30ft"
     }
    ],
@@ -140,7 +140,7 @@
      "n": "Wood Elf",
      "desc": "You are a Wood Elf that hails from the deep forests, groves, and Timber Heartlands that your people call home. Where as high-elves chose to move away from typical values and beliefs, trading clans for innovation and expansion, Wood-elves pride themselves on their heritage, clan, and traditions being fiercely loyal to their community. Many wood-elves that leave their community usually do so out of loss, necessity, or a mission of grave importance. Many wood-elf's integrating into new places and city's for the first time can come off as awkward, credulous, or slow on the uptake when it comes to things like sarcasm or unliteral social demeanors and jokes.",
      "asi": "+1 Wisdom",
-     "prof": "",
+     "prof": "Either Woodworking or Tailoring",
      "langs": "One additional Language of your choice",
      "feats": [
       {
@@ -149,7 +149,7 @@
       },
       {
        "n": "Deft Landing",
-       "d": "Falling damage you take\nfrom falling 20ft or less is halved."
+       "d": "Falling damage you take from falling 20ft or less is halved."
       },
       {
        "n": "Grove Lineage",
