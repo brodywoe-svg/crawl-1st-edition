@@ -110,8 +110,8 @@
        "d": "While you are in dim light or darkness, you can spend 2 AP to melt into the shadows, becoming Invisible until the end of your next turn or until you attack, cast a spell or enter bright light. Once you use this feature, you can’t use it again until you finish a Rest."
       },
       {
-       "n": "Nighspun Lineage",
-       "d": "You learn and know the following crafting recipes:\n[color=#b7791f]Whisperweave Hood[/color], [color=#b7791f]Whsiperweave Boots[/color], [color=#b7791f]Whisperweave Mantle[/color], [color=#b7791f]Night Brew[/color]"
+       "n": "Nightspun Lineage",
+       "d": "You learn and know the following crafting recipes:\n[color=#b7791f]Whisperweave Hood[/color], [color=#b7791f]Whisperweave Boots[/color], [color=#b7791f]Whisperweave Mantle[/color], [color=#b7791f]Night Brew[/color]"
       }
      ],
      "extra": []
@@ -169,7 +169,7 @@
    "langs": "Common, One additional Language of your choice",
    "feats": [
     {
-     "n": "Human Versitility",
+     "n": "Human Versatility",
      "d": "You gain proficiency in simple Blades, Swords, and Polearms and Light Armor."
     },
     {
