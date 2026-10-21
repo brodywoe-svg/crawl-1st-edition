@@ -6667,7 +6667,7 @@
    "makes": [],
    "props": "",
    "grants": "Enchanted: Arcane Focus, fills 1 open modifier slot",
-   "feat": "[color=#8e171c]Arcane Focus.[/color] This weapon can be used as an Arcane spellcasting focus. The secret of weaving a focus into steel and wood is closely guarded by the High Elves and rarely shared with outsiders.",
+   "feat": "[color=#8e171c]Arcane Focus[/color] - This weapon can be used as an Arcane spellcasting focus. The secret of weaving a focus into steel and wood is closely guarded by the High Elves and rarely shared with outsiders.",
    "quote": "“A human mage carries a wand in one hand and a sword in the other, and does both poorly. We simply taught the sword to listen.” – Aelindra Moonweave",
    "extra": []
   },
@@ -8353,7 +8353,7 @@
    "makes": [],
    "props": "",
    "grants": "Enchanted: Luminous, fills 1 open modifier slot",
-   "feat": "Luminous - As a free action, you can speak this weapon’s Command Word to make it shed bright light in a 20 ft. radius and dim light for an additional 20 ft., or speak it again to stop.\n\n[color=#8e171c]Enchantment Modifiers[/color]\nAn Enchantment Modifier is a Craftable Modifier that can only be crafted by a character who can cast spells, using an Enchantment Table. It’s applied to an existing item listed in its Applies To line, fills one of that item’s open modifier slots, and gives the item the Enchanted property.\n\n[color=#8e171c]Command Words[/color]\nSome enchantments are activated by speaking a Command Word. When you craft an Enchantment Modifier that requires one, you choose its Command Word, which can be any word or short phrase. Command Words follow these rules:\n\n[color=#8e171c]Activation[/color]: A creature holding or wearing the item can speak the Command Word to activate it. Speaking a Command Word is a free action (costs 0AP) unless the enchantment says otherwise.\n\n[color=#8e171c]Knowing the Word[/color]: Only creatures who know the Command Word can activate the enchantment. The enchanter can share it with anyone they choose, or keep it secret.\n\n[color=#8e171c]Speaking Required[/color]: A creature that can’t speak, such as one that is Muted, can’t activate a Command Word.",
+   "feat": "[color=#8e171c]Luminous[/color] - As a free action, you can speak this weapon’s Command Word to make it shed bright light in a 20 ft. radius and dim light for an additional 20 ft., or speak it again to stop.\n\n[color=#8e171c]Enchantment Modifiers[/color]\nAn Enchantment Modifier is a Craftable Modifier that can only be crafted by a character who can cast spells, using an Enchantment Table. It’s applied to an existing item listed in its Applies To line, fills one of that item’s open modifier slots, and gives the item the Enchanted property.\n\n[color=#8e171c]Command Words[/color]\nSome enchantments are activated by speaking a Command Word. When you craft an Enchantment Modifier that requires one, you choose its Command Word, which can be any word or short phrase. Command Words follow these rules:\n\n[color=#8e171c]Activation[/color]: A creature holding or wearing the item can speak the Command Word to activate it. Speaking a Command Word is a free action (costs 0AP) unless the enchantment says otherwise.\n\n[color=#8e171c]Knowing the Word[/color]: Only creatures who know the Command Word can activate the enchantment. The enchanter can share it with anyone they choose, or keep it secret.\n\n[color=#8e171c]Speaking Required[/color]: A creature that can’t speak, such as one that is Muted, can’t activate a Command Word.",
    "quote": "“Every apprentice’s first enchantment is light. Not because it’s easy, but because a mage who can’t see in the dark doesn’t stay a mage for long.” -Aelindra Moonweave",
    "extra": []
   },
@@ -8644,7 +8644,7 @@
    "makes": [],
    "props": "",
    "grants": "Enchanted: Resist 1, or Resist 2 on TC, fills 1 open modifier slot",
-   "feat": "Resist X - When you take mundane damage, reduce that damage by X. You can only benefit from the Resist property on one piece of equipment at a time.",
+   "feat": "[color=#8e171c]Resist X[/color] - When you take mundane damage, reduce that damage by X. You can only benefit from the Resist property on one piece of equipment at a time.",
    "quote": "“Ah, I see Mister Thorne has been listening to last week’s lecture. Yes, for those of you worried about that orc’s axe, there is an answer. It costs twice as much silver, and you’ll still feel it. Heh heh.” -Professor Aurelian Silverscale, Lecturer of Abjuration",
    "extra": []
   },
@@ -8679,7 +8679,7 @@
    "makes": [],
    "props": "",
    "grants": "Enchanted: Returning, fills 1 open modifier slot",
-   "feat": "Returning - After you make a ranged attack with this weapon, it flies back to your hand at the end of your turn.",
+   "feat": "[color=#8e171c]Returning[/color] - After you make a ranged attack with this weapon, it flies back to your hand at the end of your turn.",
    "quote": "“An axe that comes home is the only kind of loyalty some warriors ever know.” -Aelindra Moonweave",
    "extra": []
   },
@@ -9415,7 +9415,7 @@
    "makes": [],
    "props": "",
    "grants": "Enchanted: Warding 1, or Warding 2 on TC, fills 1 open modifier slot",
-   "feat": "Warding X - When you take magical damage from a spell or other magical source, reduce that damage by X. You can only benefit from the Warding property on one piece of equipment at a time.",
+   "feat": "[color=#8e171c]Warding X[/color] - When you take magical damage from a spell or other magical source, reduce that damage by X. You can only benefit from the Warding property on one piece of equipment at a time.",
    "quote": "“Now, class, Warding will turn aside a fair bit of a fireball, a lightning bolt, or a hex hurled by a jealous rival. What it won’t do is stop an ordinary orc with an ordinary axe from rearranging your ordinary ribs. Magic is polite enough to knock first. Steel never is. Heh heh.” -Professor Aurelian Silverscale, Lecturer of Abjuration",
    "extra": []
   },
