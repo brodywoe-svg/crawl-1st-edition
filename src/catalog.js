@@ -17,7 +17,7 @@ const KIND = window.GL_PAGE === "crafting" ? "recipes" : "items";
 const CATS = [
   ["Weapon", "Weapons", ["Axes", "Blades", "Bows", "Crossbows", "Cudgels", "Firearms", "Polearms", "Swords", "Unarmed", "Miscellaneous"]],
   ["Ammunition", "Ammunition", ["Arrows", "Bolts", "Shot", "Other"]],
-  ["Armor", "Armor", ["Clothing", "Light", "Medium", "Heavy", "Accessories"]],
+  ["Armor", "Armor", ["Clothing", "Light", "Medium", "Heavy", "Shields", "Accessories"]],
   ["Consumable", "Consumables", ["Food", "Potions", "Alchemical", "Scrolls and Documents", "Tools"]],
   ["Crafting Material", "Crafting Materials", ["Blacksmithing", "Woodworking", "Cloth and Leather", "Alchemy and Herbs", "Cooking Ingredients", "Scribing Supplies", "Other"]],
   ["Magic Item", "Magic Items", ["Weapons", "Armor", "Accessories", "Wondrous Items", "Other"]],
@@ -27,7 +27,10 @@ const CATS = [
 /* items.html?c=weapons shows one category, like a page of its own (the Items menu links here) */
 const CAT_SLUGS = { weapons: "Weapon", ammunition: "Ammunition", armor: "Armor", consumables: "Consumable", materials: "Crafting Material", "magic-items": "Magic Item", miscellaneous: "Miscellaneous", junk: "Miscellaneous" /* old link */ };
 const catSlug = c => Object.keys(CAT_SLUGS).find(k => CAT_SLUGS[k] === c) || "";
-const SLOTS = ["Head", "Neck", "Shoulders", "Torso", "Waist", "Arms", "Hands", "Legs", "Feet", "Rings", "Other"];
+/* where an item is worn or held; weapons go in a hand (Both Hands for two-handed ones), shields in the Off-Hand */
+const SLOTS = ["Main Hand", "Off-Hand", "Main or Off-Hand", "Both Hands", "Head", "Neck", "Shoulders", "Torso", "Waist", "Arms", "Hands", "Legs", "Feet", "Rings", "Other"];
+/* the Simple / Martial / Exotic badge shown in the item list */
+const typeBadge = t => WTIERS.includes(t) ? `<span class="wtier wt-${t[0]}" title="${esc(t)}" role="img" aria-label="${esc(t)}">${t[0]}</span>` : "";
 const PROFS = ["Blacksmithing", "Tailoring", "Woodworking", "Cooking", "Alchemy", "Leatherworking", "Scribing", "Tinkering", "Goldsmithing", "Enchanting"];
 const TIERS = ["Basic", "Advanced", "Mastery"];
 const RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "(Varies)"];
@@ -56,7 +59,7 @@ function normItem(i) {
   const cat = catOf(str(i.cat)) ? str(i.cat) : (/weapon/i.test(i.type) ? "Weapon" : /armor|shield/i.test(i.type) ? "Armor" : /potion|food/i.test(i.type) ? "Consumable" : "Crafting Material");
   return {
     id: str(i.id) || newId("i"), n: str(i.n), nc: HEX.test(str(i.nc)) ? str(i.nc) : "", cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, rarity: str(i.rarity), magic: !!i.magic, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
-    ...(WTIERS.includes(str(i.tier)) && !NO_WTIER.includes(str(i.sub)) ? { tier: str(i.tier) } : {}), ...(str(i.ap) ? { ap: str(i.ap) } : {}), ...(i.preset ? { preset: true } : {}),
+    ...(WTIERS.includes(str(i.tier)) && !(cat === "Weapon" && NO_WTIER.includes(str(i.sub))) ? { tier: str(i.tier) } : {}), ...(str(i.ap) ? { ap: str(i.ap) } : {}), ...(i.preset ? { preset: true } : {}),
     props: str(i.props && !Array.isArray(i.props) ? i.props : ""), pdefs: Array.isArray(i.pdefs) ? i.pdefs.map(x => ({ n: str(x && x.n), d: str(x && x.d) })).filter(x => x.n || x.d) : pdefsFrom(str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : ""))), desc: str(i.desc), extra: extras(i.extra)
   };
 }
@@ -232,10 +235,10 @@ function itemDetail(i) {
 const nameHTML = i => `<span class="iname${i.nc ? " tc" : ""}"${i.nc ? ` style="--c:${i.nc}"` : ""}>${esc(i.n || "New item")}</span>`;
 function itemRow(i, showCat) {
   const isOpen = open.has(i.id) || editing.has(i._id);
-  const tag = showCat ? `<span class="ctag2">${esc(i.sub || catOf(i.cat)[1])}</span>` : i.slot && i.cat === "Armor" ? `<span class="ctag2">${esc(i.slot)}</span>` : "";
+  const tag = showCat ? `<span class="ctag2">${esc(i.sub || catOf(i.cat)[1])}</span>` : "";
   return `<tbody class="irow${isOpen ? " open" : ""}" id="${esc(i.id)}" data-id="${i._id}">
-<tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${nameHTML(i)}${i.badge ? PLAYTEST : ""}${tag}</button>${ADMIN && !editing.has(i._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(i.n)}">Edit</button>` : ""}</div></td><td>${esc(i.rarity || "—")}</td><td class="imagic"><input type="checkbox" class="magicbox" aria-label="${esc(i.n)} is magic"${i.magic ? " checked" : ""}${ADMIN && !editing.has(i._id) ? "" : " disabled"}></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
-${isOpen ? `<tr class="idet"><td colspan="5">${editing.has(i._id) ? itemForm(i) : itemDetail(i)}</td></tr>` : ""}</tbody>`;
+<tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${nameHTML(i)}${i.badge ? PLAYTEST : ""}${tag}</button>${ADMIN && !editing.has(i._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(i.n)}">Edit</button>` : ""}</div></td><td class="islot">${esc(i.slot || "—")}</td><td class="itype">${typeBadge(i.tier) || "—"}</td><td>${esc(i.rarity || "—")}</td><td class="imagic"><input type="checkbox" class="magicbox" aria-label="${esc(i.n)} is magic"${i.magic ? " checked" : ""}${ADMIN && !editing.has(i._id) ? "" : " disabled"}></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
+${isOpen ? `<tr class="idet"><td colspan="7">${editing.has(i._id) ? itemForm(i) : itemDetail(i)}</td></tr>` : ""}</tbody>`;
 }
 /* Presets: their own section (admin only), which opens and closes; the choice is remembered in this browser */
 let presetsOpen = true;
@@ -248,15 +251,15 @@ function presetsSection(pre, head) {
     const groups = [...subs, ...[...new Set(inCat.map(i => i.sub))].filter(s => !subs.includes(s)).sort()];
     for (const sub of groups) {
       const g = inCat.filter(i => (i.sub || "") === (sub || "")).sort((a, b) => (WTIERS.indexOf(a.tier) + 9) % 9 - (WTIERS.indexOf(b.tier) + 9) % 9 || byName(a, b)); if (!g.length) continue;
-      body += `<tbody class="isub"><tr><th colspan="5">${esc(label)}${sub ? " · " + esc(sub) : ""}</th></tr></tbody>` + g.map(i => itemRow(i, false)).join("");
+      body += `<tbody class="isub"><tr><th colspan="7">${esc(label)}${sub ? " · " + esc(sub) : ""}</th></tr></tbody>` + g.map(i => itemRow(i, false)).join("");
     }
   }
   return `<section class="icat ipresets${presetsOpen ? " open" : ""}"><h2 class="icath"><button type="button" class="pretoggle" aria-expanded="${presetsOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Presets</button> <span>${plural(pre.length, "preset", "presets")} · only you can see these</span></h2>` +
-    (presetsOpen ? `<p class="prenote">Click Add item and choose one under "Start from a preset" to make a new item with its stats.</p><table class="ichart">${head}${body}</table>` : "") + `</section>`;
+    (presetsOpen ? `<p class="prenote">Click Add item and choose one under "Start from a preset" to make a new item with its stats.</p><table class="ichart itab">${head}${body}</table>` : "") + `</section>`;
 }
 function itemsChart(l) {
-  const head = `<thead><tr><th>Item</th><th>Rarity</th><th><span class="hl">Magic?</span><span class="hs" aria-hidden="true">Magic</span></th><th>Value</th><th><span class="hl">Weight</span><span class="hs" aria-hidden="true">Wt.</span></th></tr></thead>`;
-  if (query()) return `<div class="ghead gres"><h2>Best matches first</h2></div><table class="ichart">${head}${l.map(i => itemRow(i, true)).join("")}</table>`;
+  const head = `<thead><tr><th>Item</th><th>Slot</th><th>Type</th><th>Rarity</th><th><span class="hl">Magic?</span><span class="hs" aria-hidden="true">Magic</span></th><th>Value</th><th><span class="hl">Weight</span><span class="hs" aria-hidden="true">Wt.</span></th></tr></thead>`;
+  if (query()) return `<div class="ghead gres"><h2>Best matches first</h2></div><table class="ichart itab">${head}${l.map(i => itemRow(i, true)).join("")}</table>`;
   let h = "";
   for (const [cat, label, subs] of CATS) {
     const inCat = l.filter(i => i.cat === cat && !i.preset); if (!inCat.length) continue;
@@ -266,11 +269,11 @@ function itemsChart(l) {
       const g = inCat.filter(i => i.sub === sub);
       if (!g.length) continue;
       g.sort((a, b) => cat === "Armor" ? (SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot)) || byName(a, b) : byName(a, b));
-      body += `<tbody class="isub"><tr><th colspan="5">${esc(sub || "Other")}${cat === "Armor" && sub !== "Accessories" && sub !== "Clothing" ? " Armor" : ""}</th></tr></tbody>` + g.map(i => itemRow(i, false)).join("");
+      body += `<tbody class="isub"><tr><th colspan="7">${esc(sub || "Other")}${cat === "Armor" && !["Accessories", "Clothing", "Shields"].includes(sub) ? " Armor" : ""}</th></tr></tbody>` + g.map(i => itemRow(i, false)).join("");
     }
     const loose = inCat.filter(i => !i.sub);
-    if (loose.length) body += `<tbody class="isub"><tr><th colspan="5">Other</th></tr></tbody>` + loose.sort(byName).map(i => itemRow(i, false)).join("");
-    h += `<section class="icat"><h2 class="icath">${esc(label)} <span>${plural(inCat.length, "item", "items")}</span></h2><table class="ichart">${head}${body}</table></section>`;
+    if (loose.length) body += `<tbody class="isub"><tr><th colspan="7">Other</th></tr></tbody>` + loose.sort(byName).map(i => itemRow(i, false)).join("");
+    h += `<section class="icat"><h2 class="icath">${esc(label)} <span>${plural(inCat.length, "item", "items")}</span></h2><table class="ichart itab">${head}${body}</table></section>`;
   }
   return h + presetsSection(l.filter(i => i.preset), head);
 }
@@ -317,11 +320,12 @@ ${i._new && !d.preset ? presetPicker(i, d) : ""}
 <div class="grid3">
 ${fld(id("cat"), "Category", "", sel(id("cat"), "cat", d.cat, CATS.map(c => [c[0], c[1]])))}
 ${fld(id("sub"), d.cat === "Weapon" ? "Weapon type" : d.cat === "Armor" ? "Armor type" : "Group", "", inp(id("sub"), "sub", d.sub, ` list="subs-${i._id}"`) + `<datalist id="subs-${i._id}">${subs.map(s => `<option value="${esc(s)}">`).join("")}</datalist>`)}
-${d.cat === "Armor" ? fld(id("slot"), "Slot", "", sel(id("slot"), "slot", d.slot, [["", "None"], ...SLOTS.map(s => [s, s])])) : ""}
+${fld(id("slot"), "Equipment slot", "", sel(id("slot"), "slot", d.slot, [["", "None"], ...SLOTS.map(s => [s, s]), ...(d.slot && !SLOTS.includes(d.slot) ? [[d.slot, d.slot]] : [])]))}
+${fld(id("tier"), "Type", "The Simple, Martial or Exotic badge", sel(id("tier"), "tier", d.tier || "", [["", "None"], ...WTIERS.map(t => [t, t])]))}
 ${fld(id("rarity"), "Rarity", "", sel(id("rarity"), "rarity", d.rarity || "", [["", "None"], ...RARITIES.map(r => [r, r]), ...(d.rarity && !RARITIES.includes(d.rarity) ? [[d.rarity, d.rarity]] : [])]))}
 ${fld(id("value"), "Value", "", inp(id("value"), "value", d.value, ' placeholder="e.g. 15 gp"'))}
 ${fld(id("weight"), "Weight", "", inp(id("weight"), "weight", d.weight, ' placeholder="e.g. 3 lb"'))}
-${d.cat === "Weapon" ? fld(id("tier"), "Proficiency", "", sel(id("tier"), "tier", d.tier || "", [["", "None"], ...WTIERS.map(t => [t, t])])) + fld(id("ap"), "AP per attack", "", inp(id("ap"), "ap", d.ap || "", ' placeholder="e.g. 2"')) : ""}
+${d.cat === "Weapon" ? fld(id("ap"), "AP per attack", "", inp(id("ap"), "ap", d.ap || "", ' placeholder="e.g. 2"')) : ""}
 </div>
 ${d.cat === "Crafting Material" ? "" : fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
@@ -371,8 +375,8 @@ function readForm(f) {
   return d;
 }
 function fromDraft(d, x) {
-  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: d.cat === "Armor" ? str(d.slot) : "", value: str(d.value), weight: str(d.weight),
-    tier: d.cat === "Weapon" && WTIERS.includes(d.tier) && !NO_WTIER.includes(str(d.sub ?? x.sub)) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
+  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: str(d.slot), value: str(d.value), weight: str(d.weight),
+    tier: WTIERS.includes(d.tier) && !(d.cat === "Weapon" && NO_WTIER.includes(str(d.sub ?? x.sub))) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, actions: str(d.actions ?? x.actions), props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
     ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote ?? x.matNote), applies: str(d.applies),

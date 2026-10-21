@@ -694,6 +694,17 @@ CONDITIONS_CSS = """
 .ichart th:nth-child(2),.ichart td:nth-child(2){width:110px;text-align:center}
 .ichart th:nth-child(3),.ichart td:nth-child(3){width:80px;text-align:center}
 .ichart .hs{display:none}
+/* item list: Item, Slot, Type, Rarity, Magic, Value, Weight */
+.itab th:nth-child(2),.itab td:nth-child(2){width:130px;text-align:center}
+.itab th:nth-child(3),.itab td:nth-child(3){width:64px;text-align:center}
+.itab th:nth-child(4),.itab td:nth-child(4){width:100px;text-align:center}
+.itab th:nth-child(5),.itab td:nth-child(5){width:70px;text-align:center}
+.itab th:nth-child(6),.itab td:nth-child(6){width:90px;text-align:right}
+.itab th:nth-child(7),.itab td:nth-child(7){width:80px;text-align:right}
+.itab .islot{font-size:.85rem}
+.wtier{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:2px solid var(--ink);font:800 .72rem var(--font);color:var(--ink);background:var(--paper);vertical-align:middle}
+.wtier.wt-M{background:var(--ink);color:var(--paper)}
+.wtier.wt-E{background:#b8860b;border-color:#b8860b;color:#fff}
 .magicbox{width:18px;height:18px;accent-color:var(--ink);vertical-align:middle;margin:0}
 .magicbox:disabled{opacity:1;cursor:default}
 .ncolor{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
@@ -771,6 +782,14 @@ CONDITIONS_CSS = """
   .rchart th:nth-child(2),.rchart td:nth-child(2),.rchart th:nth-child(5),.rchart td:nth-child(5){display:none}
   .rchart th:nth-child(3),.rchart td:nth-child(3),.rchart th:nth-child(4),.rchart td:nth-child(4){width:40px}
   .ichart .hs{display:inline}
+  /* Slot and Magic fold to nothing on phones (not display:none, which would break the full-width group rows) */
+  .itab th:nth-child(2),.itab td:nth-child(2),.itab th:nth-child(5),.itab td:nth-child(5){width:0;padding:0!important;font-size:0;overflow:hidden;border-left:0;border-right:0}
+  .itab td:nth-child(5) .magicbox{display:none}
+  .itab th:nth-child(3),.itab td:nth-child(3){width:36px}
+  .itab th:nth-child(4),.itab td:nth-child(4){width:60px}
+  .itab th:nth-child(6),.itab td:nth-child(6){width:50px}
+  .itab th:nth-child(7),.itab td:nth-child(7){width:44px}
+  .wtier{width:20px;height:20px;font-size:.62rem}
   .idet td{overflow-wrap:anywhere}
   .dbtns{display:block!important}
   .ihead td,.ichart thead th,.isub th,.idet td{padding-inline:10px}

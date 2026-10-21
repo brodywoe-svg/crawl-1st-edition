@@ -647,7 +647,7 @@ function setLoadout(c, v) {
 function gearFrom(text) { return ITEMS.filter(i => new RegExp("\\b" + i.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(plainText(text))) }
 function defaultSlot(c, it) {
   const used = new Set(c.inv.map(x => x.slot).filter(Boolean));
-  const s = lcs(it.slot), want = it.cat === "Weapon" ? ["main", "off"] : /shield/i.test(it.n + " " + it.sub) ? ["off"] : s === "rings" ? ["ring1", "ring2"] : s === "other" ? ["other"] : SLOTS.some(x => x[0] === s) ? [s] : [];
+  const s = lcs(it.slot), want = s === "off-hand" ? ["off"] : s === "main hand" || s === "both hands" ? ["main"] : s === "main or off-hand" || it.cat === "Weapon" ? ["main", "off"] : /shield/i.test(it.n + " " + it.sub) ? ["off"] : s === "rings" ? ["ring1", "ring2"] : s === "other" ? ["other"] : SLOTS.some(x => x[0] === s) ? [s] : [];
   return want.find(k => !used.has(k)) || "";
 }
 
