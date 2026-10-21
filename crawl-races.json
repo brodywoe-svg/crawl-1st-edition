@@ -111,6 +111,10 @@
      "v": "Medium"
     },
     {
+     "k": "Speed",
+     "v": "Your Ground Speed is 30ft."
+    },
+    {
      "k": "Darkvision",
      "v": "30ft"
     }
