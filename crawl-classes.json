@@ -499,6 +499,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -530,6 +531,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -798,7 +800,17 @@
       "Swords",
       "Unarmed",
       "Miscellaneous"
-     ]
+     ],
+     "ot": {
+      "Axes": "SM",
+      "Blades": "SM",
+      "Bows": "SM",
+      "Crossbows": "SM",
+      "Cudgels": "SM",
+      "Firearms": "SM",
+      "Polearms": "SM",
+      "Swords": "SM"
+     }
     },
     {
      "n": 2,
@@ -987,6 +999,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1294,6 +1307,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1325,6 +1339,7 @@
    "moneyRoll": "",
    "extra": [],
    "choices": [],
+   "ptypes": {},
    "prepared": "",
    "startRank": "",
    "schoolStart": "",
@@ -1522,13 +1537,13 @@
     }
    ],
    "ptypes": {
-    "w": {
-     "Blades": "S",
-     "Polearms": "S"
-    },
     "v": {
      "Intelligence": "P",
      "Wisdom": "P"
+    },
+    "w": {
+     "Blades": "S",
+     "Polearms": "S"
     }
    },
    "prepared": "max(1, INT + floor(level / 2))",
