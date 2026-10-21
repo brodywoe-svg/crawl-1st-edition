@@ -1342,6 +1342,25 @@
    "extra": []
   },
   {
+   "id": "i-mvhe9m2yctga",
+   "n": "Iron Kettle Helmet",
+   "nc": "",
+   "cat": "Armor",
+   "sub": "Medium",
+   "slot": "Head",
+   "badge": false,
+   "rarity": "Common",
+   "magic": false,
+   "value": "",
+   "weight": "3 lbs",
+   "actions": "",
+   "pdefs": [],
+   "props": "Head, Medium, 5% Armor",
+   "feat": "",
+   "desc": "A conical iron helm with a bar that guards the nose.",
+   "extra": []
+  },
+  {
    "id": "i-mv62433jz13p",
    "n": "Iron Longsword",
    "nc": "",
