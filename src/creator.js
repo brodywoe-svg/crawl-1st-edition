@@ -646,8 +646,8 @@ function setLoadout(c, v) {
 }
 function gearFrom(text) { return ITEMS.filter(i => new RegExp("\\b" + i.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(plainText(text))) }
 /* an item's weapon actions: [{n, ap, dmg, type, d}] */
-const wactsOfItem = it => (Array.isArray(it && it.wacts) ? it.wacts : []).map(a => ({ n: str(a.n), ap: str(a.ap), dmg: str(a.dmg), type: str(a.type), d: str(a.d) })).filter(a => a.n || a.dmg || a.d);
-const wactText = a => `${a.n || "Weapon action"}${a.ap ? ` (${a.ap} AP)` : ""}${a.dmg || a.type ? `: ${[a.dmg, a.type].filter(Boolean).join(" ")}` : ""}${a.d ? `. ${a.d}` : ""}`;
+const wactsOfItem = it => (Array.isArray(it && it.wacts) ? it.wacts : []).map(a => ({ n: str(a.n), at: str(a.at), ap: str(a.ap), dmg: str(a.dmg), type: str(a.type), d: str(a.d) })).filter(a => a.n || a.dmg || a.d);
+const wactText = a => `${a.n || "Weapon action"}${a.at || a.ap ? ` (${[a.at, a.ap && a.ap + " AP"].filter(Boolean).join(", ")})` : ""}${a.dmg || a.type ? `: ${[a.dmg, a.type].filter(Boolean).join(" ")}` : ""}${a.d ? `. ${a.d}` : ""}`;
 function defaultSlot(c, it) {
   const used = new Set(c.inv.map(x => x.slot).filter(Boolean));
   const s = lcs(it.slot), want = s === "off-hand" ? ["off"] : s === "main hand" || s === "both hands" ? ["main"] : s === "main or off-hand" || it.cat === "Weapon" ? ["main", "off"] : /shield/i.test(it.n + " " + it.sub) ? ["off"] : s === "rings" ? ["ring1", "ring2"] : s === "other" ? ["other"] : SLOTS.some(x => x[0] === s) ? [s] : [];

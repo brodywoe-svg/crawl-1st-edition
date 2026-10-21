@@ -774,7 +774,8 @@ CONDITIONS_CSS = """
 .wact .wah+p,.wact .wah+*{margin-top:3px}
 .walist{display:grid;gap:10px;margin-bottom:8px}
 .warow{display:grid;gap:6px;border:2px solid var(--hair);border-radius:12px;padding:10px}
-.wagrid{display:grid;grid-template-columns:2fr 80px 1.2fr 1.2fr;gap:6px}
+.wagrid{display:grid;grid-template-columns:1.4fr 1.7fr 64px 1fr 1fr;gap:6px}
+.wafrom{margin:0;font-size:.78rem;font-weight:700;color:var(--muted)}
 .warow .wan{color:var(--red);font-weight:800}
 .wahead{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:-2px}
 .warow .xdel{justify-self:start}

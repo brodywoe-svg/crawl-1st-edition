@@ -37,7 +37,15 @@ const RARITIES = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "(Varies)"]
 const HEX = /^#[0-9a-f]{3,8}$/i;
 const KINDS = ["", "Craftable Modifier", "Enchantment Modifier"];
 const WTIERS = ["Simple", "Martial", "Exotic"];
-const wactsOf = x => (Array.isArray(x) ? x : []).map(a => ({ n: str(a && a.n), ap: str(a && a.ap), dmg: str(a && a.dmg), type: str(a && a.type), d: str(a && a.d) })).filter(a => a.n || a.d || a.dmg);
+/* weapon actions: at = action type (Melee Weapon Attack, Reaction...); p = copied from the item's preset, so it follows the preset */
+const ACTION_TYPES = ["Melee Weapon Attack", "Ranged Weapon Attack", "Reaction"];
+const wactsOf = x => (Array.isArray(x) ? x : []).map(a => ({ n: str(a && a.n), at: str(a && a.at), ap: str(a && a.ap), dmg: str(a && a.dmg), type: str(a && a.type), d: str(a && a.d), ...(a && a.p ? { p: true } : {}) })).filter(a => a.n || a.d || a.dmg);
+/* an item made from a preset (from = the preset's id) follows it for these: weapon actions copied from it, AP per attack, Type and Slot.
+   Its own extra weapon actions, name, description, properties and price stay its own. */
+function followPreset(i, p) {
+  i.wacts = [...p.wacts.map(a => ({ ...a, p: true })), ...i.wacts.filter(a => !a.p)];
+  i.ap = p.ap; i.tier = p.tier; i.slot = p.slot;
+}
 /* weapon groups with no Simple/Martial/Exotic */
 const NO_WTIER = ["Unarmed", "Miscellaneous"];
 let items = [], recipes = [], original = "", dirty = false, uid = 0;
@@ -61,7 +69,7 @@ function normItem(i) {
   return {
     id: str(i.id) || newId("i"), n: str(i.n), nc: HEX.test(str(i.nc)) ? str(i.nc) : "", cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, rarity: str(i.rarity), magic: !!i.magic, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
     ...(WTIERS.includes(str(i.tier)) && !(cat === "Weapon" && NO_WTIER.includes(str(i.sub))) ? { tier: str(i.tier) } : {}), ...(str(i.ap) ? { ap: str(i.ap) } : {}), ...(i.preset ? { preset: true } : {}),
-    wacts: wactsOf(i.wacts),
+    wacts: wactsOf(i.wacts), ...(!i.preset && str(i.from) ? { from: str(i.from) } : {}),
     props: str(i.props && !Array.isArray(i.props) ? i.props : ""), pdefs: Array.isArray(i.pdefs) ? i.pdefs.map(x => ({ n: str(x && x.n), d: str(x && x.d) })).filter(x => x.n || x.d) : pdefsFrom(str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : ""))), desc: str(i.desc), extra: extras(i.extra)
   };
 }
@@ -302,9 +310,15 @@ function nameColorPicker(nc) {
 }
 const DMG_FALLBACK = ["Acid", "Bludgeoning", "Cold", "Fire", "Force", "Lightning", "Necrotic", "Piercing", "Poison", "Psychic", "Radiant", "Slashing", "Thunder"];
 const dmgTypes = () => { const g = (normGlossary(GLOSSARY) || []).filter(e => e.sec === "Damage Types" && !/^(mundane|magical) damage$/i.test(e.n)).map(e => e.n); return g.length ? g.sort() : DMG_FALLBACK };
-const wactRow = a => `<div class="warow"><div class="wagrid wahead" aria-hidden="true"><span>Name</span><span>AP cost</span><span>Damage</span><span>Damage type</span></div><div class="wagrid"><input type="text" class="wan" value="${esc(a.n)}" placeholder="Action name, e.g. Cleave" aria-label="Action name" autocomplete="off"><input type="text" class="waap" value="${esc(a.ap)}" placeholder="AP, e.g. 3" aria-label="AP cost" autocomplete="off"><input type="text" class="wadmg" value="${esc(a.dmg)}" placeholder="Damage, e.g. 1d8 + STR" aria-label="Damage" autocomplete="off"><input type="text" class="watype" value="${esc(a.type)}" list="dmgTypes" placeholder="Damage type" aria-label="Damage type" autocomplete="off"></div><textarea class="wad" rows="2" placeholder="What the action does" aria-label="What the action does">${esc(a.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
+const wactRow = a => `<div class="warow"${a.p ? ' data-p="1"' : ""}>${a.p ? `<p class="wafrom">From the linked preset. Changes to it here are replaced when the preset changes.</p>` : ""}<div class="wagrid wahead" aria-hidden="true"><span>Name</span><span>Action type</span><span>AP cost</span><span>Damage</span><span>Damage type</span></div><div class="wagrid"><input type="text" class="wan" value="${esc(a.n)}" placeholder="Action name, e.g. Cleave" aria-label="Action name" autocomplete="off"><input type="text" class="waat" value="${esc(a.at || "")}" list="actTypes" placeholder="e.g. Reaction" aria-label="Action type" autocomplete="off"><input type="text" class="waap" value="${esc(a.ap)}" placeholder="AP, e.g. 3" aria-label="AP cost" autocomplete="off"><input type="text" class="wadmg" value="${esc(a.dmg)}" placeholder="e.g. 1d8 + STR" aria-label="Damage" autocomplete="off"><input type="text" class="watype" value="${esc(a.type)}" list="dmgTypes" placeholder="Damage type" aria-label="Damage type" autocomplete="off"></div><textarea class="wad" rows="2" placeholder="What the action does" aria-label="What the action does">${esc(a.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
 const pdefRow = x => `<div class="prow"><input type="text" class="pn" value="${esc(x.n)}" placeholder="Property name, e.g. Serrated" aria-label="Property name" autocomplete="off"><textarea class="pd" rows="2" placeholder="What the property does" aria-label="What the property does">${esc(x.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
 const topBtns = `<div class="gbtns gtop"><span class="sp"></span><button type="button" class="btn gcancel">Cancel</button><button type="button" class="btn solid gdone">Done</button></div>`;
+/* which preset an item follows (set when it's made from one, or picked here) */
+function presetLink(d) {
+  const ps = items.filter(x => x.preset && !x._new).sort((a, b) => a.cat.localeCompare(b.cat) || byName(a, b));
+  if (!ps.length) return "";
+  return `<label class="ipresetpick">Linked preset <small>When this preset is changed, this item's weapon actions from it, AP per attack, Type and Slot change too. Its other details stay its own.</small><select data-k="from"><option value="">None</option>${ps.map(p => `<option value="${esc(p.id)}"${d.from === p.id ? " selected" : ""}>${esc(p.n)} (${esc((catOf(p.cat) || ["", p.cat])[1])}${p.sub ? " · " + esc(p.sub) : ""})</option>`).join("")}</select></label>`;
+}
 /* new items can start from a preset: its stats are copied in, then you rename it and change what's different */
 function presetPicker(i, d) {
   const ps = items.filter(x => x.preset && !x._new).sort((a, b) => a.cat.localeCompare(b.cat) || a.sub.localeCompare(b.sub) || byName(a, b)); if (!ps.length) return "";
@@ -322,6 +336,7 @@ ${nameColorPicker(d.nc || "")}
 <label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> ${FLASK} Needs playtesting</label>
 <label class="chk"><input type="checkbox" data-k="preset"${d.preset ? " checked" : ""}> Preset <small>(only you see it; use it to start new items)</small></label>
 ${i._new && !d.preset ? presetPicker(i, d) : ""}
+${!d.preset && !(i._new && !d.from) ? presetLink(d) : ""}
 <div class="grid3">
 ${fld(id("cat"), "Category", "", sel(id("cat"), "cat", d.cat, CATS.map(c => [c[0], c[1]])))}
 ${fld(id("sub"), d.cat === "Weapon" ? "Weapon type" : d.cat === "Armor" ? "Armor type" : "Group", "", inp(id("sub"), "sub", d.sub, ` list="subs-${i._id}"`) + `<datalist id="subs-${i._id}">${subs.map(s => `<option value="${esc(s)}">`).join("")}</datalist>`)}
@@ -335,7 +350,7 @@ ${d.cat === "Weapon" ? fld(id("ap"), "AP per attack", "", inp(id("ap"), "ap", d.
 ${d.cat === "Crafting Material" ? "" : fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
 ${d.cat === "Crafting Material" ? "" : `<div class="glab">Properties Defined <small>The property's name shows in red, followed by what it does.</small></div><div class="plist">${(d.pdefs || []).map(pdefRow).join("")}</div><button type="button" class="btn padd">Add another property</button>`}
-${d.cat === "Crafting Material" || d.cat === "Miscellaneous" ? "" : `<div class="glab">Weapon actions <small>Each action's name shows in red, then its AP cost, damage and damage type, and what it does.</small></div><datalist id="dmgTypes">${dmgTypes().map(t => `<option value="${esc(t)}">`).join("")}</datalist><div class="walist">${(d.wacts || []).map(wactRow).join("")}</div><button type="button" class="btn waadd">Add a weapon action</button>` + (str(d.actions) ? fld(id("actions"), "Weapon actions (written in)", "Old text. Move it into the actions above, then clear this box.", area(id("actions"), "actions", d.actions, 3)) : "")}
+${d.cat === "Crafting Material" || d.cat === "Miscellaneous" ? "" : `<div class="glab">Weapon actions <small>Each action's name shows in red, then its AP cost, damage and damage type, and what it does.</small></div><datalist id="dmgTypes">${dmgTypes().map(t => `<option value="${esc(t)}">`).join("")}</datalist><datalist id="actTypes">${ACTION_TYPES.map(t => `<option value="${esc(t)}">`).join("")}</datalist><div class="walist">${(d.wacts || []).map(wactRow).join("")}</div><button type="button" class="btn waadd">Add a weapon action</button>` + (str(d.actions) ? fld(id("actions"), "Weapon actions (written in)", "Old text. Move it into the actions above, then clear this box.", area(id("actions"), "actions", d.actions, 3)) : "")}
 ${formEnd(i, "item")}</div>`;
 }
 const isCooking = p => /^cook/i.test(String(p || "").trim());
@@ -377,12 +392,12 @@ function readForm(f) {
   const q = c => [...f.querySelectorAll(".qrow." + c)].map(r => ({ qty: +r.querySelector(".qn").value || 1, name: r.querySelector(".qi").value }));
   if (KIND === "recipes") { d.makes = q("makes"); d.ing = q("ing") }
   else if (f.querySelector(".plist")) d.pdefs = [...f.querySelectorAll(".prow")].map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value }));
-  if (KIND === "items" && f.querySelector(".walist")) d.wacts = [...f.querySelectorAll(".warow")].map(r => ({ n: r.querySelector(".wan").value, ap: r.querySelector(".waap").value, dmg: r.querySelector(".wadmg").value, type: r.querySelector(".watype").value, d: r.querySelector(".wad").value }));
+  if (KIND === "items" && f.querySelector(".walist")) d.wacts = [...f.querySelectorAll(".warow")].map(r => ({ p: r.dataset.p === "1", n: r.querySelector(".wan").value, at: r.querySelector(".waat").value, ap: r.querySelector(".waap").value, dmg: r.querySelector(".wadmg").value, type: r.querySelector(".watype").value, d: r.querySelector(".wad").value }));
   return d;
 }
 function fromDraft(d, x) {
   if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: str(d.slot), value: str(d.value), weight: str(d.weight),
-    tier: WTIERS.includes(d.tier) && !(d.cat === "Weapon" && NO_WTIER.includes(str(d.sub ?? x.sub))) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, actions: str(d.actions ?? x.actions), wacts: d.wacts ? wactsOf(d.wacts) : x.wacts, props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
+    tier: WTIERS.includes(d.tier) && !(d.cat === "Weapon" && NO_WTIER.includes(str(d.sub ?? x.sub))) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, from: !d.preset && str(d.from ?? x.from) ? str(d.from ?? x.from) : undefined, actions: str(d.actions ?? x.actions), wacts: d.wacts ? wactsOf(d.wacts) : x.wacts, props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
     ...x, n: str(d.n).replace(/\s+/g, " "), prof: str(d.prof), tier: d.tier, kind: d.kind, badge: !!d.badge, pre: str(d.pre), matNote: str(d.matNote ?? x.matNote), applies: str(d.applies),
@@ -478,7 +493,7 @@ $("clist").addEventListener("change", ev => {
   if (ev.target.classList.contains("presetsel")) {
     const f = ev.target.closest(".gediting"), x = rowOf(ev.target), p = items.find(i => i.id === ev.target.value); if (!f || !x || !p) return;
     const { id, _id, _new, preset, n, ...stats } = p;
-    drafts.set(x._id, { ...readForm(f), ...stats, n, pdefs: p.pdefs.map(q => ({ ...q })), wacts: p.wacts.map(q => ({ ...q })), extra: p.extra.map(q => ({ ...q })), from: p.id, preset: false });
+    drafts.set(x._id, { ...readForm(f), ...stats, n, pdefs: p.pdefs.map(q => ({ ...q })), wacts: p.wacts.map(q => ({ ...q, p: true })), extra: p.extra.map(q => ({ ...q })), from: p.id, preset: false });
     keepDraft = x._id; render(); keepDraft = 0; const nm = document.querySelector(`.gediting[data-id="${x._id}"] [data-k="n"]`); if (nm) { nm.focus(); nm.select() }
     say(`Started from the ${p.n} preset. Rename it and change what's different, then click Done.`); return;
   }
@@ -493,7 +508,7 @@ $("clist").addEventListener("click", ev => {
   if (f && b.classList.contains("xadd")) { f.querySelector(".xlist").insertAdjacentHTML("beforeend", extraRow({ k: "", v: "" })); f.querySelector(".xrow:last-child .xk").focus(); return }
   if (f && b.classList.contains("qadd")) { const c = b.dataset.q; f.querySelector(c === "makes" ? ".qmakes" : ".qing").insertAdjacentHTML("beforeend", qtyRow({ qty: 1, name: "" }, c)); f.querySelector(`.qrow.${c}:last-child .qi`).focus(); return }
   if (f && b.classList.contains("xdel")) { b.closest(".xrow,.qrow,.prow,.warow").remove(); preview(f); return }
-  if (f && b.classList.contains("waadd")) { f.querySelector(".walist").insertAdjacentHTML("beforeend", wactRow({ n: "", ap: "", dmg: "", type: "", d: "" })); f.querySelector(".warow:last-child .wan").focus(); return }
+  if (f && b.classList.contains("waadd")) { f.querySelector(".walist").insertAdjacentHTML("beforeend", wactRow({ n: "", at: "", ap: "", dmg: "", type: "", d: "" })); f.querySelector(".warow:last-child .wan").focus(); return }
   if (f && b.classList.contains("padd")) { f.querySelector(".plist").insertAdjacentHTML("beforeend", pdefRow({ n: "", d: "" })); f.querySelector(".prow:last-child .pn").focus(); return }
   if (f && b.classList.contains("ncsw")) { setNameColor(f, b.dataset.nc); return }
   const x = rowOf(b); if (!x) return;
@@ -524,7 +539,11 @@ $("clist").addEventListener("click", ev => {
       if (!name) { err("Give the item a name."); return }
       const asPreset = !!d.preset;
       if (items.some(y => y !== x && !y._new && !!y.preset === asPreset && lc(y.n) === lc(name))) { err(`There's already ${asPreset ? "a preset" : "an item"} called ${name}.`); return }
+      const was = x.from;
       Object.assign(x, fromDraft(d, x));
+      if (x.preset) delete x.from;
+      else if (x.from) { const p = items.find(y => y.preset && y.id === x.from); if (p && x.from !== was) followPreset(x, p) }
+      if (x.preset) { const kids = items.filter(y => !y.preset && y.from === x.id); kids.forEach(y => followPreset(y, x)); if (kids.length) say(`Also updated ${kids.length} item${kids.length === 1 ? "" : "s"} made from this preset: ${kids.map(y => y.n).join(", ")}.`) }
     } else {
       const named = l => l.filter(r => str(r.name));
       if (!name && !named(d.makes).length) { err("Give the recipe a name, or pick what it makes."); return }
@@ -619,7 +638,7 @@ function tipMark(html, skip) {
 function propsHTML(t, item) { return tipMark(richInline(t), item && item.cat === "Armor" ? m => ARMOR_WORDS.includes(m.toLowerCase()) : null) }
 const actionsHTML = t => blocks(t, x => tipMark(richInline(x)));
 /* weapon actions: name (red), AP cost, damage and damage type, then what it does */
-const wactLine = a => [a.ap && `${a.ap} AP`, [a.dmg, a.type].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
+const wactLine = a => [a.at, a.ap && `${a.ap} AP`, [a.dmg, a.type].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
 const wactsHTML = l => l.map(a => `<div class="wact"><p class="wah"><span class="pdn">${esc(a.n || "Weapon action")}</span>${wactLine(a) ? ` <span class="wam">${tipMark(esc(wactLine(a)))}</span>` : ""}</p>${a.d ? blocks(a.d, x => tipMark(richInline(x))) : ""}</div>`).join("");
 const actionsBlock = i => (i.wacts.length ? wactsHTML(i.wacts) : "") + (i.actions ? `<div class="rfeat">${actionsHTML(i.actions)}</div>` : "");
 const descHTML = t => blocks(t, x => tipMark(richInline(x)));
