@@ -670,8 +670,8 @@
      "lv": 1,
      "opts": [
       {
-       "n": "Archery",
-       "d": "While you are wielding a Bow or Crossbow, ranged weapon attack made against targets within 5ft of you don't have disadvantage."
+       "n": "Marksmen",
+       "d": "While you are wielding either a Bow, Crossbow, or Firearm, you can make ranged weapon attacks at creatures within 5ft of you without disadvantage."
       },
       {
        "n": "Duel-Wielder",
@@ -683,11 +683,11 @@
       },
       {
        "n": "Armored",
-       "d": "While you are wearing a Helmet in addition to either Medium or heavy Armor, you gain an additional +1 to your Armor Class."
+       "d": "While you are wearing a Helmet in addition to either being Moderately or Heavily Armored, you gain an additional +1 to your Armor Class."
       },
       {
        "n": "Bulwark",
-       "d": "Whenever you use the Shield Bash weapon action, you can add your Strength Modifier to the Damage total. you gain an additional skill point in Shields."
+       "d": "Whenever you use the [color=#8e171c]Shield Bash[/color] weapon action, you can add your Strength Modifier to the Damage total. you gain an additional skill point in Shields."
       },
       {
        "n": "Brawler",
