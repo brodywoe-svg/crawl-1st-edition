@@ -102,12 +102,12 @@
      "langs": "One additional Language of your choice",
      "feats": [
       {
-       "n": "Superior Darkvision",
-       "d": "Your Darkvision has a range of 60 feet, instead of 30"
+       "n": "Umbravision",
+       "d": "Your Darkvision range increases to 60ft, and you can see through magical darkness as though it was non-magical in such cases for spells like Darkness."
       },
       {
-       "n": "One with the Night",
-       "d": "You can blend in with dim areas and hide amongst dark areas, you can take the hide action when in dim or dark areas."
+       "n": "Fade into Shadow",
+       "d": "While you are in dim light or darkness, you can spend 2 AP to melt into the shadows, becoming Invisible until the end of your next turn or until you attack, cast a spell or enter bright light. Once you use this feature, you can’t use it again until you finish a Rest."
       },
       {
        "n": "Nighspun Lineage",
