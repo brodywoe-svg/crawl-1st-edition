@@ -74,12 +74,12 @@
    "n": "Elf",
    "desc": "Elves are the pointy eared, tall, and slender people of yore known for their long lifespans that are nearly ten times longer than humans. Elves hail from all over the realm from the High-Elf's (sometimes called Highborn elves) that have long integrated with human Monarchy's and settlements, To the Wood Elves who defend their ancestral forests and grove homelands, and lastly the Dark Elves, who reside in the deep underground in the midnight of their monolithic strongholds and cities.",
    "asi": "+1 Dexterity",
-   "prof": "Perception,",
-   "langs": "Common, Elvish,",
+   "prof": "Perception",
+   "langs": "Common, Elvish",
    "feats": [
     {
      "n": "Elvish Heritage",
-     "d": "You have an advantage on saving throws against spells or effects that Charm or put you to Sleep."
+     "d": "You have advantage on saving throws against spells or effects that Charm or put you to Sleep."
     }
    ],
    "extra": [
