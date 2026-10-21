@@ -174,7 +174,12 @@ function grants(c) {
       });
     }
   }
-  hidePicks(c, picks.filter(p => p.opts), (p, o) => { const b = base.get(p.cat + "|" + (p.cat === "save" ? lcs(o).slice(0, 3) : o)); return !!b && covers(p.cat, b, pickTiers(p, o)) });
+  const given = (p, o) => { const b = base.get(p.cat + "|" + (p.cat === "save" ? lcs(o).slice(0, 3) : o)); return !!b && covers(p.cat, b, pickTiers(p, o)) };
+  hidePicks(c, picks.filter(p => p.opts), given);
+  /* a list with no more options left than it lets you pick isn't a choice: you get them all */
+  const auto = picks.filter(p => p.opts && shownOpts(p).length && shownOpts(p).length <= p.n);
+  auto.forEach(p => { p.auto = true; shownOpts(p).forEach(o => add({ cat: p.cat, name: p.cat === "save" ? lcs(o).slice(0, 3) : o, tiers: pickTiers(p, o) }, p.src)) });
+  if (auto.length) hidePicks(c, picks.filter(p => p.opts && !p.auto), given);
   return { fixed, picks };
 }
 /* choose-from lists leave out what the character already has from somewhere else: hidden when another source gives it
@@ -195,6 +200,7 @@ function langGrants(c) {
   }
   const base = new Set(); for (const s of sources(c)) parseLangs(s.p.langs || "", s.label).fixed.forEach(f => base.add(lcs(f.name)));
   hidePicks(c, choices, (p, o) => base.has(lcs(o)));
+  choices.forEach(p => { const o = shownOpts(p); if (o.length && o.length <= p.n) { p.auto = true; o.forEach(x => { if (!fixed.has(lcs(x))) fixed.set(lcs(x), { name: x, src: p.src }) }) } });
   return { fixed: [...fixed.values()], picks, from, choices };
 }
 function asiInfo(c) {
@@ -427,6 +433,7 @@ function renderCreate() {
   infoMap = new Map(); infoDefault = "";
   const rolled = k === "equip" && ensureMoneyRoll(c);
   if (k === "equip") syncLoadout(c);
+  syncBgGear(c);
   const body = (STEP_VIEWS[k] || (() => ""))(c);
   $("ccmain").innerHTML = `<div class="cch"><h2>${esc(title)}${sub ? `<small>${esc(sub)}</small>` : ""}</h2><span class="ccof">Step ${i + 1} of ${STEPS.length}</span></div><div class="ccbody" data-k="${k}">${body}</div>`;
   if (pinIk && !infoMap.has(pinIk)) pinIk = "";
@@ -572,7 +579,7 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
     const bgTaken = c.inv.some(x => x.from === "bg");
     const loadouts = lo.length ? `<fieldset class="ccload"><legend>${esc(k.n)} starting equipment</legend>${lo.map((l, i) => `<label class="${c.loadout === String(i) ? "on" : ""}"><input type="radio" name="ccload" data-f="loadout" value="${i}"${c.loadout === String(i) ? " checked" : ""}><span><b>${esc(l.n)}</b><small>${esc(gearLine(l.gear)) || "No gear listed"}</small></span></label>`).join("")}<label class="${c.loadout === "buy" ? "on" : ""}"><input type="radio" name="ccload" data-f="loadout" value="buy"${c.loadout === "buy" ? " checked" : ""}><span><b>Buy my own</b><small>Start with ${esc(fmtC(classMoney(c)))}</small></span></label></fieldset>` : "";
     return `${moneyHTML(c)}${loadouts}<div class="ccpurse"><span>Purse <b>${esc(fmtC(left))}</b></span><small>Started with ${esc(fmtC(start))}${b && toC(b.wealth) ? ` (${esc(fmtC(toC(b.wealth)))} from ${esc(b.n)})` : ""} · spent ${esc(fmtC(spent))}</small>${left < 0 ? `<span class="ccwarn">You've spent more than you have.</span>` : ""}</div>
-${b && b.gear && b.gear.length ? `<p class="ccnote">${esc(b.n)} gear: ${esc(gearLine(b.gear))} <button type="button" class="btn" data-act="bggear"${bgTaken ? " disabled" : ""}>${bgTaken ? "Taken" : "Take it"}</button></p>` : ""}
+${b && b.gear && b.gear.length ? `<p class="ccnote">From your ${esc(b.n)} background (already in your gear): ${esc(gearLine(b.gear))}${bgTaken ? "" : ` <button type="button" class="btn" data-act="bggear">Add it again</button>`}</p>` : ""}
 <div class="cctool"><select id="ccShopCat" aria-label="Item category"><option value="all"${shopCat === "all" ? " selected" : ""}>All gear</option>${cats.map(x => `<option${shopCat === x ? " selected" : ""}>${esc(x)}</option>`).join("")}</select><input type="search" id="ccShopQ" value="${esc(shopQ)}" placeholder="Search items" aria-label="Search items" autocomplete="off"></div>
 <div class="cclist shop">${list.map(i => `<div class="ccrow" data-ik="item:${esc(i.id)}"><span class="ccrn"><span class="tc"${i.nc ? ` style="--c:${esc(i.nc)}"` : ""}>${esc(i.n)}</span></span><span class="ccrm">${esc(i.value || "")}</span><span class="ccrm">${esc(i.weight || "")}</span><span class="ccbtns"><button type="button" class="btn" data-act="buy" data-id="${esc(i.id)}"${toC(i.value) == null || toC(i.value) > left ? ` disabled title="${toC(i.value) == null ? "No price" : "Not enough money"}"` : ""}>Buy</button><button type="button" class="btn" data-act="take" data-id="${esc(i.id)}">Take</button></span></div>`).join("") || `<p class="cempty">No items match.</p>`}</div>
 <h3 class="cch3">Your gear</h3>
@@ -609,12 +616,23 @@ function counter(cat, n, one, many) {
 }
 function choiceSet(c, p) {
   const words = ["", "one", "two", "three", "four", "five", "six"], opts = shownOpts(p), got = chosenOf(c, p).filter(o => opts.includes(o)), full = got.length >= p.n;
+  /* "Fighter: choose two saving throws" */
+  const kind = CHOICE_KINDS.find(k => k[0] === p.cat) || ["", "option", "options"], what = n => n === 1 ? kind[1] : kind[2];
   if (!opts.length) return `<fieldset class="cceither"><legend>${esc(p.src)}</legend><p class="ccnote">You already have every option in this list.</p></fieldset>`;
-  if (p.n <= 1) return `<fieldset class="cceither"><legend>${esc(p.src)}: choose one</legend>${opts.map(o => `<label><input type="radio" name="ch-${esc(p.key)}" data-f="choice" data-k="${esc(p.key)}" value="${esc(o)}"${got.includes(o) ? " checked" : ""}> ${esc(o)}</label>`).join("")}</fieldset>`;
-  return `<fieldset class="cceither"><legend>${esc(p.src)}: choose ${words[p.n] || p.n} <small>${got.length} of ${Math.min(p.n, opts.length)}</small></legend>${opts.map(o => `<label><input type="checkbox" data-f="choicem" data-k="${esc(p.key)}" value="${esc(o)}"${got.includes(o) ? " checked" : full ? " disabled" : ""}> ${esc(o)}</label>`).join("")}</fieldset>`;
+  if (p.auto) return `<fieldset class="cceither auto"><legend>${esc(p.src)}: ${esc(what(opts.length))}</legend><p class="ccnote">You get ${esc(opts.length > 1 ? opts.slice(0, -1).join(", ") + " and " + opts[opts.length - 1] : opts[0])}.</p></fieldset>`;
+  if (p.n <= 1) return `<fieldset class="cceither"><legend>${esc(p.src)}: choose one ${esc(what(1))}</legend>${opts.map(o => `<label><input type="radio" name="ch-${esc(p.key)}" data-f="choice" data-k="${esc(p.key)}" value="${esc(o)}"${got.includes(o) ? " checked" : ""}> ${esc(o)}</label>`).join("")}</fieldset>`;
+  return `<fieldset class="cceither"><legend>${esc(p.src)}: choose ${words[p.n] || p.n} ${esc(what(p.n))} <small>${got.length} of ${Math.min(p.n, opts.length)}</small></legend>${opts.map(o => `<label><input type="checkbox" data-f="choicem" data-k="${esc(p.key)}" value="${esc(o)}"${got.includes(o) ? " checked" : full ? " disabled" : ""}> ${esc(o)}</label>`).join("")}</fieldset>`;
 }
-const pickDone = (c, p) => { const o = shownOpts(p); return chosenOf(c, p).filter(x => o.includes(x)).length >= Math.min(p.n || 1, o.length) };
+const pickDone = (c, p) => { if (p.auto) return true; const o = shownOpts(p); return chosenOf(c, p).filter(x => o.includes(x)).length >= Math.min(p.n || 1, o.length) };
 function eitherHTML(c, ps, keep) { return ps.g.picks.filter(p => p.opts && keep(p)).map(p => choiceSet(c, p)).join("") }
+/* the background's gear is simply yours: added when the background is picked, swapped if it changes */
+function syncBgGear(c) {
+  const b = bgOf(c), g = b && b.gear ? b.gear : [], sig = gearSig(g);
+  if (c.bgGearSig === sig) return;
+  /* a character made before this already chose whether to take it */
+  if (c.bgGearSig === undefined && (c.inv.some(x => x.from === "bg") || c.done)) { c.bgGearSig = sig; return }
+  c.inv = c.inv.filter(x => x.from !== "bg"); addGear(c, g, "bg"); c.bgGearSig = sig; touch();
+}
 /* a loadout picked before its gear was set up (or since changed) gets the class's current gear */
 function syncLoadout(c) {
   if (c.loadout === "" || c.loadout === "buy") return;
@@ -645,8 +663,9 @@ function setLoadout(c, v) {
   if (!buying(c)) c.inv = c.inv.filter(x => !x.paid || startingWealth(c) - spentC(c) >= 0);
 }
 function gearFrom(text) { return ITEMS.filter(i => new RegExp("\\b" + i.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(plainText(text))) }
-/* an item's weapon actions: [{n, ap, dmg, type, d}] */
-const wactsOfItem = it => (Array.isArray(it && it.wacts) ? it.wacts : []).map(a => ({ n: str(a.n), at: str(a.at), ap: str(a.ap), dmg: str(a.dmg), type: str(a.type), d: str(a.d) })).filter(a => a.n || a.dmg || a.d);
+/* an item's weapon actions: [{n, at, ap, dmg, type, d}]; "N/A" or "—" counts as empty */
+const naV = v => /^\s*(n\/?a|—|-|none)?\s*$/i.test(String(v || "")) ? "" : String(v).trim();
+const wactsOfItem = it => (Array.isArray(it && it.wacts) ? it.wacts : []).map(a => ({ n: str(a.n), at: naV(a.at), ap: naV(a.ap), dmg: naV(a.dmg), type: naV(a.type), d: str(a.d) })).filter(a => a.n || a.dmg || a.d);
 const wactText = a => `${a.n || "Weapon action"}${a.at || a.ap ? ` (${[a.at, a.ap && a.ap + " AP"].filter(Boolean).join(", ")})` : ""}${a.dmg || a.type ? `: ${[a.dmg, a.type].filter(Boolean).join(" ")}` : ""}${a.d ? `. ${a.d}` : ""}`;
 function defaultSlot(c, it) {
   const used = new Set(c.inv.map(x => x.slot).filter(Boolean));
@@ -773,7 +792,7 @@ $("ccmain").addEventListener("click", ev => {
     if (same && it.cat !== "Weapon" && it.cat !== "Armor") same.qty = (same.qty || 1) + 1; else c.inv.push({ iid: it.id, qty: 1, paid, slot: defaultSlot(c, it) });
     touch(); renderCreate(); say(`${act === "buy" ? "Bought" : "Added"} ${it.n}.`); return;
   }
-  if (act === "bggear") { const b2 = bgOf(c); addGear(c, b2 ? b2.gear : [], "bg"); touch(); renderCreate(); say("Background gear added."); return }
+  if (act === "bggear") { const b2 = bgOf(c); c.inv = c.inv.filter(x => x.from !== "bg"); addGear(c, b2 ? b2.gear : [], "bg"); touch(); renderCreate(); say("Background gear added."); return }
   if (act === "drop") { c.inv.splice(+b.dataset.i, 1); touch(); renderCreate(); return }
   if (act === "own") { const t = str($("ccOwn").value); if (!t) { $("ccOwn").focus(); return } c.inv.push({ n: t, qty: 1, paid: 0, slot: "" }); touch(); renderCreate(); $("ccOwn").focus(); return }
   if (act === "nopic") { delete c.details.portrait; touch(); renderCreate(); return }

@@ -129,13 +129,26 @@ function bodyHTML(e) {
     (words.length ? `<div class="crefs">${words.map(x => `<div class="cref"><b>${esc(x.w)}</b>${paras(x.ref)}</div>`).join("")}</div>` : "") +
     (!e.lead && !e.fx.length && !notes && !words.length && !mod && !act ? `<p class="clead">No description yet.</p>` : "");
 }
+/* weapon actions written on items (Items page) show under Weapon Actions too, with the items they're on.
+   A glossary entry with the same name wins, and lists those items instead. */
+const WA_SEC = "Weapon Actions";
+const naV = v => /^\s*(n\/?a|—|-|none)?\s*$/i.test(String(v || "")) ? "" : String(v).trim();
+function actItems(name) { const k = lcs(name).trim(); return (CAT.items || []).filter(i => (Array.isArray(i.wacts) ? i.wacts : []).some(a => lcs(a.n).trim() === k)) }
+const foundOn = l => l.length ? `<p class="gfrom">Found on: ${l.map(i => `<a class="ilink" href="items.html#${esc(i.id)}">${esc(i.n)}</a>`).join(", ")}</p>` : "";
+function itemActCards(q) {
+  const have = new Set(entries.filter(e => e.sec === WA_SEC && !e._new).map(e => lcs(e.n).trim())), m = new Map();
+  (CAT.items || []).forEach(i => (Array.isArray(i.wacts) ? i.wacts : []).forEach(a => { const k = lcs(a.n).trim(); if (k && !have.has(k) && !m.has(k)) m.set(k, a) }));
+  let l = [...m.values()]; if (q) l = l.filter(a => lcs([a.n, a.at, a.dmg, a.type, a.d].join(" ")).includes(q));
+  return l.sort((a, b) => lcs(a.n).localeCompare(lcs(b.n))).map(a => { const line = [naV(a.at), [naV(a.dmg), naV(a.type)].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
+    return `<section class="cond" id="g-${esc(slugOf(a.n))}"><h2 class="chead"><span>${esc(a.n)}</span><span class="chr">${a.ap ? `<span class="ctag apc" title="Action Point cost">${esc(apText(a.ap))}</span>` : ""}<span class="ctag">From items</span></span></h2><div class="cbody">${line ? `<p class="gline"><b>${esc(line)}</b></p>` : ""}${a.d ? paras(a.d) : ""}${foundOn(actItems(a.n))}${ADMIN ? `<p class="muted">Written on an item: edit it on the Items page, or add a Weapon Actions entry with this name to write it here.</p>` : ""}</div></section>` }).join("");
+}
 function card(e, tag) {
   if (editing.has(e._id)) return form(e);
   return `<section class="cond" data-id="${e._id}" id="g-${esc(slugOf(e.n))}"><h2 class="chead"><span>${esc(e.n)}</span><span class="chr">` +
     (isAction(e.sec) && e.ap ? `<span class="ctag apc" title="Action Point cost">${esc(apText(e.ap))}</span>` : "") +
     (tag ? `<span class="ctag">${esc(singular(e.sec))}</span>` : "") +
     (ADMIN ? `<button type="button" class="gedit" aria-label="Edit ${esc(e.n)}">Edit</button>` : "") +
-    `</span></h2><div class="cbody">${bodyHTML(e)}</div></section>`;
+    `</span></h2><div class="cbody">${bodyHTML(e)}${e.sec === WA_SEC ? foundOn(actItems(e.n)) : ""}</div></section>`;
 }
 function wordRow(x) {
   return `<div class="gword"><input type="text" class="gw" value="${esc(x.w)}" placeholder="Tooltip word, e.g. Target Area" aria-label="Tooltip word" autocomplete="off">` +
@@ -190,17 +203,18 @@ function render() {
   const n = list.filter(e => !e._new).length;
   $("ccount").textContent = `${n} ${n === 1 ? noun[0] : noun[1]}`;
   let h;
-  if (query()) h = list.length ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist">${list.map(e => card(e, !o)).join("")}</div>` : "";
-  else if (o) h = `<div class="clist">${list.map(e => card(e, false)).join("")}</div>`;
+  const q = query(), inWA = !o && !GROUP || o === WA_SEC || (GROUP && GROUP.secs.includes(WA_SEC)), extraQ = q && inWA ? itemActCards(q) : "";
+  if (q) h = list.length || extraQ ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist">${list.map(e => card(e, !o)).join("")}${extraQ}</div>` : "";
+  else if (o) h = `<div class="clist">${list.map(e => card(e, false)).join("")}${o === WA_SEC ? itemActCards() : ""}</div>`;
   else h = (GROUP ? [...GROUP.secs, ...sections().filter(s => !GROUP.secs.includes(s))] : sections()).map(sec => {
-    const items = list.filter(e => e.sec === sec); if (!items.length && !(GROUP && GROUP.secs.includes(sec))) return "";
-    if (!items.length) return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><p class="muted">No entries yet.${ADMIN ? " Click Add entry and choose this section." : ""}</p></section>`;
-    return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><div class="clist">${items.map(e => card(e, true)).join("")}</div></section>`;
+    const items = list.filter(e => e.sec === sec), extra = sec === WA_SEC ? itemActCards() : ""; if (!items.length && !extra && !(GROUP && GROUP.secs.includes(sec))) return "";
+    if (!items.length && !extra) return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><p class="muted">No entries yet.${ADMIN ? " Click Add entry and choose this section." : ""}</p></section>`;
+    return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><div class="clist">${items.map(e => card(e, true)).join("")}${extra}</div></section>`;
   }).join("");
   $("clist").innerHTML = h;
   document.querySelectorAll(".gediting").forEach(preview);
   sideShow(editing.size > 0);
-  $("cempty").hidden = list.length > 0 || (GROUP && !query());
+  $("cempty").hidden = list.length > 0 || (GROUP && !query()) || /class="cond"/.test(h);
   $("cempty").textContent = !list.length && !query() && o ? `No ${o} entries yet.` + (ADMIN ? " Click Add entry to write the first one." : "") : EMPTY0;
   $("gsecs").innerHTML = sections().map(s => `<option value="${esc(s)}">`).join("");
   $("gAdd").hidden = !ADMIN;

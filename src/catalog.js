@@ -638,8 +638,10 @@ function tipMark(html, skip) {
 function propsHTML(t, item) { return tipMark(richInline(t), item && item.cat === "Armor" ? m => ARMOR_WORDS.includes(m.toLowerCase()) : null) }
 const actionsHTML = t => blocks(t, x => tipMark(richInline(x)));
 /* weapon actions: name (red), AP cost, damage and damage type, then what it does */
-const wactLine = a => [a.at, a.ap && `${a.ap} AP`, [a.dmg, a.type].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
-const wactsHTML = l => l.map(a => `<div class="wact"><p class="wah"><span class="pdn">${esc(a.n || "Weapon action")}</span>${wactLine(a) ? ` <span class="wam">${tipMark(esc(wactLine(a)))}</span>` : ""}</p>${a.d ? blocks(a.d, x => tipMark(richInline(x))) : ""}</div>`).join("");
+/* "N/A" or "—" in a field just means empty */
+const naV = v => /^\s*(n\/?a|—|-|none)?\s*$/i.test(String(v || "")) ? "" : String(v).trim();
+const wactLine = a => [naV(a.at), naV(a.ap) && `${naV(a.ap)} AP`, [naV(a.dmg), naV(a.type)].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
+const wactsHTML = l => l.map(a => `<div class="wact"><p class="wah"><a class="pdn walink" href="glossary.html?s=weapon-actions#g-${esc(slugOf(a.n || ""))}" title="See it under Glossary, Weapon Actions">${esc(a.n || "Weapon action")}</a>${wactLine(a) ? ` <span class="wam">${tipMark(esc(wactLine(a)))}</span>` : ""}</p>${a.d ? blocks(a.d, x => tipMark(richInline(x))) : ""}</div>`).join("");
 const actionsBlock = i => (i.wacts.length ? wactsHTML(i.wacts) : "") + (i.actions ? `<div class="rfeat">${actionsHTML(i.actions)}</div>` : "");
 const descHTML = t => blocks(t, x => tipMark(richInline(x)));
 tipRuntime(el => ITEM_TIPS.map.get(el.dataset.g));
