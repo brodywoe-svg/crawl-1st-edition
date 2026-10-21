@@ -1076,6 +1076,25 @@
    "extra": []
   },
   {
+   "id": "i-mvi949kcx619",
+   "n": "Gold Wire",
+   "nc": "",
+   "cat": "Crafting Material",
+   "sub": "Other",
+   "slot": "",
+   "badge": false,
+   "rarity": "",
+   "magic": false,
+   "value": "",
+   "weight": "",
+   "actions": "",
+   "pdefs": [],
+   "props": "",
+   "feat": "",
+   "desc": "",
+   "extra": []
+  },
+  {
    "id": "i-handler-s-token",
    "n": "Handler's Token",
    "nc": "",
@@ -3193,6 +3212,25 @@
    "props": "",
    "pdefs": [],
    "desc": "A pinch of hardened tree gum that binds ink and lets it flow.",
+   "extra": []
+  },
+  {
+   "id": "i-mvi949kbm2bf",
+   "n": "Pinches of Arcane Dust",
+   "nc": "",
+   "cat": "Crafting Material",
+   "sub": "Other",
+   "slot": "",
+   "badge": false,
+   "rarity": "",
+   "magic": false,
+   "value": "",
+   "weight": "",
+   "actions": "",
+   "pdefs": [],
+   "props": "",
+   "feat": "",
+   "desc": "",
    "extra": []
   },
   {
@@ -8696,7 +8734,7 @@
    "badge": false,
    "kind": "Enchantment Modifier",
    "prof": "Enchanting",
-   "pre": "+3 Enchanting, Spellcasting, Arcane Major or Minor: Evocation",
+   "pre": "+1 Enchanting",
    "ing": [
     {
      "item": "i-pinch-of-arcane-dust",
@@ -8720,8 +8758,43 @@
    "makes": [],
    "props": "",
    "grants": "Enchanted: Searing 1, or Searing 2 on TC, fills 1 open modifier slot",
-   "feat": "Searing X - This weapon deals an additional X magical fire damage on a hit.",
+   "feat": "[color=#8e171c]Searing X[/color] - This weapon deals an additional X magical fire damage on a hit.",
    "quote": "“Fire is not a weapon, my friends. Fire is a passion! We simply teach it where to go. And please, no more practicing near the mustache.” -Professor Vigo Brasamonte, Lecturer of Evocation",
+   "extra": []
+  },
+  {
+   "id": "r-mvi8tt0c21u1",
+   "n": "Shocking 1",
+   "tier": "Basic",
+   "badge": false,
+   "kind": "Enchantment Modifier",
+   "prof": "Enchanting",
+   "pre": "+1 Enchanting",
+   "ing": [
+    {
+     "item": "i-mvi949kbm2bf",
+     "qty": 2
+    },
+    {
+     "item": "i-mvi949kcx619",
+     "qty": 3
+    }
+   ],
+   "matNote": "",
+   "applies": "Any weapon",
+   "ws": "Enchantment Table",
+   "time": "3 Hours",
+   "dc": "14",
+   "tc": "21",
+   "qty": {
+    "l": "",
+    "v": ""
+   },
+   "makes": [],
+   "props": "",
+   "grants": "Enchanted: Shocking 1, or Shocking 2 on TC, fills 1 open modifier slot",
+   "feat": "[color=#8e171c]Shocking X[/color] - This weapon deals an additional X magical lightning damage on a hit.",
+   "quote": "“Lightning, students, is fire that has learned to run. Do keep your weapons away from the puddles. And from each other. And, Gerold, from your ears.” – Professor Vigo Brasamonte, Lecturer of Evocation",
    "extra": []
   },
   {
