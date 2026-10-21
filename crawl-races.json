@@ -49,6 +49,29 @@
      "extra": []
     },
     {
+     "id": "sub-mvia2q2cl9np",
+     "n": "Hill Dwarf",
+     "desc": "Hill Dwarves are the open-hearted cousins of the mountain clans, who long ago left the stone halls behind for the green valleys and wooded hills below. They are lumberjacks, ranchers, farmers and homesteaders, known for fields that never seem to fail, herds that grow fat on valley grass and timber that’s cut, hauled and raised into walls faster than any human crew could manage.\n\nWhere Mountain Dwarves keep to themselves behind gates of stone, Hill Dwarves built their towns in the open and welcomed their neighbors in. Most Hill Dwarf settlements are long-standing farm towns or sturdy wooden fortress-towns ringed with timber palisades, and many are shared with humans and halflings who have lived alongside them for generations. A Hill Dwarf’s clan is their whole community: the neighbor who helped raise their barn, the family across the creek and every soul who has shared their table.\n\nHill Dwarves are famous for their hospitality and their cooking. No traveler leaves a Hill Dwarf’s home hungry, and a Hill Dwarf feast, with its smoked meats, thick stews, fresh bread and casks of stout ale, is something people remember for years.",
+     "asi": "+1 Wisdom",
+     "prof": "Animal Handling, Either Woodworking or Cooking",
+     "langs": "One additional language of your choice",
+     "feats": [
+      {
+       "n": "Homestead Training",
+       "d": "You gain proficiency in simple Axes and simple Polearms."
+      },
+      {
+       "n": "Bountiful Table",
+       "d": "When you craft a food item using Cooking, you make one additional serving."
+      },
+      {
+       "n": "Hillstead Culture",
+       "d": "You learn and know the following crafting recipes: Deepvalley Borscht, Hearthfire Bread, Harvest Stew."
+      }
+     ],
+     "extra": []
+    },
+    {
      "id": "sub-mv8f4d29c7y1",
      "n": "Mountain Dwarf",
      "desc": "Mountain Dwarves hail from the Gilded halls and stone carved cities build within the mountains themself, each one a craftsmen in their own right.",
