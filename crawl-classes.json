@@ -1342,7 +1342,7 @@
     },
     {
      "n": "Improved Critical",
-     "d": "You score a critical hit on a roll of 19 or 20. Your critical range increases as you gain Rogue levels:\n\n[table]\nRogue level | Heading\n4th | 19–20\n8th | 18–20\n12th | 17–20\n16th | 16–20\n20th | 15–20\n[/table]",
+     "d": "You score a critical hit on a roll of 19 or 20. Your critical range increases as you gain Rogue levels:\n\n[table]\nRogue level | Critical Range\n4th | 19–20\n8th | 18–20\n12th | 17–20\n16th | 16–20\n20th | 15–20\n[/table]",
      "lv": 4
     }
    ],
