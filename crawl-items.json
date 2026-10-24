@@ -4416,6 +4416,30 @@
    "pdefs": [],
    "desc": "A springy stave of yew, heartwood on one side and sapwood on the other. The bowyer's favorite.",
    "extra": []
+  },
+  {
+   "id": "i-thieves-tools",
+   "n": "Thieves' Tools",
+   "nc": "",
+   "cat": "Consumable",
+   "sub": "Tools",
+   "slot": "",
+   "badge": false,
+   "rarity": "Common",
+   "magic": false,
+   "value": "15 (G)",
+   "weight": "1 lbs",
+   "actions": "",
+   "wacts": [],
+   "props": "Picking (Reusable)",
+   "pdefs": [
+    {
+     "n": "Picking (Reusable)",
+     "d": "You can use Thieves' Tools to make a Thievery check to open a lock. If the check fails, roll a d6. On a 1 or 2, the tools get stuck in the lock. You can't use them or try that lock again until you free them by spending 10 minutes or succeeding on a Thievery check against the lock's DC (no d6 roll for this check)."
+    }
+   ],
+   "desc": "A rolled leather case holding a set of steel picks, tension wrenches, a small mirror and a pair of fine pliers. Sturdier than a loose lockpick, its pieces bend rather than snap, but a clumsy hand can leave them jammed in the lock.",
+   "extra": []
   }
  ],
  "presets": [

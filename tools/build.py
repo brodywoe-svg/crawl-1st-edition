@@ -120,6 +120,28 @@ def read_creator():
 RACES = ROOT / "crawl-races.json"
 
 
+def feature_sources():
+    """feature name -> where it comes from, e.g. {"Martial Arts": [{"n": "Monk", "lv": 2, "href": "classes.html#class-monk"}]},
+    so the glossary can group actions under the feature they come from"""
+    out = {}
+    def put(name, src):
+        if name and src not in out.setdefault(name, []):
+            out[name].append(src)
+    for k in read_classes().get("classes", []):
+        for f in k.get("feats", []):
+            put(f.get("n", "").strip(), {"n": k.get("n", ""), "lv": f.get("lv") or 1, "href": "classes.html#" + k.get("id", "")})
+        for s in k.get("subs", []) or []:
+            for f in s.get("feats", []):
+                put(f.get("n", "").strip(), {"n": f"{s.get('n', '')} ({k.get('n', '')})", "lv": f.get("lv") or 1, "href": "classes.html#" + s.get("id", "")})
+    for r in read_races().get("races", []):
+        for f in r.get("feats", []) or []:
+            put(f.get("n", "").strip(), {"n": r.get("n", ""), "href": "races.html#" + r.get("id", "")})
+    for b in read_backgrounds().get("backgrounds", []):
+        for f in b.get("feats", []) or []:
+            put(f.get("n", "").strip(), {"n": b.get("n", "") + " background", "href": "backgrounds.html#" + b.get("id", "")})
+    return out
+
+
 def read_races():
     if not RACES.exists():
         RACES.write_text('{\n "v": 1,\n "races": []\n}\n', encoding="utf-8")
@@ -158,6 +180,7 @@ def glossary_page(template, glossary, name):
         + (f"const RACES={as_js(read_races())};" if page in ("races", "creator") else "")
         + (f"const CREATOR={as_js(read_creator())};const SPELLS={as_js(json.loads(SPELLS.read_text(encoding='utf-8')))};" if page == "creator" else f"const CREATOR={as_js(read_creator())};" if page in ("classes", "feats") else "")
         + (f"const FEATS={as_js(read_feats())};" if page == "feats" else "")
+        + (f"const FEAT_SRC={as_js(feature_sources())};" if page in ("glossary", "conditions") else "")
         + (f"const CLASSES={as_js(read_classes())};const BACKGROUNDS={as_js(read_backgrounds())};const SCHOOLS={as_js(spell_schools())};" if page in ("creator", "classes", "backgrounds", "feats") else "") + "\n"
     )
     shared = between(template, "/*@GLCORE@*/", "/*@GLCORE-END@*/") + between(template, "/*@ADMIN@*/", "/*@ADMIN-END@*/")

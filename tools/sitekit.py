@@ -770,6 +770,9 @@ CONDITIONS_CSS = """
 .wacts{display:grid;gap:10px;margin-top:6px}
 .wact p{margin:0}
 .wact .wah{font-weight:700}
+.gsrc{margin:0 0 18px}
+.gsrch{font-size:1rem;margin:4px 0 8px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.gsrcfrom{font-size:.8rem;font-weight:700;color:var(--muted)}
 .cbody .gfrom{font-size:.85rem;font-weight:700;color:var(--muted);margin:8px 0 0}
 .cbody .gline{margin:0 0 6px}
 .wact .walink{text-decoration:none}.wact .walink:hover{text-decoration:underline}

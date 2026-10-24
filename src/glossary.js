@@ -142,6 +142,19 @@ function itemActCards(q) {
   return l.sort((a, b) => lcs(a.n).localeCompare(lcs(b.n))).map(a => { const line = [naV(a.at), [naV(a.dmg), naV(a.type)].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
     return `<section class="cond" id="g-${esc(slugOf(a.n))}"><h2 class="chead"><span>${esc(a.n)}</span><span class="chr">${a.ap ? `<span class="ctag apc" title="Action Point cost">${esc(apText(a.ap))}</span>` : ""}<span class="ctag">From items</span></span></h2><div class="cbody">${line ? `<p class="gline"><b>${esc(line)}</b></p>` : ""}${a.d ? paras(a.d) : ""}${foundOn(actItems(a.n))}${ADMIN ? `<p class="muted">Written on an item: edit it on the Items page, or add a Weapon Actions entry with this name to write it here.</p>` : ""}</div></section>` }).join("");
 }
+/* Combat Actions are grouped under the feature they come from (their Requirements), e.g. Martial Arts (Monk, level 2) */
+const GROUPED_SECS = ["Combat Actions"];
+const FSRC = typeof FEAT_SRC !== "undefined" && FEAT_SRC ? FEAT_SRC : {};
+function sourceGroups(items, tag) {
+  const groups = new Map();
+  items.forEach(e => { const k = String(e.req || "").trim(); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(e) });
+  return [...groups.entries()].sort((a, b) => !a[0] ? 1 : !b[0] ? -1 : a[0].localeCompare(b[0])).map(([req, l]) => {
+    const src = FSRC[req] || [];
+    const from = src.length ? ` <span class="gsrcfrom">${src.map(s => `<a class="ilink" href="${esc(s.href)}">${esc(s.n)}${s.lv ? `, level ${esc(s.lv)}` : ""}</a>`).join(" · ")}</span>` : "";
+    return `<div class="gsrc"><h3 class="gsrch">${req ? esc(req) : "Other"}${from}</h3><div class="clist">${l.map(e => card(e, tag)).join("")}</div></div>`;
+  }).join("");
+}
+const secCards = (sec, items, tag) => GROUPED_SECS.includes(sec) && items.length ? sourceGroups(items, tag) : `<div class="clist">${items.map(e => card(e, tag)).join("")}</div>`;
 function card(e, tag) {
   if (editing.has(e._id)) return form(e);
   return `<section class="cond" data-id="${e._id}" id="g-${esc(slugOf(e.n))}"><h2 class="chead"><span>${esc(e.n)}</span><span class="chr">` +
@@ -205,11 +218,11 @@ function render() {
   let h;
   const q = query(), inWA = !o && !GROUP || o === WA_SEC || (GROUP && GROUP.secs.includes(WA_SEC)), extraQ = q && inWA ? itemActCards(q) : "";
   if (q) h = list.length || extraQ ? `<div class="ghead gres"><h2>Best matches first</h2></div><div class="clist">${list.map(e => card(e, !o)).join("")}${extraQ}</div>` : "";
-  else if (o) h = `<div class="clist">${list.map(e => card(e, false)).join("")}${o === WA_SEC ? itemActCards() : ""}</div>`;
+  else if (o) h = GROUPED_SECS.includes(o) && !editing.size ? sourceGroups(list, false) : `<div class="clist">${list.map(e => card(e, false)).join("")}${o === WA_SEC ? itemActCards() : ""}</div>`;
   else h = (GROUP ? [...GROUP.secs, ...sections().filter(s => !GROUP.secs.includes(s))] : sections()).map(sec => {
     const items = list.filter(e => e.sec === sec), extra = sec === WA_SEC ? itemActCards() : ""; if (!items.length && !extra && !(GROUP && GROUP.secs.includes(sec))) return "";
     if (!items.length && !extra) return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><p class="muted">No entries yet.${ADMIN ? " Click Add entry and choose this section." : ""}</p></section>`;
-    return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div><div class="clist">${items.map(e => card(e, true)).join("")}${extra}</div></section>`;
+    return `<section class="gsec"><div class="ghead"><h2>${esc(sec)}</h2><a class="glink" href="${secHref(sec)}">Open the ${esc(sec)} page</a></div>${GROUPED_SECS.includes(sec) && !editing.size ? sourceGroups(items, true) : `<div class="clist">${items.map(e => card(e, true)).join("")}${extra}</div>`}</section>`;
   }).join("");
   $("clist").innerHTML = h;
   document.querySelectorAll(".gediting").forEach(preview);
