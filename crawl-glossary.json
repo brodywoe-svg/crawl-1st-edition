@@ -343,6 +343,22 @@
    "tip": false
   },
   {
+   "n": "Flurry of Blows",
+   "sec": "Weapon Actions",
+   "lead": "You can expend 3 AP to make three unarmed strikes against one or more creatures within your reach. When you do, you gain 1 Exhaustion Point (EP). You can use Flurry of Blows only once per turn. (Playtest note: check whether the EP cost is needed.)",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": false,
+   "tipItems": true,
+   "tipClasses": true,
+   "tipFeats": false,
+   "tipCreator": true,
+   "hideRefs": true,
+   "ap": "3",
+   "req": "Martial Arts"
+  },
+  {
    "n": "Force",
    "sec": "Damage Types",
    "lead": "Raw magical energy shaped into a blow. Very few creatures resist Force damage.\n\nDamage of any type can be mundane or magical, depending on where it comes from.",
@@ -1174,6 +1190,22 @@
    ],
    "aka": [],
    "tip": true
+  },
+  {
+   "n": "Sweep Kick",
+   "sec": "Weapon Actions",
+   "lead": "If you've made an unarmed strike this turn, you can expend 1 AP to make an unarmed strike. If it hits a Dazed creature, it's a critical hit. You can use Sweep Kick only once per turn.",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": false,
+   "tipItems": true,
+   "tipClasses": true,
+   "tipFeats": false,
+   "tipCreator": true,
+   "hideRefs": true,
+   "req": "Martial Arts",
+   "ap": "1"
   },
   {
    "n": "Swift Step",
