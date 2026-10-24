@@ -1195,7 +1195,7 @@
   {
    "id": "class-rogue",
    "n": "Rogue",
-   "role": "Ambush Specialist & Precision Striker",
+   "role": "Ambush & Precision Specialist",
    "desc": "Rogues rely on cunning, stealth and precision, striking where enemies are weakest and slipping away before they can answer.",
    "source": "",
    "cast": "",
@@ -1210,108 +1210,149 @@
    "chart": [
     {
      "lv": 1,
-     "pool": "",
-     "die": ""
+     "pool": "5",
+     "die": "d4"
     },
     {
      "lv": 2,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 3,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 4,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d4"
     },
     {
      "lv": 5,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d6"
     },
     {
      "lv": 6,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 7,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 8,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d6"
     },
     {
      "lv": 9,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d6"
     },
     {
      "lv": 10,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d6"
     },
     {
      "lv": 11,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d8"
     },
     {
      "lv": 12,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d8"
     },
     {
      "lv": 13,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d8"
     },
     {
      "lv": 14,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d8"
     },
     {
      "lv": 15,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d8"
     },
     {
      "lv": 16,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d8"
     },
     {
      "lv": 17,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d8"
     },
     {
      "lv": 18,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d8"
     },
     {
      "lv": 19,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d8"
     },
     {
      "lv": 20,
-     "pool": "",
-     "die": ""
+     "pool": "15",
+     "die": "d8"
     }
    ],
-   "feats": [],
-   "loadouts": [],
-   "money": "",
+   "feats": [
+    {
+     "n": "Prowess",
+     "d": "Starting at 1st level, your martial training lets you push harder with each moment of combat. Whenever you roll your Action Die, you gain 1 additional Action Point (AP). This bonus increases to 2 AP at 6th level and 3 AP at 12th level. Points gained from Prowess can't exceed your Max Pool. Any excess is lost.",
+     "lv": 1
+    },
+    {
+     "n": "Sneak Attack",
+     "d": "You have Advantage on weapon attacks against a creature that is:\n\n• Flanked by you and at least one ally (melee or ranged),\n• Flanked by at least two of your allies (ranged weapon attacks only), or\n• Surprised, during the Opening round of an Ambush.\n\nWhen you score a critical hit on an attack roll with Advantage, your Critical Multiplier is equal to your Weapon Proficiency Rank modifier (minimum ×2). The multiplier applies only to the weapon's damage dice; your ability modifier is added once, after.",
+     "lv": 1
+    },
+    {
+     "n": "Tricks of the Trade",
+     "d": ". Your Threshold Checks (TC) for the Detect Traps, Identify Item and Identify Poison Expertises gain a +2 bonus. This bonus increases to +3 at 5th level, +4 at 10th level and +5 at 15th level.",
+     "lv": 1
+    },
+    {
+     "n": "Adrenaline",
+     "d": "Starting at 2nd level, during Intense moments of duress and stress you'll sometimes find your body is able to take on more than it can tolerate. During combat on your turn, you can expend 1AP to gain an additional 2 Action Points (AP) for your current turn, At the start of your next turn, you start with one less Action point and gain 1 Exhaustion Points (EP). Once this Combat action has been used, it cannot be used for the next 3 rounds of combat.",
+     "lv": 2
+    },
+    {
+     "n": "Break-In Artist",
+     "d": "You gain the following benefits when using lockpicks and thieves tools:\n\n• When you fail a Thievery check using a Lockpick, it breaks only if you fail by 5 or more.\n• Your Thieves' Tools never get stuck in a lock.",
+     "lv": 2
+    },
+    {
+     "n": "Underhanded Tactics",
+     "d": "You learn the following Combat Actions: Escape, Skulk, Vanish and Feint.",
+     "lv": 2
+    },
+    {
+     "n": "Improved Critical",
+     "d": "You score a critical hit on a roll of 19 or 20. Your critical range increases as you gain Rogue levels:\n\n[table]\nRogue level | Heading\n4th | 19–20\n8th | 18–20\n12th | 17–20\n16th | 16–20\n20th | 15–20\n[/table]",
+     "lv": 4
+    }
+   ],
+   "loadouts": [
+    {
+     "n": "Thieves Kit",
+     "gear": []
+    }
+   ],
+   "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
    "choices": [],
@@ -1319,6 +1360,16 @@
     "v": {
      "Dexterity": "P",
      "Intelligence": "P"
+    },
+    "w": {
+     "Blades": "SM",
+     "Crossbows": "SM",
+     "Firearms": "SM",
+     "Swords": "SM"
+    },
+    "a": {
+     "Light Armor": "P",
+     "Shields": "P"
     }
    },
    "prepared": "",
