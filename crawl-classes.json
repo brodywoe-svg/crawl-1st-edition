@@ -842,7 +842,7 @@
   {
    "id": "class-monk",
    "n": "Monk",
-   "role": "Exotic Weapons Specialist & Unarmed Melee Combatant",
+   "role": "Exotic Weapons & Unarmed Melee Specialist",
    "desc": "Monks are disciplined martial artists who turn body and spirit into weapons, striking with speed and precision.",
    "source": "",
    "cast": "",
@@ -857,108 +857,139 @@
    "chart": [
     {
      "lv": 1,
-     "pool": "",
-     "die": ""
+     "pool": "5",
+     "die": "d4"
     },
     {
      "lv": 2,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 3,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 4,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d4"
     },
     {
      "lv": 5,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d6"
     },
     {
      "lv": 6,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 7,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 8,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d6"
     },
     {
      "lv": 9,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d8"
     },
     {
      "lv": 10,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d8"
     },
     {
      "lv": 11,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d8"
     },
     {
      "lv": 12,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d8"
     },
     {
      "lv": 13,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d8"
     },
     {
      "lv": 14,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d8"
     },
     {
      "lv": 15,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d8"
     },
     {
      "lv": 16,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d8"
     },
     {
      "lv": 17,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d8"
     },
     {
      "lv": 18,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d8"
     },
     {
      "lv": 19,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d8"
     },
     {
      "lv": 20,
-     "pool": "",
-     "die": ""
+     "pool": "15",
+     "die": "d8"
     }
    ],
-   "feats": [],
+   "feats": [
+    {
+     "n": "Prowess",
+     "d": "Starting at 1st level, your martial training lets you push harder with each moment of combat. Whenever you roll your Action Die, you gain 1 additional Action Point (AP). This bonus increases to 2 AP at 6th level and 3 AP at 12th level. Points gained from Prowess can't exceed your Max Pool. Any excess is lost.",
+     "lv": 1
+    },
+    {
+     "n": "Way of the Fist",
+     "d": "Your Limbs count as light melee weapons, Your unarmed strikes count as melee weapon attacks. They deal 1d4 bludgeoning damage, and you can use either your Strength or Dexterity modifier for their attack and damage rolls. This damage increases to 1d6 at 5th level, 1d8 at 11th level and 1d10 at 17th level.\n\nWhen you make an unarmed strike with your off hand, you add your ability modifier to its damage, letting your blows flow together in one seamless combination.",
+     "lv": 1
+    },
+    {
+     "n": "Unarmored Discipline",
+     "d": "While your total Armor % is 30% or less, you count as Unarmored instead of Lightly Armored. While you are Unarmored, you add your Dexterity modifier to your Armor Class.",
+     "lv": 1
+    },
+    {
+     "n": "Living Weapon",
+     "d": "You learn the following Combat Actions: Swift Step and Patient Strikes. You also learn the following Unarmed Weapon Actions: Haymaker, Sweep Kick and Flurry of Blows.",
+     "lv": 2
+    },
+    {
+     "n": "Perfect Focus",
+     "d": "As a free action on your turn, you can enter a state of perfect focus. Until the end of your turn, using Unarmed Weapon Actions gives you no Exhaustion Points (EP), and you can use them more than once per turn. Once you use this feature, you can't use it again until you finish a Rest.",
+     "lv": 6
+    },
+    {
+     "n": "Pure Form",
+     "d": "At the start of your turn, you can gain 2 Exhaustion Points (EP) to end one of the following conditions on yourself: Charmed, Dazed, Frightened, Paralyzed, Poisoned, Sickened or Stunned. You can use this feature even while Incapacitated.",
+     "lv": 10
+    }
+   ],
    "loadouts": [],
-   "money": "",
+   "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
    "choices": [],
@@ -966,6 +997,20 @@
     "v": {
      "Strength": "P",
      "Dexterity": "P"
+    },
+    "w": {
+     "Axes": "E",
+     "Blades": "E",
+     "Bows": "E",
+     "Crossbows": "E",
+     "Cudgels": "E",
+     "Firearms": "E",
+     "Polearms": "E",
+     "Swords": "E",
+     "Unarmed": "P"
+    },
+    "a": {
+     "Light Armor": "P"
     }
    },
    "prepared": "",
