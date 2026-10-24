@@ -430,6 +430,22 @@
    "hideRefs": true
   },
   {
+   "n": "Haymaker",
+   "sec": "Weapon Actions",
+   "lead": "You can expend 3 AP to make an unarmed strike. On a hit, the target must succeed on a Dexterity saving throw (DC 8 + your Strength or Dexterity modifier + your Unarmed Rank) or be Dazed for its next 1d4 turns.",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": false,
+   "tipItems": true,
+   "tipClasses": true,
+   "tipFeats": false,
+   "tipCreator": true,
+   "hideRefs": true,
+   "ap": "3",
+   "req": "Martial Arts"
+  },
+  {
    "n": "Hearty",
    "sec": "Properties",
    "lead": "A creature that eats this during a rest or at camp removes 1 Exhaustion Point. If it has no Exhaustion Points, it instead regains hit points equal to the cook’s Cooking Rank.",
