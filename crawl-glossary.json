@@ -343,6 +343,29 @@
    "tip": false
   },
   {
+   "n": "Flanking",
+   "sec": "Combat Rules",
+   "lead": "[color=#8e171c]Flanked.[/color] A creature is Flanked when it's within 5 feet of two hostile creatures on opposite sides of it, and neither of them is Incapacitated. (Add to Combat Rules.)",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Flanked",
+     "ref": "A creature is Flanked when it's within 5 feet of two hostile creatures on opposite sides of it, and neither of them is Incapacitated."
+    },
+    {
+     "w": "Flanking",
+     "ref": "A creature is Flanked when it's within 5 feet of two hostile creatures on opposite sides of it, and neither of them is Incapacitated."
+    }
+   ],
+   "tip": false,
+   "tipItems": false,
+   "tipClasses": true,
+   "tipFeats": true,
+   "tipCreator": true,
+   "hideRefs": true
+  },
+  {
    "n": "Flurry of Blows",
    "sec": "Weapon Actions",
    "lead": "You can expend 3 AP to make three unarmed strikes against one or more creatures within your reach. When you do, you gain 1 Exhaustion Point (EP). You can use Flurry of Blows only once per turn. (Playtest note: check whether the EP cost is needed.)",
@@ -1204,8 +1227,8 @@
    "tipFeats": false,
    "tipCreator": true,
    "hideRefs": true,
-   "req": "Martial Arts",
-   "ap": "1"
+   "ap": "1",
+   "req": "Martial Arts"
   },
   {
    "n": "Swift Step",
