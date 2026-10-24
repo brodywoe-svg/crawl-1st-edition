@@ -725,6 +725,22 @@
    "tip": true
   },
   {
+   "n": "Patient Strikes",
+   "sec": "Combat Actions",
+   "lead": "While Unarmored, you can expend 3 AP. Until the start of your next turn, whenever a creature moves into your reach, you can make an Opportunity Attack against it. The first Opportunity Attack you make on each creature's turn costs 0 AP. At the start of your next turn, you gain 2 Exhaustion Points (EP).",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": false,
+   "tipItems": true,
+   "tipClasses": true,
+   "tipFeats": false,
+   "tipCreator": true,
+   "hideRefs": true,
+   "ap": "3",
+   "req": "Living Weapon"
+  },
+  {
    "n": "Petrified",
    "sec": "Conditions",
    "lead": "A Petrified creature has been turned to stone or another solid material. While Petrified:",
