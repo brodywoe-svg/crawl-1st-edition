@@ -754,7 +754,7 @@
    "tipCreator": true,
    "hideRefs": true,
    "ap": "3",
-   "req": "Living Weapon"
+   "req": "Martial Arts"
   },
   {
    "n": "Petrified",
@@ -1188,7 +1188,7 @@
    "tipFeats": false,
    "tipCreator": true,
    "ap": "1",
-   "req": "Living Weapon"
+   "req": "Martial Arts"
   },
   {
    "n": "Targeting",
