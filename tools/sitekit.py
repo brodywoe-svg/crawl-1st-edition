@@ -23,7 +23,7 @@ NAV_ITEMS = [
                               ("Wizard", "spells.html?class=wizard"), ("Sorcerer", "spells.html?class=sorcerer"), ("Cleric", "spells.html?class=cleric"), ("Paladin", "spells.html?class=paladin"),
                               ("Druid", "spells.html?class=druid"), ("Warlock", "spells.html?class=warlock"), ("Bard", "spells.html?class=bard")]),
     ("Crafting", "crafting.html", [("Blacksmithing", "crafting.html?p=blacksmithing"), ("Tailoring", "crafting.html?p=tailoring"), ("Woodworking", "crafting.html?p=woodworking"), ("Cooking", "crafting.html?p=cooking"), ("Alchemy", "crafting.html?p=alchemy"), ("Leatherworking", "crafting.html?p=leatherworking"), ("Scribing", "crafting.html?p=scribing"), ("Tinkering", "crafting.html?p=tinkering"), ("Goldsmithing", "crafting.html?p=goldsmithing"), ("Enchanting", "crafting.html?p=enchanting")]),
-    ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Ammunition", "items.html?c=ammunition"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"),
+    ("Items", "items.html", [("Weapons", "items.html?c=weapons"), ("Ammunition", "items.html?c=ammunition"), ("Armor", "items.html?c=armor"), ("Consumables", "items.html?c=consumables"), ("Adventuring Gear", "items.html?c=adventuring-gear"),
                              ("Materials", "items.html?c=materials"), ("Magic Items", "items.html?c=magic-items"), ("Miscellaneous", "items.html?c=miscellaneous")]),
     ("Glossary", "glossary.html", "glossary"),
     ("Tabletop", "https://brodywoe-svg.github.io/crawl-1st-edition/tabletop/", None),
@@ -426,6 +426,10 @@ def list_shell(page, logo_svg, admin_modal):
 
 
 CLASSES_CSS = """
+.mrow,.mrrow{display:flex;gap:8px;align-items:center;margin:4px 0 8px}
+.mrow .mamt{width:120px}.mrrow .mrd{flex:1;min-width:0}
+.mrow select,.mrrow select{font:600 .9rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:6px 8px}
+.mrlist{display:grid}
 .pgive{display:grid;gap:10px;border:2px solid var(--hair);border-radius:12px;padding:10px 12px;margin-bottom:12px}
 .pgrow{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:start}
 .pglab{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding-top:7px}

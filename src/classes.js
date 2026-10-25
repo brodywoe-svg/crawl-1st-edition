@@ -50,7 +50,7 @@ function chartHTML(k) {
 function classBody(k) {
   return (k.desc ? `<div class="clead">${paras(k.desc)}</div>` : "") + chartHTML(k) +
     factsHTML([["Hit die", k.hd], ["Hit points at 1st level", k.hp], ["Skill Points", k.skillPts], ...profFacts(k), ["Magic source", k.source], ["Spellcasting ability", k.cast && AB[k.cast]], ["Spells at character creation", k.spells], ["Prepared spells", k.prepared], ...spellRankFacts(k), ...k.extra.map(x => [x.k || "Detail", x.v])]) +
-    `<div class="clsload"><h3>Equipment Loadout</h3><div class="loadgrid">${k.loadouts.map(l => `<div class="loadc"><b>${esc(l.n)}</b>${gearHTML(l.gear)}</div>`).join("")}<div class="loadc money"><b>Or buy your own</b><p>Starting Currency: <b>${esc(moneyText(k))}</b></p></div></div></div>`;
+    `<div class="clsload"><h3>Equipment Loadout</h3><div class="loadgrid">${k.loadouts.map(l => `<div class="loadc"><b>${esc(l.n)}</b>${gearHTML(l.gear)}</div>`).join("")}<div class="loadc money"><b>Plus Starting Currency</b><p><b>${esc(moneyText(k))}</b></p><p class="muted">Every character picks a kit, then rolls for this on top.</p></div></div></div>`;
 }
 const moneyText = k => [k.money, k.moneyRoll && "roll " + k.moneyRoll].filter(Boolean).join(" + ") || "the standard amount";
 function spellRankFacts(k) {
@@ -112,6 +112,19 @@ const profEditor = (d, what, fld, inp) => `<div class="glab">Proficiencies <smal
   [["saves", "Saving Throws"], ["skills", "Skill Proficiencies"], ["weapons", "Weapon Proficiencies"], ["armor", "Armor Proficiencies"], ["trades", "Trade Skill Proficiencies"], ["prof", "Other Proficiencies"]].filter(([k]) => str(d[k]))
     .map(([k, l]) => fld(k, l + " (written in)", "Old text. Set it with the pickers above or below, then clear this box.", inp(k, ""))).join("") +
   fld("langs", "Languages", "", inp("langs", "e.g. One additional language of your choice")) + choicesEditor(d);
+/* Starting Currency: a fixed amount in gold, silver or copper, plus any number of rolls, each in its own coin.
+   Saved as text the creator reads: money "25 (G)", moneyRoll "3d6 (G) + 2d4 (S)". */
+const COINS = [["G", "Gold"], ["S", "Silver"], ["C", "Copper"]];
+const coinSel = (cls, u) => `<select class="${cls}" aria-label="Coin">${COINS.map(([v, l]) => `<option value="${v}"${v === u ? " selected" : ""}>${l} (${v})</option>`).join("")}</select>`;
+const moneyRollRow = r => `<div class="mrrow"><input type="text" class="mrd" value="${esc(r.d)}" placeholder="e.g. 3d6 or 2d4 x 10" aria-label="Dice to roll" autocomplete="off">${coinSel("mru", r.u)}<button type="button" class="btn xdel">Remove</button></div>`;
+function moneyEditor(d) {
+  const m = String(d.money || "").match(/([\d.,]+)\s*\(?\s*([CSGP])?/i), amt = m ? m[1] : "", unit = m && m[2] ? m[2].toUpperCase() : "G";
+  const rolls = [...String(d.moneyRoll || "").matchAll(new RegExp(DICE_RE.source, "gi"))].map(x => ({ d: x[0].replace(/\s*\(?\s*[CSGP]\s*\)?\s*$/i, "").trim(), u: (x[6] || "G").toUpperCase() })).filter(r => r.d);
+  return `<div class="glab">Starting Currency <small>Every character picks one of the class's kits, then gets this on top. Empty = the creator's standard amount.</small></div>
+<div class="mrow"><input type="number" class="mamt" min="0" step="1" value="${esc(amt)}" placeholder="e.g. 25" aria-label="Starting Currency amount">${coinSel("munit", unit)}</div>
+<div class="glab">Roll for Starting Currency <small>Rolled in the Character Creator once a kit is picked, and added on top. Add a roll for each coin, e.g. 3d6 Gold and 2d4 Silver.</small></div>
+<div class="mrlist">${rolls.map(moneyRollRow).join("")}</div><button type="button" class="btn" data-act="mradd">Add a roll</button>`;
+}
 function form(p, kind, parent) {
   const d = drafts.get(p._id) || p, id = k => `f${k}-${p._id}`;
   const fld = (k, label, help, inner) => `<label for="${id(k)}">${label}${help ? ` <small>${help}</small>` : ""}${inner}</label>`;
@@ -133,7 +146,7 @@ ${fld("spells", "Spells at character creation", "Empty = no limit", inp("spells"
 <div class="gbtns"><button type="button" class="btn" data-act="cadd">Add a level</button><button type="button" class="btn" data-act="cfill">Fill in levels 1 to 20</button></div>` +
     feats(d.feats, "Class features") +
     `<div class="glab">Equipment Loadouts <small>Each loadout is a set of gear a player can take. Item names from the Items page link to them.</small></div><div class="llist">${d.loadouts.map(loadoutHTML).join("")}</div><button type="button" class="btn" data-act="ladd">Add a loadout</button>` +
-    `<div class="fgrid">${fld("money", "Starting Currency", "What a player gets instead of a loadout, to buy their own gear. Empty = the creator's standard amount.", inp("money", "e.g. 25 (G)"))}${fld("moneyRoll", "Roll for Starting Currency", "Rolled when the player reaches Equipment in the Character Creator and added to the Starting Currency.", inp("moneyRoll", "e.g. 4d8 (G) or 2d4 x 10 (S)"))}</div>` +
+    moneyEditor(d) +
     `<div class="glab">Spellcasting details <small>Used by the Character Creator and the character sheet. Formulas can use STR, DEX, CON, INT, WIS, CHA (their modifiers), level, +, −, *, /, floor(), ceil(), max() and min().</small></div>
 <div class="fgrid">${fld("prepared", "Prepared spells", "Formula", inp("prepared", "e.g. max(1, INT + floor(level / 2))"))}
 ${fld("startRank", "Spells start at Rank", "", inp("startRank", "e.g. 0"))}${fld("schoolStart", "Major and Minor spells start at Rank", "", inp("schoolStart", "e.g. 1"))}
@@ -161,6 +174,8 @@ function readForm(f) {
   d.extra = own(f, ".xrow").map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
   d.ptypes = {}; own(f, ".pgive .pgc").forEach(c => { const v = c.classList.contains("tiered") ? [...c.querySelectorAll(".pgb.on")].map(b => b.dataset.pt).join("") : c.classList.contains("on") ? "P" : ""; if (v) (d.ptypes[c.dataset.pk] = d.ptypes[c.dataset.pk] || {})[c.dataset.pn] = v });
   d.chart = own(f, ".chrow:not(.chh)").map(r => ({ lv: r.querySelector(".cl").value, pool: r.querySelector(".cp").value, die: r.querySelector(".cd").value }));
+  if (own(f, ".mamt").length) { const a = own(f, ".mamt")[0].value.trim(); d.money = a ? `${a} (${own(f, ".munit")[0].value})` : "";
+    d.moneyRoll = own(f, ".mrrow").map(r => [r.querySelector(".mrd").value.trim(), r.querySelector(".mru").value]).filter(([x]) => x).map(([x, u]) => `${x} (${u})`).join(" + ") }
   d.loadouts = own(f, ".lrow").map(l => ({ n: l.querySelector(".ln").value, gear: [...l.querySelectorAll(".grow")].map(g => ({ n: g.querySelector(".gn").value, qty: g.querySelector(".gq").value })) }));
   d.choices = own(f, ".choicerow").map(r => { const cat = r.querySelector(".chk").value; const ot = {}; r.querySelectorAll(".chopt.tiered").forEach(o => { const v = [...o.querySelectorAll(".pgb.on")].map(b => b.dataset.pt).join(""); if (o.querySelector("input").checked && v) ot[o.querySelector("input").value] = v });
     return { n: r.querySelector(".chn").value, cat, ot, opts: cat === "lang" ? (r.querySelector(".chtext") ? r.querySelector(".chtext").value.split(/[,;]+/).map(s => s.trim()).filter(Boolean) : []) : [...r.querySelectorAll(".chopt input:checked")].map(i => i.value) } });
@@ -263,7 +278,7 @@ $("clist").addEventListener("click", ev => {
   if (fl) { const el = document.getElementById(fl.dataset.feat); if (el) { const box = el.closest(".cfin"); box.scrollTo({ top: el.offsetTop - box.offsetTop - 6, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash") } return }
   const b = ev.target.closest("button"); if (!b) return;
   const f = b.closest(".rform"), act = b.dataset.act;
-  if (b.classList.contains("xdel")) { b.closest(".lrow>.lhead") ? b.closest(".lrow").remove() : b.closest(".forow,.prow,.xrow,.chrow,.grow,.schrow,.choicerow").remove(); return }
+  if (b.classList.contains("xdel")) { b.closest(".lrow>.lhead") ? b.closest(".lrow").remove() : b.closest(".forow,.prow,.xrow,.chrow,.grow,.schrow,.choicerow,.mrrow").remove(); return }
   const addTo = (box, html, sel) => { box.insertAdjacentHTML("beforeend", html); const el = box.lastElementChild.querySelector(sel); if (el) el.focus() };
   if (f && act === "fadd") { addTo(own(f, ".plist")[0], f.dataset.kind === "bg" ? bgFeatRow({ n: "", d: "" }) : featRow({ n: "", d: "" }), ".pn"); return }
   if (f && act === "foadd") { const box = b.closest(".foptbox").querySelector(".folist"); addTo(box, optRow({ n: "", d: "" }), ".fon"); return }
@@ -273,6 +288,7 @@ $("clist").addEventListener("click", ev => {
   if (f && act === "chadd") { addTo(own(f, ".chlist2")[0], choiceRowHTML({ n: 1, cat: "skill", opts: [] }), ".chn"); return }
   if (f && act === "sadd") { addTo(own(f, ".schlist")[0], schoolRowHTML({ s: "", opp: "" }), ".ss"); return }
   if (f && act === "sfill") { const box = own(f, ".schlist")[0], have = new Set(own(f, ".schrow").map(r => lcs(r.querySelector(".ss").value.trim()))); SCHOOLS.filter(s => !have.has(lcs(s))).forEach(s => box.insertAdjacentHTML("beforeend", schoolRowHTML({ s, opp: "" }))); return }
+  if (f && act === "mradd") { addTo(own(f, ".mrlist")[0], moneyRollRow({ d: "", u: "G" }), ".mrd"); return }
   if (f && act === "ladd") { const box = own(f, ".llist")[0]; addTo(box, loadoutHTML({ n: `Loadout ${String.fromCharCode(65 + box.children.length)}`, gear: [] }), ".ln"); return }
   if (f && act === "gadd") { const box = b.closest(".lrow") ? b.closest(".lrow").querySelector(".glist") : own(f, ".glist").find(g => !g.closest(".lrow")); addTo(box, gearRowHTML({ n: "", qty: 1 }), ".gn"); return }
   if (act === "edit") { const id = +b.dataset.id; editing.add(id); render(); focusForm(id); return }

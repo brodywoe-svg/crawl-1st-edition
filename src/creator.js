@@ -262,15 +262,18 @@ function hpOf(c) {
   const con = /con/i.test(k.hp) || /^\s*\d+\s*$/.test(k.hp) ? mod(c, "con") : 0;
   return Math.max(1, +m[0] + con);
 }
-/* a class either hands out a loadout or its Starting Currency to buy gear with; a background can add wealth on top */
-const buying = c => { const k = clsOf(c); return !k || !k.loadouts.length || c.loadout === "buy" };
+/* every character picks one of the class's kits, then rolls for its Starting Currency on top; a background can add wealth too */
+const needsKit = c => { const k = clsOf(c); return !!(k && k.loadouts.length) };
+const hasKit = c => !needsKit(c) || (c.loadout !== "" && c.loadout !== "buy" && c.loadout != null);
+const rollFor = c => { const k = clsOf(c); return k ? parseRolls(k.moneyRoll) : [] };
+const rolledFor = c => { const k = clsOf(c), r = c.moneyRoll; return !!(k && r && r.cls === k.id && r.expr === k.moneyRoll && Array.isArray(r.rolls)) };
 function classMoney(c) {
   const k = clsOf(c); if (!k) return toC(CR.rules.wealth) || 0;
-  const m = toC(k.money), roll = parseDice(k.moneyRoll), r = roll && c.moneyRoll && c.moneyRoll.cls === k.id ? c.moneyRoll.coins : 0;
-  if (m == null && !roll) return toC(CR.rules.wealth) || 0;
+  const m = toC(k.money), rolls = rollFor(c), r = rolledFor(c) ? c.moneyRoll.coins : 0;
+  if (m == null && !rolls.length) return toC(CR.rules.wealth) || 0;
   return (m || 0) + r;
 }
-function startingWealth(c) { const b = bgOf(c); return (buying(c) ? classMoney(c) : 0) + ((b && toC(b.wealth)) || 0) }
+function startingWealth(c) { const b = bgOf(c); return classMoney(c) + ((b && toC(b.wealth)) || 0) }
 /* spellcasting: formulas, Major and Minor schools, spell Ranks bought with skill points */
 const fml = (c, expr) => formula(expr, a => mod(c, a), LEVEL);
 const hasMajor = k => !!(k && k.schools.length && +k.majorLv && +k.majorLv <= LEVEL);
@@ -326,11 +329,16 @@ function rankBar(c, ps, key, label) {
 }
 const RANK_HEAD = `<span class="ccscale" aria-hidden="true">${Array.from({ length: 10 }, (_, i) => `<span>+${i + 1}</span>`).join("")}<b></b></span>`;
 /* starting currency: a fixed amount, a roll made when the player reaches Equipment, or both added together */
+/* the Starting Currency roll: done with the Roll button once a kit is picked, one result per coin */
+function rollMoney(c) {
+  const k = clsOf(c), ds = rollFor(c); if (!k || !ds.length || !hasKit(c)) return false;
+  const rolls = ds.map(d => { const r = rollDice(d); return { text: d.text, dice: r.dice, total: r.total, coins: r.coins, unit: d.unit, add: d.add, times: d.times } });
+  c.moneyRoll = { cls: k.id, expr: k.moneyRoll, rolls, coins: rolls.reduce((s, r) => s + r.coins, 0) }; touch(); return true;
+}
 function ensureMoneyRoll(c) {
-  const k = clsOf(c), d = k && parseDice(k.moneyRoll);
-  if (!d) { if (c.moneyRoll) { c.moneyRoll = null; touch() } return false }
-  if (c.moneyRoll && c.moneyRoll.cls === k.id && c.moneyRoll.expr === k.moneyRoll) return false;
-  const r = rollDice(d); c.moneyRoll = { cls: k.id, expr: k.moneyRoll, dice: r.dice, total: r.total, coins: r.coins, unit: d.unit, add: d.add, times: d.times }; touch(); return true;
+  /* a roll for another class, or one made before the class's dice changed, no longer counts */
+  if (c.moneyRoll && !rolledFor(c)) { c.moneyRoll = null; touch() }
+  return false;
 }
 const skillSpent = (c, ps) => spentParts(c, ps).total;
 const spentC = c => c.inv.reduce((n, x) => n + (x.paid || 0) * (x.qty || 1), 0);
@@ -417,7 +425,7 @@ function stepOk(c, k) {
     case "skills": return !!c.seen.skills && ps.g.picks.filter(p => p.opts && (p.cat === "skill" || p.cat === "save")).every(p => pickDone(c, p)) && ["skill", "save"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow });
     case "prof": return !!c.seen.prof && ps.g.picks.filter(p => p.opts && p.cat !== "skill" && p.cat !== "save").every(p => pickDone(c, p)) && langGrants(c).choices.every(p => pickDone(c, p)) && ["weapon", "armor", "trade"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow }) && c.langs.filter(Boolean).length >= langGrants(c).picks;
     case "spells": { const k2 = clsOf(c); if (k2 && !k2.source) return !!k2; const lim = spellLimit(c); return !!c.seen.spells && (!lim || c.spells.length >= lim) }
-    case "equip": { const k2 = clsOf(c); return !!c.seen.equip && (!k2 || !k2.loadouts.length || c.loadout !== "") }
+    case "equip": return !!c.seen.equip && hasKit(c) && (!rollFor(c).length || rolledFor(c));
     case "look": return !!c.seen[k];
     case "name": return !!str(c.name);
   }
@@ -439,6 +447,7 @@ function renderCreate() {
   if (pinIk && !infoMap.has(pinIk)) pinIk = "";
   markPin(); setInfo();
   if (rolled && !RM.matches) spinDice(document.querySelectorAll(".ccmoney .die"));
+  if (justRolled && !RM.matches) { justRolled = false; spinDice(document.querySelectorAll(".ccmoney .die")) }
   $("ccBack").disabled = i === 0;
   $("ccNext").textContent = i === STEPS.length - 1 ? "Finish" : "Next";
   $("ccNext").classList.toggle("go", i === STEPS.length - 1 && STEPS.every(([sk]) => stepOk(c, sk)));
@@ -575,10 +584,10 @@ ${picks}${a.from.length ? `<p class="ccnote">Racial bonuses: ${esc(a.from.join("
     list.forEach(i => infoMap.set("item:" + i.id, itemInfo(i)));
     c.inv.forEach((x, j) => { const it = x.iid && itemById(x.iid); if (it) infoMap.set("item:" + it.id, itemInfo(it)) });
     const k = clsOf(c), lo = k ? k.loadouts : [];
-    infoDefault = infoBox("Equipment", "", `${lo.length ? `<p>Take one of your class's <b>loadouts</b>, or take its <b>Starting Currency</b> (${esc(fmtC(classMoney(c)))}) and buy your own gear.</p>` : `<p>You start with <b>${esc(fmtC(start))}</b>.</p>`}<p><b>Buy</b> takes the price from your purse; <b>Take</b> adds the item for free, for gear your Game Master gives you.</p><p>Pick a slot for anything you're wearing or holding. The rest goes in your pack.</p>`);
+    infoDefault = infoBox("Equipment", "", `${lo.length ? `<p>Pick one of your class's <b>starting kits</b>. Then roll for your <b>Starting Currency</b>, which you get on top of the kit, to buy anything else.</p>` : `<p>You start with <b>${esc(fmtC(start))}</b>.</p>`}<p><b>Buy</b> takes the price from your purse; <b>Take</b> adds the item for free, for gear your Game Master gives you.</p><p>Pick a slot for anything you're wearing or holding. The rest goes in your pack.</p>`);
     const bgTaken = c.inv.some(x => x.from === "bg");
-    const loadouts = lo.length ? `<fieldset class="ccload"><legend>${esc(k.n)} starting equipment</legend>${lo.map((l, i) => `<label class="${c.loadout === String(i) ? "on" : ""}"><input type="radio" name="ccload" data-f="loadout" value="${i}"${c.loadout === String(i) ? " checked" : ""}><span><b>${esc(l.n)}</b><small>${esc(gearLine(l.gear)) || "No gear listed"}</small></span></label>`).join("")}<label class="${c.loadout === "buy" ? "on" : ""}"><input type="radio" name="ccload" data-f="loadout" value="buy"${c.loadout === "buy" ? " checked" : ""}><span><b>Buy my own</b><small>Start with ${esc(fmtC(classMoney(c)))}</small></span></label></fieldset>` : "";
-    return `${moneyHTML(c)}${loadouts}<div class="ccpurse"><span>Purse <b>${esc(fmtC(left))}</b></span><small>Started with ${esc(fmtC(start))}${b && toC(b.wealth) ? ` (${esc(fmtC(toC(b.wealth)))} from ${esc(b.n)})` : ""} · spent ${esc(fmtC(spent))}</small>${left < 0 ? `<span class="ccwarn">You've spent more than you have.</span>` : ""}</div>
+    const loadouts = lo.length ? `<fieldset class="ccload"><legend>${esc(k.n)} starting kit: pick one</legend>${lo.map((l, i) => `<label class="${c.loadout === String(i) ? "on" : ""}"><input type="radio" name="ccload" data-f="loadout" value="${i}"${c.loadout === String(i) ? " checked" : ""}><span><b>${esc(l.n)}</b><small>${esc(gearLine(l.gear)) || "No gear listed"}</small></span></label>`).join("")}</fieldset>` : "";
+    return `${loadouts}${moneyHTML(c)}<div class="ccpurse"><span>Purse <b>${esc(fmtC(left))}</b></span><small>Started with ${esc(fmtC(start))}${b && toC(b.wealth) ? ` (${esc(fmtC(toC(b.wealth)))} from ${esc(b.n)})` : ""} · spent ${esc(fmtC(spent))}</small>${left < 0 ? `<span class="ccwarn">You've spent more than you have.</span>` : ""}</div>
 ${b && b.gear && b.gear.length ? `<p class="ccnote">From your ${esc(b.n)} background (already in your gear): ${esc(gearLine(b.gear))}${bgTaken ? "" : ` <button type="button" class="btn" data-act="bggear">Add it again</button>`}</p>` : ""}
 <div class="cctool"><select id="ccShopCat" aria-label="Item category"><option value="all"${shopCat === "all" ? " selected" : ""}>All gear</option>${cats.map(x => `<option${shopCat === x ? " selected" : ""}>${esc(x)}</option>`).join("")}</select><input type="search" id="ccShopQ" value="${esc(shopQ)}" placeholder="Search items" aria-label="Search items" autocomplete="off"></div>
 <div class="cclist shop">${list.map(i => `<div class="ccrow" data-ik="item:${esc(i.id)}"><span class="ccrn"><span class="tc"${i.nc ? ` style="--c:${esc(i.nc)}"` : ""}>${esc(i.n)}</span></span><span class="ccrm">${esc(i.value || "")}</span><span class="ccrm">${esc(i.weight || "")}</span><span class="ccbtns"><button type="button" class="btn" data-act="buy" data-id="${esc(i.id)}"${toC(i.value) == null || toC(i.value) > left ? ` disabled title="${toC(i.value) == null ? "No price" : "Not enough money"}"` : ""}>Buy</button><button type="button" class="btn" data-act="take" data-id="${esc(i.id)}">Take</button></span></div>`).join("") || `<p class="cempty">No items match.</p>`}</div>
@@ -635,14 +644,22 @@ function syncBgGear(c) {
 }
 /* a loadout picked before its gear was set up (or since changed) gets the class's current gear */
 function syncLoadout(c) {
-  if (c.loadout === "" || c.loadout === "buy") return;
+  if (c.loadout === "buy") { c.loadout = ""; touch() }
+  if (c.loadout === "") return;
   const k = clsOf(c), l = k && k.loadouts[+c.loadout];
   if (!l) { setLoadout(c, ""); touch(); return }
   if (c.loadoutSig !== gearSig(l.gear)) { setLoadout(c, c.loadout); touch() }
 }
+let justRolled = false;
 function moneyHTML(c) {
-  const k = clsOf(c), r = c.moneyRoll; if (!k || !r || !parseDice(k.moneyRoll)) return "";
-  return `<div class="ccmoney"><span class="ccml">Starting Currency</span><span class="ccmr">${k.money ? `<b>${esc(fmtC(toC(k.money)))}</b> + ` : ""}${esc(parseDice(k.moneyRoll).text)}: ${r.dice.map(d => `<span class="die">${d}</span>`).join("")}${r.add ? ` ${r.add > 0 ? "+" : "−"} ${Math.abs(r.add)}` : ""}${r.times > 1 ? ` × ${r.times}` : ""} = <b>${r.total} (${r.unit})</b></span><span class="ccmt">Total <b>${esc(fmtC(classMoney(c)))}</b></span>${!buying(c) ? `<small>Yours if you buy your own gear instead of a loadout.</small>` : ""}</div>`;
+  const k = clsOf(c); if (!k) return "";
+  const rolls = rollFor(c), fixed = toC(k.money);
+  if (!rolls.length) return fixed != null ? `<div class="ccmoney"><span class="ccml">Starting Currency</span><span class="ccmr"><b>${esc(fmtC(fixed))}</b></span><span class="ccmt">Total <b>${esc(fmtC(classMoney(c)))}</b></span></div>` : "";
+  const what = rolls.map(d => /\([CSGP]\)/i.test(d.text) ? d.text : d.text + " (" + d.unit + ")").join(" + ");
+  if (!hasKit(c)) return `<div class="ccmoney wait"><span class="ccml">Starting Currency</span><span class="ccmr">${fixed != null ? `<b>${esc(fmtC(fixed))}</b> + ` : ""}${esc(what)}</span><small>Pick a starting kit first, then roll for your Starting Currency.</small></div>`;
+  if (!rolledFor(c)) return `<div class="ccmoney"><span class="ccml">Starting Currency</span><span class="ccmr">${fixed != null ? `<b>${esc(fmtC(fixed))}</b> + ` : ""}${esc(what)}</span><button type="button" class="btn solid" data-act="moneyroll">Roll for Starting Currency</button></div>`;
+  const r = c.moneyRoll;
+  return `<div class="ccmoney"><span class="ccml">Starting Currency</span><span class="ccmr">${fixed != null ? `<b>${esc(fmtC(fixed))}</b> + ` : ""}${r.rolls.map(x => `${esc(x.text)}: ${x.dice.map(d => `<span class="die">${d}</span>`).join("")}${x.add ? ` ${x.add > 0 ? "+" : "−"} ${Math.abs(x.add)}` : ""}${x.times > 1 ? ` × ${x.times}` : ""} = <b>${x.total} (${x.unit})</b>`).join(" &nbsp;·&nbsp; ")}</span><span class="ccmt">Total <b>${esc(fmtC(classMoney(c)))}</b></span></div>`;
 }
 function spinDice(dice) {
   dice = [...dice]; const real = dice.map(d => d.textContent), sides = 8; let n = 0;
@@ -659,8 +676,7 @@ function setLoadout(c, v) {
   const k = clsOf(c), l = k && v !== "buy" && v !== "" ? k.loadouts[+v] : null;
   c.loadoutSig = l ? gearSig(l.gear) : "";
   if (l) { addGear(c, l.gear, "loadout"); c.inv.forEach(x => { if (x.from === "loadout" && slots.has(x.iid || lcs(x.n))) x.slot = slots.get(x.iid || lcs(x.n)) }) }
-  /* gear bought with money that's no longer there goes back */
-  if (!buying(c)) c.inv = c.inv.filter(x => !x.paid || startingWealth(c) - spentC(c) >= 0);
+
 }
 function gearFrom(text) { return ITEMS.filter(i => new RegExp("\\b" + i.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(plainText(text))) }
 /* an item's weapon actions: [{n, at, ap, dmg, type, d}]; "N/A" or "—" counts as empty */
@@ -780,6 +796,7 @@ $("ccmain").addEventListener("click", ev => {
     { const key = (cat === "weapon" ? "w:" : cat === "armor" ? "a:" : "t:") + n; if (!isProf(c, profState(c), key)) delete c.rank[key] }
     touch(); renderCreate(); const f = document.querySelector(`.ctier[data-f="${cat}"][data-n="${CSS.escape(n)}"][data-t="${t}"]`); if (f) f.focus(); return;
   }
+  if (act === "moneyroll") { if (rollMoney(c)) { justRolled = true; renderCreate(); say(`Starting Currency: ${fmtC(classMoney(c))}.`) } return }
   if (act === "reroll") { rollAll(); return }
   if (act === "store") { c.stored = { base: { ...c.base }, dice: JSON.parse(JSON.stringify(c.dice)) }; touch(); renderCreate(); say("Scores stored. Click Recall to bring them back."); return }
   if (act === "recall" && c.stored) { c.base = { ...c.stored.base }; c.dice = JSON.parse(JSON.stringify(c.stored.dice)); touch(); renderCreate(); say("Stored scores recalled."); return }

@@ -134,6 +134,8 @@ function parseDice(t) {
   const m = String(t || "").match(DICE_RE); if (!m) return null;
   return { n: Math.min(50, +m[1] || 1), sides: +m[2], add: m[3] ? (m[3] === "-" ? -1 : 1) * +m[4] : 0, times: +m[5] || 1, unit: (m[6] || "G").toUpperCase(), text: m[0].trim() };
 }
+/* several rolls, each in its own coin: "3d6 (G) + 2d4 (S)" */
+const parseRolls = t => [...String(t || "").matchAll(new RegExp(DICE_RE.source, "gi"))].map(m => parseDice(m[0])).filter(Boolean);
 function rollDice(d) {
   const a = new Uint32Array(d.n); crypto.getRandomValues(a);
   const dice = [...a].map(x => x % d.sides + 1), total = Math.max(0, (dice.reduce((s, x) => s + x, 0) + d.add) * d.times);

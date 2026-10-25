@@ -411,9 +411,115 @@
      "lv": 1
     }
    ],
-   "loadouts": [],
-   "money": "15",
-   "moneyRoll": "3d10",
+   "loadouts": [
+    {
+     "n": "Troubadour's Kit",
+     "gear": [
+      {
+       "n": "Iron Shortsword",
+       "qty": 1,
+       "iid": "i-iron-shortsword"
+      },
+      {
+       "n": "Iron Dagger",
+       "qty": 1,
+       "iid": "i-iron-dagger"
+      },
+      {
+       "n": "Leather Cap",
+       "qty": 1,
+       "iid": "i-leather-cap"
+      },
+      {
+       "n": "Leather Jerkin",
+       "qty": 1,
+       "iid": "i-leather-jerkin"
+      },
+      {
+       "n": "Leather Gloves",
+       "qty": 1,
+       "iid": "i-leather-gloves"
+      },
+      {
+       "n": "Leather Leggings",
+       "qty": 1,
+       "iid": "i-leather-leggings"
+      },
+      {
+       "n": "Leather Boots",
+       "qty": 1,
+       "iid": "i-leather-boots"
+      },
+      {
+       "n": "Messenger's Satchel",
+       "qty": 1,
+       "iid": "i-messenger-s-satchel"
+      },
+      {
+       "n": "Bedroll",
+       "qty": 1,
+       "iid": "i-bedroll"
+      },
+      {
+       "n": "Waterskin",
+       "qty": 1,
+       "iid": "i-waterskin"
+      },
+      {
+       "n": "Traveler’s Hardtack",
+       "qty": 5,
+       "iid": "i-traveler-s-hardtack"
+      },
+      {
+       "n": "Smoked Jerky",
+       "qty": 5,
+       "iid": "i-smoked-jerky"
+      },
+      {
+       "n": "Tinderbox",
+       "qty": 1,
+       "iid": "i-tinderbox"
+      },
+      {
+       "n": "Torch",
+       "qty": 5,
+       "iid": "i-torch"
+      },
+      {
+       "n": "Clotting Salve",
+       "qty": 1,
+       "iid": "i-clotting-salve"
+      },
+      {
+       "n": "Lute",
+       "qty": 1,
+       "iid": "i-lute"
+      },
+      {
+       "n": "Painted Stage Mask",
+       "qty": 1,
+       "iid": "i-painted-stage-mask"
+      },
+      {
+       "n": "Pot of Greasepaint",
+       "qty": 1,
+       "iid": "i-pot-of-greasepaint"
+      },
+      {
+       "n": "Juggling Balls",
+       "qty": 1,
+       "iid": "i-juggling-balls"
+      },
+      {
+       "n": "Deck of Playing Cards",
+       "qty": 1,
+       "iid": "i-deck-of-playing-cards"
+      }
+     ]
+    }
+   ],
+   "money": "15 (G)",
+   "moneyRoll": "3d10 (G)",
    "extra": [],
    "choices": [
     {
@@ -763,7 +869,148 @@
    "loadouts": [
     {
      "n": "Mercenary Kit",
-     "gear": []
+     "gear": [
+      {
+       "n": "Iron Longsword",
+       "qty": 1,
+       "iid": "i-mv62433jz13p"
+      },
+      {
+       "n": "Iron Hand Axe",
+       "qty": 2,
+       "iid": "i-iron-hand-axe"
+      },
+      {
+       "n": "Round Shield",
+       "qty": 1,
+       "iid": "i-round-shield"
+      },
+      {
+       "n": "Iron Nasal Helm",
+       "qty": 1,
+       "iid": "i-iron-nasal-helm"
+      },
+      {
+       "n": "Leather Pauldrons",
+       "qty": 1,
+       "iid": "i-leather-pauldrons"
+      },
+      {
+       "n": "Leather Jerkin",
+       "qty": 1,
+       "iid": "i-leather-jerkin"
+      },
+      {
+       "n": "Leather Bracers",
+       "qty": 1,
+       "iid": "i-leather-bracers"
+      },
+      {
+       "n": "Leather Gloves",
+       "qty": 1,
+       "iid": "i-leather-gloves"
+      },
+      {
+       "n": "Leather Belt-Skirt",
+       "qty": 1,
+       "iid": "i-leather-belt-skirt"
+      },
+      {
+       "n": "Leather Leggings",
+       "qty": 1,
+       "iid": "i-leather-leggings"
+      },
+      {
+       "n": "Leather Boots",
+       "qty": 1,
+       "iid": "i-leather-boots"
+      },
+      {
+       "n": "Backpack",
+       "qty": 1,
+       "iid": "i-backpack"
+      },
+      {
+       "n": "Bedroll",
+       "qty": 1,
+       "iid": "i-bedroll"
+      },
+      {
+       "n": "Waterskin",
+       "qty": 1,
+       "iid": "i-waterskin"
+      },
+      {
+       "n": "Traveler’s Hardtack",
+       "qty": 5,
+       "iid": "i-traveler-s-hardtack"
+      },
+      {
+       "n": "Smoked Jerky",
+       "qty": 5,
+       "iid": "i-smoked-jerky"
+      },
+      {
+       "n": "Mess Kit",
+       "qty": 1,
+       "iid": "i-mess-kit"
+      },
+      {
+       "n": "Tinderbox",
+       "qty": 1,
+       "iid": "i-tinderbox"
+      },
+      {
+       "n": "Torch",
+       "qty": 5,
+       "iid": "i-torch"
+      },
+      {
+       "n": "Hooded Lantern",
+       "qty": 1,
+       "iid": "i-hooded-lantern"
+      },
+      {
+       "n": "Flask of Lamp Oil",
+       "qty": 2,
+       "iid": "i-flask-of-lamp-oil"
+      },
+      {
+       "n": "Hempen Rope (50 ft)",
+       "qty": 1,
+       "iid": "i-hempen-rope-50-ft"
+      },
+      {
+       "n": "Grappling Hook",
+       "qty": 1,
+       "iid": "i-grappling-hook"
+      },
+      {
+       "n": "Iron Spikes (10)",
+       "qty": 1,
+       "iid": "i-iron-spikes-10"
+      },
+      {
+       "n": "Crowbar",
+       "qty": 1,
+       "iid": "i-crowbar"
+      },
+      {
+       "n": "Whetstone",
+       "qty": 1,
+       "iid": "i-whetstone"
+      },
+      {
+       "n": "Clotting Salve",
+       "qty": 2,
+       "iid": "i-clotting-salve"
+      },
+      {
+       "n": "Smelling Salts",
+       "qty": 1,
+       "iid": "i-smelling-salts"
+      }
+     ]
     }
    ],
    "money": "25 (G)",
@@ -988,7 +1235,138 @@
      "lv": 10
     }
    ],
-   "loadouts": [],
+   "loadouts": [
+    {
+     "n": "Pilgrim's Kit",
+     "gear": [
+      {
+       "n": "Dao",
+       "qty": 1,
+       "iid": "i-dao"
+      },
+      {
+       "n": "Sai",
+       "qty": 2,
+       "iid": "i-sai"
+      },
+      {
+       "n": "Tetsubo",
+       "qty": 1,
+       "iid": "i-tetsubo"
+      },
+      {
+       "n": "Linen Hood",
+       "qty": 1,
+       "iid": "i-linen-hood"
+      },
+      {
+       "n": "Linen Mantle",
+       "qty": 1,
+       "iid": "i-linen-mantle"
+      },
+      {
+       "n": "Linen Robe",
+       "qty": 1,
+       "iid": "i-mv933s37shd0"
+      },
+      {
+       "n": "Linen Sash",
+       "qty": 1,
+       "iid": "i-linen-sash"
+      },
+      {
+       "n": "Linen Wraps",
+       "qty": 1,
+       "iid": "i-linen-wraps"
+      },
+      {
+       "n": "Linen Shoes",
+       "qty": 1,
+       "iid": "i-linen-shoes"
+      },
+      {
+       "n": "Backpack",
+       "qty": 1,
+       "iid": "i-backpack"
+      },
+      {
+       "n": "Bedroll",
+       "qty": 1,
+       "iid": "i-bedroll"
+      },
+      {
+       "n": "Waterskin",
+       "qty": 1,
+       "iid": "i-waterskin"
+      },
+      {
+       "n": "Traveler’s Hardtack",
+       "qty": 5,
+       "iid": "i-traveler-s-hardtack"
+      },
+      {
+       "n": "Smoked Jerky",
+       "qty": 5,
+       "iid": "i-smoked-jerky"
+      },
+      {
+       "n": "Mess Kit",
+       "qty": 1,
+       "iid": "i-mess-kit"
+      },
+      {
+       "n": "Tinderbox",
+       "qty": 1,
+       "iid": "i-tinderbox"
+      },
+      {
+       "n": "Torch",
+       "qty": 5,
+       "iid": "i-torch"
+      },
+      {
+       "n": "Hempen Rope (50 ft)",
+       "qty": 1,
+       "iid": "i-hempen-rope-50-ft"
+      },
+      {
+       "n": "Grappling Hook",
+       "qty": 1,
+       "iid": "i-grappling-hook"
+      },
+      {
+       "n": "Iron Spikes (10)",
+       "qty": 1,
+       "iid": "i-iron-spikes-10"
+      },
+      {
+       "n": "Crowbar",
+       "qty": 1,
+       "iid": "i-crowbar"
+      },
+      {
+       "n": "Whetstone",
+       "qty": 1,
+       "iid": "i-whetstone"
+      },
+      {
+       "n": "Prayer Beads",
+       "qty": 1,
+       "iid": "i-prayer-beads"
+      },
+      {
+       "n": "Clotting Salve",
+       "qty": 3,
+       "iid": "i-clotting-salve"
+      },
+      {
+       "n": "Smelling Salts",
+       "qty": 1,
+       "iid": "i-smelling-salts"
+      }
+     ]
+    }
+   ],
    "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
@@ -1349,7 +1727,123 @@
    "loadouts": [
     {
      "n": "Thieves Kit",
-     "gear": []
+     "gear": [
+      {
+       "n": "Iron Shortsword",
+       "qty": 1,
+       "iid": "i-iron-shortsword"
+      },
+      {
+       "n": "Iron Dagger",
+       "qty": 2,
+       "iid": "i-iron-dagger"
+      },
+      {
+       "n": "Crossbow",
+       "qty": 1,
+       "iid": "i-crossbow"
+      },
+      {
+       "n": "Crossbow Bolt",
+       "qty": 20,
+       "iid": "i-crossbow-bolt"
+      },
+      {
+       "n": "Buckler",
+       "qty": 1,
+       "iid": "i-buckler"
+      },
+      {
+       "n": "Leather Cap",
+       "qty": 1,
+       "iid": "i-leather-cap"
+      },
+      {
+       "n": "Leather Jerkin",
+       "qty": 1,
+       "iid": "i-leather-jerkin"
+      },
+      {
+       "n": "Leather Gloves",
+       "qty": 1,
+       "iid": "i-leather-gloves"
+      },
+      {
+       "n": "Leather Leggings",
+       "qty": 1,
+       "iid": "i-leather-leggings"
+      },
+      {
+       "n": "Leather Boots",
+       "qty": 1,
+       "iid": "i-leather-boots"
+      },
+      {
+       "n": "Backpack",
+       "qty": 1,
+       "iid": "i-backpack"
+      },
+      {
+       "n": "Bedroll",
+       "qty": 1,
+       "iid": "i-bedroll"
+      },
+      {
+       "n": "Waterskin",
+       "qty": 1,
+       "iid": "i-waterskin"
+      },
+      {
+       "n": "Traveler’s Hardtack",
+       "qty": 5,
+       "iid": "i-traveler-s-hardtack"
+      },
+      {
+       "n": "Smoked Jerky",
+       "qty": 5,
+       "iid": "i-smoked-jerky"
+      },
+      {
+       "n": "Tinderbox",
+       "qty": 1,
+       "iid": "i-tinderbox"
+      },
+      {
+       "n": "Torch",
+       "qty": 5,
+       "iid": "i-torch"
+      },
+      {
+       "n": "Hempen Rope (50 ft)",
+       "qty": 1,
+       "iid": "i-hempen-rope-50-ft"
+      },
+      {
+       "n": "Grappling Hook",
+       "qty": 1,
+       "iid": "i-grappling-hook"
+      },
+      {
+       "n": "Piece of Chalk",
+       "qty": 1,
+       "iid": "i-piece-of-chalk"
+      },
+      {
+       "n": "Thieves' Tools",
+       "qty": 1,
+       "iid": "i-thieves-tools"
+      },
+      {
+       "n": "Lockpick",
+       "qty": 2,
+       "iid": "i-lockpick"
+      },
+      {
+       "n": "Leather Quiver",
+       "qty": 1,
+       "iid": "i-leather-quiver"
+      }
+     ]
     }
    ],
    "money": "25 (G)",
@@ -1617,9 +2111,24 @@
      "n": "Mages Kit",
      "gear": [
       {
+       "n": "Quarterstaff",
+       "qty": 1,
+       "iid": "i-quarterstaff"
+      },
+      {
+       "n": "Iron Dagger",
+       "qty": 1,
+       "iid": "i-iron-dagger"
+      },
+      {
        "n": "Linen Hood",
        "qty": 1,
        "iid": "i-linen-hood"
+      },
+      {
+       "n": "Linen Mantle",
+       "qty": 1,
+       "iid": "i-linen-mantle"
       },
       {
        "n": "Linen Robe",
@@ -1627,9 +2136,114 @@
        "iid": "i-mv933s37shd0"
       },
       {
-       "n": "Quarterstaff",
+       "n": "Linen Sash",
        "qty": 1,
-       "iid": "i-quarterstaff"
+       "iid": "i-linen-sash"
+      },
+      {
+       "n": "Linen Shoes",
+       "qty": 1,
+       "iid": "i-linen-shoes"
+      },
+      {
+       "n": "Backpack",
+       "qty": 1,
+       "iid": "i-backpack"
+      },
+      {
+       "n": "Bedroll",
+       "qty": 1,
+       "iid": "i-bedroll"
+      },
+      {
+       "n": "Waterskin",
+       "qty": 1,
+       "iid": "i-waterskin"
+      },
+      {
+       "n": "Traveler’s Hardtack",
+       "qty": 5,
+       "iid": "i-traveler-s-hardtack"
+      },
+      {
+       "n": "Smoked Jerky",
+       "qty": 5,
+       "iid": "i-smoked-jerky"
+      },
+      {
+       "n": "Tinderbox",
+       "qty": 1,
+       "iid": "i-tinderbox"
+      },
+      {
+       "n": "Torch",
+       "qty": 5,
+       "iid": "i-torch"
+      },
+      {
+       "n": "Hooded Lantern",
+       "qty": 1,
+       "iid": "i-hooded-lantern"
+      },
+      {
+       "n": "Flask of Lamp Oil",
+       "qty": 2,
+       "iid": "i-flask-of-lamp-oil"
+      },
+      {
+       "n": "Hempen Rope (50 ft)",
+       "qty": 1,
+       "iid": "i-hempen-rope-50-ft"
+      },
+      {
+       "n": "Mess Kit",
+       "qty": 1,
+       "iid": "i-mess-kit"
+      },
+      {
+       "n": "Spellbook",
+       "qty": 1,
+       "iid": "i-spellbook"
+      },
+      {
+       "n": "Writing Case",
+       "qty": 1,
+       "iid": "i-writing-case"
+      },
+      {
+       "n": "Sheet of Parchment",
+       "qty": 15,
+       "iid": "i-sheet-of-parchment"
+      },
+      {
+       "n": "Quill",
+       "qty": 2,
+       "iid": "i-quill"
+      },
+      {
+       "n": "Vial of Lampblack Ink",
+       "qty": 1,
+       "iid": "i-vial-of-lampblack-ink"
+      },
+      {
+       "n": "Pinch of Arcane Dust",
+       "qty": 1,
+       "iid": "i-pinch-of-arcane-dust"
+      },
+      {
+       "n": "Glass Vial",
+       "qty": 4,
+       "iid": "i-glass-vial"
+      },
+      {
+       "n": "Clotting Salve",
+       "qty": 1,
+       "iid": "i-clotting-salve"
+      },
+      {
+       "n": "Smelling Salts",
+       "qty": 1,
+       "iid": "i-smelling-salts"
       }
      ]
     }

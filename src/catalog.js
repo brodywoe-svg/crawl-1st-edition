@@ -19,13 +19,15 @@ const CATS = [
   ["Ammunition", "Ammunition", ["Arrows", "Bolts", "Shot", "Other"]],
   ["Armor", "Armor", ["Clothing", "Light", "Medium", "Heavy", "Shields", "Accessories"]],
   ["Consumable", "Consumables", ["Food", "Potions", "Alchemical", "Scrolls and Documents", "Tools"]],
+  /* everyday kit: bags, rope, light, camping gear, instruments */
+  ["Adventuring Gear", "Adventuring Gear", ["Containers", "Light Sources", "Camping and Cooking", "Climbing and Tools", "Instruments", "Books and Writing", "Other"]],
   ["Crafting Material", "Crafting Materials", ["Blacksmithing", "Woodworking", "Cloth and Leather", "Alchemy and Herbs", "Cooking Ingredients", "Scribing Supplies", "Other"]],
   ["Magic Item", "Magic Items", ["Weapons", "Armor", "Accessories", "Wondrous Items", "Other"]],
   /* odd bits and small objects with no better home, e.g. background trinkets */
   ["Miscellaneous", "Miscellaneous", ["Trinkets", "Containers", "Curiosities", "Keepsakes", "Junk", "Other"]],
 ];
 /* items.html?c=weapons shows one category, like a page of its own (the Items menu links here) */
-const CAT_SLUGS = { weapons: "Weapon", ammunition: "Ammunition", armor: "Armor", consumables: "Consumable", materials: "Crafting Material", "magic-items": "Magic Item", miscellaneous: "Miscellaneous", junk: "Miscellaneous" /* old link */ };
+const CAT_SLUGS = { weapons: "Weapon", ammunition: "Ammunition", armor: "Armor", consumables: "Consumable", "adventuring-gear": "Adventuring Gear", materials: "Crafting Material", "magic-items": "Magic Item", miscellaneous: "Miscellaneous", junk: "Miscellaneous" /* old link */ };
 const catSlug = c => Object.keys(CAT_SLUGS).find(k => CAT_SLUGS[k] === c) || "";
 /* where an item is worn or held; weapons go in a hand (Both Hands for two-handed ones), shields in the Off-Hand */
 const SLOTS = ["Main Hand", "Off-Hand", "Main or Off-Hand", "Both Hands", "Head", "Neck", "Shoulders", "Torso", "Waist", "Arms", "Hands", "Legs", "Feet", "Rings", "Other"];
@@ -350,7 +352,7 @@ ${d.cat === "Weapon" ? fld(id("ap"), "AP per attack", "", inp(id("ap"), "ap", d.
 ${d.cat === "Crafting Material" ? "" : fld(id("props"), "Properties", "The properties line, e.g. 1d8 slashing, Versatile 1d10, Serrated. Recipes that make this item show it too.", inp(id("props"), "props", d.props))}
 ${fld(id("desc"), "Description", "Leave a blank line between paragraphs.", area(id("desc"), "desc", d.desc, 3))}
 ${d.cat === "Crafting Material" ? "" : `<div class="glab">Properties Defined <small>The property's name shows in red, followed by what it does.</small></div><div class="plist">${(d.pdefs || []).map(pdefRow).join("")}</div><button type="button" class="btn padd">Add another property</button>`}
-${d.cat === "Crafting Material" || d.cat === "Miscellaneous" ? "" : `<div class="glab">Weapon actions <small>Each action's name shows in red, then its AP cost, damage and damage type, and what it does.</small></div><datalist id="dmgTypes">${dmgTypes().map(t => `<option value="${esc(t)}">`).join("")}</datalist><datalist id="actTypes">${ACTION_TYPES.map(t => `<option value="${esc(t)}">`).join("")}</datalist><div class="walist">${(d.wacts || []).map(wactRow).join("")}</div><button type="button" class="btn waadd">Add a weapon action</button>` + (str(d.actions) ? fld(id("actions"), "Weapon actions (written in)", "Old text. Move it into the actions above, then clear this box.", area(id("actions"), "actions", d.actions, 3)) : "")}
+${d.cat === "Crafting Material" || d.cat === "Miscellaneous" || d.cat === "Adventuring Gear" ? "" : `<div class="glab">Weapon actions <small>Each action's name shows in red, then its AP cost, damage and damage type, and what it does.</small></div><datalist id="dmgTypes">${dmgTypes().map(t => `<option value="${esc(t)}">`).join("")}</datalist><datalist id="actTypes">${ACTION_TYPES.map(t => `<option value="${esc(t)}">`).join("")}</datalist><div class="walist">${(d.wacts || []).map(wactRow).join("")}</div><button type="button" class="btn waadd">Add a weapon action</button>` + (str(d.actions) ? fld(id("actions"), "Weapon actions (written in)", "Old text. Move it into the actions above, then clear this box.", area(id("actions"), "actions", d.actions, 3)) : "")}
 ${formEnd(i, "item")}</div>`;
 }
 const isCooking = p => /^cook/i.test(String(p || "").trim());
