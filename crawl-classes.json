@@ -15,119 +15,190 @@
    "skills": "",
    "skillPts": "",
    "prof": "",
-   "langs": "",
+   "langs": "One Language of your choice",
    "chart": [
     {
      "lv": 1,
-     "pool": "",
-     "die": ""
+     "pool": "5",
+     "die": "d4"
     },
     {
      "lv": 2,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 3,
-     "pool": "",
-     "die": ""
+     "pool": "6",
+     "die": "d4"
     },
     {
      "lv": 4,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d6"
     },
     {
      "lv": 5,
-     "pool": "",
-     "die": ""
+     "pool": "7",
+     "die": "d6"
     },
     {
      "lv": 6,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 7,
-     "pool": "",
-     "die": ""
+     "pool": "8",
+     "die": "d6"
     },
     {
      "lv": 8,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d8"
     },
     {
      "lv": 9,
-     "pool": "",
-     "die": ""
+     "pool": "9",
+     "die": "d8"
     },
     {
      "lv": 10,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d8"
     },
     {
      "lv": 11,
-     "pool": "",
-     "die": ""
+     "pool": "10",
+     "die": "d8"
     },
     {
      "lv": 12,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d8"
     },
     {
      "lv": 13,
-     "pool": "",
-     "die": ""
+     "pool": "11",
+     "die": "d8"
     },
     {
      "lv": 14,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d8"
     },
     {
      "lv": 15,
-     "pool": "",
-     "die": ""
+     "pool": "12",
+     "die": "d8"
     },
     {
      "lv": 16,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d8"
     },
     {
      "lv": 17,
-     "pool": "",
-     "die": ""
+     "pool": "13",
+     "die": "d8"
     },
     {
      "lv": 18,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d8"
     },
     {
      "lv": 19,
-     "pool": "",
-     "die": ""
+     "pool": "14",
+     "die": "d8"
     },
     {
      "lv": 20,
-     "pool": "",
-     "die": ""
+     "pool": "15",
+     "die": "d8"
     }
    ],
    "feats": [],
    "loadouts": [],
-   "money": "",
+   "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
-   "choices": [],
+   "choices": [
+    {
+     "n": 4,
+     "cat": "skill",
+     "opts": [
+      "Appraisal",
+      "Arcane",
+      "Insight",
+      "Investigation",
+      "Lore",
+      "Medicine",
+      "Perception",
+      "Persuasion",
+      "Stealth",
+      "Thievery"
+     ]
+    },
+    {
+     "n": 2,
+     "cat": "save",
+     "opts": [
+      "Constitution",
+      "Intelligence",
+      "Wisdom"
+     ]
+    },
+    {
+     "n": 4,
+     "cat": "weapon",
+     "opts": [
+      "Axes",
+      "Blades",
+      "Bows",
+      "Crossbows",
+      "Cudgels",
+      "Firearms",
+      "Polearms",
+      "Swords",
+      "Unarmed"
+     ],
+     "ot": {
+      "Axes": "SM",
+      "Blades": "SM",
+      "Bows": "SM",
+      "Crossbows": "SM",
+      "Cudgels": "SM",
+      "Firearms": "SM",
+      "Polearms": "SM",
+      "Swords": "SM"
+     }
+    },
+    {
+     "n": 3,
+     "cat": "trade",
+     "opts": [
+      "Alchemy",
+      "Blacksmithing",
+      "Cooking",
+      "Enchanting",
+      "Goldsmithing",
+      "Leatherworking",
+      "Scribing",
+      "Tailoring",
+      "Tinkering",
+      "Woodworking"
+     ]
+    }
+   ],
    "ptypes": {
     "v": {
      "Constitution": "P",
      "Intelligence": "P"
+    },
+    "a": {
+     "Light Armor": "P",
+     "Shields": "P"
     }
    },
    "prepared": "",
