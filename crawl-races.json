@@ -188,6 +188,39 @@
    ]
   },
   {
+   "id": "race-mvo7ran1jehi",
+   "n": "Gnome",
+   "desc": "Dirty Gnomes. (Placeholder Text)",
+   "asi": "+1 Intelligence",
+   "prof": "Simple and Martial Firearms,",
+   "langs": "Common, Gnomish,",
+   "feats": [
+    {
+     "n": "Firearm Knowledge",
+     "d": "You gain proficiency in simple and martial Firearms."
+    }
+   ],
+   "extra": [
+    {
+     "k": "Size",
+     "v": "Small"
+    },
+    {
+     "k": "Speed",
+     "v": "Your ground speed is 25ft"
+    },
+    {
+     "k": "Darkvision",
+     "v": "30ft"
+    },
+    {
+     "k": "Age",
+     "v": "Gnomes can live up to 250 years old."
+    }
+   ],
+   "subs": []
+  },
+  {
    "id": "race-mviajii07oyj",
    "n": "Halfling",
    "desc": "Halflings are a small, cheerful people, rarely taller than a dwarf’s shoulder, who have made their homes in nearly every quiet corner of the realm. They’re often overlooked by the bigger folk, which suits them fine. Halflings know that a full table, good company and a warm hearth matter more than any crown, and they’re far tougher and braver than their size suggests.\n\nMost halflings follow one of two paths. The Hillborn Halflings live in cozy, bustling villages and alongside the Hill Dwarves in their valley towns. The Wilding Halflings dwell deep in ancient forests, carving their homes into the trunks of giant trees and keeping the old rites of the spirits.",
