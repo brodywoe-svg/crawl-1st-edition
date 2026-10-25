@@ -851,7 +851,7 @@
    "hp": "8 + Constitution Modifier",
    "saves": "",
    "skills": "",
-   "skillPts": "",
+   "skillPts": "6",
    "prof": "",
    "langs": "",
    "chart": [
@@ -1204,7 +1204,7 @@
    "hp": "8 + Constitution Modifier",
    "saves": "",
    "skills": "",
-   "skillPts": "",
+   "skillPts": "8",
    "prof": "",
    "langs": "",
    "chart": [
