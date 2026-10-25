@@ -1339,7 +1339,19 @@ label.ccrow{cursor:pointer}
 .scast .sth{justify-content:center}
 .scast p{margin:0;font-size:9.5px;padding:4px;border-bottom:1px solid var(--ink)}
 .scast p:last-child{border-bottom:0}
-.sfeat{min-height:300px}
+.sfeat{min-height:0}
+/* weapon & combat actions: two columns of short cards under the attacks */
+.sacts .sactl{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;padding:8px 6px 4px}
+.sact{border-bottom:1px solid var(--hair);padding-bottom:5px;break-inside:avoid}
+.sact p{margin:0}
+.sacth{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:11.5px}
+.sactm{font-weight:800;font-size:10.5px}
+.sacth small{margin-left:auto;color:var(--muted);font-weight:700;font-size:10px}
+.sactd{font-size:10.5px;line-height:1.3;color:var(--ink);opacity:.85}
+.snone{margin:4px 8px;color:var(--muted);font-size:11px;font-weight:600}
+.sp3 .sfeats{columns:2;column-gap:18px;display:block}
+.sp3 .sfeats>*{break-inside:avoid;margin:0 0 6px}
+@media (max-width:700px){.sacts .sactl{grid-template-columns:1fr}.sp3 .sfeats{columns:1}}
 .sfeats{display:grid;gap:6px;margin-bottom:6px}
 .sfeats p{margin:0;font-size:11.5px}
 .sfeats small{color:var(--muted);font-weight:700}

@@ -666,8 +666,11 @@ function spinDice(dice) {
   dice.forEach(d => d.classList.add("spin"));
   const t = setInterval(() => { n++; dice.forEach((d, i) => { d.textContent = n < 6 ? 1 + Math.floor(Math.random() * sides) : real[i] }); if (n >= 6) { clearInterval(t); dice.forEach(d => d.classList.remove("spin")) } }, 60);
 }
+/* gear goes where it's worn or held: shields fill the off hand first, then main-hand weapons, then light ones, and a two-handed weapon only if both hands are still free */
+const slotOrder = it => { const s = lcs(it.slot); return s === "off-hand" || /shield/i.test(it.n + " " + it.sub) ? 0 : s === "main hand" ? 1 : s === "main or off-hand" ? 2 : s === "both hands" ? 3 : it.cat === "Weapon" ? 2 : 4 };
 function addGear(c, gear, from) {
-  gear.forEach(g => { const it = g.iid && itemById(g.iid); c.inv.push({ ...(it ? { iid: it.id } : { n: g.n }), qty: g.qty || 1, paid: 0, slot: it ? defaultSlot(c, it) : "", from }) });
+  const rows = gear.map(g => { const it = g.iid && itemById(g.iid); const x = { ...(it ? { iid: it.id } : { n: g.n }), qty: g.qty || 1, paid: 0, slot: "", from }; c.inv.push(x); return [x, it] });
+  rows.filter(([, it]) => it).sort((a, b) => slotOrder(a[1]) - slotOrder(b[1])).forEach(([x, it]) => { x.slot = defaultSlot(c, it) });
 }
 const gearSig = g => g.map(x => (x.iid || lcs(x.n)) + "x" + (x.qty || 1)).sort().join("|");
 function setLoadout(c, v) {
@@ -675,7 +678,10 @@ function setLoadout(c, v) {
   c.inv = c.inv.filter(x => x.from !== "loadout"); c.loadout = v;
   const k = clsOf(c), l = k && v !== "buy" && v !== "" ? k.loadouts[+v] : null;
   c.loadoutSig = l ? gearSig(l.gear) : "";
+  /* the kit's weapons and armor go on first; background gear fills whatever slots are left */
+  const bgWorn = c.inv.filter(x => x.from === "bg" && x.slot); bgWorn.forEach(x => { x.slot = "" });
   if (l) { addGear(c, l.gear, "loadout"); c.inv.forEach(x => { if (x.from === "loadout" && slots.has(x.iid || lcs(x.n))) x.slot = slots.get(x.iid || lcs(x.n)) }) }
+  bgWorn.sort((a, b) => slotOrder(itemById(a.iid) || {}) - slotOrder(itemById(b.iid) || {})).forEach(x => { const it = x.iid && itemById(x.iid); if (it) x.slot = defaultSlot(c, it) });
 
 }
 function gearFrom(text) { return ITEMS.filter(i => new RegExp("\\b" + i.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?\\b", "i").test(plainText(text))) }
@@ -685,6 +691,10 @@ const wactsOfItem = it => (Array.isArray(it && it.wacts) ? it.wacts : []).map(a 
 const wactText = a => `${a.n || "Weapon action"}${a.at || a.ap ? ` (${[a.at, a.ap && a.ap + " AP"].filter(Boolean).join(", ")})` : ""}${a.dmg || a.type ? `: ${[a.dmg, a.type].filter(Boolean).join(" ")}` : ""}${a.d ? `. ${a.d}` : ""}`;
 function defaultSlot(c, it) {
   const used = new Set(c.inv.map(x => x.slot).filter(Boolean));
+  /* a two-handed weapon in the main hand leaves no off hand; a shield or off-hand item leaves no room for one */
+  const inMain = c.inv.find(x => x.slot === "main"), mainIt = inMain && inMain.iid && itemById(inMain.iid);
+  if (mainIt && lcs(mainIt.slot) === "both hands") used.add("off");
+  if (lcs(it.slot) === "both hands" && used.has("off")) return "";
   const s = lcs(it.slot), want = s === "off-hand" ? ["off"] : s === "main hand" || s === "both hands" ? ["main"] : s === "main or off-hand" || it.cat === "Weapon" ? ["main", "off"] : /shield/i.test(it.n + " " + it.sub) ? ["off"] : s === "rings" ? ["ring1", "ring2"] : s === "other" ? ["other"] : SLOTS.some(x => x[0] === s) ? [s] : [];
   return want.find(k => !used.has(k)) || "";
 }
@@ -955,17 +965,52 @@ function snapshot(c) {
     details: { height: c.details.height ?? c.details.hw ?? "", weight: c.details.weight || "", age: c.details.age || "", gender: c.details.gender ?? c.details.pron ?? "", looks: c.details.looks || "", story: c.details.story || "" }
   };
 }
+/* a weapon's attack line, worked out from its properties: Finesse uses the better of STR and DEX, bows, crossbows and firearms use
+   DEX, everything else STR; the bonus adds the weapon category's rank when proficient */
+const DMG_TYPES = ["Acid", "Bludgeoning", "Cold", "Fire", "Force", "Lightning", "Necrotic", "Piercing", "Poison", "Psychic", "Radiant", "Slashing", "Thunder"];
+function weaponLine(c, it, ps) {
+  const p = str(it.props), dm = p.match(/(\d+d\d+|\b\d+\b)(?:\s*\+\s*\w+)?\s+([A-Za-z]+)/), range = p.match(/(?:Thrown|Ammunition)\s*\(([\d/]+)\)/i);
+  const ranged = /^(Bows|Crossbows|Firearms)$/.test(it.sub) || /ammunition/i.test(p);
+  const ab = ranged ? "dex" : /finesse/i.test(p) && mod(c, "dex") > mod(c, "str") ? "dex" : "str";
+  const cat = WEAPONS.includes(it.sub) ? it.sub : "", prof = cat ? ps.tiers("weapon", cat).size > 0 : false, rk = cat && prof ? rankOf(c, "w:" + cat, true) : 0;
+  return { cost: str(it.ap) ? `${it.ap} AP` : "", range: range ? range[1] + " ft" : /reach/i.test(p) ? "10 ft" : ranged ? "" : "5 ft", mod: sign(mod(c, ab) + rk), rank: prof ? "+" + rk : "—", ab: `${AB[ab].slice(0, 3).toUpperCase()} ${sign(mod(c, ab))}`,
+    dmg: dm && /d|^\d+$/.test(dm[1]) ? dm[1] : "", type: dm && DMG_TYPES.includes(dm[2][0].toUpperCase() + dm[2].slice(1).toLowerCase()) ? dm[2][0].toUpperCase() + dm[2].slice(1).toLowerCase() : "", crit: "×2" };
+}
 function attackRows(c) {
-  const rows = [];
-  c.inv.filter(x => x.slot === "main" || x.slot === "off").forEach(x => { const it = x.iid && itemById(x.iid); rows.push({ n: invName(x), cost: "", range: it ? (str(it.props).match(/\d+\s*\/\s*\d+\s*ft|\d+\s*ft/i) || [""])[0] : "", note: it ? it.actions : "" }) });
+  const rows = [], ps = profState(c);
+  c.inv.filter(x => x.slot === "main" || x.slot === "off").forEach(x => { const it = x.iid && itemById(x.iid); if (it && it.cat !== "Weapon") return; rows.push({ n: invName(x), ...(it ? weaponLine(c, it, ps) : {}) }) });
   const k = clsOf(c);
-  c.spells.forEach(n => { const s = SPELL_LIST.find(x => x.n === n); if (s) rows.push({ n: s.n, cost: str(s.f.cost), range: str(s.f.range), dmg: /^n\/?a$/i.test(str(s.f.dmg)) ? "" : str(s.f.dmg), rank: spellRankOf(c, s), spell: true, ab: k && k.cast ? sign(mod(c, k.cast)) : "" }) });
+  c.spells.forEach(n => { const s = SPELL_LIST.find(x => x.n === n); if (s) { const rk = spellRankOf(c, s), cm = k && k.cast ? mod(c, k.cast) : null; rows.push({ n: s.n, cost: str(s.f.cost), range: str(s.f.range), dmg: /^n\/?a$/i.test(str(s.f.dmg)) ? "" : str(s.f.dmg), rank: "+" + rk, spell: true, mod: cm != null ? `DC ${8 + cm + rk}` : "", ab: cm != null ? `${AB[k.cast].slice(0, 3).toUpperCase()} ${sign(cm)}` : "" }) } });
   return rows;
+}
+const armorPctN = x => { const it = x && x.iid && itemById(x.iid), m = it && str(it.props).match(/(\d+)\s*%\s*Armou?r/i); return m ? +m[1] : 0 };
+const armorPct = x => armorPctN(x) ? armorPctN(x) + "%" : "";
+/* weapon and combat actions the character can use: those on the weapons in hand, glossary actions whose Requirements is
+   one of the character's features (or that a chosen feature names), and actions with no requirement, which anyone can use */
+function knownActions(c, feats) {
+  const names = new Set(), text = feats.map(f => f.d).join("\n");
+  feats.forEach(f => { names.add(lcs(f.n)); String(f.n).split(":").forEach(p => names.add(lcs(p.trim()))) });
+  const out = [], seen = new Set(), push = a => { const k = lcs(a.n); if (!seen.has(k)) { seen.add(k); out.push(a) } };
+  c.inv.filter(x => x.slot === "main" || x.slot === "off").forEach(x => { const it = x.iid && itemById(x.iid); if (it) wactsOfItem(it).forEach(a => push({ n: a.n, kind: a.at || "Weapon Action", ap: a.ap, dmg: [a.dmg, a.type].filter(Boolean).join(" "), d: a.d, src: invName(x) })) });
+  const gl = (normGlossary(GLOSSARY) || []).filter(e => ["Weapon Actions", "Combat Actions", "General Actions"].includes(e.sec));
+  gl.forEach(e => {
+    const req = plainText(e.req || "").trim(), parts = req.split(/\s*(?:,|\bor\b)\s*/i).map(x => lcs(x.trim())).filter(Boolean);
+    const hit = !req && e.sec !== "Weapon Actions" ? "Everyone" : !req && e.sec === "Weapon Actions" ? "Everyone" : parts.find(p => names.has(p)) ? req : new RegExp("(^|[^A-Za-z])" + e.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "([^A-Za-z]|$)").test(text) ? "your features" : "";
+    if (hit) push({ n: e.n, kind: e.sec.replace(/s$/, ""), ap: e.ap || "", dmg: "", d: plainText([e.lead, ...e.fx].join(" ")), src: hit });
+  });
+  return out;
+}
+function actionsBlock(c, feats) {
+  const l = knownActions(c, feats); if (!l.length) return "";
+  const ap = v => !v ? "" : /^\d+$/.test(String(v).trim()) ? v + " AP" : v;
+  /* keep each action short: its first sentences up to about 200 characters (the full text is in its tooltip) */
+  const short = t => { t = String(t || "").replace(/\s+/g, " ").trim(); if (t.length <= 210) return t; const cut = t.slice(0, 210), dot = cut.lastIndexOf(". "); return (dot > 80 ? cut.slice(0, dot + 1) : cut.replace(/\s+\S*$/, "") + "…") };
+  return `<div class="sbox sacts"><div class="stab">Weapon & combat actions</div><div class="sactl">${l.map(a => `<div class="sact" title="${esc(a.d)}"><p class="sacth"><span class="pdn">${esc(a.n)}</span> <span class="sactm">${esc([a.kind, ap(a.ap), a.dmg].filter(Boolean).join(" · "))}</span><small>${esc(a.src === "Everyone" ? "Anyone" : "From " + a.src)}</small></p><p class="sactd">${esc(short(a.d))}</p></div>`).join("")}</div></div>`;
 }
 function renderSheet() {
   const c = cur, ps = profState(c), r = raceOf(c), s = subOf(c), k = clsOf(c), sk = subclsOf(c), b = bgOf(c), lg = langGrants(c);
   $("sheetName").textContent = str(c.name) || "Unnamed character";
-  const atk = attackRows(c), atkN = Math.max(8, atk.length);
+  const atk = attackRows(c), atkN = Math.max(4, atk.length + 1);
   const extras = [...(r ? r.extra : []), ...(s ? s.extra : [])];
   const lev = (a, b2) => { a = lcs(a); b2 = lcs(b2); const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b2.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b2.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b2[j - 1] ? 0 : 1)); return d[a.length][b2.length] };
   const extraFor = name => { const x = extras.find(e => lev(e.k, name) <= 2 || lcs(e.k).includes(lcs(name))); return x ? x.v : "" };
@@ -974,7 +1019,9 @@ function renderSheet() {
   const slotItems = Object.fromEntries(SLOTS.map(([key]) => [key, c.inv.find(x => x.slot === key)]));
   const wt = x => { const it = x && x.iid && itemById(x.iid); return it ? lbs(it.weight) * (x.qty || 1) : 0 };
   const totalWt = c.inv.reduce((n, x) => n + wt(x), 0);
-  const pack = c.inv.filter(x => !x.slot);
+  const pack = (() => { const m = new Map(); c.inv.filter(x => !x.slot).forEach(x => { const k = x.iid || "n:" + lcs(x.n); if (m.has(k)) m.get(k).qty = (m.get(k).qty || 1) + (x.qty || 1); else m.set(k, { ...x }) }); return [...m.values()] })();
+  /* armor %: every worn piece and shield ("Torso, Light, 7% Armor"); each full 10% gives +1 AC */
+  const worn = c.inv.filter(x => x.slot && x.slot !== "other"), armor = { pct: worn.reduce((n, x) => n + armorPctN(x), 0) }; armor.ac = Math.floor(armor.pct / 10);
   const left = startingWealth(c) - spentC(c);
   const coins = { g: Math.floor(Math.max(0, left) / 100), s: Math.floor(Math.max(0, left) % 100 / 10), c: Math.max(0, left) % 10 };
   const allFeats = sources(c).flatMap(x => x.feats.map(f => ({ ...f, src: x.label })));
@@ -994,45 +1041,47 @@ function renderSheet() {
 <div class="shead"><div class="slogo">${$("ccLogo").innerHTML}${c.details.portrait ? `<img class="sportrait" src="${esc(c.details.portrait)}" alt="">` : ""}</div>
 <div class="sid">${[["Character name", "name", c.name], ["Class & subclass", "cls", [k && k.n, sk && sk.n].filter(Boolean).join(" / ")], ["Race & subrace", "race", [r && r.n, s && s.n].filter(Boolean).join(" / ")], ["Background", "bg", b ? b.n : ""], ["Height & weight", "hw", [c.details.height ?? c.details.hw, c.details.weight].filter(x => str(x)).join(", ")], ["Experience", "xp", ""]].map(([l, key, v]) => `<label><span>${l}</span>${key === "name" ? `<input type="text" class="sf" data-name="1" value="${esc(c.name)}" aria-label="Character name">` : sf(c, "id:" + key, v, "", "", l)}</label>`).join("")}</div></div>
 <div class="sblock satk"><div class="sbar sgrid9"><span>Weapon / Spell / Actions</span><span>Action cost</span><span>Range</span><span>Mod / DC</span><span>Skill / Spell rank</span><span>Ability modifier</span><span>Damage</span><span>Damage type</span><span>Critical multiplier</span></div>
-${Array.from({ length: atkN }, (_, i) => { const a = atk[i] || {}; return `<div class="sgrid9 satr">${[["n", a.n], ["cost", a.cost], ["range", a.range], ["dc", a.spell && castMod != null ? 8 + castMod + a.rank : ""], ["rank", a.spell ? "+" + a.rank : ""], ["ab", a.ab], ["dmg", a.dmg], ["type", ""], ["crit", ""]].map(([col, v]) => sf(c, `atk${i}:${col}`, v || "", "", "", `Attack row ${i + 1} ${col}`)).join("")}</div>` }).join("")}</div>
+${Array.from({ length: atkN }, (_, i) => { const a = atk[i] || {}; return `<div class="sgrid9 satr">${[["n", a.n], ["cost", a.cost], ["range", a.range], ["dc", a.mod], ["rank", a.rank], ["ab", a.ab], ["dmg", a.dmg], ["type", a.type], ["crit", a.crit]].map(([col, v]) => sf(c, `atk${i}:${col}`, v || "", "", "", `Attack row ${i + 1} ${col}`)).join("")}</div>` }).join("")}</div>
+${actionsBlock(c, allFeats)}
 <div class="sbar sinit"><span>${STAR} Initiative ${sf(c, "init", sign(mod(c, "dex")), "sq", "", "Initiative")}</span><span>${STAR} Concentration ${sf(c, "conc", "", "sq", "", "Concentration")}</span></div>
 <div class="scols"><div class="sleft"><div class="ssub"><span>Ability scores & modifiers</span><div class="srowh"><span>Skills & saves</span><span>Prof.</span><span class="sscalew"><small>Skill rank</small>${RANK_SCALE}</span><span>Total bonus</span></div></div>${ABIL.map(abilBlock).join("")}</div>
 <div class="sright">
 <div class="sbox"><div class="stab">Action pool</div><div class="spool">${[["ap", "Action points"], ["mp", "Magic points"], ["ep", "Exhaustion points"], ["pool", "Max pool", row1 && row1.pool], ["ad", "Action die", row1 && row1.die]].map(([key, l, d]) => `<label class="scell"><span>${l}</span>${sf(c, key, d || "", "", "", l)}</label>`).join("")}</div></div>
 <div class="sbox"><div class="stab">Status</div><div class="sstatus">
-<div class="sac"><div class="sacr sach"><span>Armor class</span><span>AC</span></div>${["Natural", "Armored", "Shield"].map(x => `<label class="sacr"><span>${x}</span>${sf(c, "ac:" + x, "", "", "", x + " AC")}</label>`).join("")}<div class="sacr sacx"><span>Others</span>${sf(c, "ac:minus", "", "", "−", "Other AC minus")}${sf(c, "ac:plus", "", "", "+", "Other AC plus")}</div></div>
+<div class="sac"><div class="sacr sach"><span>Armor class</span><span>AC</span></div>${["Natural", "Armored", "Shield"].map(x => `<label class="sacr"><span>${x}</span>${sf(c, "ac:" + x, x === "Armored" && armor.pct ? "+" + armor.ac : "", "", x === "Armored" ? "incl. shield" : "", x + " AC")}</label>`).join("")}<div class="sacr sacx"><span>Others</span>${sf(c, "ac:minus", "", "", "−", "Other AC minus")}${sf(c, "ac:plus", "", "", "+", "Other AC plus")}</div></div>
 <div class="scell sduo"><label class="sduot"><span>Hit points</span>${sf(c, "hp", "", "big", "", "Current hit points")}</label><label class="sduob"><span>Max</span>${sf(c, "hpmax", hpOf(c) ?? "", "", "", "Maximum hit points")}</label></div>
 <div class="scell sduo"><label class="sduot"><span>Hit dice</span>${sf(c, "hd", k && k.hd ? k.hd : "", "big", "", "Hit dice")}</label><label class="sduob"><span>Total</span>${sf(c, "hdt", k && k.hd ? LEVEL : "", "", "", "Hit dice total")}</label></div>
 <div class="scell sdeath"><span>Death saves</span><small>Successes</small><span>${[0, 1, 2].map(i => sbox(c, "ds" + i, "Death save success " + (i + 1))).join("")}</span><small>Failures</small><span>${[0, 1, 2].map(i => sbox(c, "df" + i, "Death save failure " + (i + 1))).join("")}</span></div></div></div>
 <div class="scond"><div class="sbox sblack"><div class="stab">Conditions</div><div class="sconds">${conds.map(n => `<label>${sbox(c, "cond:" + n, n)}<span class="gl" tabindex="0" data-g="${esc(lcs(n))}">${esc(n)}</span></label>`).join("")}</div></div>
 <div class="stack"><div class="stbl"><div class="sth"><span>Movement</span><span>ft</span></div>${MOVES.map(m => `<label><span>${m}</span>${sf(c, "mv:" + m, extraFor(m === "Ground" ? "Speed" : m) || (m === "Ground" ? extraFor("Ground") : ""), "", "", m + " speed")}</label>`).join("")}</div>
 <div class="stbl"><div class="sth"><span>Passive skills</span><span>DC</span></div>${PASSIVE.map(n => `<label><span>${n}</span>${sf(c, "pv:" + n, passive + skillTotal(c, n, ps), "", "", "Passive " + n)}</label>`).join("")}</div></div></div>
-<div class="sbox snotes"><div class="stab">Notes</div><textarea class="sf" data-s="notes" rows="9" aria-label="Notes">${esc(sheetVal(c, "notes", ""))}</textarea></div>
+<div class="sbox snotes"><div class="stab">Notes</div><textarea class="sf" data-s="notes" rows="5" aria-label="Notes">${esc(sheetVal(c, "notes", ""))}</textarea></div>
 </div></div></section>`;
   const page2 = `<section class="spage"><div class="scols">
 <div class="sleft"><div class="sblock ssq"><div class="sbar">Proficiencies</div>
 <div class="srowh sprofh"><span>Category</span><span>Type</span><span>Prof.</span><span class="sscalew"><small>Skill rank</small>${RANK_SCALE}</span><span>Total</span></div>
 <div class="sgroup">Weapons</div>${WEAPONS.map(n => { const t = ps.tiers("weapon", n); return profRow("weapon", n, "w:" + n, t, untyped("weapon", n) ? [] : WTIERS, t.size > 0) }).join("")}
 <div class="sgroup">Armor</div>${ARMORS.map(n => { const t = ps.tiers("armor", n); return profRow("armor", n, "a:" + n, t, [], t.size > 0) }).join("")}
-<div class="sgroup">Trade skills</div>${TRADES.map(n => { const t = ps.trade(n); return profRow("trade", n, "t:" + n, t, TTIERS, !!t) }).join("")}</div>
-<div class="sbox"><div class="stab">Languages</div>${lines("lang", 6, [...lg.fixed.map(f => f.name), ...c.langs.filter(Boolean)])}</div>
+<div class="sgroup">Trade skills</div>${TRADES.filter(n => ps.trade(n)).map(n => { const t = ps.trade(n); return profRow("trade", n, "t:" + n, t, TTIERS, !!t) }).join("") || `<p class="snone">No trade skills yet.</p>`}</div>
+<div class="sbox"><div class="stab">Languages</div>${(() => { const l = [...lg.fixed.map(f => f.name), ...c.langs.filter(Boolean)]; return lines("lang", Math.max(3, l.length + 1), l) })()}</div>
 <div class="spair"><div class="stbl"><div class="sth"><span>Expertise</span><span>TC</span></div>${EXPERTISE.map(([n, sk2, ab]) => `<label><span>${n} <small>(${ab})</small></span>${sf(c, "ex:" + n, "", "", sign(skillTotal(c, sk2, ps)), n)}</label>`).join("")}</div>
 <div class="stbl"><div class="sth"><span>Senses</span><span>ft</span></div>${SENSES.map(n => `<label><span>${n}</span>${sf(c, "se:" + n, extraFor(n), "", "", n)}</label>`).join("")}</div></div>
 <div class="stbl swealth"><div class="sth"><span>Wealth</span><span>Total</span><span>Weight</span></div>${[["Copper", "c"], ["Silver", "s"], ["Gold", "g"], ["Platinum", "p"]].map(([n, key]) => `<label><span>${n}</span>${sf(c, "coin:" + key, key === "p" ? "" : coins[key], "", "", n)}${sf(c, "coinw:" + key, "", "", "", n + " weight")}</label>`).join("")}</div></div>
 <div class="sright"><div class="sblock ssq"><div class="sbar seqh"><span>Equipment</span><span>Armor (%)</span><span>Weight</span></div>
-${SLOTS.map(([key, l]) => { const x = slotItems[key]; return `<div class="sgrid3 seq"><span class="sslot">${l}</span>${sf(c, "eq:" + key, x ? invName(x) : "", "", "", l)}${sf(c, "eqa:" + key, "", "", "", l + " armor percent")}${sf(c, "eqw:" + key, x ? fmtLbs(wt(x)) : "", "", "", l + " weight")}</div>` }).join("")}
-<div class="seq stot2"><span class="stotl">Totals</span><label><span>Total (%)</span>${sf(c, "eqat", "", "", "", "Total armor percent")}</label><label><span>Total wgt.</span>${sf(c, "eqwt", fmtLbs(totalWt), "", "", "Total weight")}</label></div>
-<div class="seq stot2"><span class="stotl"></span><label><span>Total (AC)</span>${sf(c, "eqac", "", "", "", "Total AC")}</label><label><span>Capacity</span>${sf(c, "cap", "", "", "", "Carry capacity")}</label></div></div>
+${SLOTS.map(([key, l]) => { const x = slotItems[key]; return `<div class="sgrid3 seq"><span class="sslot">${l}</span>${sf(c, "eq:" + key, x ? invName(x) : "", "", "", l)}${sf(c, "eqa:" + key, x ? armorPct(x) || "" : "", "", "", l + " armor percent")}${sf(c, "eqw:" + key, x ? fmtLbs(wt(x)) : "", "", "", l + " weight")}</div>` }).join("")}
+<div class="seq stot2"><span class="stotl">Totals</span><label><span>Total (%)</span>${sf(c, "eqat", armor.pct ? armor.pct + "%" : "", "", "", "Total armor percent")}</label><label><span>Total wgt.</span>${sf(c, "eqwt", fmtLbs(totalWt), "", "", "Total weight")}</label></div>
+<div class="seq stot2"><span class="stotl"></span><label><span>Total (AC)</span>${sf(c, "eqac", armor.pct ? "+" + armor.ac : "", "", "", "Total AC")}</label><label><span>Capacity</span>${sf(c, "cap", "", "", "", "Carry capacity")}</label></div></div>
 <div class="sblock ssq"><div class="sbar sgrid4"><span>Inventory & gear</span><span>Magic</span><span>Weight</span><span>Worth</span></div>
-${Array.from({ length: Math.max(20, pack.length) }, (_, i) => { const x = pack[i], it = x && x.iid && itemById(x.iid); return `<div class="sgrid4 sinv">${sf(c, "inv" + i + ":n", x ? invName(x) + ((x.qty || 1) > 1 ? ` ×${x.qty}` : "") : "", "", "", "Item " + (i + 1))}${sf(c, "inv" + i + ":m", it && it.magic ? "Yes" : "", "", "", "Magic")}${sf(c, "inv" + i + ":w", x ? fmtLbs(wt(x)) : "", "", "", "Weight")}${sf(c, "inv" + i + ":v", it ? it.value : "", "", "", "Worth")}</div>` }).join("")}</div></div></div></section>`;
-  const page3 = `<section class="spage"><div class="scols">
-<div class="sleft"><div class="sblock"><div class="sbar sgrid5"><span>Rank</span><span>Spell name</span><span>Casting cost</span><span>Range</span><span>Damage</span></div>
-${Array.from({ length: Math.max(18, spells.length) }, (_, i) => { const sp = spells[i]; return `<div class="sgrid5 sspell">${sbox(c, "prep" + i, "Prepared " + (i + 1))}${[["rank", sp ? "+" + spellRankOf(c, sp) : ""], ["n", sp ? sp.n : ""], ["cost", sp ? sp.f.cost : ""], ["range", sp ? sp.f.range : ""], ["dmg", sp && !/^n\/?a$/i.test(str(sp.f.dmg)) ? sp.f.dmg : ""]].map(([col, v]) => sf(c, `sp${i}:${col}`, v ?? "", "", "", "Spell " + (i + 1) + " " + col)).join("")}</div>` }).join("")}</div>
-<div class="spair"><div class="stbl scast"><div class="sth"><span># of prepared spells</span></div>${sf(c, "prep", k ? fml(c, k.prepared) ?? "" : "", "", "", "Number of prepared spells")}<div class="sth"><span>${esc(k && k.source ? k.source : "Arcane")} major</span></div>${sf(c, "major", hasMajor(k) && c.major ? c.major + (oppOf(k, c.major) ? ` (opposes ${oppOf(k, c.major)})` : "") : "", "", "", "Major")}<div class="sth"><span>${esc(k && k.source ? k.source : "Arcane")} minor</span></div>${sf(c, "minor", hasMinor(k) ? c.minor : "", "", "", "Minor")}</div>
-<div class="stbl scast"><div class="sth"><span>Spellcasting ability</span></div>${sf(c, "cast", k && k.cast ? `${AB[k.cast]} (${sign(castMod)})` : "", "", "", "Spellcasting ability")}<div class="sth"><span>Spellcasting DC</span></div><p>8 + Ability Modifier + Spell Rank = DC${castMod != null ? `<br><b>8 ${sign(castMod)} + rank</b>` : ""}</p><div class="sth"><span>Spell attack bonus +/−</span></div><p>Ability Modifier + Spell Rank = Atk Bonus${castMod != null ? `<br><b>${sign(castMod)} + rank</b>` : ""}</p></div></div>
-<div class="sbox"><div class="stab">Spell components</div>${lines("comp", 8, spells.filter(x => str(x.f.mat) && !/^n\/?a$/i.test(str(x.f.mat))).map(x => `${x.n}: ${plainText(x.f.mat)}`))}</div></div>
-<div class="sright"><div class="sbox sfeat"><div class="stab">Features and traits</div><div class="sfeats">${allFeats.map(f => featBlock(f.n, f.d, rich, ` <small>(${esc(f.src)})</small>`)).join("") || `<p class="muted">Your race, class and background features show here.</p>`}</div>
-<textarea class="sf" data-s="traits" rows="8" placeholder="More features and traits" aria-label="More features and traits">${esc(sheetVal(c, "traits", ""))}</textarea></div></div></div></section>`;
+${Array.from({ length: Math.max(8, pack.length + 2) }, (_, i) => { const x = pack[i], it = x && x.iid && itemById(x.iid); return `<div class="sgrid4 sinv">${sf(c, "inv" + i + ":n", x ? invName(x) + ((x.qty || 1) > 1 ? ` ×${x.qty}` : "") : "", "", "", "Item " + (i + 1))}${sf(c, "inv" + i + ":m", it && it.magic ? "Yes" : "", "", "", "Magic")}${sf(c, "inv" + i + ":w", x ? fmtLbs(wt(x)) : "", "", "", "Weight")}${sf(c, "inv" + i + ":v", it ? it.value : "", "", "", "Worth")}</div>` }).join("")}</div></div></div></section>`;
+  const caster = !!(k && k.source) || spells.length > 0;
+  const featBox = `<div class="sbox sfeat"><div class="stab">Features and traits</div><div class="sfeats">${allFeats.map(f => featBlock(f.n, f.d, rich, ` <small>(${esc(f.src)})</small>`)).join("") || `<p class="muted">Your race, class and background features show here.</p>`}</div>
+<textarea class="sf" data-s="traits" rows="4" placeholder="More features and traits" aria-label="More features and traits">${esc(sheetVal(c, "traits", ""))}</textarea></div>`;
+  const page3 = !caster ? `<section class="spage sp3">${featBox}</section>` : `<section class="spage sp3">
+<div class="sblock"><div class="sbar sgrid5"><span>Rank</span><span>Spell name</span><span>Casting cost</span><span>Range</span><span>Damage</span></div>
+${Array.from({ length: Math.max(6, spells.length + 2) }, (_, i) => { const sp = spells[i]; return `<div class="sgrid5 sspell">${sbox(c, "prep" + i, "Prepared " + (i + 1))}${[["rank", sp ? "+" + spellRankOf(c, sp) : ""], ["n", sp ? sp.n : ""], ["cost", sp ? sp.f.cost : ""], ["range", sp ? sp.f.range : ""], ["dmg", sp && !/^n\/?a$/i.test(str(sp.f.dmg)) ? sp.f.dmg : ""]].map(([col, v]) => sf(c, `sp${i}:${col}`, v ?? "", "", "", "Spell " + (i + 1) + " " + col)).join("")}</div>` }).join("")}</div>
+<div class="scols"><div class="sleft"><div class="spair"><div class="stbl scast"><div class="sth"><span># of prepared spells</span></div>${sf(c, "prep", k ? fml(c, k.prepared) ?? "" : "", "", "", "Number of prepared spells")}<div class="sth"><span>${esc(k && k.source ? k.source : "Arcane")} major</span></div>${sf(c, "major", hasMajor(k) && c.major ? c.major + (oppOf(k, c.major) ? ` (opposes ${oppOf(k, c.major)})` : "") : "", "", "", "Major")}<div class="sth"><span>${esc(k && k.source ? k.source : "Arcane")} minor</span></div>${sf(c, "minor", hasMinor(k) ? c.minor : "", "", "", "Minor")}</div>
+<div class="stbl scast"><div class="sth"><span>Spellcasting ability</span></div>${sf(c, "cast", k && k.cast ? `${AB[k.cast]} (${sign(castMod)})` : "", "", "", "Spellcasting ability")}<div class="sth"><span>Spellcasting DC</span></div><p>8 + Ability Modifier + Spell Rank = DC${castMod != null ? `<br><b>8 ${sign(castMod)} + rank</b>` : ""}</p><div class="sth"><span>Spell attack bonus +/−</span></div><p>Ability Modifier + Spell Rank = Atk Bonus${castMod != null ? `<br><b>${sign(castMod)} + rank</b>` : ""}</p></div></div></div><div class="sright"><div class="sbox"><div class="stab">Spell components</div>${lines("comp", Math.max(3, spells.filter(x => str(x.f.mat) && !/^n\/?a$/i.test(str(x.f.mat))).length + 1), spells.filter(x => str(x.f.mat) && !/^n\/?a$/i.test(str(x.f.mat))).map(x => `${x.n}: ${plainText(x.f.mat)}`))}</div></div></div>
+${featBox}</section>`;
   $("sheetPages").innerHTML = page1 + page2 + page3;
 }
 $("sheetPages").addEventListener("input", ev => {
