@@ -136,6 +136,8 @@ def feature_sources():
     for r in read_races().get("races", []):
         for f in r.get("feats", []) or []:
             put(f.get("n", "").strip(), {"n": r.get("n", ""), "href": "races.html#" + r.get("id", "")})
+    for f in read_feats().get("feats", []):
+        put(f.get("n", "").strip(), {"n": "Feat", "href": "feats.html#" + f.get("id", "")})
     for b in read_backgrounds().get("backgrounds", []):
         for f in b.get("feats", []) or []:
             put(f.get("n", "").strip(), {"n": b.get("n", "") + " background", "href": "backgrounds.html#" + b.get("id", "")})

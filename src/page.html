@@ -685,7 +685,10 @@ function tableHTML(src,fn){
 function blocks(t,fn,cls){
   fn=fn||richInline;const tabs=[];
   t=String(t||"").replace(TABLE_RE,(m,x)=>{tabs.push(x);return`\n\n\u0001${tabs.length-1}\u0001\n\n`});
-  return t.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^\u0001(\d+)\u0001$/);return m?tableHTML(tabs[+m[1]],fn):`<p${cls?` class="${cls}"`:""}>${fn(x)}</p>`}).join("");
+  /* lines starting with "- " become a bulleted list */
+  const para=x=>{if(!/^- /m.test(x))return`<p${cls?` class="${cls}"`:""}>${fn(x)}</p>`;let out="",txt=[],li=[];const end=()=>{if(txt.length){out+=`<p${cls?` class="${cls}"`:""}>${fn(txt.join("\n"))}</p>`;txt=[]}if(li.length){out+=`<ul class="tlist">${li.map(l=>`<li>${fn(l)}</li>`).join("")}</ul>`;li=[]}};
+    x.split("\n").forEach(l=>{if(/^- /.test(l)){if(txt.length){const t=txt;txt=[];out+=`<p${cls?` class="${cls}"`:""}>${fn(t.join("\n"))}</p>`}li.push(l.slice(2).trim())}else{if(li.length)end();txt.push(l)}});end();return out};
+  return t.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^\u0001(\d+)\u0001$/);return m?tableHTML(tabs[+m[1]],fn):para(x)}).join("");
 }
 function paras(t,cls){return blocks(t,richInline,cls)}
 /* a feature: its red name, then its text; the first paragraph runs on after the name */

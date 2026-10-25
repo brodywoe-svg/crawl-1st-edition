@@ -391,6 +391,11 @@ LIST_PAGES = {
 }
 
 
+FEAT_TOOLS = """
+  <select id="fcat" aria-label="Show category"><option value="">All categories</option></select>
+  <select id="fview" aria-label="Group feats"><option value="cat">Group by category</option><option value="prog">Group by progression</option><option value="none">No groups (A to Z)</option></select>"""
+
+
 def list_shell(page, logo_svg, admin_modal):
     title, intro, placeholder, add = LIST_PAGES[page]
     return f"""
@@ -401,7 +406,7 @@ def list_shell(page, logo_svg, admin_modal):
   <p id="lintro">{intro}</p>
 </header>
 <div class="cbar">
-  <input id="cq" type="search" placeholder="{placeholder}" aria-label="{placeholder}" autocomplete="off">
+  <input id="cq" type="search" placeholder="{placeholder}" aria-label="{placeholder}" autocomplete="off">{FEAT_TOOLS if page == 'feats' else ''}
   <span class="ccount" id="ccount"></span>
   <button type="button" class="btn solid" id="gAdd" hidden>{add}</button>
 </div>
@@ -836,6 +841,17 @@ CONDITIONS_CSS = """
 @media (max-width:760px){.rdet{grid-template-columns:1fr}}
 /* races */
 .rlist2{display:grid;gap:14px}
+/* Feats page: each category or progression line in a rounded box */
+#fcat,#fview{font:600 .9rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:8px 10px}
+.fgroup{border:2px solid var(--ink);border-radius:18px;padding:14px 14px 16px;margin:0 0 22px;background:color-mix(in srgb,var(--paper) 92%,var(--ink))}
+.fgh{margin:0 0 12px;font-size:1.1rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.fgh small{font-size:.8rem;font-weight:700;color:var(--muted)}
+.fprog .fstep{margin-left:calc(var(--d,0) * 22px);position:relative}
+.fprog .fstep+.fstep::before{content:"↳";position:absolute;left:-18px;top:14px;font-weight:800;color:var(--muted)}
+.ctag.ptag{background:#b8860b;border-color:#b8860b;color:#fff}
+ul.tlist{margin:.2em 0 .6em;padding-left:1.3em}
+ul.tlist li{margin:.15em 0}
+@media (max-width:600px){.fprog .fstep{margin-left:calc(var(--d,0) * 10px)}#fcat,#fview{flex:1 1 45%}}
 .subs{display:grid;gap:10px;margin-top:6px}
 .subs>h3{margin:4px 0 0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .subr{scroll-margin-top:calc(var(--navh,0px) + 80px);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;display:grid;gap:6px;background:var(--page)}

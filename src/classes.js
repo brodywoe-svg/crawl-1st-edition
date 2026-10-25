@@ -73,7 +73,7 @@ function subHTML(s, k) {
 }
 function cardHTML(p, q) {
   if (editing.has(p._id)) return `<section class="cond" id="${esc(p.id)}"><div class="chead"><span>${p._new ? "New " + WHAT : "Editing " + esc(p.n)}</span></div><div class="cbody">${form(p, IS_CLS ? "class" : IS_FEAT ? "feat" : "bg")}</div></section>`;
-  const tag = IS_CLS && p.source ? `<span class="ctag">${esc(p.source)} magic</span>` : IS_FEAT && p.cat ? `<span class="ctag">${esc(p.cat)}</span>` : "";
+  const tag = IS_CLS && p.source ? `<span class="ctag">${esc(p.source)} magic</span>` : IS_FEAT ? (p.badge ? `<span class="ctag ptag">Playtest</span>` : "") + (p.cat ? `<span class="ctag">${esc(p.cat)}</span>` : "") : "";
   const subs = !IS_CLS ? [] : q && !textOf({ ...p, subs: [] }).includes(q) ? p.subs.filter(s => editing.has(s._id) || textOf(s).includes(q)) : p.subs;
   return `<section class="cond" id="${esc(p.id)}"><h2 class="chead"><span>${esc(p.n)}</span><span class="chr">${tag}${ADMIN ? `<button type="button" class="gedit" data-act="edit" data-id="${p._id}">Edit</button>` : ""}</span></h2>
 <div class="cbody">${IS_CLS ? classBody(p) : IS_FEAT ? featBody(p) : bgBody(p)}
@@ -142,6 +142,7 @@ ${fld("oppCost", "Skill points per Rank for an Opposing School spell", "", inp("
 <div class="glab">Schools and their Opposing Schools <small>The schools a player can pick as their Major or Minor.</small></div><datalist id="schoolNames">${SCHOOLS.map(s => `<option value="${esc(s)}">`).join("")}</datalist><div class="schlist">${d.schools.map(schoolRowHTML).join("")}</div>
 <div class="gbtns"><button type="button" class="btn" data-act="sadd">Add a school</button><button type="button" class="btn" data-act="sfill">Add the schools from the spell list</button></div>` + extras;
   else if (kind === "feat") body = fld("n", "Feat name", "", inp("n", "e.g. Shield Master")) +
+    `<label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> Playtest <small>(shows a Playtest tag on the feat)</small></label>` +
     `<div class="fgrid">${fld("cat", "Category", "Optional, e.g. Combat, Magic, Skill, General", `<input type="text" id="${id("cat")}" data-k="cat" value="${esc(d.cat)}" placeholder="e.g. Combat" list="featCats" autocomplete="off">`)}${fld("pre", "Prerequisite", "Optional", inp("pre", "e.g. Strength 13 or higher, 4th level"))}</div>` +
     `<datalist id="featCats">${[...new Set(["General", "Combat", "Magic", "Skill", ...list.map(x => x.cat).filter(Boolean)])].map(c => `<option value="${esc(c)}">`).join("")}</datalist>` +
     fld("desc", "What the feat does", "Leave a blank line between paragraphs.", `<textarea id="${id("desc")}" data-k="desc" rows="6">${esc(d.desc)}</textarea>`) + extras;
@@ -154,7 +155,7 @@ ${fld("oppCost", "Skill points per Rank for an Opposing School spell", "", inp("
 }
 const own = (f, sel) => [...f.querySelectorAll(sel)].filter(el => el.closest(".rform") === f);
 function readForm(f) {
-  const d = {}; own(f, "[data-k]").forEach(el => { d[el.dataset.k] = el.value });
+  const d = {}; own(f, "[data-k]").forEach(el => { d[el.dataset.k] = el.type === "checkbox" ? el.checked : el.value });
   d.feats = own(f, ".prow").map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value, lv: r.querySelector(".pl") ? r.querySelector(".pl").value : "",
     ...(r.querySelector(".foptbox") ? { opts: [...r.querySelectorAll(".forow")].map(o => ({ n: o.querySelector(".fon").value, d: o.querySelector(".fod").value })), pick: r.querySelector(".fpick").value, more: r.querySelector(".fmore").value } : {}) }));
   d.extra = own(f, ".xrow").map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
@@ -179,12 +180,59 @@ function render() {
   shown.sort((a, b) => (a._new ? -1 : b._new ? 1 : 0) || byName(a, b));
   const n = list.filter(p => !p._new).length;
   $("ccount").textContent = `${n} ${n === 1 ? WHAT : WHATS}`;
-  $("clist").innerHTML = ITEM_LIST() + (shown.length ? `<div class="rlist2">${shown.map(p => cardHTML(p, q)).join("")}</div>` : "");
+  if (IS_FEAT) { fillFeatCats(); const c = featCatFilter(); if (c) shown = shown.filter(p => editing.has(p._id) || (p.cat || "Uncategorized") === c) }
+  $("clist").innerHTML = ITEM_LIST() + (!shown.length ? "" : IS_FEAT ? featGroupsHTML(shown, q) : `<div class="rlist2">${shown.map(p => cardHTML(p, q)).join("")}</div>`);
   markTips($("clist"), PAGE_TIPS);
   sideShow(editing.size > 0);
   $("cempty").hidden = shown.length > 0;
   $("cempty").textContent = n ? "Nothing matches. Try a different word, or clear the search." : `No ${WHATS} yet.` + (ADMIN ? ` Click Add ${WHAT} to create the first one.` : "");
   $("gAdd").hidden = !ADMIN;
+}
+/* ---------------------------------------------------------------- Feats page: filter by category, group by category or by progression
+   (a feat whose prerequisite names another feat follows it: Head Honcho, then Fear Mongerer, then Infamous). Each group sits in a rounded box. */
+const FEAT_CAT_ORDER = ["Aggro", "Control", "Roleplay", "Fortitude", "Weapon Mastery", "Spellcraft"];
+let featView = "cat";
+try { featView = localStorage.getItem("crawl-feat-view") || "cat" } catch (e) { }
+const featCatFilter = () => $("fcat") ? $("fcat").value : "";
+const catRank = c => { const i = FEAT_CAT_ORDER.indexOf(c); return i < 0 ? (c === "Uncategorized" ? 999 : 100) : i };
+const featCats = () => [...new Set(list.filter(p => !p._new).map(p => p.cat || "Uncategorized"))].sort((a, b) => catRank(a) - catRank(b) || a.localeCompare(b));
+function fillFeatCats() { const el = $("fcat"); if (!el) return; const v = el.value, opts = featCats(); el.innerHTML = `<option value="">All categories</option>` + opts.map(c => `<option${c === v ? " selected" : ""}>${esc(c)}</option>`).join(""); if (v && !opts.includes(v)) el.value = "" }
+/* the feats a feat's prerequisite names. A name that's also a background ("Executioner") doesn't count when the prerequisite is about backgrounds. */
+function featParents(f, all) {
+  const pre = String(f.pre || ""), bgNames = new Set((typeof BACKGROUNDS !== "undefined" && BACKGROUNDS ? arr(BACKGROUNDS.backgrounds) : []).map(b => lcs(b.n)));
+  return all.filter(g => g !== f && g.n && new RegExp("(^|[^a-z])" + g.n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "([^a-z]|$)", "i").test(pre) && !(bgNames.has(lcs(g.n)) && /background/i.test(pre)));
+}
+function featLines(shown) {
+  const all = list.filter(p => !p._new), par = new Map(all.map(f => [f, featParents(f, all)])), grp = new Map(all.map(f => [f, f]));
+  const top = f => { while (grp.get(f) !== f) f = grp.get(f); return f };
+  all.forEach(f => par.get(f).forEach(g => { const a = top(f), b = top(g); if (a !== b) grp.set(a, b) }));
+  const depth = f => { const p = par.get(f) || []; return p.length ? 1 + Math.max(...p.map(depth)) : 0 };
+  const lines = new Map(); shown.forEach(f => { const k = grp.has(f) ? top(f) : f; if (!lines.has(k)) lines.set(k, []); lines.get(k).push(f) });
+  const chains = [], solo = [];
+  lines.forEach(l => { const members = all.filter(f => top(f) === top(l[0])); if (members.length > 1) chains.push(l.sort((a, b) => depth(a) - depth(b) || byName(a, b))); else solo.push(...l) });
+  chains.sort((a, b) => catRank(a[0].cat || "Uncategorized") - catRank(b[0].cat || "Uncategorized") || byName(a[0], b[0]));
+  return { chains, solo: solo.sort(byName), depth };
+}
+const featBox = (title, sub, cards, cls) => `<section class="fgroup${cls ? " " + cls : ""}"><h2 class="fgh">${title}${sub ? ` <small>${sub}</small>` : ""}</h2><div class="rlist2">${cards}</div></section>`;
+function featGroupsHTML(shown, q) {
+  const cards = l => l.map(p => cardHTML(p, q)).join(""), count = l => `${l.length} ${l.length === 1 ? "feat" : "feats"}`;
+  const editingNew = shown.filter(p => p._new); shown = shown.filter(p => !p._new);
+  const lead = editingNew.length ? `<div class="rlist2">${cards(editingNew)}</div>` : "";
+  if (featView === "none" || q) return lead + (shown.length ? `<div class="rlist2">${cards(shown.sort(byName))}</div>` : "");
+  if (featView === "prog") {
+    const { chains, solo, depth } = featLines(shown);
+    /* the line's steps: feats at the same step are listed together ("Tough → Death Defying, Healthy") */
+    const steps = l => [...new Set(l.map(depth))].sort((a, b) => a - b).map(d => l.filter(f => depth(f) === d).map(f => f.n).join(", ")).join(" → ");
+    return lead + chains.map(l => featBox(esc(steps(l)), esc([...new Set(l.map(f => f.cat).filter(Boolean))].join(", ") + " · " + count(l)), l.map(f => `<div class="fstep" style="--d:${depth(f)}">${cardHTML(f, q)}</div>`).join(""), "fprog")).join("") +
+      (solo.length ? featBox("Standalone feats", esc("No other feat leads to or from these · " + count(solo)), cards(solo)) : "");
+  }
+  const byCat = new Map(); shown.forEach(f => { const c = f.cat || "Uncategorized"; if (!byCat.has(c)) byCat.set(c, []); byCat.get(c).push(f) });
+  return lead + [...byCat.entries()].sort((a, b) => catRank(a[0]) - catRank(b[0]) || a[0].localeCompare(b[0])).map(([c, l]) => featBox(esc(c), count(l), cards(l.sort(byName)))).join("");
+}
+if (IS_FEAT && $("fcat")) {
+  $("fview").value = featView;
+  $("fcat").addEventListener("change", render);
+  $("fview").addEventListener("change", () => { featView = $("fview").value; try { localStorage.setItem("crawl-feat-view", featView) } catch (e) { } render() });
 }
 function markDirty() {
   dirty = JSON.stringify(clean()) !== original;

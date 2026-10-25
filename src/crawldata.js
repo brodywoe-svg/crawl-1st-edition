@@ -118,7 +118,7 @@ const stripIds = ({ _id, _new, ...x }) => x;
 const cleanClasses = list => ({ v: 1, classes: list.filter(c => !c._new).map(c => ({ ...stripIds(c), subs: c.subs.filter(s => !s._new).map(stripIds).sort(byName) })).sort(byName) });
 const cleanBgs = list => ({ v: 1, backgrounds: list.filter(b => !b._new).map(stripIds).sort(byName) });
 /* feats (crawl-feats.json): name, category, prerequisite, description, extra details */
-function normFeat(p) { p = p || {}; return { id: str(p.id) || newId("feat"), n: str(p.n), cat: str(p.cat), pre: str(p.pre), desc: str(p.desc), extra: extrasOf(p.extra), _id: ++uid } }
+function normFeat(p) { p = p || {}; return { id: str(p.id) || newId("feat"), n: str(p.n), cat: str(p.cat), pre: str(p.pre), desc: str(p.desc), extra: extrasOf(p.extra), ...(p.badge === true || p.badge === "on" ? { badge: true } : {}), _id: ++uid } }
 const normFeats = j => arr(j && j.feats).filter(f => f && str(f.n)).map(normFeat).sort(byName);
 const cleanFeats = list => ({ v: 1, feats: list.filter(f => !f._new).map(stripIds).sort(byName) });
 /* every class gains a feat at every Nth level (Character Creator rules: featEvery, 0 = off) */

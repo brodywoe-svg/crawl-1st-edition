@@ -1,4 +1,309 @@
 {
  "v": 1,
- "feats": []
+ "feats": [
+  {
+   "id": "feat-archery-master",
+   "n": "Archery Master",
+   "cat": "Weapon Mastery",
+   "pre": "Bow Mastery",
+   "desc": "You've loosed so many arrows that the bow feels like part of your arm. No wall, crate or shield is cover enough, and anything you hit stays where it fell. You gain the following benefits while wielding a Bow:\n- You score a critical hit on a roll of 18, 19 or 20.\n- Your ranged attacks with a Bow ignore half cover and three-quarters cover.\n- You learn the Crippling Shot Weapon Action.\n\n[color=#8e171c]Crippling Shot[/color] (Weapon Action). You can expend 3 AP to make a ranged attack with a Bow. On a hit, the target must succeed on a Dexterity saving throw (DC 8 + your Dexterity modifier + your Bows Rank) or its Ground Speed is halved until the start of its next turn.",
+   "extra": []
+  },
+  {
+   "id": "feat-axe-marauder",
+   "n": "Axe Marauder",
+   "cat": "Weapon Mastery",
+   "pre": "Axe Mastery",
+   "desc": "Your axe doesn't just cut, it tears. You've learned to drag the edge through a wound so it opens wide and won't close, leaving your foes to bleed out with every step they take. You gain the following benefits while wielding an Axe:\n- You learn the Hemorrhage Weapon Action.\n- Your Axe can't be knocked out of your grip or forcibly taken from your hand.\n\n[color=#8e171c]Hemorrhage[/color] (Weapon Action). You can expend 3 AP to make a melee attack with an Axe. On a hit, the target must succeed on a Constitution saving throw (DC 8 + your Strength modifier + your Axes Rank) or become Bleeding.",
+   "extra": []
+  },
+  {
+   "id": "feat-axe-mastery",
+   "n": "Axe Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Axes",
+   "desc": "You've trained properly with the axe, learning how much weight to put behind a swing and exactly when to let it fly. You gain the following benefits while wielding an Axe:\n- You score a critical hit on a roll of 19 or 20.\n- You can throw any Axe, even one without the Thrown property. Its range is a number of feet equal to 5 × your Strength modifier (minimum 5 feet).\n- You learn the Sunder Weapon Action.\n\n[color=#8e171c]Sunder[/color] (Weapon Action). When you make a melee attack with an Axe, you can expend 1 additional Action Point (AP). On a hit, if the target is a Moderately Armored Humanoid, its AC is reduced by 2 until the next time it takes damage.",
+   "extra": []
+  },
+  {
+   "id": "feat-black-widow",
+   "n": "Black Widow",
+   "cat": "Roleplay",
+   "pre": "Man-Eater, Charisma 17 or higher, female character",
+   "desc": "Your web has only grown wider. Men walk into it willingly, and few ever walk back out. The following benefits replace those of Man-Eater:\n- When you hit a male Humanoid with a weapon attack, you deal an extra 4 damage.\n- You gain a +4 bonus to Charisma checks made to seduce, distract or persuade male Humanoids.",
+   "extra": []
+  },
+  {
+   "id": "feat-blade-mastery",
+   "n": "Blade Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Blades, Dexterity 17 or higher",
+   "desc": "You've been taught the proper methods and techniques for fighting with a knife: quick cuts, close quarters, and knowing exactly where to cut so a foe can't shake it off. You gain the following benefits while wielding a Blade:\n- You score a critical hit on a roll of 19 or 20.\n- The first attack you make with a Blade on each of your turns costs only 1 AP.\n- You learn the Sabotage Weapon Action.\n\n[color=#8e171c]Sabotage[/color] (Weapon Action). You can expend 3 AP to make a melee attack with a Blade. On a hit, the target's next saving throw is reduced by an amount equal to the damage this attack dealt.",
+   "extra": []
+  },
+  {
+   "id": "feat-blowgun-mastery",
+   "n": "Blowgun Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Miscellaneous weapons",
+   "desc": "Most people see a blowgun as a child's toy. You've learned otherwise: a silent puff of breath, and a needle that finds the one place it was never meant to go. You gain the following benefits while wielding a Blowgun:\n- You score a critical hit on a roll of 19 or 20.\n- Your Blowgun deals 1d4 piercing damage instead of 1.\n- Your Critical Multiplier with a Blowgun is ×3.",
+   "extra": []
+  },
+  {
+   "id": "feat-bow-mastery",
+   "n": "Bow Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Bows",
+   "desc": "You've received proper training with the bow: how to breathe, how to draw, and how to have an arrow on the string before your foe has finished moving. You gain the following benefits while wielding a Bow:\n- You score a critical hit on a roll of 19 or 20.\n- Your ranged attacks against Prone creatures don't have Disadvantage.\n- The first attack you make with a Bow on each of your turns costs only 1 AP.",
+   "extra": []
+  },
+  {
+   "id": "feat-confirmed-bachelor",
+   "n": "Confirmed Bachelor",
+   "cat": "Roleplay",
+   "pre": "Lady Killer, Charisma 17 or higher, male character",
+   "desc": "Time has only made you more irresistible. In the eyes of every lady in the room, you're the most eligible bachelor there, and you know it. The following benefits replace those of Lady Killer:\n- When you hit a female Humanoid with a weapon attack, you deal an extra 4 damage.\n- You gain a +4 bonus to Charisma checks made to seduce, distract or persuade female Humanoids.",
+   "extra": []
+  },
+  {
+   "id": "feat-crossbow-mastery",
+   "n": "Crossbow Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Crossbows",
+   "desc": "You've drilled the crank, the latch and the trigger until your hands do it without thinking. Up close or at a distance, every bolt you loose finds its mark, and a small crossbow is always within reach. You gain the following benefits while wielding a Crossbow:\n- You score a critical hit on a roll of 19 or 20.\n- Ranged weapon attacks you make with a Crossbow don't have Disadvantage when you're targeting a creature within 5 feet of you.\n- You learn the Point Blank Weapon Action.\n\n[color=#8e171c]Point Blank[/color] (Weapon Action). After you make a melee attack on your turn, you can draw a loaded Hand Crossbow into your off hand and make a ranged attack with it against a creature within 5 feet of you for 1 AP instead of its normal cost.",
+   "extra": []
+  },
+  {
+   "id": "feat-cudgel-mastery",
+   "n": "Cudgel Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Cudgels",
+   "desc": "You've trained properly with bludgeoning weapons and learned how to put the full weight of a blow behind them. You gain the following benefits while wielding a Cudgel:\n- You score a critical hit on a roll of 19 or 20.\n- Your Opportunity Attacks have Advantage.\n- You learn the Toppling Blow Weapon Action.\n\n[color=#8e171c]Toppling Blow[/color] (Weapon Action). When you make a melee attack with a Cudgel, you can expend 1 additional Action Point (AP). On a hit, the target must succeed on a Strength saving throw (DC 8 + your Strength modifier + your Cudgels Rank) or fall Prone. A Heavily Armored target has Disadvantage on this save. You can use Toppling Blow only once per turn.",
+   "extra": []
+  },
+  {
+   "id": "feat-death-defying",
+   "n": "Death Defying",
+   "cat": "Fortitude",
+   "pre": "Constitution 15 or higher, or the Tough feat",
+   "desc": "When the light fades and the cold creeps in, something in you refuses to let go. Battered and bloodied, you always find your way back to the waking world. You gain the following benefits:\n- You have Advantage on death saving throws.\n- When you take damage from a critical hit while you have 0 hit points, you mark only one failed death saving throw instead of two.",
+   "extra": []
+  },
+  {
+   "id": "feat-desensitized",
+   "n": "Desensitized",
+   "cat": "Aggro",
+   "pre": "Sellsword, Deserter, Executioner or Pit Fighter background",
+   "desc": "You've seen what people do to one another when no one is left to stop them, and some of it you did yourself. The screams stopped bothering you a long time ago. That's what bothers you most. You gain the following benefits and drawbacks:\n- When you hit a Humanoid with a weapon or spell attack, you deal an extra 2 damage.\n- While you have less than half your maximum hit points, you have Advantage on Wisdom saving throws.\n- You have a −2 penalty to Charisma checks and Charisma saving throws.",
+   "extra": []
+  },
+  {
+   "id": "feat-executioner",
+   "n": "Executioner",
+   "cat": "Aggro",
+   "pre": "Have killed at least 25 Humanoids",
+   "desc": "Twenty-five. Twenty-six. Twenty-seven. You stopped saying the number out loud a long time ago, but you never stopped counting. Every body that hits the floor is just one more tally, and you're already looking for the next.\n\nYou learn the Execution Combat Action.\n\n[color=#8e171c]Execution[/color] (Combat Action). You can use this Combat Action only if you've reduced a creature to 0 hit points this turn. Your Ground Speed increases by 10 feet until the end of your turn, and your next melee weapon attack this turn costs 0 AP. You can use Execution only once per turn.",
+   "extra": []
+  },
+  {
+   "id": "feat-fear-mongerer",
+   "n": "Fear Mongerer",
+   "cat": "Control",
+   "pre": "Head Honcho, Strength 17 or higher, Charisma 17 or higher",
+   "desc": "You're the warrior men whisper about around campfires. Those who raise a blade against you learn quickly why, and the survivors make sure everyone else hears about it. You gain the following benefits:\n- When you reduce a Humanoid to 0 hit points with a melee attack, each Humanoid of your choice within 15 feet of you that can see it must succeed on a Wisdom saving throw (DC 8 + your Charisma modifier + your Intimidation Rank) or be Frightened of you until the end of its next turn.\n- Head Honcho's extra damage against Frightened creatures increases from 2 to your Charisma modifier (minimum 2), and applies to any creature that's Frightened of you, not just Humanoids.\n- A creature that succeeds on a save against your Intimidate or this feat is immune to both until the combat ends.",
+   "extra": []
+  },
+  {
+   "id": "feat-firearm-mastery",
+   "n": "Firearm Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Firearms",
+   "desc": "You know your firearms inside and out: how to pack the powder, seat the shot and keep the flint dry. Your guns fire when you need them to, and there's always a loaded pistol at your hip. You gain the following benefits while wielding a Firearm:\n- You score a critical hit on a roll of 19 or 20.\n- The Misfire score of any Firearm you use is reduced by 1. A Firearm whose Misfire score is reduced to 0 can't misfire.\n- Ranged weapon attacks you make with a Firearm don't have Disadvantage when you're targeting a creature within 5 feet of you.\n- You learn the Point Blank Weapon Action.\n\n[color=#8e171c]Point Blank[/color] (Weapon Action). After you make a melee attack on your turn, you can draw a loaded one-handed Firearm (any Firearm without the Two-Handed property) into your off hand and make a ranged attack with it against a creature within 5 feet of you for 1 AP instead of its normal cost.",
+   "extra": []
+  },
+  {
+   "id": "feat-head-honcho",
+   "n": "Head Honcho",
+   "cat": "Control",
+   "pre": "Strength 15 or higher, Charisma 15 or higher",
+   "desc": "Every pack has someone at the top, and you clawed your way there with your fists and your nerve. One look from you is enough to make lesser men remember their place. You gain the following benefits:\n- You learn the Intimidate Combat Action.\n- Humanoids can't make you Frightened, and you have Advantage on checks and saving throws to resist Intimidation from Humanoids.\n- You gain a +2 bonus to Charisma (Intimidation) checks made against Humanoids.\n- When you hit a Humanoid that is Frightened of you, you deal an extra 2 damage.\n\n[color=#8e171c]Intimidate[/color] (Combat Action). You can expend 1 AP to threaten up to three Humanoids within 15 feet of you that can see and hear you. Each must succeed on a Wisdom saving throw (DC 8 + your Charisma modifier + your Intimidation Rank) or be Frightened of you until the end of its next turn. A creature that succeeds is immune to your Intimidate until the combat ends. You can use Intimidate only once per turn.",
+   "extra": []
+  },
+  {
+   "id": "feat-healthy",
+   "n": "Healthy",
+   "cat": "Fortitude",
+   "pre": "Constitution 14 or higher, or the Tough feat",
+   "desc": "While others in your company cough through the damp and nurse their festering cuts, you eat when you can, sleep when you can, wash when you can and keep your wounds clean. It isn't glamorous, but in the filth of the dungeon, it's what keeps you standing when they fall.\n\nYour hit point maximum increases by 10. You can take this feat only once.",
+   "extra": []
+  },
+  {
+   "id": "feat-infamous",
+   "n": "Infamous",
+   "cat": "Control",
+   "pre": "Fear Mongerer, Strength 19 or higher, Charisma 19 or higher",
+   "desc": "Your name has outgrown you. Bards sing it, mothers use it to frighten their children, and soldiers whisper it before battle. Merely standing near you is enough to make a grown man's hands shake. You gain the following benefits:\n- Infamy. Each hostile Humanoid that starts its turn within 10 feet of you and can see you must succeed on a Wisdom saving throw (DC 8 + your Charisma modifier + your Intimidation Rank) or be Frightened of you.\n- Lasting Terror. Whenever you Frighten a Humanoid, it's Frightened of you for 1d4 turns.",
+   "extra": [
+    {
+     "k": "Playtest note",
+     "v": "Its aura checks every turn and ignores the shared immunity, and Lasting Terror makes every fear last 1d4 turns. Watch how quickly it locks down Humanoid-heavy fights."
+    }
+   ],
+   "badge": true
+  },
+  {
+   "id": "feat-lady-killer",
+   "n": "Lady Killer",
+   "cat": "Roleplay",
+   "pre": "Charisma 14 or higher, male character",
+   "desc": "You're a smooth-talking devil, and the ladies always seem to relax in your presence. Maybe they don't see you as a threat, or maybe it's something more… Either way, it's an opportunity you never let slip away. You gain the following benefits:\n- When you hit a female Humanoid with a weapon attack, you deal an extra 2 damage.\n- You gain a +2 bonus to Charisma checks made to seduce, distract or persuade female Humanoids.",
+   "extra": []
+  },
+  {
+   "id": "feat-last-stand",
+   "n": "Last Stand",
+   "cat": "Fortitude",
+   "pre": "Constitution 15 or higher",
+   "desc": "You've decided you're not dying here. Not today, not like this. When your body hits the ground and the world starts to fade, sheer stubbornness drags you back to your feet for one more round.\n\nAt the start of your turn, if you have 0 hit points, you regain 1d4 hit points. You can use this feature even while Incapacitated. Once you use it, you can't use it again until you finish a Rest.",
+   "extra": []
+  },
+  {
+   "id": "feat-leper",
+   "n": "Leper",
+   "cat": "Roleplay",
+   "pre": "Constitution 9 or lower, Charisma 9 or lower",
+   "desc": "The sickness took your looks, your friends and your place in the world, but it couldn't take your life, and it made the rest of you harder in the process. What poisons others barely touches you now. Folk see your face and look away, and you've learned that a frightened stranger does what he's told. You gain the following benefits and drawbacks:\n- While your affliction is visible, you have Disadvantage on Charisma checks, except Intimidation.\n- While your affliction is visible or known, you gain a +5 bonus to Charisma (Intimidation) checks against Humanoids.\n- You have Resistance to poison damage, and Advantage on saving throws against being Poisoned.",
+   "extra": []
+  },
+  {
+   "id": "feat-mail-breaker",
+   "n": "Mail-Breaker",
+   "cat": "Weapon Mastery",
+   "pre": "Cudgel Mastery",
+   "desc": "You've learned that armor is just a shell, and that the right blow in the right place cracks it open. You gain the following benefits while wielding a Cudgel:\n- Your Critical Multiplier with Cudgels is ×3.\n- When you hit a Heavily Armored Humanoid, it must succeed on a Constitution saving throw (DC 8 + your Strength modifier + your Cudgels Rank) or be Dazed until the end of its next turn.",
+   "extra": []
+  },
+  {
+   "id": "feat-man-eater",
+   "n": "Man-Eater",
+   "cat": "Roleplay",
+   "pre": "Charisma 14 or higher, female character",
+   "desc": "You're the seductress of the night. You know exactly what men want, and you love to stack them up like dominoes just to watch them fall. You gain the following benefits:\n- When you hit a male Humanoid with a weapon attack, you deal an extra 2 damage.\n- You gain a +2 bonus to Charisma checks made to seduce, distract or persuade male Humanoids.",
+   "extra": []
+  },
+  {
+   "id": "feat-masochist",
+   "n": "Masochist",
+   "cat": "Fortitude",
+   "pre": "Constitution 15 or higher",
+   "desc": "You've been hit so many times that pain has become an old friend, one you almost look forward to. Every so often, a blow that should have dropped you lands and you just grin through it, as if it never happened at all.\n\nWhen you take damage from a melee weapon attack, roll a d10. On a 9 or 10, you take no damage from that attack.",
+   "extra": [
+    {
+     "k": "Playtest note",
+     "v": "Ignoring 20% of melee weapon hits is very strong against bosses and big single hits. Watch whether it needs a limit, such as once per turn."
+    }
+   ],
+   "badge": true
+  },
+  {
+   "id": "feat-master-artillerist",
+   "n": "Master Artillerist",
+   "cat": "Weapon Mastery",
+   "pre": "Crossbow Mastery",
+   "desc": "To you, a crossbow is a siege engine you can carry. Even the heaviest bow is light in your hands, and anyone standing in a line had better hope the first bolt stops it. You gain the following benefits while wielding a Crossbow:\n- You score a critical hit on a roll of 18, 19 or 20.\n- Weapon attacks you make with a Heavy Crossbow cost 2 AP instead of 3 AP.\n- You learn the Impaling Bolt Weapon Action.\n\n[color=#8e171c]Impaling Bolt[/color] (Weapon Action). You can expend 3 AP to make a ranged attack with a Crossbow. On a hit, if another creature is within 10 feet directly behind the target, in a straight line from you, make a separate attack roll against that creature too. On a hit, it takes the weapon's damage.",
+   "extra": []
+  },
+  {
+   "id": "feat-master-duelist",
+   "n": "Master Duelist",
+   "cat": "Weapon Mastery",
+   "pre": "Sword Mastery",
+   "desc": "You've crossed blades with more swordsmen than you can remember, and you've learned the language every duel is spoken in. Against another sword, every mistake your opponent makes is an opening, and you never let one pass. You gain the following benefits while wielding a Sword:\n- You score a critical hit on a roll of 18, 19 or 20.\n- Your Sword can't be knocked out of your grip or forcibly taken from your hand.\n- Whenever a creature within your reach makes a melee attack against you with a Sword and misses, you can make an Opportunity Attack against it.",
+   "extra": []
+  },
+  {
+   "id": "feat-master-marksmen",
+   "n": "Master Marksmen",
+   "cat": "Weapon Mastery",
+   "pre": "Firearm Mastery",
+   "desc": "You don't just shoot a target, you choose where the ball lands. A hand, a knee, the space between the eyes: at your distance, it's all the same. You gain the following benefits while wielding a Firearm:\n- You score a critical hit on a roll of 18, 19 or 20.\n- When a Firearm you're using misfires, it doesn't break. The attack simply misses.\n- You learn the Debilitate Weapon Action.\n\n[color=#8e171c]Debilitate[/color] (Weapon Action). You can expend 3 AP to make a ranged attack with a Firearm. Before you roll, choose one of the following. On a hit, the target suffers that effect:\n- Arm. It must succeed on a Strength saving throw (DC 8 + your Dexterity modifier + your Firearms Rank) or drop one item it's holding.\n- Leg. Its Ground Speed becomes 0 until the start of its next turn.\n- Wings. Choose this only against a creature with a Flying Speed. It must succeed on a Dexterity saving throw (same DC) or its Flying Speed becomes 0 until the start of its next turn. If it's in the air, it falls.\n- Head. It must make a Constitution saving throw (same DC). On a failure, it's Dazed until the end of its next turn. If it has 30% or less of its maximum hit points remaining, it drops to 0 hit points instead.",
+   "extra": [
+    {
+     "k": "Playtest note",
+     "v": "Debilitate's Head execute can end a boss fight with one failed save. Watch whether bosses or legendary creatures need immunity to the drop to 0 (Dazed instead)."
+    }
+   ],
+   "badge": true
+  },
+  {
+   "id": "feat-nerves-of-steel",
+   "n": "Nerves of Steel",
+   "cat": "Fortitude",
+   "pre": "Wisdom 18 or higher",
+   "desc": "You've trained your mind and body to stay steady when things turn dangerous. Monsters roar, mages whisper, and you just stare back. You gain the following benefits:\n- You can't be Frightened.\n- You gain a +2 bonus to saving throws against being Charmed.\n- When a creature tries to Frighten or Charm you with magic, you have Advantage on your next attack roll against it.",
+   "extra": []
+  },
+  {
+   "id": "feat-polearm-mastery",
+   "n": "Polearm Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Polearms",
+   "desc": "You've trained properly with long-hafted weapons, learning to hold enemies at the end of your reach and punish anyone who tries to close the distance. You gain the following benefits while wielding a Polearm:\n- You learn the Reaching Strike Weapon Action.\n- Creatures provoke an Opportunity Attack from you when they enter your reach.\n- When you hit a creature with an Opportunity Attack, it must succeed on a Dexterity saving throw (DC 8 + your Strength or Dexterity modifier + your Polearms Rank) or its Ground Speed becomes 0 until the start of its next turn.\n\n[color=#8e171c]Reaching Strike[/color] (Weapon Action). When you make a melee attack with a Polearm, you can expend 1 additional AP to extend its reach by 5 feet for that attack.",
+   "extra": []
+  },
+  {
+   "id": "feat-punisher",
+   "n": "Punisher",
+   "cat": "Aggro",
+   "pre": "Strength 15 or higher, or Dexterity 15 or higher",
+   "desc": "Every so often, everything lines up: your footing, your swing, the gap in their guard. When it does, the blow lands twice as hard as it had any right to.\n\nWhen you roll damage for a weapon attack, roll one extra damage die of the same type. If it shows the same number as one of the weapon's damage dice, add it to the damage. This applies only to the attack's initial damage roll, not to extra dice from a critical hit.",
+   "extra": []
+  },
+  {
+   "id": "feat-spear-mastery",
+   "n": "Spear Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Spears",
+   "desc": "The spear is one of the simplest weapons to learn, but it richly rewards those who take the time to master it. You gain the following benefits while wielding a Spear:\n- Your Spear's damage die increases from a d6 to a d8, and from a d8 to a d10 when wielded with two hands. This has no effect if another feature has already increased the die.\n- When you make a thrown weapon attack with a Spear against a creature within 20 feet of you, you can also add your Dexterity modifier to the damage.\n- You learn the Charge Combat Action.\n\n[color=#8e171c]Charge[/color] (Combat Action). You can expend 1 AP to increase your Ground Speed by 10 feet until the end of your turn.",
+   "extra": []
+  },
+  {
+   "id": "feat-spell-sequencer",
+   "n": "Spell Sequencer",
+   "cat": "Spellcraft",
+   "pre": "The ability to cast at least one spell",
+   "desc": "Each morning, you lock two spells away in the back of your mind, ready to go but not yet released. It's an old and dangerous art, one most mages abandoned after watching its masters burn themselves out. You never learned that lesson.\n\nWhen you finish a Rest, choose two spells you know of the same spell level (3rd level or lower) and with the same kind of target: an area, a single creature or yourself. Before your next Rest, you can cast both spells at the same time on your turn without spending MP. When you do, you gain Exhaustion Points (EP) equal to the combined MP cost of both spells. Once you use this feature, you can't use it again until you finish a Rest.",
+   "extra": [
+    {
+     "k": "Playtest note",
+     "v": "check the balance of free casting paid in EP, and whether the 3rd-level cap is right."
+    }
+   ],
+   "badge": true
+  },
+  {
+   "id": "feat-spellsculpt",
+   "n": "Spellsculpt",
+   "cat": "Spellcraft",
+   "pre": "The ability to cast at least one spell",
+   "desc": "Most casters let a spell leave their hands the way it was taught to them. You've studied one spell so closely that you can bend it at will, stretching it farther, splitting it in two, or hushing it to a whisper.\n\nWhen you take this feat, choose one spell you know, and choose one of the following Spellsculpt options. When you cast that spell, you can apply the chosen option to it by paying its extra MP cost on top of the spell's cost.\n\nYou can take this feat more than once. Each time, choose a different spell.\n\nSpellsculpt options:\n- Careful Spell. If the spell forces creatures to make a saving throw, choose a number of them up to your spellcasting ability modifier (minimum 1). They automatically succeed on their save. *+1 MP*\n- Distant Spell. If the spell has a range of 5 feet or more, its range is doubled. If its range is Touch, it becomes 30 feet. *+1 MP*\n- Empowered Spell. When you roll damage for the spell, you can reroll a number of damage dice up to your spellcasting ability modifier (minimum 1). You must use the new rolls. *+1 MP*\n- Extended Spell. If the spell lasts 1 minute or longer, its duration is doubled, up to a maximum of 24 hours. *+1 MP*\n- Heightened Spell. If the spell forces a creature to make a saving throw, choose one target. It has Disadvantage on its first save against the spell. *+3 MP*\n- Subtle Spell. You can cast the spell without its Verbal or Somatic Components. *+1 MP*\n- Twinned Spell. If the spell targets only one creature and doesn't have a range of Self, you can target a second creature in range with the same spell. *+MP equal to half the spell's cost, rounded up*",
+   "extra": []
+  },
+  {
+   "id": "feat-sword-mastery",
+   "n": "Sword Mastery",
+   "cat": "Weapon Mastery",
+   "pre": "Proficiency with Swords",
+   "desc": "You've trained properly with the sword, learning its footwork, its guards and the patience to wait for an opening. You gain the following benefits while wielding a Sword:\n- You score a critical hit on a roll of 19 or 20.\n- Your Opportunity Attacks have Advantage.\n- You learn the Defense Stance Weapon Action.\n\n[color=#8e171c]Defense Stance[/color] (Weapon Action). You can expend 1 AP to enter a defensive stance. Until the start of your next turn, the next melee weapon attack made against you has Disadvantage.",
+   "extra": []
+  },
+  {
+   "id": "feat-tough",
+   "n": "Tough",
+   "cat": "Fortitude",
+   "pre": "",
+   "desc": "You've been stabbed, burned, trampled and thrown down more stairs than you can count, and every time you got back up a little harder to kill. Your scars have scars, and your body has long since stopped taking injury personally.\n\nYour hit point maximum increases by an amount equal to twice your level. Whenever you gain a level after that, your hit point maximum increases by an additional 2.",
+   "extra": []
+  }
+ ]
 }

@@ -1476,6 +1476,170 @@
    "notes": [],
    "aka": [],
    "tip": false
+  },
+  {
+   "n": "Execution",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Combat Actions",
+   "lead": "You can use this Combat Action only if you've reduced a creature to 0 hit points this turn. Your Ground Speed increases by 10 feet until the end of your turn, and your next melee weapon attack this turn costs 0 AP. You can use Execution only once per turn.",
+   "fx": [],
+   "ap": "",
+   "req": "Executioner"
+  },
+  {
+   "n": "Intimidate",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Combat Actions",
+   "lead": "You can expend 1 AP to threaten up to three Humanoids within 15 feet of you that can see and hear you. Each must succeed on a Wisdom saving throw (DC 8 + your Charisma modifier + your Intimidation Rank) or be Frightened of you until the end of its next turn. A creature that succeeds is immune to your Intimidate until the combat ends. You can use Intimidate only once per turn.",
+   "fx": [],
+   "ap": "1",
+   "req": "Head Honcho"
+  },
+  {
+   "n": "Toppling Blow",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "When you make a melee attack with a Cudgel, you can expend 1 additional Action Point (AP). On a hit, the target must succeed on a Strength saving throw (DC 8 + your Strength modifier + your Cudgels Rank) or fall Prone. A Heavily Armored target has Disadvantage on this save. You can use Toppling Blow only once per turn.",
+   "fx": [],
+   "ap": "+1 AP",
+   "req": "Cudgel Mastery"
+  },
+  {
+   "n": "Defense Stance",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "You can expend 1 AP to enter a defensive stance. Until the start of your next turn, the next melee weapon attack made against you has Disadvantage.",
+   "fx": [],
+   "ap": "1",
+   "req": "Sword Mastery"
+  },
+  {
+   "n": "Sunder",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "When you make a melee attack with an Axe, you can expend 1 additional Action Point (AP). On a hit, if the target is a Moderately Armored Humanoid, its AC is reduced by 2 until the next time it takes damage.",
+   "fx": [],
+   "ap": "+1 AP",
+   "req": "Axe Mastery"
+  },
+  {
+   "n": "Hemorrhage",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "You can expend 3 AP to make a melee attack with an Axe. On a hit, the target must succeed on a Constitution saving throw (DC 8 + your Strength modifier + your Axes Rank) or become Bleeding.",
+   "fx": [],
+   "ap": "3",
+   "req": "Axe Marauder"
+  },
+  {
+   "n": "Charge",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Combat Actions",
+   "lead": "You can expend 1 AP to increase your Ground Speed by 10 feet until the end of your turn.",
+   "fx": [],
+   "ap": "1",
+   "req": "Spear Mastery"
+  },
+  {
+   "n": "Reaching Strike",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "When you make a melee attack with a Polearm, you can expend 1 additional AP to extend its reach by 5 feet for that attack.",
+   "fx": [],
+   "ap": "+1 AP",
+   "req": "Polearm Mastery"
+  },
+  {
+   "n": "Sabotage",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "You can expend 3 AP to make a melee attack with a Blade. On a hit, the target's next saving throw is reduced by an amount equal to the damage this attack dealt.",
+   "fx": [],
+   "ap": "3",
+   "req": "Blade Mastery"
+  },
+  {
+   "n": "Crippling Shot",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "You can expend 3 AP to make a ranged attack with a Bow. On a hit, the target must succeed on a Dexterity saving throw (DC 8 + your Dexterity modifier + your Bows Rank) or its Ground Speed is halved until the start of its next turn.",
+   "fx": [],
+   "ap": "3",
+   "req": "Archery Master"
+  },
+  {
+   "n": "Point Blank",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "This Weapon Action comes from more than one feat; each gives its own version:",
+   "fx": [
+    "Crossbow Mastery: After you make a melee attack on your turn, you can draw a loaded Hand Crossbow into your off hand and make a ranged attack with it against a creature within 5 feet of you for 1 AP instead of its normal cost.",
+    "Firearm Mastery: After you make a melee attack on your turn, you can draw a loaded one-handed Firearm (any Firearm without the Two-Handed property) into your off hand and make a ranged attack with it against a creature within 5 feet of you for 1 AP instead of its normal cost."
+   ],
+   "ap": "1",
+   "req": "Crossbow Mastery or Firearm Mastery"
+  },
+  {
+   "n": "Impaling Bolt",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "You can expend 3 AP to make a ranged attack with a Crossbow. On a hit, if another creature is within 10 feet directly behind the target, in a straight line from you, make a separate attack roll against that creature too. On a hit, it takes the weapon's damage.",
+   "fx": [],
+   "ap": "3",
+   "req": "Master Artillerist"
+  },
+  {
+   "n": "Debilitate",
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "hideRefs": true,
+   "sec": "Weapon Actions",
+   "lead": "You can expend 3 AP to make a ranged attack with a Firearm. Before you roll, choose one of the following. On a hit, the target suffers that effect:",
+   "fx": [
+    "Arm. It must succeed on a Strength saving throw (DC 8 + your Dexterity modifier + your Firearms Rank) or drop one item it's holding.",
+    "Leg. Its Ground Speed becomes 0 until the start of its next turn.",
+    "Wings. Choose this only against a creature with a Flying Speed. It must succeed on a Dexterity saving throw (same DC) or its Flying Speed becomes 0 until the start of its next turn. If it's in the air, it falls.",
+    "Head. It must make a Constitution saving throw (same DC). On a failure, it's Dazed until the end of its next turn. If it has 30% or less of its maximum hit points remaining, it drops to 0 hit points instead."
+   ],
+   "ap": "3",
+   "req": "Master Marksmen"
   }
  ]
 }
