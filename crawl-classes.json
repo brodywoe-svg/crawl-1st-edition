@@ -118,7 +118,23 @@
      "die": "d8"
     }
    ],
-   "feats": [],
+   "feats": [
+    {
+     "n": "Artificer's Talent",
+     "d": "",
+     "lv": 1
+    },
+    {
+     "n": "Reforging",
+     "d": "",
+     "lv": 1
+    },
+    {
+     "n": "Equipment Upkeep",
+     "d": "",
+     "lv": 1
+    }
+   ],
    "loadouts": [],
    "money": "25 (G)",
    "moneyRoll": "",
