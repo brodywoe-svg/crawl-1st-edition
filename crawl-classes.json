@@ -416,14 +416,14 @@
      "n": "Troubadour's Kit",
      "gear": [
       {
-       "n": "Iron Shortsword",
+       "n": "Shortsword",
        "qty": 1,
-       "iid": "i-iron-shortsword"
+       "iid": "i-shortsword"
       },
       {
-       "n": "Iron Dagger",
+       "n": "Dagger",
        "qty": 1,
-       "iid": "i-iron-dagger"
+       "iid": "i-dagger"
       },
       {
        "n": "Leather Cap",
@@ -871,14 +871,14 @@
      "n": "Mercenary Kit",
      "gear": [
       {
-       "n": "Iron Longsword",
+       "n": "Longsword",
        "qty": 1,
-       "iid": "i-mv62433jz13p"
+       "iid": "i-longsword"
       },
       {
-       "n": "Iron Hand Axe",
+       "n": "Handaxe",
        "qty": 2,
-       "iid": "i-iron-hand-axe"
+       "iid": "i-handaxe"
       },
       {
        "n": "Round Shield",
@@ -1729,14 +1729,14 @@
      "n": "Thieves Kit",
      "gear": [
       {
-       "n": "Iron Shortsword",
+       "n": "Shortsword",
        "qty": 1,
-       "iid": "i-iron-shortsword"
+       "iid": "i-shortsword"
       },
       {
-       "n": "Iron Dagger",
+       "n": "Dagger",
        "qty": 2,
-       "iid": "i-iron-dagger"
+       "iid": "i-dagger"
       },
       {
        "n": "Crossbow",
@@ -2116,9 +2116,9 @@
        "iid": "i-quarterstaff"
       },
       {
-       "n": "Iron Dagger",
+       "n": "Dagger",
        "qty": 1,
-       "iid": "i-iron-dagger"
+       "iid": "i-dagger"
       },
       {
        "n": "Linen Hood",
