@@ -1355,7 +1355,30 @@
    "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
-   "choices": [],
+   "choices": [
+    {
+     "n": 4,
+     "cat": "skill",
+     "opts": [
+      "Acrobatics",
+      "Animal Handling",
+      "Appraisal",
+      "Athletics",
+      "Deception",
+      "Insight",
+      "Intimidation",
+      "Investigation",
+      "Lore",
+      "Medicine",
+      "Occult",
+      "Perception",
+      "Performance",
+      "Persuasion",
+      "Stealth",
+      "Thievery"
+     ]
+    }
+   ],
    "ptypes": {
     "v": {
      "Dexterity": "P",
@@ -1364,7 +1387,7 @@
     "w": {
      "Blades": "SM",
      "Crossbows": "SM",
-     "Firearms": "SM",
+     "Firearms": "S",
      "Swords": "SM"
     },
     "a": {
