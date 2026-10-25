@@ -329,9 +329,29 @@
    ],
    "feats": [
     {
-     "n": "Rage",
-     "d": "You learn the following Combat Actions: Rage, Charge,",
+     "n": "Anger Management",
+     "d": "You gain the following Benefits while Raging:",
      "lv": 1
+    },
+    {
+     "n": "Tribe Tactics",
+     "d": "You learn the following Combat Actions: [color=#8e171c]Rage[/color], [color=#8e171c]Charge[/color], and [color=#8e171c]Warcry[/color].",
+     "lv": 1
+    },
+    {
+     "n": "Intimidating Physicue",
+     "d": "Starting at 1st level, your body is naturally intimidating to some, and persuasive to others, you can add your Strength modifier to Charisma (Intimidation) checks made to intimate other creatures and Charisma (Persuasion) checks made to seduce other humanoids.",
+     "lv": 1
+    },
+    {
+     "n": "Reckless Attack",
+     "d": "Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
+     "lv": 2
+    },
+    {
+     "n": "Adrenaline",
+     "d": "Starting at 2nd level, during Intense moments of duress and stress you’ll sometimes find your body is able to take on more than it can tolerate. During combat on your turn, you can expend 1AP to gain an additional 2 Action Points (AP) for your current turn, At the start of your next turn, you start with one less Action point and gain 1EP (Exhaustion Point). Once this Combat action has been used, it cannot be used for the next 3 rounds of combat.",
+     "lv": 2
     }
    ],
    "loadouts": [],
