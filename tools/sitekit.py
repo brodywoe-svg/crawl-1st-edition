@@ -393,7 +393,7 @@ LIST_PAGES = {
 
 FEAT_TOOLS = """
   <select id="fcat" aria-label="Show category"><option value="">All categories</option></select>
-  <select id="fview" aria-label="Group feats"><option value="cat">Group by category</option><option value="prog">Group by progression</option><option value="none">No groups (A to Z)</option></select>"""
+  <select id="fview" aria-label="Group feats"><option value="cat">Group by category</option><option value="prog">Group by progression</option><option value="tree">Skill tree</option><option value="none">No groups (A to Z)</option></select>"""
 
 
 def list_shell(page, logo_svg, admin_modal):
@@ -852,6 +852,23 @@ CONDITIONS_CSS = """
 .fgh small{font-size:.8rem;font-weight:700;color:var(--muted)}
 .fprog .fstep{margin-left:calc(var(--d,0) * 22px);position:relative}
 .fprog .fstep+.fstep::before{content:"↳";position:absolute;left:-18px;top:14px;font-weight:800;color:var(--muted)}
+/* Feats skill tree */
+.ftintro{margin:0 0 14px;color:var(--muted);font-weight:600}
+.ftwrap{position:relative;overflow-x:auto;padding:4px 2px 8px}
+.ftlines{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.ftlines path{fill:none;stroke:var(--ink);stroke-width:2.5;opacity:.55}
+.ftcols{position:relative;display:flex;gap:56px;align-items:center;min-width:max-content}
+.ftcol{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.ftstep{font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center}
+.ftnode{display:grid;gap:3px;width:220px;text-align:left;font:inherit;color:var(--ink);background:var(--paper);border:2.5px solid var(--ink);border-radius:14px;padding:10px 12px;cursor:pointer;box-shadow:0 2px 0 var(--ink)}
+.ftnode b{font-size:.98rem}
+.ftnode small{font-size:.74rem;color:var(--muted);font-weight:600;line-height:1.3}
+.ftnode:hover{transform:translateY(-1px)}
+.ftnode.on{background:var(--ink);color:var(--paper)}
+.ftnode.on small{color:var(--paper);opacity:.8}
+.ftnode.play{border-color:#b8860b}
+.ftnode:focus-visible{outline:3px solid #b8860b;outline-offset:2px}
+.ftdetail{margin-top:14px}
 .ctag.ptag{background:#b8860b;border-color:#b8860b;color:#fff}
 ul.tlist{margin:.2em 0 .6em;padding-left:1.3em}
 ul.tlist li{margin:.15em 0}
@@ -938,7 +955,24 @@ body.cc-sheet .ccintro{display:none}
 .ccbtns{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .ccbtns .btn{padding:4px 12px;font-size:.82rem;font-weight:700}
 @media (max-width:640px){.ccchar{grid-template-columns:48px 1fr}.ccchar img,.ccnopic{width:48px;height:48px}.ccchar .ccbtns{grid-column:1/-1;justify-content:flex-start}}
-/* the creation screen */
+/* the creation screen. While creating (body.cc-app) on wide screens, the creator fills the window: no intro or logo,
+   the steps, choices and info panel each scroll on their own, so long descriptions never resize it */
+body.cc-app .ccintro{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (min-width:1061px){
+  body.cc-app .ccwrap{max-width:none;padding:10px 14px 14px}
+  body.cc-app .cctop:has(#ccAdminBtn[hidden]){display:none}
+  body.cc-app .ccgame{height:calc(100vh - var(--navh,52px) - 24px);min-height:520px;grid-template-columns:230px minmax(0,1fr) 400px;grid-template-rows:auto minmax(0,1fr) auto}
+  body.cc-app .ccsteps{overflow-y:auto;scrollbar-width:thin}
+  body.cc-app .ccmain{overflow-y:auto;min-height:0;scrollbar-width:thin}
+  body.cc-app .ccinfo{min-height:0;overflow:hidden}
+  body.cc-app .cii{position:static;max-height:none;height:100%}
+  body.cc-app .cib{flex:1}
+}
+.ccptgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
+.ccpts{border:2px solid var(--ink);border-radius:12px;padding:4px 12px 10px}
+.ccpts .cch3{margin:8px 0 6px}
+.ccptrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px solid var(--hair);font-weight:700;font-size:.9rem}
+.ccptrow small{margin-left:8px;color:var(--muted);font-weight:700;font-size:.78rem}
 .ccgame{display:grid;grid-template-columns:210px minmax(0,1fr) 330px;grid-template-areas:"title title title" "steps main info" "foot foot foot";border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--ink);scroll-margin-top:calc(var(--navh,0px) + 10px)}
 .cctitle{grid-area:title;display:flex;align-items:center;gap:10px;padding:8px 10px;color:var(--paper)}
 .cctitle b{flex:1;text-align:center;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

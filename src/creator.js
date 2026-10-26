@@ -413,7 +413,7 @@ function itemInfo(it) {
 const STEPS = [
   ["race", "Race", "Choose your race"], ["class", "Class", "Choose your class"], ["bg", "Background", "Choose your background"],
   ["abil", "Abilities", "Roll your ability scores"], ["skills", "Skills", "Choose your skills"], ["prof", "Proficiencies", "Proficiencies", "Weapons, armor, trades and languages"],
-  ["spells", "Spells", "Choose your spells"], ["equip", "Equipment", "Gear up"], ["look", "Appearance", "Appearance and story"], ["name", "Name", "Name your character"]
+  ["spells", "Spells", "Choose your spells"], ["points", "Skill Points", "Spend your skill points", "Everything you can raise, in one place"], ["equip", "Equipment", "Gear up"], ["look", "Appearance", "Appearance and story"], ["name", "Name", "Name your character"]
 ];
 function stepOk(c, k) {
   const ps = profState(c);
@@ -425,6 +425,7 @@ function stepOk(c, k) {
     case "skills": return !!c.seen.skills && ps.g.picks.filter(p => p.opts && (p.cat === "skill" || p.cat === "save")).every(p => pickDone(c, p)) && ["skill", "save"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow });
     case "prof": return !!c.seen.prof && ps.g.picks.filter(p => p.opts && p.cat !== "skill" && p.cat !== "save").every(p => pickDone(c, p)) && langGrants(c).choices.every(p => pickDone(c, p)) && ["weapon", "armor", "trade"].every(cat => { const n = pickCount(c, ps, cat); return n.chosen >= n.allow }) && c.langs.filter(Boolean).length >= langGrants(c).picks;
     case "spells": { const k2 = clsOf(c); if (k2 && !k2.source) return !!k2; const lim = spellLimit(c); return !!c.seen.spells && (!lim || c.spells.length >= lim) }
+    case "points": return !!c.seen.points && pointsLeft(c, ps) >= 0;
     case "equip": return !!c.seen.equip && hasKit(c) && (!rollFor(c).length || rolledFor(c));
     case "look": return !!c.seen[k];
     case "name": return !!str(c.name);
@@ -433,7 +434,9 @@ function stepOk(c, k) {
 }
 let infoDefault = "", infoMap = new Map(), pinIk = "";
 /* the info panel: shows what's hovered, or a clicked (pinned) row until something else is clicked */
-function setInfo(html) { $("ccinfo").innerHTML = html || (pinIk && infoMap.get(pinIk)) || infoDefault }
+/* the info panel keeps showing the last thing hovered or picked until another one is; a clicked row stays pinned */
+let lastIk = "";
+function setInfo(html) { $("ccinfo").innerHTML = html || (pinIk && infoMap.get(pinIk)) || (lastIk && infoMap.get(lastIk)) || infoDefault }
 function markPin() { document.querySelectorAll("#ccmain .pinned").forEach(x => x.classList.remove("pinned")); if (pinIk) { const r = document.querySelector(`#ccmain .ccrow[data-ik="${CSS.escape(pinIk)}"]`); if (r) r.classList.add("pinned"); else pinIk = "" } }
 function renderCreate() {
   const c = cur, i = Math.min(Math.max(0, c.step | 0), STEPS.length - 1), [k, , title, sub] = STEPS[i];
@@ -474,6 +477,21 @@ function featPicks(c) {
   }).join("");
 }
 const STEP_VIEWS = {
+  /* every rank a skill point can raise, all on one page: skills and saving throws, weapons, armor, trade skills and spells */
+  points(c) {
+    const ps = profState(c), pts = skillPoints(c), k = clsOf(c);
+    infoDefault = infoBox("Skill points", "", `<p>${pts ? `Your class gives you <b>${pts} skill point${pts === 1 ? "" : "s"}</b>.` : "Your class doesn't give skill points."} Each point raises the rank of something you're proficient in by 1, up to +10.</p><p>This page lists everything you can raise. The same ranks show on the Skills, Proficiencies and Spells steps.</p><p>Only things you're proficient in are listed; become proficient on those steps first.</p>`);
+    if (!k) return `<p class="cempty">Choose a class first.</p>`;
+    const label = key => { const [cat, n] = key.split(/:(.*)/s); return cat === "save" ? AB[n] + " saving throw" : n };
+    const total = key => { const [cat, n] = key.split(/:(.*)/s); return cat === "skill" ? sign(skillTotal(c, n, ps)) : cat === "save" ? sign(saveTotal(c, n, ps)) : "" };
+    const groups = [["Skills and saving throws", x => /^(skill|save):/.test(x)], ["Weapons", x => /^w:/.test(x)], ["Armor", x => /^a:/.test(x)], ["Trade skills", x => /^t:/.test(x)]];
+    const rows = rankables(c, ps).filter(([, prof]) => prof).map(([key]) => key);
+    const sec = (title, keys) => keys.length ? `<div class="ccsec ccpts"><h3 class="cch3">${title}</h3>${keys.map(key => `<div class="ccptrow"><span>${esc(label(key))}${total(key) ? `<small>${total(key)}</small>` : ""}</span>${rankBar(c, ps, key, label(key))}</div>`).join("")}</div>` : "";
+    const spells = c.spells.map(spellByName).filter(Boolean);
+    const spellSec = spells.length ? `<div class="ccsec ccpts"><h3 class="cch3">Spell Ranks</h3>${spells.map(s => { const r = spellRankOf(c, s), cost = rankCost(c, s), start = spellStart(c, s);
+      return `<div class="ccptrow" data-ik="spell:${esc(s.n)}"><span>${esc(s.n)}<small>${cost > 1 ? `${cost} points per Rank` : schoolOf(s) || ""}</small></span><span class="ccstepper"><button type="button" data-sr="-1" data-n="${esc(s.n)}" aria-label="Lower ${esc(s.n)} Rank"${r <= start ? " disabled" : ""}>−</button><span title="Rank">+${r}</span><button type="button" data-sr="1" data-n="${esc(s.n)}" aria-label="Raise ${esc(s.n)} Rank"${r >= rankCapOf(c) || pointsLeft(c, ps) < cost ? " disabled" : ""}>+</button></span></div>` }).join("")}</div>` : "";
+    return pointsLine(c, ps) + (pts ? `<div class="ccptgrid">${groups.map(([t, f]) => sec(t, rows.filter(f))).join("")}${spellSec}</div>` : `<p class="cempty">${esc(k.n)}s don't get skill points. Click Next.</p>`);
+  },
   race(c) {
     if (!RACE_LIST.length) return `<p class="cempty">No races yet. Add them on the <a href="races.html">Races page</a>.</p>`;
     const r = raceOf(c), s = subOf(c);
@@ -713,14 +731,15 @@ function rollAll() {
 }
 
 /* ---------------------------------------------------------------- events in the creator */
-$("ccmain").addEventListener("pointerover", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) setInfo(infoMap.get(o.dataset.ik)) });
-$("ccmain").addEventListener("focusin", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) setInfo(infoMap.get(o.dataset.ik)) });
+$("ccmain").addEventListener("pointerover", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik) && o.dataset.ik !== lastIk) { lastIk = o.dataset.ik; setInfo() } });
+$("ccmain").addEventListener("focusin", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) { lastIk = o.dataset.ik; setInfo() } });
+/* picking an option shows it (and keeps it) */
+$("ccmain").addEventListener("click", ev => { const o = ev.target.closest("[data-ik]"); if (o) { lastIk = o.dataset.ik; if (pinIk && pinIk !== o.dataset.ik && !o.classList.contains("ccrow")) pinIk = "" } }, true);
 document.addEventListener("click", ev => {
   if (view !== "create") return;
   const row = ev.target.closest("#ccmain .ccrow[data-ik]");
-  if (row && !ev.target.closest("input,button,select,a,textarea")) { pinIk = row.dataset.ik; markPin(); setInfo(); return }
-  if (row || ev.target.closest("#ccinfo")) return;
-  if (pinIk) { pinIk = ""; markPin(); setInfo() }
+  if (row && !ev.target.closest("input,button,select,a,textarea")) { pinIk = pinIk === row.dataset.ik ? "" : row.dataset.ik; lastIk = row.dataset.ik; markPin(); setInfo(); return }
+  /* clicking elsewhere leaves the panel as it is */
 });
 $("ccmain").addEventListener("keydown", ev => { const p = ev.target.closest(".ccpick"); if (p && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); p.click() } });
 $("ccmain").addEventListener("pointerleave", () => setInfo());
@@ -902,10 +921,11 @@ function popup(title, html, okLabel, cancelLabel) {
   });
 }
 function goStep(i) {
-  const c = cur, k = STEPS[c.step | 0][0]; pinIk = "";
+  const c = cur, k = STEPS[c.step | 0][0]; pinIk = ""; lastIk = "";
   c.seen[k] = true; if (k === "spells" || k === "skills" || k === "prof") c.seen[k] = true;
   c.step = Math.min(Math.max(0, i), STEPS.length - 1); swapSel = ""; touch(); renderCreate(); say("");
-  $("ccgame").scrollIntoView({ block: "start", behavior: RM.matches ? "auto" : "smooth" });
+  $("ccmain").scrollTop = 0;
+  if (!document.body.classList.contains("cc-app") || innerWidth < 1061) $("ccgame").scrollIntoView({ block: "start", behavior: RM.matches ? "auto" : "smooth" });
 }
 $("ccsteps").addEventListener("click", ev => { const b = ev.target.closest("[data-step]"); if (b) goStep(+b.dataset.step) });
 $("ccBack").addEventListener("click", () => goStep((cur.step | 0) - 1));
@@ -1178,6 +1198,7 @@ function show(v, quiet) {
   $("cchome").hidden = v !== "home"; $("ccgame").hidden = $("ccfoot").hidden = v !== "create"; $("ccsheet").hidden = v !== "sheet"; $("ccadmin").hidden = v !== "admin";
   $("ccAdminBtn").hidden = !ADMIN || v === "admin";
   document.body.classList.toggle("cc-sheet", v === "sheet");
+  document.body.classList.toggle("cc-app", v === "create");
   if (v === "home") renderHome(); else if (v === "create") renderCreate(); else if (v === "sheet") renderSheet(); else renderAdmin();
   try { const u = new URL(location.href); u.searchParams.delete("c"); if (cur && v !== "home" && v !== "admin") u.searchParams.set("c", cur.id); history.replaceState(null, "", u) } catch (e) { }
   if (!quiet) window.scrollTo(0, 0);

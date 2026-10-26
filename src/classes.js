@@ -198,6 +198,7 @@ function render() {
   if (IS_FEAT) { fillFeatCats(); const c = featCatFilter(); if (c) shown = shown.filter(p => editing.has(p._id) || (p.cat || "Uncategorized") === c) }
   $("clist").innerHTML = ITEM_LIST() + (!shown.length ? "" : IS_FEAT ? featGroupsHTML(shown, q) : `<div class="rlist2">${shown.map(p => cardHTML(p, q)).join("")}</div>`);
   markTips($("clist"), PAGE_TIPS);
+  if (IS_FEAT && featView === "tree") drawTrees();
   sideShow(editing.size > 0);
   $("cempty").hidden = shown.length > 0;
   $("cempty").textContent = n ? "Nothing matches. Try a different word, or clear the search." : `No ${WHATS} yet.` + (ADMIN ? ` Click Add ${WHAT} to create the first one.` : "");
@@ -226,13 +227,43 @@ function featLines(shown) {
   const chains = [], solo = [];
   lines.forEach(l => { const members = all.filter(f => top(f) === top(l[0])); if (members.length > 1) chains.push(l.sort((a, b) => depth(a) - depth(b) || byName(a, b))); else solo.push(...l) });
   chains.sort((a, b) => catRank(a[0].cat || "Uncategorized") - catRank(b[0].cat || "Uncategorized") || byName(a[0], b[0]));
-  return { chains, solo: solo.sort(byName), depth };
+  return { chains, solo: solo.sort(byName), depth, par };
 }
+/* Skill tree: each feat line as a tree, left to right, with lines from a feat to the ones it leads to.
+   Click a feat to read it under its tree. Only feats that progress are shown. */
+let treePick = "";
+function featTreeHTML(shown, q) {
+  const { chains, depth, par } = featLines(shown);
+  if (!chains.length) return `<p class="cempty">No feat lines${featCatFilter() ? " in this category" : ""} yet. A feat joins a line when its prerequisite names another feat.</p>`;
+  return `<p class="ftintro">Each tree is a line of feats: take the one on the left first. Click a feat to read it.</p>` + chains.map(l => {
+    const cols = [...new Set(l.map(depth))].sort((a, b) => a - b).map(d => l.filter(f => depth(f) === d));
+    const pick = l.find(f => f.id === treePick);
+    return `<section class="fgroup ftree" data-tree><h2 class="fgh">${esc(l[0].n)} line <small>${esc([...new Set(l.map(f => f.cat).filter(Boolean))].join(", "))} · ${l.length} feats</small></h2>
+<div class="ftwrap"><svg class="ftlines" aria-hidden="true"></svg><div class="ftcols">${cols.map((col, i) => `<div class="ftcol"><span class="ftstep">${i === 0 ? "Start" : "Step " + (i + 1)}</span>${col.map(f => `<button type="button" class="ftnode${f.id === treePick ? " on" : ""}${f.badge ? " play" : ""}" data-feat="${esc(f.id)}" data-par="${esc((par.get(f) || []).filter(p => l.includes(p)).map(p => p.id).join(" "))}" aria-pressed="${f.id === treePick}"><b>${esc(f.n)}</b><small>${esc(f.pre || "No prerequisite")}</small></button>`).join("")}</div>`).join("")}</div></div>
+${pick ? `<div class="ftdetail">${cardHTML(pick, q)}</div>` : ""}</section>`;
+  }).join("");
+}
+/* draw the lines between feats once the tree is on the page (and again when the window changes size) */
+function drawTrees() {
+  document.querySelectorAll("[data-tree] .ftwrap").forEach(w => {
+    const svg = w.querySelector(".ftlines"), box = w.getBoundingClientRect(); let d = "";
+    svg.setAttribute("width", w.scrollWidth); svg.setAttribute("height", w.scrollHeight);
+    w.querySelectorAll(".ftnode[data-par]").forEach(n => n.dataset.par.split(" ").filter(Boolean).forEach(pid => {
+      const p = w.querySelector(`.ftnode[data-feat="${CSS.escape(pid)}"]`); if (!p) return;
+      const a = p.getBoundingClientRect(), b = n.getBoundingClientRect();
+      const x1 = a.right - box.left + w.scrollLeft, y1 = a.top + a.height / 2 - box.top, x2 = b.left - box.left + w.scrollLeft, y2 = b.top + b.height / 2 - box.top, mx = (x1 + x2) / 2;
+      d += `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2} `;
+    }));
+    svg.innerHTML = d ? `<path d="${d}"/>` : "";
+  });
+}
+window.addEventListener("resize", () => { if (featView === "tree") drawTrees() });
 const featBox = (title, sub, cards, cls) => `<section class="fgroup${cls ? " " + cls : ""}"><h2 class="fgh">${title}${sub ? ` <small>${sub}</small>` : ""}</h2><div class="rlist2">${cards}</div></section>`;
 function featGroupsHTML(shown, q) {
   const cards = l => l.map(p => cardHTML(p, q)).join(""), count = l => `${l.length} ${l.length === 1 ? "feat" : "feats"}`;
   const editingNew = shown.filter(p => p._new); shown = shown.filter(p => !p._new);
   const lead = editingNew.length ? `<div class="rlist2">${cards(editingNew)}</div>` : "";
+  if (featView === "tree" && !q) return lead + featTreeHTML(shown, q);
   if (featView === "none" || q) return lead + (shown.length ? `<div class="rlist2">${cards(shown.sort(byName))}</div>` : "");
   if (featView === "prog") {
     const { chains, solo, depth } = featLines(shown);
@@ -245,9 +276,12 @@ function featGroupsHTML(shown, q) {
   return lead + [...byCat.entries()].sort((a, b) => catRank(a[0]) - catRank(b[0]) || a[0].localeCompare(b[0])).map(([c, l]) => featBox(esc(c), count(l), cards(l.sort(byName)))).join("");
 }
 if (IS_FEAT && $("fcat")) {
+  /* feats.html?view=tree opens the skill tree */
+  try { const v = new URLSearchParams(location.search).get("view"); if (["tree", "cat", "prog", "none"].includes(v)) featView = v } catch (e) { }
   $("fview").value = featView;
+  $("clist").addEventListener("click", ev => { const n = ev.target.closest(".ftnode"); if (!n) return; treePick = treePick === n.dataset.feat ? "" : n.dataset.feat; render(); const b = document.querySelector(`.ftnode[data-feat="${CSS.escape(n.dataset.feat)}"]`); if (b) b.focus() });
   $("fcat").addEventListener("change", render);
-  $("fview").addEventListener("change", () => { featView = $("fview").value; try { localStorage.setItem("crawl-feat-view", featView) } catch (e) { } render() });
+  $("fview").addEventListener("change", () => { featView = $("fview").value; try { localStorage.setItem("crawl-feat-view", featView); const u = new URL(location.href); if (featView === "tree") u.searchParams.set("view", "tree"); else u.searchParams.delete("view"); history.replaceState(null, "", u) } catch (e) { } render() });
 }
 function markDirty() {
   dirty = JSON.stringify(clean()) !== original;
