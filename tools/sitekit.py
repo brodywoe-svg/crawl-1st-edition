@@ -959,15 +959,21 @@ body.cc-sheet .ccintro{display:none}
    the steps, choices and info panel each scroll on their own, so long descriptions never resize it */
 body.cc-app .ccintro{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (min-width:1061px){
-  body.cc-app .ccwrap{max-width:none;padding:10px 14px 14px}
+  /* the page itself doesn't scroll: the creator is the window below the header */
+  html:has(body.cc-app),body.cc-app{overflow:hidden;height:100%}
+  body.cc-app footer,body.cc-app .site-foot{display:none}
+  body.cc-app .ccwrap{max-width:none;padding:8px 10px;height:calc(100vh - var(--navh,52px));box-sizing:border-box;display:flex;flex-direction:column}
+  body.cc-app .ccwrap>.gmsg:empty{display:none}
+  body.cc-app #ccgame{flex:1;min-height:0;height:auto}
   body.cc-app .cctop:has(#ccAdminBtn[hidden]){display:none}
-  body.cc-app .ccgame{height:calc(100vh - var(--navh,52px) - 24px);min-height:520px;grid-template-columns:230px minmax(0,1fr) 400px;grid-template-rows:auto minmax(0,1fr) auto}
+  body.cc-app .ccgame{grid-template-columns:230px minmax(0,1fr) 400px;grid-template-rows:auto minmax(0,1fr) auto}
   body.cc-app .ccsteps{overflow-y:auto;scrollbar-width:thin}
   body.cc-app .ccmain{overflow-y:auto;min-height:0;scrollbar-width:thin}
   body.cc-app .ccinfo{min-height:0;overflow:hidden}
   body.cc-app .cii{position:static;max-height:none;height:100%}
   body.cc-app .cib{flex:1}
 }
+@media (min-width:1061px) and (max-height:820px){body.cc-app .ccstep{padding:5px 10px}body.cc-app .ccsl small{display:none}}
 .ccptgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
 .ccpts{border:2px solid var(--ink);border-radius:12px;padding:4px 12px 10px}
 .ccpts .cch3{margin:8px 0 6px}

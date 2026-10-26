@@ -436,7 +436,9 @@ let infoDefault = "", infoMap = new Map(), pinIk = "";
 /* the info panel: shows what's hovered, or a clicked (pinned) row until something else is clicked */
 /* the info panel keeps showing the last thing hovered or picked until another one is; a clicked row stays pinned */
 let lastIk = "";
-function setInfo(html) { $("ccinfo").innerHTML = html || (pinIk && infoMap.get(pinIk)) || (lastIk && infoMap.get(lastIk)) || infoDefault }
+/* the selected option on this step (the last one, e.g. the subrace after the race) */
+const selIk = () => { const on = [...document.querySelectorAll("#ccmain .ccopt.on[data-ik]")].filter(o => infoMap.has(o.dataset.ik)); return on.length ? on[on.length - 1].dataset.ik : "" };
+function setInfo(html) { const sel = !pinIk || !infoMap.has(pinIk) ? selIk() : ""; $("ccinfo").innerHTML = html || (pinIk && infoMap.get(pinIk)) || (sel && infoMap.get(sel)) || (lastIk && infoMap.get(lastIk)) || infoDefault }
 function markPin() { document.querySelectorAll("#ccmain .pinned").forEach(x => x.classList.remove("pinned")); if (pinIk) { const r = document.querySelector(`#ccmain .ccrow[data-ik="${CSS.escape(pinIk)}"]`); if (r) r.classList.add("pinned"); else pinIk = "" } }
 function renderCreate() {
   const c = cur, i = Math.min(Math.max(0, c.step | 0), STEPS.length - 1), [k, , title, sub] = STEPS[i];
@@ -731,8 +733,8 @@ function rollAll() {
 }
 
 /* ---------------------------------------------------------------- events in the creator */
-$("ccmain").addEventListener("pointerover", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik) && o.dataset.ik !== lastIk) { lastIk = o.dataset.ik; setInfo() } });
-$("ccmain").addEventListener("focusin", ev => { if (pinIk) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) { lastIk = o.dataset.ik; setInfo() } });
+$("ccmain").addEventListener("pointerover", ev => { if (pinIk || selIk()) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik) && o.dataset.ik !== lastIk) { lastIk = o.dataset.ik; setInfo() } });
+$("ccmain").addEventListener("focusin", ev => { if (pinIk || selIk()) return; const o = ev.target.closest("[data-ik]"); if (o && infoMap.has(o.dataset.ik)) { lastIk = o.dataset.ik; setInfo() } });
 /* picking an option shows it (and keeps it) */
 $("ccmain").addEventListener("click", ev => { const o = ev.target.closest("[data-ik]"); if (o) { lastIk = o.dataset.ik; if (pinIk && pinIk !== o.dataset.ik && !o.classList.contains("ccrow")) pinIk = "" } }, true);
 document.addEventListener("click", ev => {
@@ -748,17 +750,21 @@ $("ccmain").addEventListener("click", ev => {
   const o = ev.target.closest(".ccopt");
   if (o) {
     const [kind, id] = o.dataset.ik.split(/:(.*)/s);
-    if (kind === "race") { if (c.race !== id) { c.race = id; c.sub = ""; c.asi = []; c.choice = {} } }
-    else if (kind === "sub") c.sub = id;
-    else if (kind === "class") { if (c.cls !== id) { c.cls = id; c.subcls = ""; c.spells = []; c.spellUp = {}; c.major = ""; c.minor = ""; c.fopt = {}; c.moneyRoll = null; setLoadout(c, "") } }
+    /* clicking the selected option again unselects it */
+    const was = o.classList.contains("on");
+    if (kind === "race") { if (c.race !== id || was) { c.race = was ? "" : id; c.sub = ""; c.asi = []; c.choice = {} } }
+    else if (kind === "sub") c.sub = was ? "" : id;
+    else if (kind === "class") { if (c.cls !== id || was) { c.cls = was ? "" : id; c.subcls = ""; c.spells = []; c.spellUp = {}; c.major = ""; c.minor = ""; c.fopt = {}; c.moneyRoll = null; setLoadout(c, "") } }
     else if (kind === "fopt") {
       const [key, name] = id.split(/\|(.*)/s), hit = choiceFeats(c).find(x => foptKey(x.kind, x.f) === key); if (!hit) return;
       const need = picksAt(hit.f, LEVEL); let got = foptChosen(c, hit.kind, hit.f);
       got = got.includes(name) ? got.filter(n => n !== name) : [...got, name].slice(-need);
       c.fopt[key] = got;
     }
-    else if (kind === "subcls") c.subcls = id;
-    else if (kind === "bg") { c.bg = id; if (id === "custom" && !c.bgCustom) c.bgCustom = { n: "", desc: "" } }
+    else if (kind === "subcls") c.subcls = was ? "" : id;
+    else if (kind === "bg") { c.bg = was ? "" : id; if (!was && id === "custom" && !c.bgCustom) c.bgCustom = { n: "", desc: "" } }
+    /* what's selected shows on the right and stays; unselecting goes back to showing what you hover */
+    pinIk = was ? "" : o.dataset.ik; lastIk = was ? "" : o.dataset.ik;
     touch(); renderCreate(); const again = document.querySelector(`.ccopt[data-ik="${CSS.escape(o.dataset.ik)}"]`); if (again) again.focus(); return;
   }
   const b = ev.target.closest("button"); if (!b) return;
