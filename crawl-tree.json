@@ -25,8 +25,9 @@
    "ic": "sword-of-light"
   },
   "f:class-fighter:adrenaline": {
-   "x": 689,
-   "y": 790
+   "x": 678,
+   "y": 782,
+   "ic": "adrenaline"
   },
   "f:class-fighter:prowess": {
    "x": 452,
