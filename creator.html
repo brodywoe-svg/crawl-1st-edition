@@ -3115,7 +3115,7 @@ if (!STATIC) snapAll();
 /* ---------------------------------------------------------------- Tree mode (an experiment)
    With the "Tree mode" switch in the header on, the Character Creator's Class step becomes a Path of Exile style skill tree.
    The tree is built from the site's data every time, so new classes, features and feats appear on their own:
-     - classes sit around a ring, grouped by specialty (Martial, Arcane, Divine, Primal, Occult); each class starts at its
+     - classes sit around a ring, in name order; each class starts at its
        start node and its features run outward by level; a choice feature (Fighting Style) fans out into its options, and
        the Combat and Weapon Actions a feature teaches hang off it; subclasses (archetypes) branch off the start node;
      - feats sit on an outer ring, grouped by category, with each feat line running outward.
@@ -3127,8 +3127,6 @@ function normTree(j) { j = j && typeof j === "object" ? j : {}; return { v: 1, n
 let TREE_SAVED = normTree(typeof TREE !== "undefined" ? TREE : null), TREE_ORIG = JSON.stringify(TREE_SAVED);
 let FEAT_LIST = arr(typeof FEATS !== "undefined" && FEATS ? FEATS.feats : []);
 const treeDirty = () => JSON.stringify(TREE_SAVED) !== TREE_ORIG;
-const SPEC_ORDER = ["Martial", "Arcane", "Divine", "Primal", "Occult"];
-const specOf = k => k.source || "Martial";
 const KINDS = [["start", "Class start"], ["keystone", "Keystone"], ["notable", "Notable"], ["minor", "Minor"], ["option", "Option"], ["action", "Action"], ["feat", "Feat"]];
 const FEAT_CAT_ORDER2 = ["Aggro", "Control", "Roleplay", "Fortitude", "Weapon Mastery", "Spellcraft"];
 
@@ -3145,17 +3143,13 @@ function baseTree() {
   const add = n => { let id = n.id, i = 2; while (ids.has(id)) id = n.id + "-" + i++; n.id = id; ids.add(id); nodes.push(n); return n };
   const link = (a, b) => links.push([a, b]);
   const actions = (normGlossary(GLOSSARY) || []).filter(e => e.sec === "Combat Actions" || e.sec === "Weapon Actions");
-  const classes = CR.classes.slice().sort((a, b) => SPEC_ORDER.indexOf(specOf(a)) - SPEC_ORDER.indexOf(specOf(b)) || byName(a, b));
+  const classes = CR.classes.slice().sort(byName);
   const N = Math.max(1, classes.length), R0 = 520, STEP = 170;
   let outer = R0;
-  /* specialty labels in the middle of their classes */
-  const specs = [...new Set(classes.map(specOf))];
-  specs.forEach(sp => { const idx = classes.map((k, i) => specOf(k) === sp ? i : -1).filter(i => i >= 0), mid = (idx[0] + idx[idx.length - 1]) / 2, a = -Math.PI / 2 + mid * 2 * Math.PI / N;
-    add({ id: "spec:" + slugOf(sp), kind: "label", n: sp, x: Math.round(Math.cos(a) * 300), y: Math.round(Math.sin(a) * 300) }) });
   classes.forEach((k, i) => {
     const a = -Math.PI / 2 + i * 2 * Math.PI / N, ux = Math.cos(a), uy = Math.sin(a), px = -uy, py = ux;
     const P = (r, side) => ({ x: Math.round(ux * r + px * (side || 0)), y: Math.round(uy * r + py * (side || 0)) });
-    const start = add({ id: "cls:" + k.id, kind: "start", n: k.n, d: k.desc, ref: { t: "class", cls: k.id }, cls: k.id, spec: specOf(k), ...P(R0) });
+    const start = add({ id: "cls:" + k.id, kind: "start", n: k.n, d: k.desc, ref: { t: "class", cls: k.id }, cls: k.id, ...P(R0) });
     let prev = start.id, r = R0, side = 1;
     /* subclasses (archetypes) branch off the start node to the side */
     k.subs.forEach((s, j) => {
@@ -3240,7 +3234,7 @@ function treeState(c, T) {
 }
 function treeNodeInfo(c, n, st) {
   const r = n.ref || {}, k = r.cls && CR.classes.find(x => x.id === r.cls);
-  const kind = (KINDS.find(x => x[0] === n.kind) || ["", n.kind === "label" ? "Specialty" : "Node"])[1];
+  const kind = (KINDS.find(x => x[0] === n.kind) || ["", n.kind === "label" ? "Label" : "Node"])[1];
   const s = st.get(n.id), status = s === "have" ? "Yours" : s === "open" ? (r.t === "class" ? "Click to take this class" : r.t === "opt" ? "Click to choose this option" : "Click to take it") : s === "locked" ? (r.t === "featx" ? "Feats come from 2nd level" : `Unlocks at level ${n.lv || 1}`) : "";
   const facts = [k && r.t !== "class" ? ["Class", k.n] : null, n.lv && r.t !== "class" ? ["Level", n.lv] : null, n.ap ? ["AP cost", /^\d+$/.test(n.ap) ? n.ap + " AP" : n.ap] : null, n.pre ? ["Prerequisite", n.pre] : null, n.cat ? ["Category", n.cat] : null].filter(Boolean);
   return infoBox(n.n || "Node", kind, `${status ? `<p class="tvstatus ${s}">${esc(status)}</p>` : ""}${facts.length ? `<dl class="gfacts">${facts.map(([a, b]) => `<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join("")}</dl>` : ""}${n.d ? `<div class="clead">${paras(n.d)}</div>` : ""}`);
