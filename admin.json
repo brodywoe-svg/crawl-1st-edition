@@ -1,9 +1,17 @@
 {
- "v": 1,
- "cipher": "AES-256-GCM",
- "kdf": "PBKDF2-SHA256",
- "iterations": 600000,
- "salt": "4Y3foKn6qReG+oHhPKqlQA==",
- "iv": "yAoseZ8kD4QBLRou",
- "data": "0nT1oKZewHZmKf4glu8l8Kt/7+7zctIafbaQGbXBuBKGiN+MdLjQPZFDeTFEW8UkAU/i21M3ac0w3RnwLt2NWrvI6tAMIpzL9iiBvzz+hN/Pw5HVcO0uyRRDnwk6L9mFOZalew+GebUsvwy60w=="
+ "v": 2,
+ "users": [
+  {
+   "name": "Brody Woelke",
+   "box": {
+    "v": 1,
+    "cipher": "AES-256-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 600000,
+    "salt": "4Y3foKn6qReG+oHhPKqlQA==",
+    "iv": "yAoseZ8kD4QBLRou",
+    "data": "0nT1oKZewHZmKf4glu8l8Kt/7+7zctIafbaQGbXBuBKGiN+MdLjQPZFDeTFEW8UkAU/i21M3ac0w3RnwLt2NWrvI6tAMIpzL9iiBvzz+hN/Pw5HVcO0uyRRDnwk6L9mFOZalew+GebUsvwy60w=="
+   }
+  }
+ ]
 }
