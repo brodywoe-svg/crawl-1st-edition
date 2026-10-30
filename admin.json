@@ -12,6 +12,18 @@
     "iv": "yAoseZ8kD4QBLRou",
     "data": "0nT1oKZewHZmKf4glu8l8Kt/7+7zctIafbaQGbXBuBKGiN+MdLjQPZFDeTFEW8UkAU/i21M3ac0w3RnwLt2NWrvI6tAMIpzL9iiBvzz+hN/Pw5HVcO0uyRRDnwk6L9mFOZalew+GebUsvwy60w=="
    }
+  },
+  {
+   "name": "Maddox Turner",
+   "box": {
+    "v": 1,
+    "cipher": "AES-256-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 600000,
+    "salt": "G7oiXrigXhOqPeQcZBruGA==",
+    "iv": "+mR/8EP/Uy+Upas1",
+    "data": "W3iwEZeSiEiMtwyTFCaanac5wkXjkWIO1gBMtoLaqfXN4U2pIJNg6qvDFKvYu7PvIk5IWMNqsg4S3cvd6iv88+saRHrkb81L2ITyOltBvBXsYbyIewKBxz9W/b9okYKaauPBP9Io2HomntRz6A=="
+   }
   }
  ]
 }
