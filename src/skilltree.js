@@ -128,13 +128,13 @@ function treeNodeInfo(c, n, st) {
 
 /* ---------------------------------------------------------------- the 3D viewer */
 const TV = { px: 0, py: 0, zoom: 0.42, tilt: 38, rot: 0, focus: "" };
-let treeEdit = false, treeSel = "", treeLinkFrom = "", treeHover = "";
+let treeEdit = false, treeSel = "", treeLinkFrom = "", treeHover = "", treeIcPick = false;
 function treeHTML(c) {
   const T = fullTree(), st = treeState(c, T), W = 1;
   const xs = T.nodes.map(n => n.x), ys = T.nodes.map(n => n.y), ext = Math.max(400, ...xs.map(Math.abs), ...ys.map(Math.abs)) + 200;
   const path = T.links.map(([a, b]) => { const p = T.byId.get(a), q = T.byId.get(b); const on = st.get(a) === "have" && st.get(b) === "have"; return `<path class="${on ? "on" : st.get(b) === "open" || st.get(a) === "open" ? "open" : ""}" d="M${p.x + ext},${p.y + ext} L${q.x + ext},${q.y + ext}"/>` }).join("");
   const node = n => n.kind === "label" ? `<div class="tn tlabel" style="left:${n.x}px;top:${n.y}px" data-node="${esc(n.id)}"><span>${esc(n.n)}</span></div>`
-    : `<button type="button" class="tn k-${esc(n.kind)} s-${st.get(n.id) || "none"}${n.id === treeSel ? " sel" : ""}${n.hide ? " hidden-node" : ""}${n.custom ? " custom" : ""}" style="left:${n.x}px;top:${n.y}px" data-node="${esc(n.id)}" aria-label="${esc(n.n)}"><i></i><span>${esc(n.n)}</span></button>`;
+    : `<button type="button" class="tn k-${esc(n.kind)} s-${st.get(n.id) || "none"}${n.id === treeSel ? " sel" : ""}${n.hide ? " hidden-node" : ""}${n.custom ? " custom" : ""}" style="left:${n.x}px;top:${n.y}px" data-node="${esc(n.id)}" aria-label="${esc(n.n)}"><i${n.ic && TREE_ICON.has(n.ic) ? ` class="hasic"` : ""}>${n.ic ? treeIconSVG(n.ic) : ""}</i><span>${esc(n.n)}</span></button>`;
   const ctl = `<div class="tvctl"><button type="button" data-tv="out" aria-label="Zoom out">−</button><button type="button" data-tv="in" aria-label="Zoom in">+</button><button type="button" data-tv="home">${clsOf(c) ? "My class" : "Center"}</button><label>Tilt<input type="range" data-tvr="tilt" min="0" max="65" value="${TV.tilt}"></label><label>Turn<input type="range" data-tvr="rot" min="-180" max="180" value="${TV.rot}"></label>` +
     (ADMIN ? (treeEdit ? `<span class="tvedit">Editing</span><button type="button" data-tv="addnode">Add a node</button><button type="button" data-tv="save"${treeDirty() ? "" : " disabled"}>Save tree</button><button type="button" data-tv="discard"${treeDirty() ? "" : " disabled"}>Discard</button><button type="button" data-tv="done">Done editing</button>` : `<button type="button" data-tv="edit">Edit tree</button>`) : "") + `</div>`;
   const legend = `<div class="tvlegend"><span class="lg have">Yours</span><span class="lg open">Can take</span><span class="lg locked">Higher level</span></div>`;
@@ -171,7 +171,7 @@ function treePick(c, id) {
   const T = fullTree(), n = T.byId.get(id); if (!n || n.kind === "label") return;
   if (treeEdit) {
     if (treeLinkFrom && treeLinkFrom !== id) { const a = treeLinkFrom; TREE_SAVED.unlinks = TREE_SAVED.unlinks.filter(u => !sameLink(u, a, id)); if (!T.links.some(l => sameLink(l, a, id))) TREE_SAVED.links.push([a, id]); treeLinkFrom = ""; treeSel = id; renderCreate(); return }
-    treeSel = treeSel === id ? "" : id; treeLinkFrom = ""; renderCreate(); return;
+    treeSel = treeSel === id ? "" : id; treeLinkFrom = ""; treeIcPick = false; renderCreate(); return;
   }
   const r = n.ref || {}, st = treeState(c, T).get(id);
   if (r.t === "class") { const was = c.cls === r.cls; if (!was) { TV.zoom = Math.max(TV.zoom, 0.7); TV.focus = "" } c.cls = was ? "" : r.cls; c.subcls = ""; c.spells = []; c.spellUp = {}; c.major = ""; c.minor = ""; c.fopt = {}; c.moneyRoll = null; setLoadout(c, ""); treeSel = was ? "" : id; touch(); renderCreate(); return }
@@ -193,11 +193,12 @@ function treeEditForm(n, T) {
 <label>Name<input type="text" data-te="n" value="${esc(n.n || "")}" autocomplete="off"></label>
 <label>Description<textarea data-te="d" rows="6">${esc(n.d || "")}</textarea></label>
 <label>Look<select data-te="kind">${KINDS.map(([v, l]) => `<option value="${v}"${v === n.kind ? " selected" : ""}>${l}</option>`).join("")}${n.kind === "label" ? `<option value="label" selected>Label</option>` : ""}</select></label>
+<div class="tvic"><b>Icon</b><div class="tvicnow">${n.ic && TREE_ICON.has(n.ic) ? `<span class="tvicsw">${treeIconSVG(n.ic)}</span>${esc(TREE_ICON.get(n.ic)[1])}` : `<small>No icon</small>`}<button type="button" class="btn" data-te-icopen>${treeIcPick ? "Close icons" : n.ic ? "Change icon" : "Choose an icon"}</button>${n.ic ? `<button type="button" class="btn" data-te-ic="">Remove</button>` : ""}</div>${treeIcPick ? `<div class="tvicgrid">${TREE_ICONS.map(x => `<button type="button" data-te-ic="${x[0]}" title="${esc(x[1])} (${esc(x[2])})" aria-label="${esc(x[1])}"${x[0] === n.ic ? ` aria-pressed="true"` : ""}>${treeIconSVG(x[0])}</button>`).join("")}</div>` : ""}</div>
 <label class="chk"><input type="checkbox" data-te="hide"${n.hide ? " checked" : ""}> Hide this node</label>
 <p class="tvxy">Position ${Math.round(n.x)}, ${Math.round(n.y)}. Drag the node to move it.</p>
 <div class="tvlinkl"><b>Linked to</b>${linked.map(m => `<span>${esc(m.n)}<button type="button" data-te-unlink="${esc(m.id)}" aria-label="Unlink ${esc(m.n)}">×</button></span>`).join("") || `<small>Nothing</small>`}</div>
 <div class="tvbtns"><button type="button" class="btn" data-te-act="link">Link to another node</button><button type="button" class="btn" data-te-act="branch">Add a node branching from this</button>${n.custom ? `<button type="button" class="btn gdel" data-te-act="delete">Delete node</button>` : n.edited ? `<button type="button" class="btn" data-te-act="reset">Undo my changes to it</button>` : ""}</div>
-<p class="ccnote">Nodes from the data change when the class, feature or feat changes. Your changes (position, name, description, look, hiding, links) are kept on top. Click Save tree to keep them.</p></div>`);
+<p class="ccnote">Nodes from the data change when the class, feature or feat changes. Your changes (position, name, description, look, icon, hiding, links) are kept on top. Click Save tree to keep them.</p></div>`);
 }
 function treeEditInput(t) {
   const f = t.closest(".tvform"); if (!f) return;
@@ -285,6 +286,8 @@ async function saveTree() {
   $("ccinfo").addEventListener("change", ev => { if (ev.target.closest(".tvform") && ev.target.matches("select,[type=checkbox]")) treeEditInput(ev.target) });
   $("ccinfo").addEventListener("click", ev => {
     const f = ev.target.closest(".tvform"); if (!f) return;
+    if (ev.target.closest("[data-te-icopen]")) { treeIcPick = !treeIcPick; renderCreate(); return }
+    const ic = ev.target.closest("[data-te-ic]"); if (ic) { const id = f.dataset.node, ex = TREE_SAVED.extra.find(x => x.id === id), tgt = ex || nodeOv(id); if (ic.dataset.teIc) tgt.ic = ic.dataset.teIc; else delete tgt.ic; treeIcPick = false; renderCreate(); return }
     const u = ev.target.closest("[data-te-unlink]"); if (u) { treeEditAct(cur, "unlink", [f.dataset.node, u.dataset.teUnlink]); return }
     const b = ev.target.closest("[data-te-act]"); if (b) treeEditAct(cur, b.dataset.teAct, f.dataset.node);
   });

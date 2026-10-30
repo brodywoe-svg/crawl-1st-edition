@@ -1036,6 +1036,22 @@ body.cc-app .ccintro{position:absolute;width:1px;height:1px;overflow:hidden;clip
 .tvstatus{font-weight:800;margin:0}
 .tvstatus.have{color:#9c7428}.tvstatus.open{color:var(--red)}.tvstatus.locked{color:var(--muted)}
 .tvform{display:grid;gap:10px}
+.tn i.hasic{display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#3a3442,#1b1920 62%,#0e0d11)}
+.tn.k-start i.hasic{background:radial-gradient(circle at 50% 38%,#4a3c22,#21190b 65%,#0e0a04)}
+.tn i .tic{width:64%;height:64%;color:#f4dc9a;filter:drop-shadow(0 0 3px rgba(244,220,154,.5));overflow:visible}
+.tn.k-keystone i .tic,.tn.k-action i .tic{transform:rotate(-45deg)}
+.tn.s-have i .tic{color:#fff3cf}
+.tic{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.tic .t{fill:currentColor;fill-opacity:.16}.tic .s{fill:currentColor;stroke:none}
+.tvic{display:grid;gap:6px;font-size:.85rem}
+.tvicnow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:600}
+.tvicsw{width:34px;height:34px;border-radius:50%;background:#17161b;display:grid;place-items:center;color:#f4dc9a}
+.tvicsw .tic{width:24px;height:24px}
+.tvicgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px;max-height:240px;overflow:auto;padding:6px;background:#17161b;border-radius:10px}
+.tvicgrid button{aspect-ratio:1;border:1px solid #3a3442;border-radius:50%;background:radial-gradient(circle at 50% 38%,#3a3442,#1b1920 70%);color:#f4dc9a;display:grid;place-items:center;cursor:pointer;padding:0}
+.tvicgrid button:hover,.tvicgrid button:focus-visible{border-color:#d9b25f}
+.tvicgrid button[aria-pressed=true]{border:2px solid #d9b25f;box-shadow:0 0 6px rgba(217,178,95,.6)}
+.tvicgrid .tic{width:62%;height:62%}
 .tvform label{display:grid;gap:4px;font-weight:700;font-size:.85rem}
 .tvform label.chk{display:flex;align-items:center;gap:8px}
 .tvform input[type=text],.tvform textarea,.tvform select{font:600 .9rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:6px 8px}

@@ -210,6 +210,7 @@ def glossary_page(template, glossary, name):
         script += (ROOT / "src" / "crawldata.js").read_text(encoding="utf-8")
     script += (ROOT / "src" / page_js).read_text(encoding="utf-8")
     if page == "creator":
+        script += (ROOT / "src" / "treeicons.js").read_text(encoding="utf-8")
         script += (ROOT / "src" / "skilltree.js").read_text(encoding="utf-8")
     return (
         f"<title>{title}</title>" + links + mode_init
