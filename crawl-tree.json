@@ -14,6 +14,12 @@
   },
   "cls:class-wizard": {
    "ic": "grimoire"
+  },
+  "cls:class-barbarian": {
+   "ic": "warhammer"
+  },
+  "cls:class-rogue": {
+   "ic": "veiled-mask"
   }
  },
  "extra": [],
