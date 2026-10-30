@@ -5,6 +5,15 @@
    "ic": "crossed-blades",
    "x": 348,
    "y": 397
+  },
+  "cls:class-cleric": {
+   "ic": "flanged-mace"
+  },
+  "cls:class-artificer": {
+   "ic": "cogwork"
+  },
+  "cls:class-wizard": {
+   "ic": "grimoire"
   }
  },
  "extra": [],
