@@ -832,6 +832,8 @@ ul.tlist li{margin:.15em 0}
         <label class="mlabel" for="setupKey">GitHub access key</label>
         <input type="password" id="setupKey" autocomplete="off" spellcheck="false">
         <p class="mhelp"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Make a key on GitHub</a>: choose only this repository, and set <b>Contents</b> to <b>Read and write</b>.</p>
+        <label class="mlabel" for="setupName">Your name</label>
+        <input type="text" id="setupName" autocomplete="nickname" maxlength="40">
         <label class="mlabel" for="setupPass">New admin password</label>
         <input type="password" id="setupPass" autocomplete="new-password">
         <label class="mlabel" for="setupPass2">Type the password again</label>
@@ -947,9 +949,9 @@ function tipHTML(hit){
 
 /* admin sign-in, shared by every page of the GitHub Pages site. The unlocked key is kept
    in sessionStorage, so the sign-in lasts while this browser tab is open, across pages. */
-let ADMIN=false, GH_KEY=null;
+let ADMIN=false, GH_KEY=null, ADMIN_NAME="";
 const AdminHooks={canSignOut:()=>true,signedIn:()=>{},signedOut:()=>{}};
-const ADMIN_SS="crawl-admin-key";
+const ADMIN_SS="crawl-admin-key", ADMIN_SN="crawl-admin-name";
 const REPO=window.CRAWL_REPO||{};
 const KDF_ITER=600000;
 const b64=u8=>{let s="";for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
@@ -972,24 +974,58 @@ async function unlockKey(box,pass){
 function gh(path,opts={},key=GH_KEY){
   return fetch(`https://api.github.com/repos/${REPO.owner}/${REPO.repo}${path}`,{...opts,cache:"no-store",headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+key,"X-GitHub-Api-Version":"2022-11-28",...(opts.headers||{})}});
 }
+const EDIT_LOG="crawl-edits.json";
+const EDIT_PAGES={"crawl-spells.json":"Spells","crawl-items.json":"Items","crawl-glossary.json":"Glossary","crawl-classes.json":"Classes","crawl-races.json":"Races","crawl-feats.json":"Feats","crawl-backgrounds.json":"Backgrounds","crawl-creator.json":"Character Creator","crawl-tree.json":"Skill tree"};
+async function getRepoText(path){
+  const r=await gh(`/contents/${encodeURIComponent(path)}?ref=${REPO.branch||"main"}`,{headers:{"Accept":"application/vnd.github.raw+json"}});
+  if(r.status===404)return null; if(!r.ok)throw {code:"http",status:r.status}; return r.text();
+}
 async function putFile(path,text,message,key=GH_KEY){
   const branch=REPO.branch||"main";
   const cur=await gh(`/contents/${encodeURIComponent(path)}?ref=${branch}`,{},key);
   if(cur.status===401)throw {code:"bad_key"};
-  let sha; if(cur.ok)sha=(await cur.json()).sha; else if(cur.status!==404)throw {code:"http",status:cur.status};
+  let sha,oldText=null; if(cur.ok){const j=await cur.json();sha=j.sha;if(j.content&&j.encoding==="base64"){try{oldText=new TextDecoder().decode(unb64(j.content.replace(/\s/g,"")))}catch(e){}}} else if(cur.status!==404)throw {code:"http",status:cur.status};
+  if(sha&&oldText==null&&EDIT_PAGES[path]){try{oldText=await getRepoText(path)}catch(e){}}
+  if(ADMIN_NAME&&path!=="admin.json")message+=` (by ${ADMIN_NAME})`;
   const body={message,branch,content:b64(new TextEncoder().encode(text))}; if(sha)body.sha=sha;
   const r=await gh(`/contents/${encodeURIComponent(path)}`,{method:"PUT",body:JSON.stringify(body),headers:{"Content-Type":"application/json"}},key);
   if(r.status===401)throw {code:"bad_key"};
   if(r.status===403||r.status===404)throw {code:"no_access"};
   if(r.status===409)throw {code:"conflict"};
   if(!r.ok)throw {code:"http",status:r.status};
-  return r.json();
+  const out=await r.json();
+  if(EDIT_PAGES[path]&&ADMIN_NAME){try{await recordEdits(path,oldText,text)}catch(e){}}
+  return out;
 }
-function showAdminBtn(){document.documentElement.classList.toggle("is-admin",ADMIN);$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?"Admin · Sign out":"Admin"}
-function becomeAdmin(key,quiet){GH_KEY=key;ADMIN=true;try{sessionStorage.setItem(ADMIN_SS,key)}catch(e){}closeAdmin();showAdminBtn();AdminHooks.signedIn(quiet)}
-function signOut(){if(!AdminHooks.canSignOut())return;ADMIN=false;GH_KEY=null;try{sessionStorage.removeItem(ADMIN_SS)}catch(e){}showAdminBtn();AdminHooks.signedOut()}
-function restoreAdmin(){if(!STATIC)return;let k=null;try{k=sessionStorage.getItem(ADMIN_SS)}catch(e){}if(k)becomeAdmin(k,true)}
-$("adminBtn").addEventListener("click",()=>{if(ADMIN)signOut();else openAdmin()});
+/* who edited what: each saved thing (spell, item, class, feature, node...) is stamped in crawl-edits.json */
+function editItems(text,path){
+  const out=new Map(); let v; try{v=JSON.parse(text)}catch(e){return out}
+  const keyOf=o=>o&&typeof o==="object"&&!Array.isArray(o)?String(o.id||o.n||o.name||""):"";
+  const strip=o=>Array.isArray(o)?o.map(x=>keyOf(x)?"#"+keyOf(x):strip(x)):o&&typeof o==="object"?Object.fromEntries(Object.keys(o).map(k=>[k,strip(o[k])])):o;
+  const isMap=o=>o&&typeof o==="object"&&!Array.isArray(o)&&Object.keys(o).length&&Object.values(o).every(x=>x&&typeof x==="object"&&!Array.isArray(x));
+  const kids=(o,pre)=>{if(!o||typeof o!=="object")return;Object.keys(o).forEach(k=>{const c=o[k];if(Array.isArray(c))arr(c,pre+"."+k,k);else if(isMap(c))Object.keys(c).forEach(id=>{const x=c[id];out.set(pre+"."+k+"/"+id,{n:x.n||id,c:k,j:JSON.stringify(strip(x))})});else if(c&&typeof c==="object")kids(c,pre+"."+k)})};
+  const arr=(a,pre,cat)=>a.forEach(x=>{const k=keyOf(x);if(k){const key=pre+"/"+k;out.set(key,{n:String(x.n||x.name||k),c:cat,j:JSON.stringify(strip(x))});kids(x,key)}else if(x&&typeof x==="object")kids(x,pre)});
+  if(Array.isArray(v))arr(v,"",""); else kids(v,"");
+  return out;
+}
+async function recordEdits(path,oldText,newText){
+  const a=editItems(oldText||"null",path),b=editItems(newText,path),at=new Date().toISOString(),ch={};
+  b.forEach((x,k)=>{const o=a.get(k);if(!o||o.j!==x.j)ch[path+k]={n:x.n,f:path,c:x.c,how:o?"edited":"added",by:ADMIN_NAME,at}});
+  a.forEach((x,k)=>{if(!b.has(k))ch[path+k]={n:x.n,f:path,c:x.c,how:"removed",by:ADMIN_NAME,at}});
+  if(!Object.keys(ch).length&&oldText!==newText)ch[path]={n:EDIT_PAGES[path]+" settings",f:path,c:"",how:"edited",by:ADMIN_NAME,at};
+  if(!Object.keys(ch).length)return;
+  for(let i=0;i<3;i++){
+    let log={v:1,edits:{}};try{const t=await getRepoText(EDIT_LOG);if(t)log=JSON.parse(t)}catch(e){}
+    log.edits=Object.assign(log.edits||{},ch);
+    const keep=Object.entries(log.edits).sort((x,y)=>y[1].at.localeCompare(x[1].at)).slice(0,3000);log.edits=Object.fromEntries(keep);
+    try{await putFile(EDIT_LOG,JSON.stringify(log,null,1)+"\n","Record who edited what");EDITS=log;histRender();return}catch(e){if(!(e&&e.code==="conflict"))return}
+  }
+}
+function showAdminBtn(){document.documentElement.classList.toggle("is-admin",ADMIN);$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?`Admin · ${ADMIN_NAME||"Signed in"}`:"Admin";const h=document.getElementById("histBtn");if(h)h.hidden=!ADMIN;histShow()}
+function becomeAdmin(key,quiet,name){GH_KEY=key;ADMIN=true;if(name!=null)ADMIN_NAME=name;try{sessionStorage.setItem(ADMIN_SS,key);sessionStorage.setItem(ADMIN_SN,ADMIN_NAME)}catch(e){}closeAdmin();showAdminBtn();AdminHooks.signedIn(quiet)}
+function signOut(){if(!AdminHooks.canSignOut())return;ADMIN=false;GH_KEY=null;ADMIN_NAME="";try{sessionStorage.removeItem(ADMIN_SS);sessionStorage.removeItem(ADMIN_SN)}catch(e){}closeAcct();showAdminBtn();AdminHooks.signedOut()}
+function restoreAdmin(){if(!STATIC)return;let k=null,n="";try{k=sessionStorage.getItem(ADMIN_SS);n=sessionStorage.getItem(ADMIN_SN)||""}catch(e){}if(k)becomeAdmin(k,true,n)}
+$("adminBtn").addEventListener("click",()=>{if(ADMIN)openAcct();else openAdmin()});
 let adminMode="login";
 function setAdminMode(m){
   adminMode=m;
@@ -999,8 +1035,11 @@ function setAdminMode(m){
   $("adminSwitch").textContent=m==="login"?"First time? Set up admin access":"Back to sign-in";
   $("adminErr").textContent="";
 }
+/* admin.json holds one locked copy of the GitHub key per admin: {v:2, users:[{name, box}]}.
+   The first file (v1) was a single box: that's the owner. */
+const adminUsers=j=>!j?null:Array.isArray(j.users)?j.users.filter(u=>u&&u.box&&u.box.data):j.data&&j.salt&&j.iv?[{name:"Brody",box:j}]:null;
 async function fetchAdminBox(){
-  try{const r=await fetch("admin.json",{cache:"no-store"});if(r.ok){const j=await r.json();if(j&&j.data&&j.salt&&j.iv)return j}}catch(e){}
+  try{const r=await fetch("admin.json?t="+Date.now(),{cache:"no-store"});if(r.ok){const u=adminUsers(await r.json());if(u&&u.length)return u}}catch(e){}
   return null;
 }
 async function openAdmin(){
@@ -1023,26 +1062,136 @@ $("adminForm").addEventListener("submit",async e=>{
     const pass=$("adminPass").value; if(!pass){err("Type your admin password.");return}
     go.disabled=true;err("Checking…");
     try{
-      const box=await fetchAdminBox(); if(!box){setAdminMode("setup");err("Admin access isn't set up yet.");return}
-      let key; try{key=await unlockKey(box,pass)}catch(x){err("That password isn't right.");return}
-      becomeAdmin(key);
+      const users=await fetchAdminBox(); if(!users){setAdminMode("setup");err("Admin access isn't set up yet.");return}
+      let key=null,who="";for(const u of users){try{key=await unlockKey(u.box,pass);who=u.name;break}catch(x){}}
+      if(!key){err("That password isn't right.");return}
+      becomeAdmin(key,false,who);
     }finally{go.disabled=false}
   }else{
-    const key=$("setupKey").value.trim(), p1=$("setupPass").value, p2=$("setupPass2").value;
+    const key=$("setupKey").value.trim(), nm=$("setupName").value.trim(), p1=$("setupPass").value, p2=$("setupPass2").value;
     if(!key){err("Paste your GitHub access key.");return}
+    if(!nm){err("Type your name. It shows next to the things you edit.");return}
     if(p1.length<12){err("Use at least 12 characters for the password.");return}
     if(p1!==p2){err("The two passwords don't match.");return}
     go.disabled=true;err("Locking the key and saving…");
     try{
       const box=await lockKey(key,p1);
-      await putFile("admin.json",JSON.stringify(box,null,1)+"\n","Set up admin access",key);
-      becomeAdmin(key);
+      await putFile("admin.json",JSON.stringify({v:2,users:[{name:nm,box}]},null,1)+"\n","Set up admin access",key);
+      becomeAdmin(key,false,nm);
     }catch(x){
       const c=x&&x.code;
       err(c==="bad_key"?"GitHub didn't accept that key. Check you copied all of it.":c==="no_access"?"That key can't change this repo. Give it access to this repository with Contents set to Read and write.":"Couldn't reach GitHub. Try again in a moment.");
     }finally{go.disabled=false}
   }
 });
+/* signed-in admin: change your password or name, add or remove admins, sign out */
+document.body.insertAdjacentHTML("beforeend",`<div class="modal" id="acctModal" hidden><div class="mbox acctbox" role="dialog" aria-modal="true" aria-labelledby="acctTitle">
+<div class="mhead"><h2 id="acctTitle">Admin</h2></div><div class="mbody" id="acctBody"></div>
+<div class="mfoot"><button type="button" class="mlink" id="acctOut">Sign out</button><span class="mbtns"><button type="button" class="btn" id="acctClose">Close</button></span></div></div></div>`);
+let acctUsers=null,acctSure="";
+async function loadAcct(){try{const t=await getRepoText("admin.json");acctUsers=adminUsers(t?JSON.parse(t):null)||[]}catch(e){acctUsers=null}}
+function acctHTML(){
+  const me=ADMIN_NAME, us=acctUsers;
+  return `<p class="mnote">Signed in as <b>${escA(me||"an admin")}</b>. Your name is shown next to everything you edit.</p>
+<h3 class="acth">Your name</h3><div class="actrow"><input type="text" id="acName" value="${escA(me)}" maxlength="40" autocomplete="off"><button type="button" class="btn" data-acct="name">Change name</button></div>
+<h3 class="acth">Change your password</h3>
+<label class="mlabel" for="acP1">New password</label><input type="password" id="acP1" autocomplete="new-password">
+<label class="mlabel" for="acP2">Type it again</label><input type="password" id="acP2" autocomplete="new-password">
+<div class="actrow"><button type="button" class="btn solid" data-acct="pass">Change my password</button></div>
+<h3 class="acth">Admins</h3>${us==null?`<p class="mnote">Couldn't load the admin list. Check your connection and reopen this.</p>`:`<ul class="actlist">${us.map(u=>`<li><b>${escA(u.name)}</b>${u.name===me?` <small>(you)</small>`:`<button type="button" class="btn${acctSure===u.name?" gdel":""}" data-acct="remove" data-who="${escA(u.name)}">${acctSure===u.name?"Click again to remove":"Remove"}</button>`}</li>`).join("")}</ul>`}
+<h3 class="acth">Add an admin</h3><p class="mnote">Choose their name and a starting password, then tell them the password in person. They can change it after signing in.</p>
+<label class="mlabel" for="acNN">Their name</label><input type="text" id="acNN" maxlength="40" autocomplete="off">
+<label class="mlabel" for="acNP1">Their password</label><input type="password" id="acNP1" autocomplete="new-password">
+<label class="mlabel" for="acNP2">Type it again</label><input type="password" id="acNP2" autocomplete="new-password">
+<div class="actrow"><button type="button" class="btn solid" data-acct="add">Add admin</button></div>
+<p class="merr" id="acctErr" role="alert"></p>`;
+}
+const escA=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function openAcct(){acctSure="";$("acctTitle").textContent="Admin";$("acctBody").innerHTML=`<p class="mnote">Loading…</p>`;$("acctModal").hidden=false;await loadAcct();$("acctBody").innerHTML=acctHTML()}
+function closeAcct(){const m=document.getElementById("acctModal");if(m)m.hidden=true}
+$("acctClose").addEventListener("click",closeAcct);
+$("acctOut").addEventListener("click",()=>{closeAcct();signOut()});
+$("acctModal").addEventListener("click",e=>{if(e.target===$("acctModal"))closeAcct()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("acctModal").hidden)closeAcct()});
+async function saveUsers(users,msg,done){
+  const err=m=>{const e=document.getElementById("acctErr");if(e)e.textContent=m};
+  err("Saving…");
+  try{await putFile("admin.json",JSON.stringify({v:2,users},null,1)+"\n",msg);acctUsers=users;acctSure="";$("acctBody").innerHTML=acctHTML();err(done)}
+  catch(x){const c=x&&x.code;err(c==="bad_key"?"GitHub no longer accepts the access key.":c==="conflict"?"The admin list changed while you were editing. Close this and open it again.":"Saving failed. Check your connection and try again.")}
+}
+$("acctBody").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-acct]");if(!b||!acctUsers)return;
+  const a=b.dataset.acct,err=m=>{$("acctErr").textContent=m},v=id=>($(id).value||"");
+  const users=acctUsers.map(u=>({...u})),meI=users.findIndex(u=>u.name===ADMIN_NAME);
+  if(a==="name"){const n=v("acName").trim();if(!n){err("Type a name.");return}if(n===ADMIN_NAME)return;if(users.some(u=>u.name.toLowerCase()===n.toLowerCase())){err("Another admin already has that name.");return}
+    const old=ADMIN_NAME;if(meI>=0)users[meI].name=n;ADMIN_NAME=n;try{sessionStorage.setItem(ADMIN_SN,n)}catch(x){}showAdminBtn();
+    await saveUsers(users,`Rename admin ${old} to ${n}`,"Name changed.");return}
+  if(a==="pass"){const p1=v("acP1"),p2=v("acP2");if(p1.length<12){err("Use at least 12 characters for the password.");return}if(p1!==p2){err("The two passwords don't match.");return}
+    err("Locking your key with the new password…");const box=await lockKey(GH_KEY,p1);
+    if(meI>=0)users[meI].box=box;else users.push({name:ADMIN_NAME||"Admin",box});
+    await saveUsers(users,`Change the admin password for ${ADMIN_NAME}`,"Password changed. Use the new one next time you sign in.");return}
+  if(a==="add"){const n=v("acNN").trim(),p1=v("acNP1"),p2=v("acNP2");if(!n){err("Type their name.");return}if(users.some(u=>u.name.toLowerCase()===n.toLowerCase())){err("There's already an admin with that name.");return}
+    if(p1.length<12){err("Use at least 12 characters for their password.");return}if(p1!==p2){err("The two passwords don't match.");return}
+    err("Locking a copy of the key with their password…");const box=await lockKey(GH_KEY,p1);users.push({name:n,box});
+    await saveUsers(users,`Add admin ${n}`,`${n} can now sign in with that password.`);return}
+  if(a==="remove"){const w=b.dataset.who;if(acctSure!==w){acctSure=w;$("acctBody").innerHTML=acctHTML();return}
+    await saveUsers(users.filter(u=>u.name!==w),`Remove admin ${w}`,`${w} can no longer sign in.`);return}
+});
+/* Edit history switch: shows who last edited what */
+let EDITS=null,histFilter="page",histWho="";
+const HIST_SS="crawl-hist";
+const histOn=()=>{try{return sessionStorage.getItem(HIST_SS)==="1"}catch(e){return false}};
+(function(){
+  const ab=document.getElementById("adminBtn");if(!ab)return;
+  ab.insertAdjacentHTML("afterend",`<button type="button" class="histbtn" id="histBtn" role="switch" aria-checked="false" hidden title="Show who last edited what"><span class="tsw" aria-hidden="true"></span>Edit history</button>`);
+  document.body.insertAdjacentHTML("beforeend",`<aside class="histpanel" id="histPanel" hidden aria-label="Edit history"><div class="hph"><b>Last edited by</b><button type="button" class="hpx" id="histX" aria-label="Close edit history">×</button></div>
+<div class="hpf"><button type="button" data-hf="page" aria-pressed="true">This page</button><button type="button" data-hf="all" aria-pressed="false">Everything</button><select id="histWho" aria-label="Who"><option value="">Everyone</option></select></div><div class="hpl" id="histList"></div></aside>`);
+  $("histBtn").addEventListener("click",()=>{const on=!histOn();try{sessionStorage.setItem(HIST_SS,on?"1":"0")}catch(e){}histShow()});
+  $("histX").addEventListener("click",()=>{try{sessionStorage.setItem(HIST_SS,"0")}catch(e){}histShow()});
+  $("histPanel").addEventListener("click",e=>{const f=e.target.closest("[data-hf]");if(!f)return;histFilter=f.dataset.hf;document.querySelectorAll("#histPanel [data-hf]").forEach(x=>x.setAttribute("aria-pressed",x===f));histRender()});
+  $("histWho").addEventListener("change",e=>{histWho=e.target.value;histRender()});
+  const st=document.createElement("style");st.textContent=`.histbtn{display:inline-flex;align-items:center;gap:8px;border:2px solid currentColor;border-radius:999px;background:none;color:inherit;font:700 .8rem var(--font);padding:4px 12px 4px 6px;cursor:pointer;white-space:nowrap}
+.histbtn[hidden]{display:none}.histbtn .tsw{width:28px;height:16px;border-radius:999px;background:rgba(127,127,127,.45);position:relative;transition:background .15s}
+.histbtn .tsw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform .15s}
+.histbtn[aria-checked=true] .tsw{background:#d9b25f}.histbtn[aria-checked=true] .tsw::after{transform:translateX(12px)}
+.histpanel{position:fixed;right:12px;top:calc(var(--navh,52px) + 10px);z-index:70;width:min(340px,calc(100vw - 24px));max-height:calc(100vh - var(--navh,52px) - 24px);display:flex;flex-direction:column;background:var(--paper,#fff);color:var(--ink,#111);border:2px solid var(--ink,#111);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden}
+.histpanel[hidden]{display:none}.hph{display:flex;align-items:center;justify-content:space-between;background:var(--ink,#111);color:var(--paper,#fff);padding:8px 12px}
+.hpx{background:none;border:0;color:inherit;font-size:1.3rem;line-height:1;cursor:pointer}
+.hpf{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(127,127,127,.35);flex-wrap:wrap}
+.hpf button{border:2px solid var(--ink,#111);background:none;color:inherit;border-radius:999px;font:700 .75rem var(--font);padding:3px 10px;cursor:pointer}
+.hpf button[aria-pressed=true]{background:var(--ink,#111);color:var(--paper,#fff)}
+.hpf select{margin-left:auto;font:600 .75rem var(--font);border:2px solid var(--ink,#111);border-radius:999px;padding:2px 6px;background:var(--paper,#fff);color:var(--ink,#111)}
+.hpl{overflow:auto;padding:4px 0}.hpi{padding:7px 12px;border-bottom:1px solid rgba(127,127,127,.2);display:grid;gap:2px;font-size:.82rem}
+.hpi b{font-size:.9rem}.hpi small{color:var(--muted,#666);font-weight:600}.hpi .who{font-weight:800}
+.hpi.removed b{text-decoration:line-through;opacity:.7}.hpe{padding:14px 12px;color:var(--muted,#666);font-size:.85rem;font-weight:600}
+.acth{margin:14px 0 2px;font-size:.95rem;font-weight:800}.actrow{display:flex;gap:8px;align-items:center;margin-top:6px}.actrow input{flex:1}
+.actlist{list-style:none;margin:0;padding:0;display:grid;gap:6px}.actlist li{display:flex;align-items:center;gap:8px;justify-content:space-between;border:2px solid rgba(127,127,127,.35);border-radius:10px;padding:6px 10px}
+.acctbox{max-width:480px}.acctbox .btn.gdel{color:#b3261e;border-color:#b3261e}
+.treebtn{display:inline-flex;align-items:center;gap:7px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:4px 12px 4px 6px;font:700 .8rem var(--font);cursor:pointer}
+.treebtn .tsw{width:30px;height:16px;border-radius:999px;background:var(--hair);position:relative;transition:background .15s}
+.treebtn .tsw::after{content:"";position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--paper);box-shadow:0 0 0 1px var(--ink);transition:left .15s}
+.treebtn[aria-checked="true"] .tsw{background:#b8860b}
+.treebtn[aria-checked="true"] .tsw::after{left:16px}`;
+  document.head.appendChild(st);
+})();
+const HIST_FILES={"spells.html":["crawl-spells.json"],"items.html":["crawl-items.json"],"crafting.html":["crawl-items.json"],"glossary.html":["crawl-glossary.json"],"conditions.html":["crawl-glossary.json"],"classes.html":["crawl-classes.json"],"races.html":["crawl-races.json"],"feats.html":["crawl-feats.json"],"backgrounds.html":["crawl-backgrounds.json"],"creator.html":["crawl-creator.json","crawl-tree.json"]};
+async function histLoad(){try{const t=await getRepoText(EDIT_LOG);EDITS=t?JSON.parse(t):{v:1,edits:{}}}catch(e){EDITS=EDITS||null}histRender()}
+function histShow(){
+  const b=document.getElementById("histBtn"),p=document.getElementById("histPanel");if(!b||!p)return;
+  const on=ADMIN&&histOn();b.setAttribute("aria-checked",on);p.hidden=!on;if(on){if(!EDITS)histLoad();else histRender()}
+}
+function histRender(){
+  const l=document.getElementById("histList");if(!l)return;
+  if(!EDITS){l.innerHTML=`<p class="hpe">Loading…</p>`;return}
+  const pg=(location.pathname.split("/").pop()||"index.html"),files=HIST_FILES[pg];
+  const all=Object.values(EDITS.edits||{}).sort((a,b)=>b.at.localeCompare(a.at));
+  const who=[...new Set(all.map(x=>x.by))].sort(),sel=$("histWho");
+  sel.innerHTML=`<option value="">Everyone</option>`+who.map(w=>`<option${w===histWho?" selected":""}>${escA(w)}</option>`).join("");
+  const rows=all.filter(x=>(histFilter==="all"||!files||files.includes(x.f))&&(!histWho||x.by===histWho)).slice(0,150);
+  const cat=x=>{const c={presets:"Preset",recipes:"Recipe",feats:x.f==="crawl-feats.json"?"Feat":"Feature",opts:"Option",subs:"Subclass",nodes:"Tree node",extra:"Tree node",entries:"Entry",items:"Item",classes:"Class",races:"Race",backgrounds:"Background"}[x.c];return c||""};
+  const when=t=>{const d=new Date(t);return isNaN(d)?"":d.toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})};
+  l.innerHTML=rows.length?rows.map(x=>`<div class="hpi ${x.how}"><b>${escA(x.n)}</b><small>${escA([EDIT_PAGES[x.f]||x.f,cat(x)].filter(Boolean).join(" · "))} · ${x.how}</small><span><span class="who">${escA(x.by)}</span> · ${when(x.at)}</span></div>`).join(""):`<p class="hpe">${files&&histFilter==="page"?"Nothing on this page has been edited since edit history started.":"No edits recorded yet."} Edits are recorded from now on, each time someone saves.</p>`;
+}
 /* Home page (index.html): cards to every part of the site. The counts on the cards are refreshed from the data files,
    so they stay right after admin edits. Runs after the shared admin code. */
 const COUNT_FILES = { classes: ["crawl-classes.json", j => j.classes], races: ["crawl-races.json", j => j.races], backgrounds: ["crawl-backgrounds.json", j => j.backgrounds],
