@@ -1117,7 +1117,7 @@ async function recordEdits(path,oldText,newText){
     try{await putFile(EDIT_LOG,JSON.stringify(log,null,1)+"\n","Record who edited what");EDITS=log;histRender();return}catch(e){if(!(e&&e.code==="conflict"))return}
   }
 }
-function showAdminBtn(){document.documentElement.classList.toggle("is-admin",ADMIN);$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?`Admin · ${ADMIN_NAME||"Signed in"}`:"Admin";const h=document.getElementById("histBtn");if(h)h.hidden=!ADMIN;histShow()}
+function showAdminBtn(){document.documentElement.classList.toggle("is-admin",ADMIN);$("adminBtn").classList.toggle("on",ADMIN);$("adminLabel").textContent=ADMIN?`Admin · ${ADMIN_NAME||"Signed in"}`:"Admin";const h=document.getElementById("aoptWrap");if(h)h.hidden=!ADMIN;aoptSync();histShow()}
 function becomeAdmin(key,quiet,name){GH_KEY=key;ADMIN=true;if(name!=null)ADMIN_NAME=name;try{sessionStorage.setItem(ADMIN_SS,key);sessionStorage.setItem(ADMIN_SN,ADMIN_NAME)}catch(e){}closeAdmin();showAdminBtn();AdminHooks.signedIn(quiet)}
 function signOut(){if(!AdminHooks.canSignOut())return;ADMIN=false;GH_KEY=null;ADMIN_NAME="";try{sessionStorage.removeItem(ADMIN_SS);sessionStorage.removeItem(ADMIN_SN)}catch(e){}closeAcct();showAdminBtn();AdminHooks.signedOut()}
 function restoreAdmin(){if(!STATIC)return;let k=null,n="";try{k=sessionStorage.getItem(ADMIN_SS);n=sessionStorage.getItem(ADMIN_SN)||""}catch(e){}if(k)becomeAdmin(k,true,n)}
@@ -1239,18 +1239,43 @@ const HIST_SS="crawl-hist";
 const histOn=()=>{try{return sessionStorage.getItem(HIST_SS)==="1"}catch(e){return false}};
 (function(){
   const ab=document.getElementById("adminBtn");if(!ab)return;
-  ab.insertAdjacentHTML("afterend",`<button type="button" class="histbtn" id="histBtn" role="switch" aria-checked="false" hidden title="Show who last edited what"><span class="tsw" aria-hidden="true"></span>Edit history</button>`);
+  ab.insertAdjacentHTML("afterend",`<div class="aopt" id="aoptWrap" hidden><button type="button" class="aoptbtn" id="aoptBtn" aria-haspopup="true" aria-expanded="false">Admin Options<span class="aoptcar" aria-hidden="true"></span></button>
+<div class="aoptmenu" id="aoptMenu" role="menu" hidden>
+<button type="button" role="menuitem" data-aopt="acct"><b>Admins and sign-in</b><small>Add or remove admins, change your name or password</small></button>
+<button type="button" role="menuitemcheckbox" data-aopt="tree" aria-checked="false"><span class="tsw" aria-hidden="true"></span><b>Tree mode</b></button>
+<button type="button" role="menuitemcheckbox" data-aopt="hist" id="histBtn" aria-checked="false"><span class="tsw" aria-hidden="true"></span><b>Last edited by</b></button>
+<button type="button" role="menuitem" data-aopt="out" class="aoptout"><b>Sign out</b></button></div></div>`);
   document.body.insertAdjacentHTML("beforeend",`<aside class="histpanel" id="histPanel" hidden aria-label="Edit history"><div class="hph"><b>Last edited by</b><button type="button" class="hpx" id="histX" aria-label="Close edit history">×</button></div>
 <div class="hpf"><button type="button" data-hf="page" aria-pressed="true">This page</button><button type="button" data-hf="all" aria-pressed="false">Everything</button><select id="histWho" aria-label="Who"><option value="">Everyone</option></select></div><div class="hpl" id="histList"></div></aside>`);
-  $("histBtn").addEventListener("click",()=>{const on=!histOn();try{sessionStorage.setItem(HIST_SS,on?"1":"0")}catch(e){}histShow()});
-  $("histX").addEventListener("click",()=>{try{sessionStorage.setItem(HIST_SS,"0")}catch(e){}histShow()});
+  window.addEventListener("crawl-tree-mode",()=>aoptSync());
+  const menu=$("aoptMenu"),btn=$("aoptBtn"),openM=o=>{menu.hidden=!o;btn.setAttribute("aria-expanded",o)};
+  btn.addEventListener("click",e=>{e.stopPropagation();openM(menu.hidden)});
+  document.addEventListener("click",e=>{if(e.isTrusted&&!e.target.closest("#aoptWrap"))openM(false)});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!menu.hidden){openM(false);btn.focus()}});
+  menu.addEventListener("click",e=>{const it=e.target.closest("[data-aopt]");if(!it)return;const a=it.dataset.aopt;
+    if(a==="acct"){openM(false);openAcct();return}
+    if(a==="out"){openM(false);signOut();return}
+    if(a==="hist"){const on=!histOn();try{sessionStorage.setItem(HIST_SS,on?"1":"0")}catch(x){}histShow();aoptSync();return}
+    if(a==="tree"){const tb=document.getElementById("treeBtn");if(tb)tb.click();else{const r=document.documentElement,on=r.getAttribute("data-tree")!=="on";r.setAttribute("data-tree",on?"on":"off");try{localStorage.setItem("crawl-tree-mode",on?"1":"0")}catch(x){}window.dispatchEvent(new Event("crawl-tree-mode"))}openM(true);aoptSync();return}
+  });
+  $("histX").addEventListener("click",()=>{try{sessionStorage.setItem(HIST_SS,"0")}catch(e){}histShow();aoptSync()});
   $("histPanel").addEventListener("click",e=>{const f=e.target.closest("[data-hf]");if(!f)return;histFilter=f.dataset.hf;document.querySelectorAll("#histPanel [data-hf]").forEach(x=>x.setAttribute("aria-pressed",x===f));histRender()});
   $("histWho").addEventListener("change",e=>{histWho=e.target.value;histRender()});
-  const st=document.createElement("style");st.textContent=`.histbtn{display:inline-flex;align-items:center;gap:8px;border:2px solid currentColor;border-radius:999px;background:none;color:inherit;font:700 .8rem var(--font);padding:4px 12px 4px 6px;cursor:pointer;white-space:nowrap}
-.histbtn[hidden]{display:none}.histbtn .tsw{width:28px;height:16px;border-radius:999px;background:rgba(127,127,127,.45);position:relative;transition:background .15s}
-.histbtn .tsw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform .15s}
-.histbtn[aria-checked=true] .tsw{background:#d9b25f}.histbtn[aria-checked=true] .tsw::after{transform:translateX(12px)}
-.histpanel{position:fixed;right:12px;top:calc(var(--navh,52px) + 10px);z-index:70;width:min(340px,calc(100vw - 24px));max-height:calc(100vh - var(--navh,52px) - 24px);display:flex;flex-direction:column;background:var(--paper,#fff);color:var(--ink,#111);border:2px solid var(--ink,#111);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden}
+  const st=document.createElement("style");st.textContent=`html.is-admin #treeBtn{display:none!important}
+.aopt{position:relative;display:inline-flex}.aopt[hidden]{display:none}
+.aoptbtn{display:inline-flex;align-items:center;gap:8px;border:2px solid #d9b25f;border-radius:999px;background:#d9b25f;color:#111;font:800 .8rem var(--font);padding:5px 12px;cursor:pointer;white-space:nowrap}
+.aoptcar{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor}
+.aoptbtn[aria-expanded=true] .aoptcar{transform:rotate(180deg)}
+.aoptmenu{position:absolute;right:0;top:calc(100% + 8px);z-index:80;min-width:270px;background:var(--paper,#fff);color:var(--ink,#111);border:2px solid var(--ink,#111);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.35);padding:6px;display:grid;gap:2px;text-transform:none;letter-spacing:0}
+.aoptmenu[hidden]{display:none}
+.aoptmenu button{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;text-align:left;background:none;border:0;border-radius:8px;padding:9px 10px;color:inherit;font:600 .88rem var(--font);cursor:pointer}
+.aoptmenu button:hover,.aoptmenu button:focus-visible{background:rgba(127,127,127,.15)}
+.aoptmenu button[role=menuitem]{grid-template-columns:1fr}.aoptmenu small{grid-column:1/-1;color:var(--muted,#666);font-weight:600;font-size:.75rem}
+.aoptmenu .aoptout{border-top:1px solid rgba(127,127,127,.3);border-radius:0 0 8px 8px;margin-top:4px}
+.aoptmenu .tsw{width:30px;height:16px;border-radius:999px;background:rgba(127,127,127,.45);position:relative;transition:background .15s}
+.aoptmenu .tsw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform .15s}
+.aoptmenu [aria-checked=true] .tsw{background:#d9b25f}.aoptmenu [aria-checked=true] .tsw::after{transform:translateX(14px)}
+.histpanel{position:fixed;right:12px;top:calc(var(--navh,52px) + 10px);z-index:24;width:min(340px,calc(100vw - 24px));max-height:calc(100vh - var(--navh,52px) - 24px);display:flex;flex-direction:column;background:var(--paper,#fff);color:var(--ink,#111);border:2px solid var(--ink,#111);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden}
 .histpanel[hidden]{display:none}.hph{display:flex;align-items:center;justify-content:space-between;background:var(--ink,#111);color:var(--paper,#fff);padding:8px 12px}
 .hpx{background:none;border:0;color:inherit;font-size:1.3rem;line-height:1;cursor:pointer}
 .hpf{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(127,127,127,.35);flex-wrap:wrap}
@@ -1270,11 +1295,12 @@ const histOn=()=>{try{return sessionStorage.getItem(HIST_SS)==="1"}catch(e){retu
 .treebtn[aria-checked="true"] .tsw::after{left:16px}`;
   document.head.appendChild(st);
 })();
+function aoptSync(){const m=document.getElementById("aoptMenu");if(!m)return;const t=m.querySelector('[data-aopt="tree"]'),h=m.querySelector('[data-aopt="hist"]');if(t)t.setAttribute("aria-checked",document.documentElement.getAttribute("data-tree")==="on");if(h)h.setAttribute("aria-checked",ADMIN&&histOn())}
 const HIST_FILES={"spells.html":["crawl-spells.json"],"items.html":["crawl-items.json"],"crafting.html":["crawl-items.json"],"glossary.html":["crawl-glossary.json"],"conditions.html":["crawl-glossary.json"],"classes.html":["crawl-classes.json"],"races.html":["crawl-races.json"],"feats.html":["crawl-feats.json"],"backgrounds.html":["crawl-backgrounds.json"],"creator.html":["crawl-creator.json","crawl-tree.json"]};
 async function histLoad(){try{const t=await getRepoText(EDIT_LOG);EDITS=t?JSON.parse(t):{v:1,edits:{}}}catch(e){EDITS=EDITS||null}histRender()}
 function histShow(){
   const b=document.getElementById("histBtn"),p=document.getElementById("histPanel");if(!b||!p)return;
-  const on=ADMIN&&histOn();b.setAttribute("aria-checked",on);p.hidden=!on;if(on){if(!EDITS)histLoad();else histRender()}
+  const on=ADMIN&&histOn();b.setAttribute("aria-checked",on);p.hidden=!on;aoptSync();if(on){if(!EDITS)histLoad();else histRender()}
 }
 function histRender(){
   const l=document.getElementById("histList");if(!l)return;

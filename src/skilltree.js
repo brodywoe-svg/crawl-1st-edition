@@ -9,7 +9,7 @@
    are saved, in crawl-tree.json = {v, nodes: {id: {x, y, n, d, kind, hide}}, extra: [node], links: [[a, b]], unlinks: [[a, b]]}.
    The view is top-down: drag to pan, wheel or +/- to zoom, Alt-drag or right-drag (or the Turn slider) to turn. */
 const treeOn = () => document.documentElement.getAttribute("data-tree") === "on";
-function normTree(j) { j = j && typeof j === "object" ? j : {}; return { v: 1, nodes: j.nodes && typeof j.nodes === "object" && !Array.isArray(j.nodes) ? j.nodes : {}, extra: arr(j.extra).filter(n => n && n.id), links: arr(j.links).filter(l => Array.isArray(l) && l.length === 2), unlinks: arr(j.unlinks).filter(l => Array.isArray(l) && l.length === 2) } }
+function normTree(j) { j = j && typeof j === "object" ? j : {}; return { v: 1, nodes: j.nodes && typeof j.nodes === "object" && !Array.isArray(j.nodes) ? j.nodes : {}, extra: arr(j.extra).filter(n => n && n.id), links: arr(j.links).filter(l => Array.isArray(l) && l.length === 2), unlinks: arr(j.unlinks).filter(l => Array.isArray(l) && l.length === 2), curves: j.curves && typeof j.curves === "object" && !Array.isArray(j.curves) ? j.curves : {} } }
 let TREE_SAVED = normTree(typeof TREE !== "undefined" ? TREE : null), TREE_ORIG = JSON.stringify(TREE_SAVED);
 let FEAT_LIST = arr(typeof FEATS !== "undefined" && FEATS ? FEATS.feats : []);
 const treeDirty = () => JSON.stringify(TREE_SAVED) !== TREE_ORIG;
@@ -94,6 +94,14 @@ function baseTree() {
 }
 /* the base tree with the admin's changes on top */
 const sameLink = (l, a, b) => (l[0] === a && l[1] === b) || (l[0] === b && l[1] === a);
+/* a line's bend (c: how far its middle is pushed sideways, in tree pixels) and lock, keyed by both ends */
+const linkKey = (a, b) => [a, b].sort().join("|");
+const curveOf = (a, b) => TREE_SAVED.curves[linkKey(a, b)] || {};
+function linkGeo(p, q, a, b) {
+  const cv = curveOf(a, b), c = +cv.c || 0, dx = q.x - p.x, dy = q.y - p.y, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
+  const mx = (p.x + q.x) / 2, my = (p.y + q.y) / 2;
+  return { c, lock: !!cv.lock, nx, ny, cx: mx + nx * c, cy: my + ny * c, hx: mx + nx * c / 2, hy: my + ny * c / 2 };
+}
 function fullTree() {
   const t = baseTree(), S = TREE_SAVED;
   const nodes = [...t.nodes, ...S.extra.map(n => ({ kind: "minor", d: "", ...n, custom: true }))].map(n => { const o = S.nodes[n.id]; return o ? { ...n, ...o, edited: true } : n });
@@ -128,17 +136,21 @@ function treeNodeInfo(c, n, st) {
 
 /* ---------------------------------------------------------------- the 3D viewer */
 const TV = { px: 0, py: 0, zoom: 0.42, tilt: 0, rot: 0, focus: "" };
-let treeEdit = false, treeSel = "", treeLinkFrom = "", treeHover = "", treeIcPick = false;
+let treeEdit = false, treeSel = "", treeLinkFrom = "", treeHover = "", treeIcPick = false, treeLinkSel = "";
 function treeHTML(c) {
   const T = fullTree(), st = treeState(c, T), W = 1;
   const xs = T.nodes.map(n => n.x), ys = T.nodes.map(n => n.y), ext = Math.max(400, ...xs.map(Math.abs), ...ys.map(Math.abs)) + 200;
-  const path = T.links.map(([a, b]) => { const p = T.byId.get(a), q = T.byId.get(b); const on = st.get(a) === "have" && st.get(b) === "have"; return `<path class="${on ? "on" : st.get(b) === "open" || st.get(a) === "open" ? "open" : ""}" d="M${p.x + ext},${p.y + ext} L${q.x + ext},${q.y + ext}"/>` }).join("");
+  let handle = "";
+  const path = T.links.map(([a, b]) => { const p = T.byId.get(a), q = T.byId.get(b), g = linkGeo(p, q, a, b), key = linkKey(a, b), on = st.get(a) === "have" && st.get(b) === "have";
+    const d = g.c ? `M${p.x + ext},${p.y + ext} Q${g.cx + ext},${g.cy + ext} ${q.x + ext},${q.y + ext}` : `M${p.x + ext},${p.y + ext} L${q.x + ext},${q.y + ext}`;
+    const sel = treeEdit && treeLinkSel === key; if (sel && !g.lock) handle = `<div class="tvhandle" style="left:${g.hx}px;top:${g.hy}px" data-handle="${esc(key)}" title="Drag to curve the line"></div>`;
+    return `<path class="${on ? "on" : st.get(b) === "open" || st.get(a) === "open" ? "open" : ""}${treeEdit && g.lock ? " lockd" : ""}${sel ? " selk" : ""}" d="${d}"/>` + (treeEdit ? `<path class="hit" d="${d}" data-link="${esc(key)}"/>` : "") }).join("");
   const node = n => n.kind === "label" ? `<div class="tn tlabel" style="left:${n.x}px;top:${n.y}px" data-node="${esc(n.id)}"><span>${esc(n.n)}</span></div>`
     : `<button type="button" class="tn k-${esc(n.kind)} s-${st.get(n.id) || "none"}${n.id === treeSel ? " sel" : ""}${n.hide ? " hidden-node" : ""}${n.custom ? " custom" : ""}" style="left:${n.x}px;top:${n.y}px" data-node="${esc(n.id)}" aria-label="${esc(n.n)}"><i${n.ic && TREE_ICON.has(n.ic) ? ` class="hasic"` : ""}>${n.ic ? treeIconSVG(n.ic) : ""}</i><span>${esc(n.n)}</span></button>`;
   const ctl = `<div class="tvctl"><button type="button" data-tv="out" aria-label="Zoom out">−</button><button type="button" data-tv="in" aria-label="Zoom in">+</button><button type="button" data-tv="home">${clsOf(c) ? "My class" : "Center"}</button><label>Turn<input type="range" data-tvr="rot" min="-180" max="180" value="${TV.rot}"></label>` +
     (ADMIN ? (treeEdit ? `<span class="tvedit">Editing</span><button type="button" data-tv="addnode">Add a node</button><button type="button" data-tv="save"${treeDirty() ? "" : " disabled"}>Save tree</button><button type="button" data-tv="discard"${treeDirty() ? "" : " disabled"}>Discard</button><button type="button" data-tv="done">Done editing</button>` : `<button type="button" data-tv="edit">Edit tree</button>`) : "") + `</div>`;
   const legend = `<div class="tvlegend"><span class="lg have">Yours</span><span class="lg open">Can take</span><span class="lg locked">Higher level</span></div>`;
-  return `<div class="tv${treeEdit ? " editing" : ""}" id="tv" tabindex="0" aria-label="Skill tree. Drag to move, scroll to zoom, Alt-drag to turn."><div class="tvstage"><div class="tvplane" id="tvplane"><svg class="tvlinks" width="${ext * 2}" height="${ext * 2}" style="left:${-ext}px;top:${-ext}px">${path}</svg>${T.nodes.map(node).join("")}</div></div>${ctl}${legend}${treeEdit && treeLinkFrom ? `<p class="tvhint">Click the node to link <b>${esc((T.byId.get(treeLinkFrom) || {}).n || "")}</b> to. Press Esc to stop.</p>` : ""}</div>`;
+  return `<div class="tv${treeEdit ? " editing" : ""}" id="tv" tabindex="0" aria-label="Skill tree. Drag to move, scroll to zoom, Alt-drag to turn."><div class="tvstage"><div class="tvplane" id="tvplane"><svg class="tvlinks" width="${ext * 2}" height="${ext * 2}" style="left:${-ext}px;top:${-ext}px">${path}</svg>${T.nodes.map(node).join("")}${handle}</div></div>${ctl}${legend}${treeEdit && treeLinkFrom ? `<p class="tvhint">Click the node to link <b>${esc((T.byId.get(treeLinkFrom) || {}).n || "")}</b> to. Press Esc to stop.</p>` : ""}</div>`;
 }
 function applyView() {
   const p = $("tvplane"); if (!p) return;
@@ -163,7 +175,8 @@ function treeAfterRender(c) {
   if (!$("tv")) return;
   if (!TV.focus) { TV.focus = "x"; if (clsOf(c)) centerOn("cls:" + clsOf(c).id) }
   applyView();
-  if (treeEdit && treeSel) { const T = fullTree(); if (T.byId.get(treeSel)) $("ccinfo").innerHTML = treeEditForm(T.byId.get(treeSel), T) }
+  if (treeEdit && treeLinkSel) { const f = treeLinkForm(); if (f) $("ccinfo").innerHTML = f; else treeLinkSel = "" }
+  else if (treeEdit && treeSel) { const T = fullTree(); if (T.byId.get(treeSel)) $("ccinfo").innerHTML = treeEditForm(T.byId.get(treeSel), T) }
   else if (treeHover || treeSel) { const T = fullTree(), n = T.byId.get(treeSel || treeHover); if (n) $("ccinfo").innerHTML = treeNodeInfo(c, n, treeState(c, T)) }
 }
 /* clicking a node: take the class, choose the option, or (editing) select it */
@@ -171,7 +184,7 @@ function treePick(c, id) {
   const T = fullTree(), n = T.byId.get(id); if (!n || n.kind === "label") return;
   if (treeEdit) {
     if (treeLinkFrom && treeLinkFrom !== id) { const a = treeLinkFrom; TREE_SAVED.unlinks = TREE_SAVED.unlinks.filter(u => !sameLink(u, a, id)); if (!T.links.some(l => sameLink(l, a, id))) TREE_SAVED.links.push([a, id]); treeLinkFrom = ""; treeSel = id; renderCreate(); return }
-    treeSel = treeSel === id ? "" : id; treeLinkFrom = ""; treeIcPick = false; renderCreate(); return;
+    treeSel = treeSel === id ? "" : id; treeLinkFrom = ""; treeIcPick = false; treeLinkSel = ""; renderCreate(); return;
   }
   const r = n.ref || {}, st = treeState(c, T).get(id);
   if (r.t === "class") { const was = c.cls === r.cls; if (!was) { TV.zoom = Math.max(TV.zoom, 0.7); TV.focus = "" } c.cls = was ? "" : r.cls; c.subcls = ""; c.spells = []; c.spellUp = {}; c.major = ""; c.minor = ""; c.fopt = {}; c.moneyRoll = null; setLoadout(c, ""); treeSel = was ? "" : id; touch(); renderCreate(); return }
@@ -196,7 +209,7 @@ function treeEditForm(n, T) {
 <div class="tvic"><b>Icon</b><div class="tvicnow">${n.ic && TREE_ICON.has(n.ic) ? `<span class="tvicsw">${treeIconSVG(n.ic)}</span>${esc(TREE_ICON.get(n.ic)[1])}` : `<small>No icon</small>`}<button type="button" class="btn" data-te-icopen>${treeIcPick ? "Close icons" : n.ic ? "Change icon" : "Choose an icon"}</button>${n.ic ? `<button type="button" class="btn" data-te-ic="">Remove</button>` : ""}</div>${treeIcPick ? `<div class="tvicgrid">${TREE_ICONS.map(x => `<button type="button" data-te-ic="${x[0]}" title="${esc(x[1])} (${esc(x[2])})" aria-label="${esc(x[1])}"${x[0] === n.ic ? ` aria-pressed="true"` : ""}>${treeIconSVG(x[0])}</button>`).join("")}</div>` : ""}</div>
 <label class="chk"><input type="checkbox" data-te="hide"${n.hide ? " checked" : ""}> Hide this node</label>
 <p class="tvxy">Position ${Math.round(n.x)}, ${Math.round(n.y)}. Drag the node to move it.</p>
-<div class="tvlinkl"><b>Linked to</b>${linked.map(m => `<span>${esc(m.n)}<button type="button" data-te-unlink="${esc(m.id)}" aria-label="Unlink ${esc(m.n)}">×</button></span>`).join("") || `<small>Nothing</small>`}</div>
+<div class="tvlinkl"><b>Linked to</b>${linked.map(m => curveOf(n.id, m.id).lock ? `<span title="This line is locked">${esc(m.n)} 🔒</span>` : `<span>${esc(m.n)}<button type="button" data-te-unlink="${esc(m.id)}" aria-label="Unlink ${esc(m.n)}">×</button></span>`).join("") || `<small>Nothing</small>`}</div><p class="tvxy">Click a line to curve or lock it.</p>
 <div class="tvbtns"><button type="button" class="btn" data-te-act="link">Link to another node</button><button type="button" class="btn" data-te-act="branch">Add a node branching from this</button>${n.custom ? `<button type="button" class="btn gdel" data-te-act="delete">Delete node</button>` : n.edited ? `<button type="button" class="btn" data-te-act="reset">Undo my changes to it</button>` : ""}</div>
 <p class="ccnote">Nodes from the data change when the class, feature or feat changes. Your changes (position, name, description, look, icon, hiding, links) are kept on top. Click Save tree to keep them.</p></div>`);
 }
@@ -210,7 +223,7 @@ function refreshTreeBtns() { document.querySelectorAll('[data-tv="save"],[data-t
 function treeEditAct(c, act, id) {
   const T = fullTree(), n = T.byId.get(id);
   if (act === "link") { treeLinkFrom = id; renderCreate(); return }
-  if (act === "unlink") { const [a, b] = id; TREE_SAVED.links = TREE_SAVED.links.filter(l => !sameLink(l, a, b)); if (T.links.some(l => sameLink(l, a, b))) TREE_SAVED.unlinks.push([a, b]); renderCreate(); return }
+  if (act === "unlink") { const [a, b] = id; if (curveOf(a, b).lock) { say("That line is locked. Unlock it first."); return } delete TREE_SAVED.curves[linkKey(a, b)]; if (treeLinkSel === linkKey(a, b)) treeLinkSel = ""; TREE_SAVED.links = TREE_SAVED.links.filter(l => !sameLink(l, a, b)); if (T.links.some(l => sameLink(l, a, b))) TREE_SAVED.unlinks.push([a, b]); renderCreate(); return }
   if (act === "branch" || act === "addnode") {
     const nid = "x-" + Date.now().toString(36), at = n || { x: -TV.px / TV.zoom, y: -TV.py / TV.zoom };
     TREE_SAVED.extra.push({ id: nid, n: "New node", d: "", kind: "minor", x: Math.round(at.x + (n ? 120 : 0)), y: Math.round(at.y + (n ? 60 : 0)) });
@@ -220,9 +233,36 @@ function treeEditAct(c, act, id) {
   if (act === "delete") { TREE_SAVED.extra = TREE_SAVED.extra.filter(x => x.id !== id); TREE_SAVED.links = TREE_SAVED.links.filter(l => l[0] !== id && l[1] !== id); delete TREE_SAVED.nodes[id]; treeSel = ""; renderCreate(); return }
   if (act === "reset") { delete TREE_SAVED.nodes[id]; renderCreate(); return }
 }
+/* a selected line (editing): curve it and lock it */
+function treeLinkForm() {
+  const [a, b] = treeLinkSel.split("|"), T = fullTree(), p = T.byId.get(a), q = T.byId.get(b);
+  if (!p || !q || !T.links.some(l => sameLink(l, a, b))) return "";
+  const cv = curveOf(a, b), c = +cv.c || 0;
+  return infoBox("Line", cv.lock ? "Locked" : "Line", `<div class="tvlform">
+<p><b>${esc(p.n)}</b> to <b>${esc(q.n)}</b></p>
+<label>Curve <input type="range" data-tl="c" min="-400" max="400" step="5" value="${c}"${cv.lock ? " disabled" : ""}> <output>${c}</output></label>
+<p class="tvxy">${cv.lock ? "Unlock the line to change its curve." : "Drag the round handle on the line, or use the slider. 0 is straight."}</p>
+<label class="chk"><input type="checkbox" data-tl="lock"${cv.lock ? " checked" : ""}> Lock this line</label>
+<p class="tvxy">A locked line keeps its curve and can't be bent or unlinked until you unlock it.</p>
+<div class="tvbtns"><button type="button" class="btn" data-tl-act="straight"${cv.lock || !c ? " disabled" : ""}>Make it straight</button><button type="button" class="btn gdel" data-tl-act="unlink"${cv.lock ? " disabled" : ""}>Unlink</button><button type="button" class="btn" data-tl-act="close">Done</button></div>
+<p class="ccnote">Click Save tree to keep your changes.</p></div>`);
+}
+function treeLinkInput(t) {
+  const key = treeLinkSel, [a, b] = key.split("|"), cv = TREE_SAVED.curves[key] = { ...curveOf(a, b) };
+  if (t.dataset.tl === "lock") { cv.lock = t.checked; if (!cv.lock) delete cv.lock }
+  else if (t.dataset.tl === "c" && !cv.lock) { cv.c = +t.value; const o = t.parentElement.querySelector("output"); if (o) o.textContent = t.value }
+  if (!cv.c) delete cv.c; if (!Object.keys(cv).length) delete TREE_SAVED.curves[key];
+  if (t.dataset.tl === "lock") renderCreate(); else { const tv = $("tv"); if (tv) { const keep = { ...TV }; tv.parentElement.innerHTML = treeHTML(cur); Object.assign(TV, keep); applyView() } refreshTreeBtns() }
+}
+function treeLinkAct(act) {
+  const key = treeLinkSel, [a, b] = key.split("|");
+  if (act === "close") { treeLinkSel = ""; renderCreate(); return }
+  if (act === "straight") { const cv = { ...curveOf(a, b) }; if (cv.lock) return; delete cv.c; if (Object.keys(cv).length) TREE_SAVED.curves[key] = cv; else delete TREE_SAVED.curves[key]; renderCreate(); return }
+  if (act === "unlink") { treeEditAct(cur, "unlink", [a, b]); treeLinkSel = ""; renderCreate() }
+}
 async function saveTree() {
   if (!ADMIN || !GH_KEY) { say("Sign in as admin to save the tree."); return }
-  const data = { v: 1, nodes: TREE_SAVED.nodes, extra: TREE_SAVED.extra, links: TREE_SAVED.links, unlinks: TREE_SAVED.unlinks };
+  const data = { v: 1, nodes: TREE_SAVED.nodes, extra: TREE_SAVED.extra, links: TREE_SAVED.links, unlinks: TREE_SAVED.unlinks, curves: TREE_SAVED.curves };
   say("Saving the skill tree…");
   try { await putFile("crawl-tree.json", JSON.stringify(data, null, 1) + "\n", "Update the skill tree from the Character Creator"); TREE_ORIG = JSON.stringify(TREE_SAVED); say("Skill tree saved. Everyone sees it in about a minute."); renderCreate() }
   catch (x) { say(saveError(x && x.code, "skill tree")) }
@@ -234,14 +274,21 @@ async function saveTree() {
   const main = $("ccmain");
   main.addEventListener("pointerdown", ev => {
     const tv = ev.target.closest("#tv"); if (!tv || ev.target.closest(".tvctl,.tvlegend")) return;
-    const nodeEl = ev.target.closest(".tn[data-node]");
-    drag = { x: ev.clientX, y: ev.clientY, moved: 0, turn: ev.altKey || ev.button === 2, node: treeEdit && nodeEl ? nodeEl.dataset.node : "", pick: nodeEl ? nodeEl.dataset.node : "" };
+    const nodeEl = ev.target.closest(".tn[data-node]"), hEl = treeEdit && ev.target.closest("[data-handle]"), lEl = treeEdit && !nodeEl && ev.target.closest("[data-link]");
+    drag = { x: ev.clientX, y: ev.clientY, moved: 0, turn: ev.altKey || ev.button === 2, node: treeEdit && nodeEl ? nodeEl.dataset.node : "", pick: nodeEl ? nodeEl.dataset.node : "", handle: hEl ? hEl.dataset.handle : "", lpick: lEl ? lEl.dataset.link : "" };
     tv.setPointerCapture(ev.pointerId);
   });
   main.addEventListener("pointermove", ev => {
     const tv = $("tv"); if (!tv) return;
     if (!drag) { const n = ev.target.closest(".tn[data-node]"); const id = n ? n.dataset.node : ""; if (id !== treeHover && !treeSel && !treeEdit) { treeHover = id; if (id) { const T = fullTree(), nd = T.byId.get(id); if (nd && nd.kind !== "label") $("ccinfo").innerHTML = treeNodeInfo(cur, nd, treeState(cur, T)) } } return }
     const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y; drag.x = ev.clientX; drag.y = ev.clientY; drag.moved += Math.abs(dx) + Math.abs(dy);
+    if (drag.handle) {
+      const [a, b] = drag.handle.split("|"), T = fullTree(), p = T.byId.get(a), q = T.byId.get(b); if (!p || !q) return;
+      const g = linkGeo(p, q, a, b), r = -TV.rot * Math.PI / 180, ux = (dx * Math.cos(r) - dy * Math.sin(r)) / TV.zoom, uy = (dx * Math.sin(r) + dy * Math.cos(r)) / TV.zoom;
+      const cv = TREE_SAVED.curves[drag.handle] = { ...curveOf(a, b) }; cv.c = Math.round(Math.max(-600, Math.min(600, g.c + 2 * (ux * g.nx + uy * g.ny))));
+      if (!cv.c && !cv.lock) delete TREE_SAVED.curves[drag.handle];
+      const keep = { ...TV }; const host = tv.parentElement; host.innerHTML = treeHTML(cur); Object.assign(TV, keep); applyView(); return;
+    }
     if (drag.node && drag.moved > 3) {
       const T = fullTree(), n = T.byId.get(drag.node), ex = TREE_SAVED.extra.find(x => x.id === drag.node), tgt = ex || nodeOv(drag.node);
       tgt.x = Math.round((tgt.x ?? n.x) + dx / TV.zoom); tgt.y = Math.round((tgt.y ?? n.y) + dy / TV.zoom);
@@ -254,7 +301,9 @@ async function saveTree() {
   });
   const end = ev => {
     if (!drag) return; const d = drag; drag = null;
+    if (d.handle) { renderCreate(); return }
     if (d.node && d.moved > 3) { renderCreate(); return }
+    if (d.moved <= 4 && d.lpick) { treeLinkSel = treeLinkSel === d.lpick ? "" : d.lpick; treeSel = ""; treeLinkFrom = ""; renderCreate(); return }
     if (d.moved <= 4 && d.pick) treePick(cur, d.pick);
   };
   main.addEventListener("pointerup", end);
@@ -282,16 +331,17 @@ async function saveTree() {
     if (a === "addnode") { treeEditAct(c, "addnode", ""); return }
   });
   /* the edit form lives in the info panel */
-  $("ccinfo").addEventListener("input", ev => { if (ev.target.closest(".tvform")) treeEditInput(ev.target) });
-  $("ccinfo").addEventListener("change", ev => { if (ev.target.closest(".tvform") && ev.target.matches("select,[type=checkbox]")) treeEditInput(ev.target) });
+  $("ccinfo").addEventListener("input", ev => { if (ev.target.closest(".tvlform")) { treeLinkInput(ev.target); return } if (ev.target.closest(".tvform")) treeEditInput(ev.target) });
+  $("ccinfo").addEventListener("change", ev => { if (ev.target.closest(".tvlform")) return; if (ev.target.closest(".tvform") && ev.target.matches("select,[type=checkbox]")) treeEditInput(ev.target) });
   $("ccinfo").addEventListener("click", ev => {
+    const lf = ev.target.closest(".tvlform"); if (lf) { const b = ev.target.closest("[data-tl-act]"); if (b) treeLinkAct(b.dataset.tlAct); return }
     const f = ev.target.closest(".tvform"); if (!f) return;
     if (ev.target.closest("[data-te-icopen]")) { treeIcPick = !treeIcPick; renderCreate(); return }
     const ic = ev.target.closest("[data-te-ic]"); if (ic) { const id = f.dataset.node, ex = TREE_SAVED.extra.find(x => x.id === id), tgt = ex || nodeOv(id); if (ic.dataset.teIc) tgt.ic = ic.dataset.teIc; else delete tgt.ic; treeIcPick = false; renderCreate(); return }
     const u = ev.target.closest("[data-te-unlink]"); if (u) { treeEditAct(cur, "unlink", [f.dataset.node, u.dataset.teUnlink]); return }
     const b = ev.target.closest("[data-te-act]"); if (b) treeEditAct(cur, b.dataset.teAct, f.dataset.node);
   });
-  document.addEventListener("keydown", ev => { if (ev.key === "Escape" && treeLinkFrom) { treeLinkFrom = ""; renderCreate() } });
+  document.addEventListener("keydown", ev => { if (ev.key === "Escape" && (treeLinkFrom || treeLinkSel)) { treeLinkFrom = ""; treeLinkSel = ""; renderCreate() } });
   window.addEventListener("crawl-tree-mode", () => { if (view === "create") { treeSel = ""; treeHover = ""; renderCreate() } });
   window.addEventListener("beforeunload", ev => { if (treeDirty()) { ev.preventDefault(); ev.returnValue = "" } });
 })();

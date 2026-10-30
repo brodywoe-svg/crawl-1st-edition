@@ -991,12 +991,22 @@ body.cc-app .ccintro{position:absolute;width:1px;height:1px;overflow:hidden;clip
 .tvstage{position:absolute;inset:0}
 .tvplane{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
 .tvlinks{position:absolute;overflow:visible;pointer-events:none}
+.tvlinks path.hit{stroke:transparent;stroke-width:22;pointer-events:stroke;cursor:pointer;filter:none}
+.tvlinks path.selk.selk{stroke:#7fc8ff;stroke-width:8;filter:drop-shadow(0 0 6px #7fc8ff)}
+.tvlinks path.lockd{stroke-dasharray:14 8}
+.tvhandle{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#7fc8ff;border:3px solid #fff;box-shadow:0 0 0 3px rgba(127,200,255,.35),0 4px 10px rgba(0,0,0,.5);cursor:grab;z-index:5;transform:translateZ(40px)}
+.tvlform{display:grid;gap:10px}.tvlform label{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.85rem}.tvlform input[type=range]{flex:1;accent-color:#7fc8ff}.tvlform output{min-width:3ch;font-variant-numeric:tabular-nums}
 .tvlinks path{stroke:#5a5266;stroke-width:5;fill:none;stroke-linecap:round}
 .tvlinks path.open{stroke:#8b7a52}
 .tvlinks path.on{stroke:#e2b24a;stroke-width:7;filter:drop-shadow(0 0 6px #e2b24a)}
 .tn{position:absolute;transform-style:preserve-3d;transform:translate(-50%,-50%) translateZ(var(--z,10px)) rotateZ(calc(var(--rot,0deg) * -1)) rotateX(calc(var(--tilt,0deg) * -1));display:grid;justify-items:center;gap:6px;background:none;border:0;padding:0;color:#e9e3f2;font:700 13px var(--font);cursor:pointer}
 .tn i{display:block;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7d7590,#3b3548 60%,#1d1925);border:3px solid #6d6480;box-shadow:0 6px 14px rgba(0,0,0,.6)}
 .tn span{max-width:170px;text-align:center;line-height:1.15;text-shadow:0 2px 4px #000,0 0 2px #000;white-space:normal}
+button.tn{display:block}
+button.tn>span{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);width:max-content;pointer-events:none}
+button.tn.k-keystone>span{top:calc(100% + 14px)}
+.tn i.hasic{padding:0;line-height:0}
+.tn i .tic{display:block;margin:auto}
 .tn.k-start{--z:34px}.tn.k-start i{width:74px;height:74px;border-width:5px;border-color:#c9a04a;background:radial-gradient(circle at 35% 30%,#f4dca0,#9c7428 55%,#3a2a0e)}
 .tn.k-start span{font-size:18px;letter-spacing:.06em;text-transform:uppercase}
 .tn.k-notable{--z:22px}.tn.k-notable i{width:50px;height:50px;border-color:#9fb2d8}
