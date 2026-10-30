@@ -974,6 +974,77 @@ body.cc-app .ccintro{position:absolute;width:1px;height:1px;overflow:hidden;clip
   body.cc-app .cib{flex:1}
 }
 @media (min-width:1061px) and (max-height:820px){body.cc-app .ccstep{padding:5px 10px}body.cc-app .ccsl small{display:none}}
+/* ---------------- Tree mode: the switch in the header, and the 3D skill tree on the Class step */
+.treebtn{display:inline-flex;align-items:center;gap:7px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:4px 12px 4px 6px;font:700 .8rem var(--font);cursor:pointer}
+.treebtn .tsw{width:30px;height:16px;border-radius:999px;background:var(--hair);position:relative;transition:background .15s}
+.treebtn .tsw::after{content:"";position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--paper);box-shadow:0 0 0 1px var(--ink);transition:left .15s}
+.treebtn[aria-checked="true"] .tsw{background:#b8860b}
+.treebtn[aria-checked="true"] .tsw::after{left:16px}
+.ccmain.treemode{display:flex;flex-direction:column;padding:10px}
+.ccmain.treemode .cch{margin-bottom:8px}
+.ccmain.treemode .ccbody{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
+.cctreehost{flex:1;min-height:440px;display:flex}
+.tv{position:relative;flex:1;min-height:440px;overflow:hidden;border-radius:12px;background:radial-gradient(ellipse at 50% 35%,#2a2433 0%,#121018 55%,#060509 100%);cursor:grab;touch-action:none;user-select:none;outline:none}
+.tv:active{cursor:grabbing}
+.tvstage{position:absolute;inset:0;perspective:1100px;perspective-origin:50% 35%}
+.tvplane{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
+.tvlinks{position:absolute;overflow:visible;pointer-events:none}
+.tvlinks path{stroke:#5a5266;stroke-width:5;fill:none;stroke-linecap:round}
+.tvlinks path.open{stroke:#8b7a52}
+.tvlinks path.on{stroke:#e2b24a;stroke-width:7;filter:drop-shadow(0 0 6px #e2b24a)}
+.tn{position:absolute;transform-style:preserve-3d;transform:translate(-50%,-50%) translateZ(var(--z,10px)) rotateZ(calc(var(--rot,0deg) * -1)) rotateX(calc(var(--tilt,0deg) * -1));display:grid;justify-items:center;gap:6px;background:none;border:0;padding:0;color:#e9e3f2;font:700 13px var(--font);cursor:pointer}
+.tn i{display:block;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7d7590,#3b3548 60%,#1d1925);border:3px solid #6d6480;box-shadow:0 6px 14px rgba(0,0,0,.6)}
+.tn span{max-width:170px;text-align:center;line-height:1.15;text-shadow:0 2px 4px #000,0 0 2px #000;white-space:normal}
+.tn.k-start{--z:34px}.tn.k-start i{width:74px;height:74px;border-width:5px;border-color:#c9a04a;background:radial-gradient(circle at 35% 30%,#f4dca0,#9c7428 55%,#3a2a0e)}
+.tn.k-start span{font-size:18px;letter-spacing:.06em;text-transform:uppercase}
+.tn.k-notable{--z:22px}.tn.k-notable i{width:50px;height:50px;border-color:#9fb2d8}
+.tn.k-keystone{--z:28px}.tn.k-keystone i{width:56px;height:56px;border-radius:12px;transform:rotate(45deg);border-color:#d07a7a}
+.tn.k-option i{width:28px;height:28px;border-color:#7fa8a0}
+.tn.k-option span,.tn.k-action span{font-size:11.5px;font-weight:600}
+.tn.k-action i{width:22px;height:22px;border-radius:6px;transform:rotate(45deg);border-color:#c0574d;background:radial-gradient(circle at 35% 30%,#e88e84,#7a2a22 60%,#2b0c09)}
+.tn.k-feat{--z:16px}.tn.k-feat i{width:40px;height:40px;border-radius:10px;border-color:#a98fd6;background:radial-gradient(circle at 35% 30%,#c9b5ee,#5b3f8e 60%,#1f1433)}
+.tn.s-have i{border-color:#ffd166;box-shadow:0 0 0 3px rgba(255,209,102,.35),0 0 22px #e2b24a,0 6px 14px rgba(0,0,0,.6);filter:saturate(1.3) brightness(1.15)}
+.tn.s-have span{color:#ffe7a8}
+.tn.s-open i{border-color:#f0e6c8;animation:tvpulse 1.6s ease-in-out infinite}
+.tn.s-locked{opacity:.5}
+.tn.s-none:not(.k-start){opacity:.78}
+.tn.sel i{outline:3px solid #fff;outline-offset:4px}
+.tn:hover i,.tn:focus-visible i{filter:brightness(1.35)}
+.tn:focus-visible{outline:none}
+.tn.custom i{border-style:dashed}
+.tn.hidden-node{opacity:.25}
+.tv.far .tn.k-minor span,.tv.far .tn.k-option span,.tv.far .tn.k-action span,.tv.far .tn.k-feat span{display:none}
+@keyframes tvpulse{50%{box-shadow:0 0 0 6px rgba(240,230,200,.18),0 6px 14px rgba(0,0,0,.6)}}
+@media (prefers-reduced-motion:reduce){.tn.s-open i{animation:none}}
+.tlabel{position:absolute;transform:translate(-50%,-50%) translateZ(2px) rotateZ(calc(var(--rot,0deg) * -1)) rotateX(calc(var(--tilt,0deg) * -1));color:#b9a77a;font:800 26px var(--font);letter-spacing:.24em;text-transform:uppercase;opacity:.7;pointer-events:none;white-space:nowrap}
+.tvctl{position:absolute;left:10px;top:10px;right:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;pointer-events:none}
+.tvctl>*{pointer-events:auto}
+.tvctl button{font:700 .78rem var(--font);color:#f1ead8;background:rgba(20,17,26,.85);border:1.5px solid #6d6480;border-radius:999px;padding:5px 11px;cursor:pointer}
+.tvctl button:hover:not([disabled]){border-color:#e2b24a}
+.tvctl button[disabled]{opacity:.45;cursor:default}
+.tvctl label{display:inline-flex;align-items:center;gap:6px;font:700 .72rem var(--font);color:#d9d0c0;background:rgba(20,17,26,.85);border:1.5px solid #6d6480;border-radius:999px;padding:3px 10px}
+.tvctl input[type=range]{width:90px;accent-color:#e2b24a}
+.tvedit{font:800 .72rem var(--font);letter-spacing:.1em;text-transform:uppercase;color:#1a1408;background:#e2b24a;border-radius:999px;padding:5px 10px}
+.tvlegend{position:absolute;left:10px;bottom:10px;display:flex;gap:10px;font:700 .72rem var(--font);color:#d9d0c0;pointer-events:none}
+.tvlegend .lg::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px;border:2px solid #6d6480}
+.tvlegend .have::before{border-color:#ffd166;background:#e2b24a}
+.tvlegend .open::before{border-color:#f0e6c8}
+.tvlegend .locked::before{opacity:.5}
+.tvhint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);margin:0;background:#e2b24a;color:#1a1408;font-weight:700;border-radius:999px;padding:6px 14px}
+.tv.editing{background:radial-gradient(ellipse at 50% 35%,#24302a 0%,#0f1512 60%,#050806 100%)}
+.tv.editing .tn{cursor:move}
+.tvstatus{font-weight:800;margin:0}
+.tvstatus.have{color:#9c7428}.tvstatus.open{color:var(--red)}.tvstatus.locked{color:var(--muted)}
+.tvform{display:grid;gap:10px}
+.tvform label{display:grid;gap:4px;font-weight:700;font-size:.85rem}
+.tvform label.chk{display:flex;align-items:center;gap:8px}
+.tvform input[type=text],.tvform textarea,.tvform select{font:600 .9rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:6px 8px}
+.tvxy{margin:0;font-size:.8rem;color:var(--muted)}
+.tvlinkl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.85rem}
+.tvlinkl span{display:inline-flex;align-items:center;gap:4px;border:1.5px solid var(--ink);border-radius:999px;padding:2px 4px 2px 10px}
+.tvlinkl button{border:0;background:none;font:800 1rem var(--font);cursor:pointer;color:var(--red)}
+.tvbtns{display:flex;flex-wrap:wrap;gap:6px}
+@media (max-width:640px){.treebtn span:last-child{display:none}.treebtn{padding:4px 6px}.tvctl label{display:none}}
 .ccptgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
 .ccpts{border:2px solid var(--ink);border-radius:12px;padding:4px 12px 10px}
 .ccpts .cch3{margin:8px 0 6px}

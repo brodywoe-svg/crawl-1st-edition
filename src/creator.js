@@ -457,6 +457,8 @@ function renderCreate() {
   $("ccNext").textContent = i === STEPS.length - 1 ? "Finish" : "Next";
   $("ccNext").classList.toggle("go", i === STEPS.length - 1 && STEPS.every(([sk]) => stepOk(c, sk)));
   $("ccName").textContent = str(c.name) || "New character";
+  if (k === "class" && treeOn()) treeAfterRender(c);
+  $("ccmain").classList.toggle("treemode", k === "class" && treeOn());
 }
 const optBtn = (ik, on, label, sub) => `<button type="button" class="ccopt${on ? " on" : ""}" data-ik="${esc(ik)}" aria-pressed="${on}"><span>${esc(label)}</span>${sub ? `<small>${esc(sub)}</small>` : ""}</button>`;
 function schoolPicks(c, k) {
@@ -503,6 +505,7 @@ const STEP_VIEWS = {
       (r && r.subs.length ? `<h3 class="cch3">Subrace</h3><div class="ccopts sub">${r.subs.map(y => optBtn("sub:" + y.id, s === y, y.n)).join("")}</div>` : "");
   },
   class(c) {
+    if (treeOn() && CR.classes.length) return treeStep(c);
     if (!CR.classes.length) return `<p class="cempty">No classes yet.${ADMIN ? ` Add them on the <a href="classes.html">Classes page</a>.` : ""}</p>`;
     const k = clsOf(c), s = subclsOf(c);
     const clink = (x, extra) => `<p class="cclinks"><a class="glink" href="classes.html#${encodeURIComponent(x.id)}" target="_blank" rel="noopener">Open on the Classes page</a>${extra || ""}</p>`;
@@ -1262,7 +1265,9 @@ function start() {
 if (STATIC) {
   $("adminBtn").hidden = false; showAdminBtn();
   const get = f => fetch(f, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
-  Promise.all([get("crawl-creator.json"), get("crawl-races.json"), get("crawl-spells.json"), get("crawl-items.json"), get("crawl-classes.json"), get("crawl-backgrounds.json")]).then(([cj, rj, sj, ij, kj, bj]) => {
+  Promise.all([get("crawl-creator.json"), get("crawl-races.json"), get("crawl-spells.json"), get("crawl-items.json"), get("crawl-classes.json"), get("crawl-backgrounds.json"), get("crawl-tree.json"), get("crawl-feats.json")]).then(([cj, rj, sj, ij, kj, bj, tj, fj]) => {
+    if (tj && !treeDirty()) { TREE_SAVED = normTree(tj); TREE_ORIG = JSON.stringify(TREE_SAVED) }
+    if (fj && Array.isArray(fj.feats)) FEAT_LIST = fj.feats;
     if (ij && Array.isArray(ij.items)) { ITEMS = ij.items; GEAR_ITEMS = ij.items }
     if (cj && !adminDirty()) { const n = normRules(cj); if (n) { CR.rules = n; RULES_ORIG = JSON.stringify(cleanCreator()) } }
     if (rj) RACE_LIST = normRaces(rj);

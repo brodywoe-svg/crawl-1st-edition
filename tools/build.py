@@ -59,6 +59,10 @@ def read_catalog():
     return json.loads(CATALOG.read_text(encoding="utf-8"))
 
 
+TREE_BTN = ('<button type="button" class="treebtn" id="treeBtn" role="switch" aria-checked="false" title="Tree mode: the Character Creator shows classes as a skill tree">'
+            '<span class="tsw" aria-hidden="true"></span><span>Tree mode</span></button>')
+
+
 def page_body(template, spells):
     # the glossary goes in first: the TPL copy of the template also contains its placeholder
     body = template.replace("/*@GLOSSARY@*/null", as_js(read_glossary()), 1)
@@ -84,6 +88,7 @@ GLOSSARY_PAGES = {
     "creator.html": ("creator", "Character Creator · Crawl 1st Edition", "Make a Crawl 1st Edition character step by step: race, class, background, ability scores, skills, spells and gear, then a printable character sheet."),
 }
 CREATOR = ROOT / "crawl-creator.json"
+TREE = ROOT / "crawl-tree.json"
 CLASSES = ROOT / "crawl-classes.json"
 BACKGROUNDS = ROOT / "crawl-backgrounds.json"
 FEATS = ROOT / "crawl-feats.json"
@@ -111,6 +116,13 @@ def read_backgrounds():
 
 def read_feats():
     return read_json(FEATS, '{\n "v": 1,\n "feats": []\n}\n')
+
+
+def read_tree():
+    """Tree mode's skill tree: only the admin's changes to the tree built from the data"""
+    if not TREE.exists():
+        TREE.write_text('{\n "v": 1,\n "nodes": {},\n "extra": [],\n "links": [],\n "unlinks": []\n}\n', encoding="utf-8")
+    return json.loads(TREE.read_text(encoding="utf-8"))
 
 
 def read_creator():
@@ -170,6 +182,11 @@ def glossary_page(template, glossary, name):
         "var M='M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z',S='M8 4.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zM7.2 0h1.6v2.4H7.2zM7.2 13.6h1.6V16H7.2zM0 7.2h2.4v1.6H0zM13.6 7.2H16v1.6h-2.4zM2.2 3.3l1.1-1.1 1.7 1.7-1.1 1.1zM11 12.1l1.1-1.1 1.7 1.7-1.1 1.1zM2.2 12.7l1.7-1.7 1.1 1.1-1.7 1.7zM11 3.9l1.7-1.7 1.1 1.1-1.7 1.7z';"
         "function show(){var d=r.getAttribute('data-mode')==='dark';b.setAttribute('aria-pressed',d);document.getElementById('modeLabel').textContent=d?'Light mode':'Dark mode';document.getElementById('modeIcon').setAttribute('d',d?S:M)}"
         "b.addEventListener('click',function(){var d=r.getAttribute('data-mode')!=='dark';if(d)r.setAttribute('data-mode','dark');else r.removeAttribute('data-mode');try{localStorage.setItem('crawl-mode',d?'dark':'light')}catch(e){}show()});show()})();"
+        # Tree mode: an on/off switch kept in this browser; the Character Creator turns its Class step into a skill tree
+        "(function(){var b=document.getElementById('treeBtn'),r=document.documentElement;if(!b)return;"
+        "function set(on){if(on)r.setAttribute('data-tree','on');else r.removeAttribute('data-tree');b.setAttribute('aria-checked',on)}"
+        "var on=false;try{on=localStorage.getItem('crawl-tree-mode')==='1'}catch(e){}set(on);"
+        "b.addEventListener('click',function(){on=r.getAttribute('data-tree')!=='on';set(on);try{localStorage.setItem('crawl-tree-mode',on?'1':'0')}catch(e){}window.dispatchEvent(new Event('crawl-tree-mode'))})})();"
     )
     sections = crawlsite.glossary_sections(glossary)
     catalog = page in ("items", "crafting")
@@ -181,7 +198,8 @@ def glossary_page(template, glossary, name):
         + f"const CATALOG={as_js(read_catalog())};"
         + (f"const RACES={as_js(read_races())};" if page in ("races", "creator") else "")
         + (f"const CREATOR={as_js(read_creator())};const SPELLS={as_js(json.loads(SPELLS.read_text(encoding='utf-8')))};" if page == "creator" else f"const CREATOR={as_js(read_creator())};" if page in ("classes", "feats") else "")
-        + (f"const FEATS={as_js(read_feats())};" if page == "feats" else "")
+        + (f"const FEATS={as_js(read_feats())};" if page in ("feats", "creator") else "")
+        + (f"const TREE={as_js(read_tree())};" if page == "creator" else "")
         + (f"const FEAT_SRC={as_js(feature_sources())};" if page in ("glossary", "conditions") else "")
         + (f"const CLASSES={as_js(read_classes())};const BACKGROUNDS={as_js(read_backgrounds())};const SCHOOLS={as_js(spell_schools())};" if page in ("creator", "classes", "backgrounds", "feats") else "") + "\n"
     )
@@ -191,10 +209,12 @@ def glossary_page(template, glossary, name):
     if page in ("creator", "classes", "backgrounds", "feats"):
         script += (ROOT / "src" / "crawldata.js").read_text(encoding="utf-8")
     script += (ROOT / "src" / page_js).read_text(encoding="utf-8")
+    if page == "creator":
+        script += (ROOT / "src" / "skilltree.js").read_text(encoding="utf-8")
     return (
         f"<title>{title}</title>" + links + mode_init
         + f"<style>{style}{crawlsite.NAV_CSS}{crawlsite.CONDITIONS_CSS}{crawlsite.CREATOR_CSS if page == 'creator' else crawlsite.CLASSES_CSS if page in ('classes', 'backgrounds', 'feats') else crawlsite.HOME_CSS if page == 'home' else ''}</style>"
-        + crawlsite.nav_html(page, controls=admin_btn + mode_btn, sections=sections, races=read_races(), classes=read_classes(), backgrounds=read_backgrounds(), feats=read_feats())
+        + crawlsite.nav_html(page, controls=admin_btn + TREE_BTN + mode_btn, sections=sections, races=read_races(), classes=read_classes(), backgrounds=read_backgrounds(), feats=read_feats())
         + (crawlsite.home_shell(logo, modal, home_counts()) if page == "home" else crawlsite.catalog_shell(page, logo, modal) if catalog else crawlsite.races_shell(logo, modal) if page == "races" else crawlsite.creator_shell(logo, modal) if page == "creator" else crawlsite.list_shell(page, logo, modal) if page in ("classes", "backgrounds", "feats") else crawlsite.glossary_shell(page, logo, modal))
         + f"<script>{mode_js}</script><script>{prelude}{shared}{script}</script>"
     )
