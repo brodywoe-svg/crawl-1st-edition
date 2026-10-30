@@ -1,6 +1,12 @@
 {
  "v": 1,
- "nodes": {},
+ "nodes": {
+  "cls:class-fighter": {
+   "ic": "crossed-blades",
+   "x": 348,
+   "y": 397
+  }
+ },
  "extra": [],
  "links": [],
  "unlinks": []
