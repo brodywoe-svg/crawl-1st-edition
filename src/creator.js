@@ -378,7 +378,8 @@ document.addEventListener("click", ev => { const el = glAt(ev.target); if (el) s
 window.addEventListener("scroll", hideTip, { passive: true, capture: true });
 
 /* ---------------------------------------------------------------- shared bits of markup */
-const say = m => { $("gmsg").textContent = m || "" };
+let sayT = 0;
+const say = m => { $("gmsg").textContent = m || ""; clearTimeout(sayT); if (m) sayT = setTimeout(() => { $("gmsg").textContent = "" }, 4000) };
 const factsHTML = rows => { rows = rows.filter(r => r[1]); return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${rich(v)}</dd>`).join("")}</dl>` : "" };
 const optsHTML = f => f.opts ? `<div class="fopts"><p class="fchoose">${esc(choiceLine(f))}</p>${f.opts.map(o => `<div class="fopt"><b>${esc(o.n)}</b>${o.d ? `<p>${rich(o.d)}</p>` : ""}</div>`).join("")}</div>` : "";
 const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, rich) + optsHTML(f)).join("")}</div>` : "";
@@ -747,7 +748,7 @@ document.addEventListener("click", ev => {
   /* clicking elsewhere leaves the panel as it is */
 });
 $("ccmain").addEventListener("keydown", ev => { const p = ev.target.closest(".ccpick"); if (p && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); p.click() } });
-$("ccmain").addEventListener("pointerleave", () => setInfo());
+$("ccmain").addEventListener("pointerleave", () => { if ($("tv") && (treeSel || treeEdit)) return; setInfo() });
 $("ccmain").addEventListener("click", ev => {
   const c = cur; if (!c) return;
   const o = ev.target.closest(".ccopt");

@@ -7,7 +7,7 @@
      - feats sit on an outer ring, grouped by category, with each feat line running outward.
    The admin can move, rename, re-describe, restyle, hide, link and unlink any node and add new ones. Only those changes
    are saved, in crawl-tree.json = {v, nodes: {id: {x, y, n, d, kind, hide}}, extra: [node], links: [[a, b]], unlinks: [[a, b]]}.
-   The view is a tilted 3D plane: drag to pan, wheel or +/- to zoom, Alt-drag or right-drag (or the sliders) to turn and tilt. */
+   The view is top-down: drag to pan, wheel or +/- to zoom, Alt-drag or right-drag (or the Turn slider) to turn. */
 const treeOn = () => document.documentElement.getAttribute("data-tree") === "on";
 function normTree(j) { j = j && typeof j === "object" ? j : {}; return { v: 1, nodes: j.nodes && typeof j.nodes === "object" && !Array.isArray(j.nodes) ? j.nodes : {}, extra: arr(j.extra).filter(n => n && n.id), links: arr(j.links).filter(l => Array.isArray(l) && l.length === 2), unlinks: arr(j.unlinks).filter(l => Array.isArray(l) && l.length === 2) } }
 let TREE_SAVED = normTree(typeof TREE !== "undefined" ? TREE : null), TREE_ORIG = JSON.stringify(TREE_SAVED);
@@ -127,7 +127,7 @@ function treeNodeInfo(c, n, st) {
 }
 
 /* ---------------------------------------------------------------- the 3D viewer */
-const TV = { px: 0, py: 0, zoom: 0.42, tilt: 38, rot: 0, focus: "" };
+const TV = { px: 0, py: 0, zoom: 0.42, tilt: 0, rot: 0, focus: "" };
 let treeEdit = false, treeSel = "", treeLinkFrom = "", treeHover = "", treeIcPick = false;
 function treeHTML(c) {
   const T = fullTree(), st = treeState(c, T), W = 1;
@@ -135,7 +135,7 @@ function treeHTML(c) {
   const path = T.links.map(([a, b]) => { const p = T.byId.get(a), q = T.byId.get(b); const on = st.get(a) === "have" && st.get(b) === "have"; return `<path class="${on ? "on" : st.get(b) === "open" || st.get(a) === "open" ? "open" : ""}" d="M${p.x + ext},${p.y + ext} L${q.x + ext},${q.y + ext}"/>` }).join("");
   const node = n => n.kind === "label" ? `<div class="tn tlabel" style="left:${n.x}px;top:${n.y}px" data-node="${esc(n.id)}"><span>${esc(n.n)}</span></div>`
     : `<button type="button" class="tn k-${esc(n.kind)} s-${st.get(n.id) || "none"}${n.id === treeSel ? " sel" : ""}${n.hide ? " hidden-node" : ""}${n.custom ? " custom" : ""}" style="left:${n.x}px;top:${n.y}px" data-node="${esc(n.id)}" aria-label="${esc(n.n)}"><i${n.ic && TREE_ICON.has(n.ic) ? ` class="hasic"` : ""}>${n.ic ? treeIconSVG(n.ic) : ""}</i><span>${esc(n.n)}</span></button>`;
-  const ctl = `<div class="tvctl"><button type="button" data-tv="out" aria-label="Zoom out">−</button><button type="button" data-tv="in" aria-label="Zoom in">+</button><button type="button" data-tv="home">${clsOf(c) ? "My class" : "Center"}</button><label>Tilt<input type="range" data-tvr="tilt" min="0" max="65" value="${TV.tilt}"></label><label>Turn<input type="range" data-tvr="rot" min="-180" max="180" value="${TV.rot}"></label>` +
+  const ctl = `<div class="tvctl"><button type="button" data-tv="out" aria-label="Zoom out">−</button><button type="button" data-tv="in" aria-label="Zoom in">+</button><button type="button" data-tv="home">${clsOf(c) ? "My class" : "Center"}</button><label>Turn<input type="range" data-tvr="rot" min="-180" max="180" value="${TV.rot}"></label>` +
     (ADMIN ? (treeEdit ? `<span class="tvedit">Editing</span><button type="button" data-tv="addnode">Add a node</button><button type="button" data-tv="save"${treeDirty() ? "" : " disabled"}>Save tree</button><button type="button" data-tv="discard"${treeDirty() ? "" : " disabled"}>Discard</button><button type="button" data-tv="done">Done editing</button>` : `<button type="button" data-tv="edit">Edit tree</button>`) : "") + `</div>`;
   const legend = `<div class="tvlegend"><span class="lg have">Yours</span><span class="lg open">Can take</span><span class="lg locked">Higher level</span></div>`;
   return `<div class="tv${treeEdit ? " editing" : ""}" id="tv" tabindex="0" aria-label="Skill tree. Drag to move, scroll to zoom, Alt-drag to turn."><div class="tvstage"><div class="tvplane" id="tvplane"><svg class="tvlinks" width="${ext * 2}" height="${ext * 2}" style="left:${-ext}px;top:${-ext}px">${path}</svg>${T.nodes.map(node).join("")}</div></div>${ctl}${legend}${treeEdit && treeLinkFrom ? `<p class="tvhint">Click the node to link <b>${esc((T.byId.get(treeLinkFrom) || {}).n || "")}</b> to. Press Esc to stop.</p>` : ""}</div>`;
@@ -155,7 +155,7 @@ function centerOn(id) {
 /* the Class step in Tree mode */
 function treeStep(c) {
   const k = clsOf(c);
-  infoMap.set("tree:intro", infoBox("Skill tree", "Tree mode", `<p>Your class's features run outward from its start node, by level. <b>Click a class's start node</b> to take that class.</p><p>Choice features fan out into their options: click an option to choose it. The Combat and Weapon Actions a feature teaches hang off it. Feats sit on the outer ring, by category; they come from 2nd level.</p><p>Drag to move around, scroll to zoom, and Alt-drag (or the sliders) to turn and tilt.</p>`));
+  infoMap.set("tree:intro", infoBox("Skill tree", "Tree mode", `<p>Your class's features run outward from its start node, by level. <b>Click a class's start node</b> to take that class.</p><p>Choice features fan out into their options: click an option to choose it. The Combat and Weapon Actions a feature teaches hang off it. Feats sit on the outer ring, by category; they come from 2nd level.</p><p>Drag to move around, scroll to zoom, and Alt-drag (or the Turn slider) to turn it. Click a node to keep its details here; click it again to let go.</p>`));
   infoDefault = infoMap.get("tree:intro");
   return `<div class="cctreehost">${treeHTML(c)}</div>${k ? schoolPicks(c, k) : ""}`;
 }
@@ -248,7 +248,7 @@ async function saveTree() {
       const el = tv.querySelector(`.tn[data-node="${CSS.escape(drag.node)}"]`); if (el) { el.style.left = tgt.x + "px"; el.style.top = tgt.y + "px" }
       return;
     }
-    if (drag.turn) { TV.rot = Math.max(-180, Math.min(180, TV.rot + dx * 0.3)); TV.tilt = Math.max(0, Math.min(65, TV.tilt - dy * 0.25)); syncSliders() }
+    if (drag.turn) { TV.rot = Math.max(-180, Math.min(180, TV.rot + dx * 0.3)); syncSliders() }
     else { TV.px += dx; TV.py += dy }
     applyView();
   });
@@ -274,9 +274,9 @@ async function saveTree() {
   main.addEventListener("click", ev => {
     const b = ev.target.closest("[data-tv]"); if (!b) return; const c = cur, a = b.dataset.tv;
     if (a === "in" || a === "out") { TV.zoom = Math.max(0.15, Math.min(2.5, TV.zoom * (a === "in" ? 1.25 : 0.8))); TV.px *= a === "in" ? 1.25 : 0.8; TV.py *= a === "in" ? 1.25 : 0.8; applyView(); return }
-    if (a === "home") { TV.zoom = 0.6; TV.tilt = treeEdit ? 0 : 38; TV.rot = 0; syncSliders(); centerOn(clsOf(c) ? "cls:" + clsOf(c).id : ""); applyView(); return }
+    if (a === "home") { TV.zoom = 0.6; TV.tilt = 0; TV.rot = 0; syncSliders(); centerOn(clsOf(c) ? "cls:" + clsOf(c).id : ""); applyView(); return }
     if (a === "edit") { treeEdit = true; TV.tilt = 0; TV.rot = 0; treeSel = ""; renderCreate(); say("Editing the skill tree: drag nodes to move them, click one to change it."); return }
-    if (a === "done") { if (treeDirty()) { say("Save or discard your tree changes first."); return } treeEdit = false; treeSel = ""; treeLinkFrom = ""; TV.tilt = 38; renderCreate(); say(""); return }
+    if (a === "done") { if (treeDirty()) { say("Save or discard your tree changes first."); return } treeEdit = false; treeSel = ""; treeLinkFrom = ""; TV.tilt = 0; renderCreate(); say(""); return }
     if (a === "discard") { TREE_SAVED = normTree(JSON.parse(TREE_ORIG)); treeSel = ""; treeLinkFrom = ""; renderCreate(); say("Tree changes discarded."); return }
     if (a === "save") { saveTree(); return }
     if (a === "addnode") { treeEditAct(c, "addnode", ""); return }

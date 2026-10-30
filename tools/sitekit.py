@@ -931,6 +931,9 @@ CREATOR_CSS = """
 :root{--gold:#b7791f}
 :root[data-mode="dark"]{--gold:#e8b350}
 .ccwrap{position:relative;max-width:1240px;margin:0 auto;padding:24px 16px 120px}
+/* creator messages float as a short-lived note at the bottom instead of taking space at the top */
+.ccwrap>.gmsg{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:60;margin:0;max-width:min(560px,calc(100vw - 32px));background:#111;color:#fff;border:2px solid #d9b25f;border-radius:999px;padding:8px 18px;box-shadow:0 8px 24px rgba(0,0,0,.35);pointer-events:none;text-align:center}
+.ccwrap>.gmsg:empty{display:none}
 .ccintro .logo{width:min(300px,70%)}
 .ccintro h1{margin:0 0 4px}
 .ccintro p{margin-top:0;max-width:640px}
@@ -962,8 +965,7 @@ body.cc-app .ccintro{position:absolute;width:1px;height:1px;overflow:hidden;clip
   /* the page itself doesn't scroll: the creator is the window below the header */
   html:has(body.cc-app),body.cc-app{overflow:hidden;height:100%}
   body.cc-app footer,body.cc-app .site-foot{display:none}
-  body.cc-app .ccwrap{max-width:none;padding:8px 10px;height:calc(100vh - var(--navh,52px));box-sizing:border-box;display:flex;flex-direction:column}
-  body.cc-app .ccwrap>.gmsg:empty{display:none}
+  body.cc-app .ccwrap{max-width:none;padding:0 10px 8px;height:calc(100vh - var(--navh,52px));box-sizing:border-box;display:flex;flex-direction:column}
   body.cc-app #ccgame{flex:1;min-height:0;height:auto}
   body.cc-app .cctop:has(#ccAdminBtn[hidden]){display:none}
   body.cc-app .ccgame{grid-template-columns:230px minmax(0,1fr) 400px;grid-template-rows:auto minmax(0,1fr) auto}
@@ -986,7 +988,7 @@ body.cc-app .ccintro{position:absolute;width:1px;height:1px;overflow:hidden;clip
 .cctreehost{flex:1;min-height:440px;display:flex}
 .tv{position:relative;flex:1;min-height:440px;overflow:hidden;border-radius:12px;background:radial-gradient(ellipse at 50% 35%,#2a2433 0%,#121018 55%,#060509 100%);cursor:grab;touch-action:none;user-select:none;outline:none}
 .tv:active{cursor:grabbing}
-.tvstage{position:absolute;inset:0;perspective:1100px;perspective-origin:50% 35%}
+.tvstage{position:absolute;inset:0}
 .tvplane{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
 .tvlinks{position:absolute;overflow:visible;pointer-events:none}
 .tvlinks path{stroke:#5a5266;stroke-width:5;fill:none;stroke-linecap:round}
