@@ -35,7 +35,8 @@
   },
   "f:class-fighter:prowess": {
    "x": 454,
-   "y": 518
+   "y": 518,
+   "kind": "keystone"
   },
   "cls:class-ranger": {
    "ic": "heavy-crossbow",
@@ -59,8 +60,8 @@
    "y": 404
   },
   "f:class-barbarian:reckless-attack": {
-   "x": 562,
-   "y": 416
+   "x": 569,
+   "y": 403
   },
   "f:class-barbarian:adrenaline": {
    "x": 1043,
@@ -141,25 +142,56 @@
    "y": 190
   },
   "f:class-barbarian:fury": {
-   "x": 782,
-   "y": 306
+   "x": 716,
+   "y": 407,
+   "kind": "keystone"
   },
   "f:class-barbarian:prowess": {
-   "x": 695,
-   "y": 386
+   "x": 799,
+   "y": 326,
+   "kind": "keystone"
   },
   "f:class-barbarian:intimidating-physique": {
-   "x": 641,
+   "x": 644,
    "y": 330
   },
   "f:class-monk:resolve": {
    "x": -189,
-   "y": 586
+   "y": 586,
+   "kind": "keystone"
+  },
+  "f:class-rogue:guile": {
+   "kind": "keystone"
+  },
+  "f:class-artificer:ingenuity": {
+   "kind": "keystone"
   }
  },
  "extra": [],
- "links": [],
- "unlinks": [],
+ "links": [
+  [
+   "f:class-barbarian:prowess",
+   "f:class-barbarian:fury"
+  ],
+  [
+   "f:class-barbarian:fury",
+   "f:class-barbarian:intimidating-physique"
+  ],
+  [
+   "f:class-barbarian:warrior-training",
+   "f:class-barbarian:prowess"
+  ]
+ ],
+ "unlinks": [
+  [
+   "f:class-barbarian:fury",
+   "f:class-barbarian:warrior-training"
+  ],
+  [
+   "f:class-barbarian:intimidating-physique",
+   "f:class-barbarian:prowess"
+  ]
+ ],
  "curves": {
   "f:class-monk:martial-arts|f:class-monk:unarmored-discipline": {
    "c": 50
