@@ -1,6 +1,222 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/f:class-barbarian:reckless-attack": {
+   "n": "f:class-barbarian:reckless-attack",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:fury": {
+   "n": "f:class-barbarian:fury",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:prowess": {
+   "n": "f:class-barbarian:prowess",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:intimidating-physique": {
+   "n": "f:class-barbarian:intimidating-physique",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:aggression": {
+   "n": "f:class-barbarian:aggression",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:warrior-training": {
+   "n": "f:class-barbarian:warrior-training",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-fighter:weapon-specialist": {
+   "n": "f:class-fighter:weapon-specialist",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/cls:class-druid": {
+   "n": "cls:class-druid",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-fighter:fighting-style": {
+   "n": "f:class-fighter:fighting-style",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/f:class-fighter:adrenaline": {
+   "n": "f:class-fighter:adrenaline",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:fighting-style:duel-wielder": {
+   "n": "o:class-fighter:fighting-style:duel-wielder",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:fighting-style:armored": {
+   "n": "o:class-fighter:fighting-style:armored",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:fighting-style:marksmen": {
+   "n": "o:class-fighter:fighting-style:marksmen",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:fighting-style:two-handed": {
+   "n": "o:class-fighter:fighting-style:two-handed",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:fighting-style:bulwark": {
+   "n": "o:class-fighter:fighting-style:bulwark",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:fighting-style:brawler": {
+   "n": "o:class-fighter:fighting-style:brawler",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:fighting-style:specialist": {
+   "n": "o:class-fighter:fighting-style:specialist",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:axes": {
+   "n": "o:class-fighter:weapon-specialist:axes",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:blades": {
+   "n": "o:class-fighter:weapon-specialist:blades",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:cudgels": {
+   "n": "o:class-fighter:weapon-specialist:cudgels",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:polearms": {
+   "n": "o:class-fighter:weapon-specialist:polearms",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:unarmed": {
+   "n": "o:class-fighter:weapon-specialist:unarmed",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:bows": {
+   "n": "o:class-fighter:weapon-specialist:bows",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:firearms": {
+   "n": "o:class-fighter:weapon-specialist:firearms",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:swords": {
+   "n": "o:class-fighter:weapon-specialist:swords",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:miscellaneous": {
+   "n": "o:class-fighter:weapon-specialist:miscellaneous",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
+  "crawl-tree.json.nodes/o:class-fighter:weapon-specialist:shields": {
+   "n": "o:class-fighter:weapon-specialist:shields",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:46:57.288Z"
+  },
   "crawl-tree.json.nodes/f:class-monk:perfect-focus": {
    "n": "f:class-monk:perfect-focus",
    "f": "crawl-tree.json",
@@ -121,38 +337,6 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T01:40:25.572Z"
   },
-  "crawl-tree.json.nodes/f:class-barbarian:reckless-attack": {
-   "n": "f:class-barbarian:reckless-attack",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:32:01.332Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:fury": {
-   "n": "f:class-barbarian:fury",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:32:01.332Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:prowess": {
-   "n": "f:class-barbarian:prowess",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:32:01.332Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:intimidating-physique": {
-   "n": "f:class-barbarian:intimidating-physique",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:32:01.332Z"
-  },
   "crawl-tree.json.nodes/f:class-monk:resolve": {
    "n": "f:class-monk:resolve",
    "f": "crawl-tree.json",
@@ -190,22 +374,6 @@
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:24:30.041Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:aggression": {
-   "n": "f:class-barbarian:aggression",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:24:30.041Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:warrior-training": {
-   "n": "f:class-barbarian:warrior-training",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
    "by": "Brody Woelke",
    "at": "2026-10-31T01:24:30.041Z"
   },
@@ -625,14 +793,6 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T00:05:52.587Z"
   },
-  "crawl-tree.json.nodes/f:class-fighter:weapon-specialist": {
-   "n": "f:class-fighter:weapon-specialist",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:05:52.587Z"
-  },
   "crawl-tree.json.nodes/f:class-monk:pure-form": {
    "n": "f:class-monk:pure-form",
    "f": "crawl-tree.json",
@@ -688,14 +848,6 @@
    "how": "edited",
    "by": "Brody Woelke",
    "at": "2026-10-31T00:02:58.323Z"
-  },
-  "crawl-tree.json.nodes/cls:class-druid": {
-   "n": "cls:class-druid",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
   },
   "crawl-tree.json.nodes/cls:class-cleric": {
    "n": "cls:class-cleric",
