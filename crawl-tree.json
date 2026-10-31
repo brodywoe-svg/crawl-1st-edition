@@ -19,8 +19,8 @@
   },
   "cls:class-barbarian": {
    "ic": "warhammer",
-   "x": 503,
-   "y": 177
+   "x": 497,
+   "y": 211
   },
   "cls:class-rogue": {
    "ic": "veiled-mask"
@@ -46,8 +46,8 @@
    "y": 446
   },
   "cls:class-druid": {
-   "x": 519,
-   "y": -99
+   "x": 513,
+   "y": -51
   },
   "f:class-barbarian:anger-management": {
    "x": 642,
