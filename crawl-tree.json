@@ -43,8 +43,8 @@
   },
   "cls:class-ranger": {
    "ic": "heavy-crossbow",
-   "x": 100,
-   "y": 446
+   "x": 88,
+   "y": 436
   },
   "cls:class-druid": {
    "x": 513,
@@ -335,7 +335,21 @@
    "ic": "toolbox"
   },
   "f:class-wizard:arcane-channeling": {
-   "ic": "channeling"
+   "ic": "channeling",
+   "x": -380,
+   "y": -739
+  },
+  "f:class-wizard:arcane-major": {
+   "x": -252,
+   "y": -822
+  },
+  "f:class-wizard:arcane-minor": {
+   "x": -501,
+   "y": -664
+  },
+  "f:class-wizard:somatic-conversion": {
+   "x": -448,
+   "y": -866
   }
  },
  "extra": [],
