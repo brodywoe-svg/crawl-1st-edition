@@ -366,7 +366,12 @@
     },
     {
      "n": "Fury",
-     "d": "Whenever you roll your Action Die, you gain 1 additional Action Point (AP). This bonus increases to 2 AP at 6th level and 3 AP at 12th level. In addition, while you're Raging, whenever an enemy deals damage to you, you gain 1 AP. Points gained from Fury can't exceed your Max Pool; any excess is lost.",
+     "d": "While you're Raging, whenever an enemy deals damage to you, you gain 1 AP. Points gained from Fury can't exceed your Max Pool; any excess is lost.",
+     "lv": 1
+    },
+    {
+     "n": "Prowess",
+     "d": "Starting at 1st level, your martial training lets you push harder with each moment of combat.\n\nWhenever you roll your Action Die, you gain 1 additional Action Point (AP). This bonus increases to 2 AP at 6th level and 3 AP at 12th level.\n\nPoints gained from Prowess can’t exceed your Max Pool. Any excess is lost.",
      "lv": 1
     }
    ],
