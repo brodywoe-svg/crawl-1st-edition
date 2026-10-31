@@ -333,6 +333,9 @@
    "x": 81,
    "y": -748,
    "ic": "toolbox"
+  },
+  "f:class-wizard:arcane-channeling": {
+   "ic": "channeling"
   }
  },
  "extra": [],
