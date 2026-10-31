@@ -1,6 +1,14 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/f:class-wizard:arcane-channeling": {
+   "n": "f:class-wizard:arcane-channeling",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:13:38.552Z"
+  },
   "crawl-tree.json.nodes/f:class-artificer:ingenuity": {
    "n": "f:class-artificer:ingenuity",
    "f": "crawl-tree.json",
