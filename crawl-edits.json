@@ -1,6 +1,110 @@
 {
  "v": 1,
  "edits": {
+  "crawl-glossary.json.entries/Charge": {
+   "n": "Charge",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Crippling Shot": {
+   "n": "Crippling Shot",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Debilitate": {
+   "n": "Debilitate",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Defense Stance": {
+   "n": "Defense Stance",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Execution": {
+   "n": "Execution",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Hemorrhage": {
+   "n": "Hemorrhage",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Impaling Bolt": {
+   "n": "Impaling Bolt",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Intimidate": {
+   "n": "Intimidate",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Point Blank": {
+   "n": "Point Blank",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Reaching Strike": {
+   "n": "Reaching Strike",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Sabotage": {
+   "n": "Sabotage",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Sunder": {
+   "n": "Sunder",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
+  "crawl-glossary.json.entries/Toppling Blow": {
+   "n": "Toppling Blow",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:14:44.612Z"
+  },
   "crawl-classes.json.classes/class-barbarian": {
    "n": "Barbarian",
    "f": "crawl-classes.json",
