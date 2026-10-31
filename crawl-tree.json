@@ -26,11 +26,13 @@
    "ic": "veiled-mask"
   },
   "f:class-fighter:fighting-style": {
-   "ic": "sword-of-light"
+   "ic": "sword-of-light",
+   "x": 460,
+   "y": 691
   },
   "f:class-fighter:adrenaline": {
-   "x": 678,
-   "y": 782,
+   "x": 528,
+   "y": 635,
    "ic": "adrenaline"
   },
   "f:class-fighter:prowess": {
@@ -44,8 +46,8 @@
    "y": 446
   },
   "cls:class-druid": {
-   "x": 522,
-   "y": -57
+   "x": 519,
+   "y": -99
   },
   "f:class-barbarian:anger-management": {
    "x": 642,
@@ -60,8 +62,8 @@
    "y": 404
   },
   "f:class-barbarian:reckless-attack": {
-   "x": 569,
-   "y": 403
+   "x": 755,
+   "y": 325
   },
   "f:class-barbarian:adrenaline": {
    "x": 1043,
@@ -131,31 +133,31 @@
    "y": 2246
   },
   "f:class-fighter:weapon-specialist": {
-   "x": 823,
-   "y": 956,
+   "x": 606,
+   "y": 573,
    "ic": "spearhead"
   },
   "f:class-barbarian:aggression": {
-   "x": 595,
-   "y": 266
+   "x": 636,
+   "y": 230
   },
   "f:class-barbarian:warrior-training": {
-   "x": 674,
-   "y": 190
+   "x": 649,
+   "y": 120
   },
   "f:class-barbarian:fury": {
-   "x": 716,
-   "y": 407,
+   "x": 891,
+   "y": 263,
    "kind": "keystone"
   },
   "f:class-barbarian:prowess": {
-   "x": 799,
-   "y": 326,
+   "x": 905,
+   "y": 150,
    "kind": "keystone"
   },
   "f:class-barbarian:intimidating-physique": {
-   "x": 644,
-   "y": 330
+   "x": 762,
+   "y": 250
   },
   "f:class-monk:resolve": {
    "x": -189,
@@ -207,6 +209,74 @@
   "f:class-rogue:improved-critical": {
    "x": -943,
    "y": 484
+  },
+  "o:class-fighter:fighting-style:duel-wielder": {
+   "x": 419,
+   "y": 826
+  },
+  "o:class-fighter:fighting-style:armored": {
+   "x": 475,
+   "y": 811
+  },
+  "o:class-fighter:fighting-style:marksmen": {
+   "x": 352,
+   "y": 797
+  },
+  "o:class-fighter:fighting-style:two-handed": {
+   "x": 318,
+   "y": 746
+  },
+  "o:class-fighter:fighting-style:bulwark": {
+   "x": 318,
+   "y": 692
+  },
+  "o:class-fighter:fighting-style:brawler": {
+   "x": 353,
+   "y": 641
+  },
+  "o:class-fighter:fighting-style:specialist": {
+   "x": 406,
+   "y": 609
+  },
+  "o:class-fighter:weapon-specialist:axes": {
+   "x": 722,
+   "y": 560
+  },
+  "o:class-fighter:weapon-specialist:blades": {
+   "x": 591,
+   "y": 502
+  },
+  "o:class-fighter:weapon-specialist:cudgels": {
+   "x": 689,
+   "y": 510
+  },
+  "o:class-fighter:weapon-specialist:polearms": {
+   "x": 730,
+   "y": 613
+  },
+  "o:class-fighter:weapon-specialist:unarmed": {
+   "x": 546,
+   "y": 533
+  },
+  "o:class-fighter:weapon-specialist:bows": {
+   "x": 709,
+   "y": 663
+  },
+  "o:class-fighter:weapon-specialist:firearms": {
+   "x": 664,
+   "y": 678
+  },
+  "o:class-fighter:weapon-specialist:swords": {
+   "x": 643,
+   "y": 490
+  },
+  "o:class-fighter:weapon-specialist:miscellaneous": {
+   "x": 559,
+   "y": 705
+  },
+  "o:class-fighter:weapon-specialist:shields": {
+   "x": 614,
+   "y": 692
   }
  },
  "extra": [],
