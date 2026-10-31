@@ -346,7 +346,7 @@
    "feats": [
     {
      "n": "Aggression",
-     "d": "You learn the Rage Combat Action.\n\n[color=#8e171c]Rage[/color]  You can expend 1 AP to enter a Rage. It lasts until the end of combat, or until you end your turn without having attacked a hostile creature or taken damage since your last turn. While Raging: | \n\n• You have Resistance to non-magical bludgeoning, piercing and slashing damage.\n• You have Advantage on Strength checks and Strength saving throws.\n• You can't cast spells or maintain Concentration.\n• When you hit with a melee weapon attack that has Advantage, you can add your Strength modifier to the damage a second time.",
+     "d": "You learn the Rage Combat Action.\n\nRage. You can expend 1 AP to enter a Rage. It lasts until the end of combat, or until you end your turn without having attacked a hostile creature or taken damage since your last turn. While Raging: | \n\n• You have Resistance to non-magical bludgeoning, piercing and slashing damage.\n• You have Advantage on Strength checks and Strength saving throws.\n• You can't cast spells or maintain Concentration.\n• When you hit with a melee weapon attack that has Advantage, you can add your Strength modifier to the damage a second time.",
      "lv": 1
     },
     {
