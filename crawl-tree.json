@@ -182,7 +182,8 @@
   "f:class-artificer:ingenuity": {
    "kind": "keystone",
    "x": -81,
-   "y": -596
+   "y": -596,
+   "ic": "toolbox"
   },
   "f:class-rogue:sneak-attack": {
    "x": -783,
@@ -311,24 +312,27 @@
    "y": 38
   },
   "a:class-artificer:quick-repair": {
-   "x": 6,
-   "y": -758
+   "x": 166,
+   "y": -768
   },
   "a:class-artificer:use-magical-device": {
-   "x": 161,
-   "y": -761
+   "x": 167,
+   "y": -720
   },
   "f:class-artificer:artificer-s-talent": {
    "x": 4,
-   "y": -655
+   "y": -655,
+   "ic": "arcane-device"
   },
   "f:class-artificer:repair-and-dismantle": {
    "x": 85,
-   "y": -603
+   "y": -603,
+   "ic": "cogwork"
   },
   "f:class-artificer:tricks-of-the-trade": {
    "x": 81,
-   "y": -748
+   "y": -748,
+   "ic": "toolbox"
   }
  },
  "extra": [],
