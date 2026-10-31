@@ -1145,17 +1145,23 @@
   {
    "n": "Quick Repair",
    "sec": "Combat Actions",
-   "lead": "You can expend 3 AP to patch up a Broken Weapon, Firearm, or small item that you or an ally within 5 feet of you is holding. Make a Repair Check  You can use Quick Repair only once per turn.",
+   "lead": "You can expend 3 AP to patch up a Broken Weapon, Firearm, or small item that you or an ally within 5 feet of you is holding. Make a Repair Check (d20 + Intelligence Modifier + The Appropriate Trade Skill Rank). You can use Quick Repair only once per turn. At the DM's discretion and the decided complexity of the item, you must roll equal to, or above the Determined DC.\n\n[table]\nItem Type | Trade Skill\nMetal weapons and armor | Blacksmithing\nBows, staffs and wooden weapons | Woodworking\nFirearms, mechanisms and tools | Tinkering\nJewelry and accessories | Goldsmithing\n[/table]\n\n[table]\nRepair Difficulty | DC\nEasy | (DC12)\nModerate | (DC15)\nDifficult | (DC18)\nComplex | (DC20)\nImpossible | (DC25)\nBeyond Repair | (DC30)\n[/table]",
    "fx": [],
    "notes": [],
-   "aka": [],
+   "aka": [
+    {
+     "w": "Quick Repair",
+     "ref": "You can expend 3 AP to patch up a Broken Weapon, Firearm, or small item that you or an ally within 5 feet of you is holding. Make a Repair Check (d20 + Intelligence Modifier + The Appropriate Trade Skill Rank). You can use Quick Repair only once per turn. At the DM's discretion and the decided complexity of the item, you must roll equal to, or above the Determined DC.\n\n[table]\nItem Type | Trade\nMetal weapons and armor | Blacksmithing\nBows, staffs and wooden weapons | Woodworking\nFirearms, mechanisms and tools | Tinkering\nJewelry and accessories | Goldsmithing\n[/table]\n\n[table]\nRepair Difficulty | DC\nEasy | (DC12)\nModerate | (DC15)\nDifficult | (DC18)\nComplex | (DC20)\nImpossible | (DC25)\nBeyond Repair | (DC30)\n[/table]"
+    }
+   ],
    "tip": true,
    "tipItems": true,
    "tipClasses": true,
    "tipFeats": true,
    "tipCreator": true,
    "ap": "3",
-   "req": "Tricks of the Trade"
+   "req": "Tricks of the Trade",
+   "hideRefs": true
   },
   {
    "n": "Radiant",
