@@ -1,6 +1,30 @@
 {
  "v": 1,
  "edits": {
+  "crawl-classes.json.classes/class-monk": {
+   "n": "Monk",
+   "f": "crawl-classes.json",
+   "c": "classes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:21:18.089Z"
+  },
+  "crawl-classes.json.classes/class-monk.feats/Resolve": {
+   "n": "Resolve",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:21:18.089Z"
+  },
+  "crawl-classes.json.classes/class-monk.feats/Prowess": {
+   "n": "Prowess",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:21:18.089Z"
+  },
   "crawl-classes.json.classes/class-rogue": {
    "n": "Rogue",
    "f": "crawl-classes.json",
