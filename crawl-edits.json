@@ -1,6 +1,14 @@
 {
  "v": 1,
  "edits": {
+  "crawl-classes.json.classes/class-artificer.feats/Artificer's Talent": {
+   "n": "Artificer's Talent",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:50:59.769Z"
+  },
   "crawl-classes.json.classes/class-artificer.feats/Repair and Dismantle": {
    "n": "Repair and Dismantle",
    "f": "crawl-classes.json",
@@ -29,14 +37,6 @@
    "n": "Artificer",
    "f": "crawl-classes.json",
    "c": "classes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:35:38.664Z"
-  },
-  "crawl-classes.json.classes/class-artificer.feats/Artificer's Talent": {
-   "n": "Artificer's Talent",
-   "f": "crawl-classes.json",
-   "c": "feats",
    "how": "edited",
    "by": "Brody Woelke",
    "at": "2026-10-31T00:35:38.664Z"
