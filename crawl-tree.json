@@ -51,19 +51,19 @@
    "y": 279
   },
   "f:class-barbarian:tribe-tactics": {
-   "x": 776,
-   "y": 339
+   "x": 741,
+   "y": 348
   },
   "f:class-barbarian:intimidating-physicue": {
-   "x": 919,
-   "y": 357
+   "x": 829,
+   "y": 404
   },
   "f:class-barbarian:reckless-attack": {
-   "x": 1102,
-   "y": 393
+   "x": 939,
+   "y": 468
   },
   "f:class-barbarian:adrenaline": {
-   "x": 1218,
+   "x": 1043,
    "y": 531
   },
   "cls:class-paladin": {
