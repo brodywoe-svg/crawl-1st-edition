@@ -1862,8 +1862,8 @@
    ],
    "feats": [
     {
-     "n": "Prowess",
-     "d": "Starting at 1st level, your martial training lets you push harder with each moment of combat. Whenever you roll your Action Die, you gain 1 additional Action Point (AP). This bonus increases to 2 AP at 6th level and 3 AP at 12th level. Points gained from Prowess can't exceed your Max Pool. Any excess is lost.",
+     "n": "Guile",
+     "d": "Whenever a creature misses you with the first melee attack it makes against you on its turn, you gain 1 Action Point (AP). Whenever you score a critical hit, you gain 1 AP. Points gained from Guile can’t exceed your Max Pool; any excess is lost.",
      "lv": 1
     },
     {
@@ -1872,8 +1872,8 @@
      "lv": 1
     },
     {
-     "n": "Tricks of the Trade",
-     "d": ". Your Threshold Checks (TC) for the Detect Traps, Identify Item and Identify Poison Expertises gain a +2 bonus. This bonus increases to +3 at 5th level, +4 at 10th level and +5 at 15th level.",
+     "n": "Cunning Expertise",
+     "d": "Your Threshold Checks (TC) for the Detect Traps, Identify Item and Identify Poison Expertises gain a +2 bonus. This bonus increases to +3 at 5th level, +4 at 10th level and +5 at 15th level.",
      "lv": 1
     },
     {
