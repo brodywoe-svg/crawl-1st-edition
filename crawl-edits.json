@@ -1,6 +1,30 @@
 {
  "v": 1,
  "edits": {
+  "crawl-classes.json.classes/class-barbarian": {
+   "n": "Barbarian",
+   "f": "crawl-classes.json",
+   "c": "classes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:25:06.548Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Fury": {
+   "n": "Fury",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:25:06.548Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Prowess": {
+   "n": "Prowess",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:25:06.548Z"
+  },
   "crawl-glossary.json.entries/Rage": {
    "n": "Rage",
    "f": "crawl-glossary.json",
@@ -121,14 +145,6 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T00:14:44.612Z"
   },
-  "crawl-classes.json.classes/class-barbarian": {
-   "n": "Barbarian",
-   "f": "crawl-classes.json",
-   "c": "classes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:13:50.356Z"
-  },
   "crawl-classes.json.classes/class-barbarian.feats/Warrior Training": {
    "n": "Warrior Training",
    "f": "crawl-classes.json",
@@ -139,14 +155,6 @@
   },
   "crawl-classes.json.classes/class-barbarian.feats/Intimidating Physique": {
    "n": "Intimidating Physique",
-   "f": "crawl-classes.json",
-   "c": "feats",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:13:50.356Z"
-  },
-  "crawl-classes.json.classes/class-barbarian.feats/Fury": {
-   "n": "Fury",
    "f": "crawl-classes.json",
    "c": "feats",
    "how": "added",
