@@ -1,6 +1,70 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/f:class-barbarian:reckless-attack": {
+   "n": "f:class-barbarian:reckless-attack",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:way-of-the-fist": {
+   "n": "f:class-monk:way-of-the-fist",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:aggression": {
+   "n": "f:class-barbarian:aggression",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:warrior-training": {
+   "n": "f:class-barbarian:warrior-training",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:fury": {
+   "n": "f:class-barbarian:fury",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:prowess": {
+   "n": "f:class-barbarian:prowess",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:intimidating-physique": {
+   "n": "f:class-barbarian:intimidating-physique",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:resolve": {
+   "n": "f:class-monk:resolve",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:24:30.041Z"
+  },
   "crawl-classes.json.classes/class-monk": {
    "n": "Monk",
    "f": "crawl-classes.json",
@@ -393,14 +457,6 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T00:06:41.384Z"
   },
-  "crawl-tree.json.nodes/f:class-barbarian:reckless-attack": {
-   "n": "f:class-barbarian:reckless-attack",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:06:41.384Z"
-  },
   "crawl-tree.json.nodes/f:class-barbarian:adrenaline": {
    "n": "f:class-barbarian:adrenaline",
    "f": "crawl-tree.json",
@@ -539,14 +595,6 @@
   },
   "crawl-tree.json.nodes/f:class-monk:prowess": {
    "n": "f:class-monk:prowess",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/f:class-monk:way-of-the-fist": {
-   "n": "f:class-monk:way-of-the-fist",
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "added",
