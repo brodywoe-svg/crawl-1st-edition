@@ -1,19 +1,19 @@
 {
  "v": 1,
  "edits": {
+  "crawl-glossary.json.entries/Quick Repair": {
+   "n": "Quick Repair",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:07:17.247Z"
+  },
   "crawl-glossary.json.entries/Misfire X": {
    "n": "Misfire X",
    "f": "crawl-glossary.json",
    "c": "entries",
    "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:57:00.984Z"
-  },
-  "crawl-glossary.json.entries/Quick Repair": {
-   "n": "Quick Repair",
-   "f": "crawl-glossary.json",
-   "c": "entries",
-   "how": "added",
    "by": "Brody Woelke",
    "at": "2026-10-31T00:57:00.984Z"
   },
