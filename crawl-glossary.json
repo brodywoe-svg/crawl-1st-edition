@@ -798,21 +798,21 @@
   {
    "n": "Misfire X",
    "sec": "Properties",
-   "lead": "[color=#8e171c]Misfire X.[/color] When you make an attack roll with a firearm and the d20 shows a number equal to or lower than its Misfire score, the weapon misfires. The attack misses, and the firearm breaks and Requires Repair. A broken firearm can’t be fired until it’s repaired.\n\nA broken firearm can only be repaired outside of combat, with a successful Tinkering check (DC 8 + the Misfire score). Its small, intricate mechanisms are too complex to be mended by magic. A creature that isn’t proficient with firearms increases the weapon’s Misfire score by 1.",
+   "lead": "[color=#8e171c]Misfire X.[/color] When you make an attack roll with a firearm and the d20 shows a number equal to or lower than its Misfire score, the weapon misfires. The attack misses, and the firearm breaks and effectively becomes unusable, gaining the Broken Property.",
    "fx": [],
    "notes": [],
    "aka": [
     {
      "w": "Misfire X",
-     "ref": "[color=#8e171c]Misfire X.[/color] When you make an attack roll with a firearm and the d20 shows a number equal to or lower than its Misfire score, the weapon misfires. The attack misses, and the firearm breaks and Requires Repair. A broken firearm can’t be fired until it’s repaired.\n\nA broken firearm can only be repaired outside of combat, with a successful Tinkering check (DC 8 + the Misfire score). Its small, intricate mechanisms are too complex to be mended by magic. A creature that isn’t proficient with firearms increases the weapon’s Misfire score by 1."
-    },
-    {
-     "w": "Repairing a Firearm",
-     "ref": "A broken firearm can only be repaired outside of combat, with a successful Tinkering check (DC 8 + the Misfire score). Its small, intricate mechanisms are too complex to be mended by magic. A creature that isn’t proficient with firearms increases the weapon’s Misfire score by 1."
+     "ref": "[color=#8e171c]Misfire X.[/color] When you make an attack roll with a firearm and the d20 shows a number equal to or lower than its Misfire score, the weapon misfires. The attack misses, and the firearm breaks and effectively becomes unusable, gaining the Broken Property."
     }
    ],
    "tip": true,
-   "hideRefs": true
+   "hideRefs": true,
+   "tipItems": true,
+   "tipClasses": true,
+   "tipFeats": true,
+   "tipCreator": true
   },
   {
    "n": "Modifier Slots",
