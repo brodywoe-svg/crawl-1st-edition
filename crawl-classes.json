@@ -121,7 +121,7 @@
    "feats": [
     {
      "n": "Artificer's Talent",
-     "d": "You've learned to work any trade with whatever tools you can carry, and to build useful tricks out of junk. You gain the following benefits:\n\n[color=#8e171c]Field Workshop.[/color] You start with an Artificer's Kit. During a Rest, your kit counts as any workstation except a Forge, Anvil or Loom, for recipes in trades you're proficient with.\n\n[color=#8e171c]Quick Hands.[/color] Crafting takes you half the normal time, rounded up to the nearest 30 minutes.\n\n[color=#8e171c]Contraptions.[/color] You learn and know the following crafting recipes: Scrap Caltrops, Flash Powder, Smoke Canister, Spring Snare, Oil Bomb, Shrapnel Bomb and Firecracker.",
+     "d": "You've learned to work any trade with whatever tools you can carry, and to build useful tricks out of junk. You gain the following benefits:\n\n[color=#8e171c]Field Workshop.[/color] You start with an Artificer's Kit. During a Rest, your kit counts as any workstation except a Forge, Anvil or Loom, for recipes in trades you're proficient with.\n\n[color=#8e171c]Quick Hands.[/color] Crafting takes you half the normal time, rounded up to the nearest 30 minutes.\n\n[color=#8e171c]Contraptions.[/color] You learn and know the following crafting recipes: [color=#b7791f]Caltrops[/color], [color=#b7791f]Flash Powder[/color], [color=#b7791f]Smoke Canister[/color], [color=#b7791f]Spring Snare[/color], [color=#b7791f]Oil Bomb[/color], [color=#b7791f]Shrapnel Bomb[/color] and [color=#b7791f]Firecracker[/color].",
      "lv": 1
     },
     {
