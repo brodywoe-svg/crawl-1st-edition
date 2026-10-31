@@ -7,7 +7,9 @@
    "y": 397
   },
   "cls:class-cleric": {
-   "ic": "flanged-mace"
+   "ic": "flanged-mace",
+   "x": 246,
+   "y": -462
   },
   "cls:class-artificer": {
    "ic": "cogwork"
@@ -36,11 +38,13 @@
    "y": 518
   },
   "cls:class-ranger": {
-   "ic": "heavy-crossbow"
+   "ic": "heavy-crossbow",
+   "x": 86,
+   "y": 468
   },
   "cls:class-druid": {
-   "x": 483,
-   "y": -193
+   "x": 522,
+   "y": -57
   },
   "f:class-barbarian:anger-management": {
    "x": 642,
@@ -61,10 +65,69 @@
   "f:class-barbarian:adrenaline": {
    "x": 1218,
    "y": 531
+  },
+  "cls:class-paladin": {
+   "x": -353,
+   "y": 360
+  },
+  "cls:class-monk": {
+   "x": -145,
+   "y": 429
+  },
+  "f:class-monk:prowess": {
+   "x": -203,
+   "y": 586
+  },
+  "f:class-monk:way-of-the-fist": {
+   "x": -229,
+   "y": 712
+  },
+  "f:class-monk:unarmored-discipline": {
+   "x": -282,
+   "y": 836
+  },
+  "f:class-monk:martial-arts": {
+   "x": -402,
+   "y": 893
+  },
+  "a:class-monk:swift-step": {
+   "x": -476,
+   "y": 783
+  },
+  "a:class-monk:sweep-kick": {
+   "x": -538,
+   "y": 824
+  },
+  "a:class-monk:patient-strikes": {
+   "x": -569,
+   "y": 875
+  },
+  "a:class-monk:flurry-of-blows": {
+   "x": -571,
+   "y": 927
+  },
+  "a:class-monk:haymaker": {
+   "x": -399,
+   "y": 775
+  },
+  "f:class-monk:perfect-focus": {
+   "x": -362,
+   "y": 1018
+  },
+  "f:class-monk:pure-form": {
+   "x": -328,
+   "y": 1139
   }
  },
  "extra": [],
  "links": [],
  "unlinks": [],
- "curves": {}
+ "curves": {
+  "f:class-monk:martial-arts|f:class-monk:unarmored-discipline": {
+   "c": 50
+  },
+  "f:class-monk:martial-arts|f:class-monk:perfect-focus": {
+   "c": 50
+  }
+ }
 }
