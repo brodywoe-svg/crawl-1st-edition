@@ -59,8 +59,8 @@
    "y": 404
   },
   "f:class-barbarian:reckless-attack": {
-   "x": 939,
-   "y": 468
+   "x": 562,
+   "y": 416
   },
   "f:class-barbarian:adrenaline": {
    "x": 1043,
@@ -79,8 +79,8 @@
    "y": 586
   },
   "f:class-monk:way-of-the-fist": {
-   "x": -229,
-   "y": 712
+   "x": -225,
+   "y": 696
   },
   "f:class-monk:unarmored-discipline": {
    "x": -282,
@@ -131,6 +131,30 @@
    "x": 823,
    "y": 956,
    "ic": "spearhead"
+  },
+  "f:class-barbarian:aggression": {
+   "x": 595,
+   "y": 266
+  },
+  "f:class-barbarian:warrior-training": {
+   "x": 674,
+   "y": 190
+  },
+  "f:class-barbarian:fury": {
+   "x": 782,
+   "y": 306
+  },
+  "f:class-barbarian:prowess": {
+   "x": 695,
+   "y": 386
+  },
+  "f:class-barbarian:intimidating-physique": {
+   "x": 641,
+   "y": 330
+  },
+  "f:class-monk:resolve": {
+   "x": -189,
+   "y": 586
   }
  },
  "extra": [],
