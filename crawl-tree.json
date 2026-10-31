@@ -111,12 +111,12 @@
    "y": 788
   },
   "f:class-monk:perfect-focus": {
-   "x": -362,
-   "y": 1018
+   "x": -345,
+   "y": 1021
   },
   "f:class-monk:pure-form": {
-   "x": -328,
-   "y": 1139
+   "x": -222,
+   "y": 964
   }
  },
  "extra": [],
@@ -127,6 +127,9 @@
    "c": 50
   },
   "f:class-monk:martial-arts|f:class-monk:perfect-focus": {
+   "c": 50
+  },
+  "f:class-monk:perfect-focus|f:class-monk:pure-form": {
    "c": 50
   }
  }
