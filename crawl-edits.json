@@ -1,6 +1,94 @@
 {
  "v": 1,
  "edits": {
+  "crawl-classes.json.classes/class-artificer": {
+   "n": "Artificer",
+   "f": "crawl-classes.json",
+   "c": "classes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-artificer.feats/Artificer's Talent": {
+   "n": "Artificer's Talent",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-artificer.feats/Ingenuity": {
+   "n": "Ingenuity",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-artificer.feats/Repair and Dismantle": {
+   "n": "Repair and Dismantle",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-artificer.feats/Tricks of the Trade": {
+   "n": "Tricks of the Trade",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-artificer.loadouts/Inventor's Kit": {
+   "n": "Inventor's Kit",
+   "f": "crawl-classes.json",
+   "c": "loadouts",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-fighter": {
+   "n": "Fighter",
+   "f": "crawl-classes.json",
+   "c": "classes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-fighter.choices/5": {
+   "n": "5",
+   "f": "crawl-classes.json",
+   "c": "choices",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-artificer.feats/Reforging": {
+   "n": "Reforging",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-artificer.feats/Equipment Upkeep": {
+   "n": "Equipment Upkeep",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
+  "crawl-classes.json.classes/class-fighter.choices/4": {
+   "n": "4",
+   "f": "crawl-classes.json",
+   "c": "choices",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:35:38.664Z"
+  },
   "crawl-classes.json.classes/class-barbarian": {
    "n": "Barbarian",
    "f": "crawl-classes.json",
