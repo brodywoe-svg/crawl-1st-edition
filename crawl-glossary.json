@@ -136,7 +136,7 @@
   {
    "n": "Broken",
    "sec": "Properties",
-   "lead": "A Broken item or piece of Equipment is too damaged to serve its original purpose. An item that is broken is constituted by its state such as Weapons that are rusted through, bent or snapped in two, Firearms that have misfired or jammed, Armor and shields that are dented, damaged, and/or torn. \n\nAn Item with the Broken property remains broken until it is repaired. While an Item is broken no creature can benefit from its properties or modifiers. A Broken Item gains the following Detriments:",
+   "lead": "[color=#8e171c]Broken.[/color] A Broken item or piece of Equipment is too damaged to serve its original purpose. An item that is broken is constituted by its state such as Weapons that are rusted through, bent or snapped in two, Firearms that have misfired or jammed, Armor and shields that are dented, damaged, and/or torn. \n\nAn Item with the Broken property remains broken until it is repaired. While an Item is broken no creature can benefit from its properties or modifiers. A Broken Item gains the following Detriments:",
    "fx": [
     "You can't attack with a Broken weapon.",
     "A Broken firearm can't be fired (see Misfire).",
