@@ -1378,8 +1378,8 @@
    ],
    "feats": [
     {
-     "n": "Prowess",
-     "d": "Starting at 1st level, your martial training lets you push harder with each moment of combat. Whenever you roll your Action Die, you gain 1 additional Action Point (AP). This bonus increases to 2 AP at 6th level and 3 AP at 12th level. Points gained from Prowess can't exceed your Max Pool. Any excess is lost.",
+     "n": "Resolve",
+     "d": "Every second time you hit a creature with a melee attack on your turn, you gain 1 Action Point (AP). Points gained from Resolve can't exceed your Max Pool; any excess is lost.",
      "lv": 1
     },
     {
