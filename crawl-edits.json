@@ -1,6 +1,38 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/f:class-barbarian:tribe-tactics": {
+   "n": "f:class-barbarian:tribe-tactics",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:06:41.384Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:intimidating-physicue": {
+   "n": "f:class-barbarian:intimidating-physicue",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:06:41.384Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:reckless-attack": {
+   "n": "f:class-barbarian:reckless-attack",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:06:41.384Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:adrenaline": {
+   "n": "f:class-barbarian:adrenaline",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:06:41.384Z"
+  },
   "crawl-tree.json.nodes/f:class-monk:perfect-focus": {
    "n": "f:class-monk:perfect-focus",
    "f": "crawl-tree.json",
@@ -195,38 +227,6 @@
   },
   "crawl-tree.json.nodes/f:class-barbarian:anger-management": {
    "n": "f:class-barbarian:anger-management",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:00:38.979Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:tribe-tactics": {
-   "n": "f:class-barbarian:tribe-tactics",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:00:38.979Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:intimidating-physicue": {
-   "n": "f:class-barbarian:intimidating-physicue",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:00:38.979Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:reckless-attack": {
-   "n": "f:class-barbarian:reckless-attack",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:00:38.979Z"
-  },
-  "crawl-tree.json.nodes/f:class-barbarian:adrenaline": {
-   "n": "f:class-barbarian:adrenaline",
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "added",
