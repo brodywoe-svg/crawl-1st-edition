@@ -121,21 +121,30 @@
    "feats": [
     {
      "n": "Artificer's Talent",
-     "d": "",
+     "d": "You've learned to work any trade with whatever tools you can carry, and to build useful tricks out of junk. You gain the following benefits:\n\n[color=#8e171c]Field Workshop.[/color] You start with an Artificer's Kit. During a Rest, your kit counts as any workstation except a Forge, Anvil or Loom, for recipes in trades you're proficient with.\n\n[color=#8e171c]Quick Hands.[/color] Crafting takes you half the normal time, rounded up to the nearest 30 minutes.\n\n[color=#8e171c]Contraptions.[/color] You learn and know the following crafting recipes: Scrap Caltrops, Flash Powder, Smoke Canister, Spring Snare, Oil Bomb, Shrapnel Bomb and Firecracker.",
      "lv": 1
     },
     {
-     "n": "Reforging",
-     "d": "",
+     "n": "Ingenuity",
+     "d": "At the start of your turn in combat, you can forgo rolling your Action Die. If you do, you gain Action Points (AP) equal to your Intelligence modifier instead (minimum 1).",
      "lv": 1
     },
     {
-     "n": "Equipment Upkeep",
-     "d": "",
+     "n": "Repair and Dismantle",
+     "d": "You know how to put broken gear back together, and how to take anything apart for its parts, whether you have hours at a workbench or seconds in the middle of a fight. You gain the following benefits:\n\n[color=#8e171c]Repair.[/color] When you finish a Rest, you can repair one Broken item. Make an Intelligence check, adding your Rank in the trade that matches the item's material (see the table). The DC is 10 for a Basic item, 14 for Advanced and 18 for Mastery; for a firearm it's 8 + its Misfire score. On a success, the item is no longer Broken. On a failure, you can try again after your next Rest.\n\n[color=#8e171c]Dismantle.[/color] During a Rest, you can dismantle an item you're holding, including a Broken one. Any Modifiers on it are lost. The GM decides what salvage you recover, based on what the item was made of (usually 1 to 3 pieces for a larger item).\n\n[table]\nItem material | Trade\nMetal weapons and armor | Blacksmithing\nLeather armor | Leatherworking\nCloth armor | Tailoring\nBows, staffs and wooden weapons | Woodworking\nFirearms, mechanisms and tools | Tinkering\nJewelry and accessories | Goldsmithing\n[/table]\n\n[color=#8e171c]Disarm Devices.[/color] You can dismantle a trap, lock or mechanism you can reach. Make an Intelligence (Thievery) check against its DC. On a success, it's disarmed, and the GM decides what salvage you recover from it.",
      "lv": 1
+    },
+    {
+     "n": "Tricks of the Trade",
+     "d": "You learn the [color=#8e171c]Quick Repair[/color] and [color=#8e171c]Use Magical Device[/color] Combat Actions."
     }
    ],
-   "loadouts": [],
+   "loadouts": [
+    {
+     "n": "Inventor's Kit",
+     "gear": []
+    }
+   ],
    "money": "25 (G)",
    "moneyRoll": "",
    "extra": [],
@@ -1198,7 +1207,7 @@
      ]
     },
     {
-     "n": 4,
+     "n": 5,
      "cat": "weapon",
      "opts": [
       "Axes",
