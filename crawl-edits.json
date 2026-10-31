@@ -1,21 +1,13 @@
 {
  "v": 1,
  "edits": {
-  "crawl-classes.json.classes/class-barbarian.feats/Aggression": {
-   "n": "Aggression",
-   "f": "crawl-classes.json",
-   "c": "feats",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:19:56.103Z"
-  },
   "crawl-glossary.json.entries/Rage": {
    "n": "Rage",
    "f": "crawl-glossary.json",
    "c": "entries",
-   "how": "added",
+   "how": "edited",
    "by": "Brody Woelke",
-   "at": "2026-10-31T00:18:51.265Z"
+   "at": "2026-10-31T00:21:20.476Z"
   },
   "crawl-glossary.json.entries/Charge": {
    "n": "Charge",
@@ -23,7 +15,15 @@
    "c": "entries",
    "how": "edited",
    "by": "Brody Woelke",
-   "at": "2026-10-31T00:14:44.612Z"
+   "at": "2026-10-31T00:21:20.476Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Aggression": {
+   "n": "Aggression",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:19:56.103Z"
   },
   "crawl-glossary.json.entries/Crippling Shot": {
    "n": "Crippling Shot",
