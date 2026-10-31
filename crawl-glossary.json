@@ -1628,6 +1628,27 @@
    "tip": true
   },
   {
+   "n": "Use Magical Device",
+   "sec": "Combat Actions",
+   "lead": "You can use a Spell Scroll or a magic item even if you don't meet its class or spellcasting requirements. While in combat you may expend 1 AP to make an Intelligence (Arcane) check: the DC is 10 + the spell's level for a scroll, or 15 for any other item. On a success, you use it normally, using Intelligence as your spellcasting modifier and paying any MP cost with AP. On a failure, the AP is spent, nothing happens, and a scroll crumbles to ash.",
+   "fx": [],
+   "notes": [],
+   "aka": [
+    {
+     "w": "Use Magical Device",
+     "ref": "You can use a Spell Scroll or a magic item even if you don't meet its class or spellcasting requirements. While in combat you may expend 1 AP to make an Intelligence (Arcane) check: the DC is 10 + the spell's level for a scroll, or 15 for any other item. On a success, you use it normally, using Intelligence as your spellcasting modifier and paying any MP cost with AP. On a failure, the AP is spent, nothing happens, and a scroll crumbles to ash."
+    }
+   ],
+   "tip": true,
+   "tipItems": true,
+   "tipClasses": true,
+   "tipFeats": true,
+   "tipCreator": true,
+   "hideRefs": true,
+   "ap": "1",
+   "req": "Tricks of the Trade"
+  },
+  {
    "n": "Vanish",
    "sec": "Combat Actions",
    "lead": "While you're behind cover and no hostile creature is within 10 feet of you, you can expend 1 AP to take the Hide action. The first ranged weapon attack you make while hidden doesn't reveal your location. On a hit, the target can't discern your location and can't target you for its next 1d4 turns. You can use Vanish only once per turn.",
