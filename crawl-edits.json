@@ -1,6 +1,78 @@
 {
  "v": 1,
  "edits": {
+  "crawl-classes.json.classes/class-barbarian": {
+   "n": "Barbarian",
+   "f": "crawl-classes.json",
+   "c": "classes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Aggression": {
+   "n": "Aggression",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Warrior Training": {
+   "n": "Warrior Training",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Intimidating Physique": {
+   "n": "Intimidating Physique",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Fury": {
+   "n": "Fury",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Anger Management": {
+   "n": "Anger Management",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Tribe Tactics": {
+   "n": "Tribe Tactics",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Intimidating Physicue": {
+   "n": "Intimidating Physicue",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
+  "crawl-classes.json.classes/class-barbarian.feats/Adrenaline": {
+   "n": "Adrenaline",
+   "f": "crawl-classes.json",
+   "c": "feats",
+   "how": "removed",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:13:50.356Z"
+  },
   "crawl-tree.json.nodes/f:class-barbarian:tribe-tactics": {
    "n": "f:class-barbarian:tribe-tactics",
    "f": "crawl-tree.json",
