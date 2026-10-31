@@ -1,6 +1,30 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/f:class-monk:perfect-focus": {
+   "n": "f:class-monk:perfect-focus",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:03:47.046Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:pure-form": {
+   "n": "f:class-monk:pure-form",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:03:47.046Z"
+  },
+  "crawl-tree.json.curves/f:class-monk:perfect-focus|f:class-monk:pure-form": {
+   "n": "f:class-monk:perfect-focus|f:class-monk:pure-form",
+   "f": "crawl-tree.json",
+   "c": "curves",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:03:47.046Z"
+  },
   "crawl-tree.json.nodes/a:class-monk:swift-step": {
    "n": "a:class-monk:swift-step",
    "f": "crawl-tree.json",
@@ -107,22 +131,6 @@
   },
   "crawl-tree.json.nodes/f:class-monk:martial-arts": {
    "n": "f:class-monk:martial-arts",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/f:class-monk:perfect-focus": {
-   "n": "f:class-monk:perfect-focus",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/f:class-monk:pure-form": {
-   "n": "f:class-monk:pure-form",
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "added",
