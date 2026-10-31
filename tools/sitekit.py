@@ -1064,6 +1064,8 @@ button.tn.k-keystone>span{top:calc(100% + 14px)}
 .tvicgrid button:hover,.tvicgrid button:focus-visible{border-color:#d9b25f}
 .tvicgrid button[aria-pressed=true]{border:2px solid #d9b25f;box-shadow:0 0 6px rgba(217,178,95,.6)}
 .tvicgrid .tic{width:62%;height:62%}
+.tvicgrid h4{grid-column:1/-1;margin:6px 2px 0;font:800 .7rem var(--font);letter-spacing:.08em;text-transform:uppercase;color:#d9b25f}
+.tvicgrid{max-height:320px}
 .tvform label{display:grid;gap:4px;font-weight:700;font-size:.85rem}
 .tvform label.chk{display:flex;align-items:center;gap:8px}
 .tvform input[type=text],.tvform textarea,.tvform select{font:600 .9rem var(--font);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:6px 8px}
