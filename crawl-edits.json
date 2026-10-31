@@ -1,6 +1,14 @@
 {
  "v": 1,
  "edits": {
+  "crawl-glossary.json.entries/Misfire X": {
+   "n": "Misfire X",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:37:54.670Z"
+  },
   "crawl-classes.json.classes/class-artificer": {
    "n": "Artificer",
    "f": "crawl-classes.json",
