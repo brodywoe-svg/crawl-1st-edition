@@ -1,6 +1,126 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/f:class-monk:perfect-focus": {
+   "n": "f:class-monk:perfect-focus",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:martial-arts": {
+   "n": "f:class-monk:martial-arts",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-rogue:sneak-attack": {
+   "n": "f:class-rogue:sneak-attack",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-rogue:cunning-expertise": {
+   "n": "f:class-rogue:cunning-expertise",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-rogue:adrenaline": {
+   "n": "f:class-rogue:adrenaline",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-rogue:break-in-artist": {
+   "n": "f:class-rogue:break-in-artist",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-rogue:underhanded-tactics": {
+   "n": "f:class-rogue:underhanded-tactics",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-rogue:improved-critical": {
+   "n": "f:class-rogue:improved-critical",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:resolve": {
+   "n": "f:class-monk:resolve",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-fighter:prowess": {
+   "n": "f:class-fighter:prowess",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-rogue:guile": {
+   "n": "f:class-rogue:guile",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:way-of-the-fist": {
+   "n": "f:class-monk:way-of-the-fist",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:pure-form": {
+   "n": "f:class-monk:pure-form",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/cls:class-monk": {
+   "n": "cls:class-monk",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
+  "crawl-tree.json.nodes/f:class-monk:unarmored-discipline": {
+   "n": "f:class-monk:unarmored-discipline",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T01:57:28.185Z"
+  },
   "crawl-tree.json.nodes/cls:class-druid": {
    "n": "cls:class-druid",
    "f": "crawl-tree.json",
@@ -225,67 +345,11 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T01:46:57.288Z"
   },
-  "crawl-tree.json.nodes/f:class-monk:perfect-focus": {
-   "n": "f:class-monk:perfect-focus",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
   "crawl-tree.json.nodes/cls:class-ranger": {
    "n": "cls:class-ranger",
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
-  "crawl-tree.json.nodes/f:class-monk:martial-arts": {
-   "n": "f:class-monk:martial-arts",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
-  "crawl-tree.json.nodes/f:class-rogue:sneak-attack": {
-   "n": "f:class-rogue:sneak-attack",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
-  "crawl-tree.json.nodes/f:class-rogue:cunning-expertise": {
-   "n": "f:class-rogue:cunning-expertise",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
-  "crawl-tree.json.nodes/f:class-rogue:adrenaline": {
-   "n": "f:class-rogue:adrenaline",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
-  "crawl-tree.json.nodes/f:class-rogue:break-in-artist": {
-   "n": "f:class-rogue:break-in-artist",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
-  "crawl-tree.json.nodes/f:class-rogue:underhanded-tactics": {
-   "n": "f:class-rogue:underhanded-tactics",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
    "by": "Brody Woelke",
    "at": "2026-10-31T01:40:25.572Z"
   },
@@ -321,14 +385,6 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T01:40:25.572Z"
   },
-  "crawl-tree.json.nodes/f:class-rogue:improved-critical": {
-   "n": "f:class-rogue:improved-critical",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
-  },
   "crawl-tree.json.curves/f:class-rogue:guile|f:class-rogue:sneak-attack": {
    "n": "f:class-rogue:guile|f:class-rogue:sneak-attack",
    "f": "crawl-tree.json",
@@ -345,30 +401,6 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T01:40:25.572Z"
   },
-  "crawl-tree.json.nodes/f:class-monk:resolve": {
-   "n": "f:class-monk:resolve",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:32:01.332Z"
-  },
-  "crawl-tree.json.nodes/f:class-fighter:prowess": {
-   "n": "f:class-fighter:prowess",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:32:01.332Z"
-  },
-  "crawl-tree.json.nodes/f:class-rogue:guile": {
-   "n": "f:class-rogue:guile",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:32:01.332Z"
-  },
   "crawl-tree.json.nodes/f:class-artificer:ingenuity": {
    "n": "f:class-artificer:ingenuity",
    "f": "crawl-tree.json",
@@ -376,14 +408,6 @@
    "how": "added",
    "by": "Brody Woelke",
    "at": "2026-10-31T01:32:01.332Z"
-  },
-  "crawl-tree.json.nodes/f:class-monk:way-of-the-fist": {
-   "n": "f:class-monk:way-of-the-fist",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:24:30.041Z"
   },
   "crawl-classes.json.classes/class-monk": {
    "n": "Monk",
@@ -801,14 +825,6 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T00:05:52.587Z"
   },
-  "crawl-tree.json.nodes/f:class-monk:pure-form": {
-   "n": "f:class-monk:pure-form",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:03:47.046Z"
-  },
   "crawl-tree.json.curves/f:class-monk:perfect-focus|f:class-monk:pure-form": {
    "n": "f:class-monk:perfect-focus|f:class-monk:pure-form",
    "f": "crawl-tree.json",
@@ -873,24 +889,8 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T00:02:37.019Z"
   },
-  "crawl-tree.json.nodes/cls:class-monk": {
-   "n": "cls:class-monk",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
   "crawl-tree.json.nodes/f:class-monk:prowess": {
    "n": "f:class-monk:prowess",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/f:class-monk:unarmored-discipline": {
-   "n": "f:class-monk:unarmored-discipline",
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "added",
