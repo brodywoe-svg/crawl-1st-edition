@@ -1,6 +1,14 @@
 {
  "v": 1,
  "edits": {
+  "crawl-glossary.json.entries/Rage": {
+   "n": "Rage",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:18:51.265Z"
+  },
   "crawl-glossary.json.entries/Charge": {
    "n": "Charge",
    "f": "crawl-glossary.json",
