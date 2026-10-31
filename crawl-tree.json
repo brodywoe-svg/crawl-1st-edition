@@ -38,7 +38,8 @@
   "f:class-fighter:prowess": {
    "x": 454,
    "y": 518,
-   "kind": "keystone"
+   "kind": "keystone",
+   "ic": "sword-and-dagger"
   },
   "cls:class-ranger": {
    "ic": "heavy-crossbow",
@@ -75,24 +76,27 @@
   },
   "cls:class-monk": {
    "x": -145,
-   "y": 429
+   "y": 429,
+   "ic": "lotus"
   },
   "f:class-monk:prowess": {
    "x": -203,
    "y": 586
   },
   "f:class-monk:way-of-the-fist": {
-   "x": -225,
-   "y": 696
+   "x": -232,
+   "y": 705
   },
   "f:class-monk:unarmored-discipline": {
    "x": -282,
-   "y": 836
+   "y": 836,
+   "ic": "gi"
   },
   "f:class-monk:martial-arts": {
    "x": -402,
    "y": 893,
-   "kind": "minor"
+   "kind": "minor",
+   "ic": "nunchaku"
   },
   "a:class-monk:swift-step": {
    "x": -500,
@@ -117,12 +121,13 @@
   "f:class-monk:perfect-focus": {
    "x": -345,
    "y": 1021,
-   "ic": "ki-focus",
+   "ic": "perfect-focus",
    "kind": "minor"
   },
   "f:class-monk:pure-form": {
    "x": -222,
-   "y": 964
+   "y": 964,
+   "ic": "pure-form"
   },
   "feat:feat-death-defying": {
    "x": 577,
@@ -160,35 +165,41 @@
    "y": 250
   },
   "f:class-monk:resolve": {
-   "x": -189,
-   "y": 586,
+   "x": -192,
+   "y": 584,
    "kind": "keystone"
   },
   "f:class-rogue:guile": {
-   "kind": "keystone"
+   "kind": "keystone",
+   "ic": "fox"
   },
   "f:class-artificer:ingenuity": {
    "kind": "keystone"
   },
   "f:class-rogue:sneak-attack": {
    "x": -783,
-   "y": 175
+   "y": 175,
+   "ic": "flank"
   },
   "f:class-rogue:cunning-expertise": {
    "x": -929,
-   "y": 229
+   "y": 229,
+   "ic": "owl"
   },
   "f:class-rogue:adrenaline": {
    "x": -986,
-   "y": 379
+   "y": 379,
+   "ic": "adrenaline"
   },
   "f:class-rogue:break-in-artist": {
    "x": -826,
-   "y": 318
+   "y": 318,
+   "ic": "keyhole"
   },
   "f:class-rogue:underhanded-tactics": {
    "x": -776,
-   "y": 414
+   "y": 414,
+   "ic": "caltrops"
   },
   "a:class-rogue:escape": {
    "x": -718,
@@ -208,7 +219,8 @@
   },
   "f:class-rogue:improved-critical": {
    "x": -943,
-   "y": 484
+   "y": 484,
+   "ic": "natural-20"
   },
   "o:class-fighter:fighting-style:duel-wielder": {
    "x": 419,
