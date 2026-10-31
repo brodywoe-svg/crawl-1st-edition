@@ -112,11 +112,25 @@
   },
   "f:class-monk:perfect-focus": {
    "x": -345,
-   "y": 1021
+   "y": 1021,
+   "ic": "ki-focus"
   },
   "f:class-monk:pure-form": {
    "x": -222,
    "y": 964
+  },
+  "feat:feat-death-defying": {
+   "x": 577,
+   "y": 2194
+  },
+  "feat:feat-healthy": {
+   "x": 450,
+   "y": 2246
+  },
+  "f:class-fighter:weapon-specialist": {
+   "x": 823,
+   "y": 956,
+   "ic": "spearhead"
   }
  },
  "extra": [],
