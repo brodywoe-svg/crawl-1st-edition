@@ -832,11 +832,11 @@
     }
    ],
    "tip": true,
-   "hideRefs": true,
    "tipItems": true,
    "tipClasses": true,
    "tipFeats": true,
-   "tipCreator": true
+   "tipCreator": true,
+   "hideRefs": true
   },
   {
    "n": "Modifier Slots",
@@ -1141,6 +1141,21 @@
     }
    ],
    "tip": false
+  },
+  {
+   "n": "Quick Repair",
+   "sec": "Combat Actions",
+   "lead": "You can expend 3 AP to patch up a Broken Weapon, Firearm, or small item that you or an ally within 5 feet of you is holding. Make a Repair Check  You can use Quick Repair only once per turn.",
+   "fx": [],
+   "notes": [],
+   "aka": [],
+   "tip": true,
+   "tipItems": true,
+   "tipClasses": true,
+   "tipFeats": true,
+   "tipCreator": true,
+   "ap": "3",
+   "req": "Tricks of the Trade"
   },
   {
    "n": "Radiant",
