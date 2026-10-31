@@ -7,7 +7,31 @@
    "c": "nodes",
    "how": "edited",
    "by": "Brody Woelke",
-   "at": "2026-10-31T00:03:47.046Z"
+   "at": "2026-10-31T00:05:52.587Z"
+  },
+  "crawl-tree.json.nodes/feat:feat-death-defying": {
+   "n": "feat:feat-death-defying",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:05:52.587Z"
+  },
+  "crawl-tree.json.nodes/feat:feat-healthy": {
+   "n": "feat:feat-healthy",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:05:52.587Z"
+  },
+  "crawl-tree.json.nodes/f:class-fighter:weapon-specialist": {
+   "n": "f:class-fighter:weapon-specialist",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:05:52.587Z"
   },
   "crawl-tree.json.nodes/f:class-monk:pure-form": {
    "n": "f:class-monk:pure-form",
