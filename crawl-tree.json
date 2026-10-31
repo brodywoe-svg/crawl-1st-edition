@@ -39,7 +39,7 @@
    "x": 454,
    "y": 518,
    "kind": "keystone",
-   "ic": "sword-and-dagger"
+   "ic": "warhelm"
   },
   "cls:class-ranger": {
    "ic": "heavy-crossbow",
@@ -64,7 +64,8 @@
   },
   "f:class-barbarian:reckless-attack": {
    "x": 755,
-   "y": 325
+   "y": 325,
+   "ic": "surge"
   },
   "f:class-barbarian:adrenaline": {
    "x": 1043,
@@ -140,29 +141,34 @@
   "f:class-fighter:weapon-specialist": {
    "x": 606,
    "y": 573,
-   "ic": "spearhead"
+   "ic": "sword-and-dagger"
   },
   "f:class-barbarian:aggression": {
-   "x": 636,
-   "y": 230
+   "x": 641,
+   "y": 226,
+   "ic": "broken-chain"
   },
   "f:class-barbarian:warrior-training": {
    "x": 649,
-   "y": 120
+   "y": 120,
+   "ic": "breastplate"
   },
   "f:class-barbarian:fury": {
    "x": 891,
    "y": 263,
-   "kind": "keystone"
+   "kind": "keystone",
+   "ic": "broken-shield"
   },
   "f:class-barbarian:prowess": {
    "x": 905,
    "y": 150,
-   "kind": "keystone"
+   "kind": "keystone",
+   "ic": "warhelm"
   },
   "f:class-barbarian:intimidating-physique": {
    "x": 762,
-   "y": 250
+   "y": 250,
+   "ic": "brute"
   },
   "f:class-monk:resolve": {
    "x": -192,
@@ -171,10 +177,12 @@
   },
   "f:class-rogue:guile": {
    "kind": "keystone",
-   "ic": "fox"
+   "ic": "plumed-hat"
   },
   "f:class-artificer:ingenuity": {
-   "kind": "keystone"
+   "kind": "keystone",
+   "x": -81,
+   "y": -596
   },
   "f:class-rogue:sneak-attack": {
    "x": -783,
@@ -256,31 +264,38 @@
   },
   "o:class-fighter:weapon-specialist:blades": {
    "x": 591,
-   "y": 502
+   "y": 502,
+   "ic": "dagger"
   },
   "o:class-fighter:weapon-specialist:cudgels": {
    "x": 689,
-   "y": 510
+   "y": 510,
+   "ic": "morningstar"
   },
   "o:class-fighter:weapon-specialist:polearms": {
    "x": 730,
-   "y": 613
+   "y": 613,
+   "ic": "spearhead"
   },
   "o:class-fighter:weapon-specialist:unarmed": {
    "x": 546,
-   "y": 533
+   "y": 533,
+   "ic": "tankard"
   },
   "o:class-fighter:weapon-specialist:bows": {
    "x": 709,
-   "y": 663
+   "y": 663,
+   "ic": "longbow"
   },
   "o:class-fighter:weapon-specialist:firearms": {
    "x": 664,
-   "y": 678
+   "y": 678,
+   "ic": "muzzle-flash"
   },
   "o:class-fighter:weapon-specialist:swords": {
    "x": 643,
-   "y": 490
+   "y": 490,
+   "ic": "greatsword"
   },
   "o:class-fighter:weapon-specialist:miscellaneous": {
    "x": 559,
@@ -288,7 +303,32 @@
   },
   "o:class-fighter:weapon-specialist:shields": {
    "x": 614,
-   "y": 692
+   "y": 692,
+   "ic": "bulwark"
+  },
+  "a:class-barbarian:charge": {
+   "x": 656,
+   "y": 38
+  },
+  "a:class-artificer:quick-repair": {
+   "x": 6,
+   "y": -758
+  },
+  "a:class-artificer:use-magical-device": {
+   "x": 161,
+   "y": -761
+  },
+  "f:class-artificer:artificer-s-talent": {
+   "x": 4,
+   "y": -655
+  },
+  "f:class-artificer:repair-and-dismantle": {
+   "x": 85,
+   "y": -603
+  },
+  "f:class-artificer:tricks-of-the-trade": {
+   "x": 81,
+   "y": -748
   }
  },
  "extra": [],
@@ -304,6 +344,18 @@
   [
    "f:class-barbarian:warrior-training",
    "f:class-barbarian:prowess"
+  ],
+  [
+   "f:class-artificer:ingenuity",
+   "cls:class-artificer"
+  ],
+  [
+   "f:class-artificer:artificer-s-talent",
+   "f:class-artificer:ingenuity"
+  ],
+  [
+   "f:class-artificer:repair-and-dismantle",
+   "f:class-artificer:artificer-s-talent"
   ]
  ],
  "unlinks": [
@@ -318,6 +370,14 @@
   [
    "f:class-rogue:adrenaline",
    "f:class-rogue:guile"
+  ],
+  [
+   "cls:class-artificer",
+   "f:class-artificer:artificer-s-talent"
+  ],
+  [
+   "f:class-artificer:ingenuity",
+   "f:class-artificer:repair-and-dismantle"
   ]
  ],
  "curves": {
