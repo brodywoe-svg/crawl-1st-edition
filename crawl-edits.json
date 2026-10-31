@@ -1,0 +1,69 @@
+{
+ "v": 1,
+ "edits": {
+  "crawl-tree.json.nodes/cls:class-barbarian": {
+   "n": "cls:class-barbarian",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  },
+  "crawl-tree.json.nodes/f:class-fighter:prowess": {
+   "n": "f:class-fighter:prowess",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  },
+  "crawl-tree.json.nodes/cls:class-druid": {
+   "n": "cls:class-druid",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:anger-management": {
+   "n": "f:class-barbarian:anger-management",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:tribe-tactics": {
+   "n": "f:class-barbarian:tribe-tactics",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:intimidating-physicue": {
+   "n": "f:class-barbarian:intimidating-physicue",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:reckless-attack": {
+   "n": "f:class-barbarian:reckless-attack",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  },
+  "crawl-tree.json.nodes/f:class-barbarian:adrenaline": {
+   "n": "f:class-barbarian:adrenaline",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:00:38.979Z"
+  }
+ }
+}
