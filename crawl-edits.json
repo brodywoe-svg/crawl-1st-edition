@@ -1,6 +1,46 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/a:class-monk:swift-step": {
+   "n": "a:class-monk:swift-step",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:02:58.323Z"
+  },
+  "crawl-tree.json.nodes/a:class-monk:sweep-kick": {
+   "n": "a:class-monk:sweep-kick",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:02:58.323Z"
+  },
+  "crawl-tree.json.nodes/a:class-monk:patient-strikes": {
+   "n": "a:class-monk:patient-strikes",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:02:58.323Z"
+  },
+  "crawl-tree.json.nodes/a:class-monk:flurry-of-blows": {
+   "n": "a:class-monk:flurry-of-blows",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:02:58.323Z"
+  },
+  "crawl-tree.json.nodes/a:class-monk:haymaker": {
+   "n": "a:class-monk:haymaker",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:02:58.323Z"
+  },
   "crawl-tree.json.nodes/cls:class-druid": {
    "n": "cls:class-druid",
    "f": "crawl-tree.json",
@@ -67,46 +107,6 @@
   },
   "crawl-tree.json.nodes/f:class-monk:martial-arts": {
    "n": "f:class-monk:martial-arts",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/a:class-monk:swift-step": {
-   "n": "a:class-monk:swift-step",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/a:class-monk:sweep-kick": {
-   "n": "a:class-monk:sweep-kick",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/a:class-monk:patient-strikes": {
-   "n": "a:class-monk:patient-strikes",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/a:class-monk:flurry-of-blows": {
-   "n": "a:class-monk:flurry-of-blows",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:02:37.019Z"
-  },
-  "crawl-tree.json.nodes/a:class-monk:haymaker": {
-   "n": "a:class-monk:haymaker",
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "added",
