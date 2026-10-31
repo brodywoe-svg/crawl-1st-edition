@@ -141,13 +141,13 @@
    "notes": [],
    "aka": [],
    "tip": true,
-   "hideRefs": true,
-   "ap": "1",
-   "req": "Warrior Training, Spear Mastery",
    "tipItems": true,
    "tipClasses": true,
    "tipFeats": true,
-   "tipCreator": true
+   "tipCreator": true,
+   "hideRefs": true,
+   "ap": "1",
+   "req": "Warrior Training, Spear Mastery"
   },
   {
    "n": "Charmed",
@@ -1143,7 +1143,12 @@
     "When you hit with a melee weapon attack that has Advantage, you can add your Strength modifier to the damage a second time."
    ],
    "notes": [],
-   "aka": [],
+   "aka": [
+    {
+     "w": "Rage",
+     "ref": "You can expend 1 AP to enter a Rage. It lasts until the end of combat, or until you end your turn without having attacked a hostile creature or taken damage since your last turn. While Raging:\n\n• You have Resistance to bludgeoning, piercing and slashing damage.\n• You have Advantage on Strength checks and Strength saving throws.\n• You can't cast spells or maintain Concentration.\n•When you hit with a melee weapon attack that has Advantage, you can add your Strength modifier to the damage a second time.\n\nWhen your Rage ends, you gain 2 Exhaustion Points (EP)."
+    }
+   ],
    "tip": true,
    "tipItems": true,
    "tipClasses": true,
