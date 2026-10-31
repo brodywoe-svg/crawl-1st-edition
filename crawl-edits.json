@@ -1,6 +1,54 @@
 {
  "v": 1,
  "edits": {
+  "crawl-tree.json.nodes/f:class-artificer:ingenuity": {
+   "n": "f:class-artificer:ingenuity",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:12:09.133Z"
+  },
+  "crawl-tree.json.nodes/a:class-artificer:quick-repair": {
+   "n": "a:class-artificer:quick-repair",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:12:09.133Z"
+  },
+  "crawl-tree.json.nodes/a:class-artificer:use-magical-device": {
+   "n": "a:class-artificer:use-magical-device",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:12:09.133Z"
+  },
+  "crawl-tree.json.nodes/f:class-artificer:artificer-s-talent": {
+   "n": "f:class-artificer:artificer-s-talent",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:12:09.133Z"
+  },
+  "crawl-tree.json.nodes/f:class-artificer:repair-and-dismantle": {
+   "n": "f:class-artificer:repair-and-dismantle",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:12:09.133Z"
+  },
+  "crawl-tree.json.nodes/f:class-artificer:tricks-of-the-trade": {
+   "n": "f:class-artificer:tricks-of-the-trade",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:12:09.133Z"
+  },
   "crawl-tree.json.nodes/f:class-fighter:prowess": {
    "n": "f:class-fighter:prowess",
    "f": "crawl-tree.json",
@@ -137,56 +185,8 @@
    "by": "Brody Woelke",
    "at": "2026-10-31T02:10:32.945Z"
   },
-  "crawl-tree.json.nodes/f:class-artificer:ingenuity": {
-   "n": "f:class-artificer:ingenuity",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T02:10:32.945Z"
-  },
   "crawl-tree.json.nodes/a:class-barbarian:charge": {
    "n": "a:class-barbarian:charge",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T02:10:32.945Z"
-  },
-  "crawl-tree.json.nodes/a:class-artificer:quick-repair": {
-   "n": "a:class-artificer:quick-repair",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T02:10:32.945Z"
-  },
-  "crawl-tree.json.nodes/a:class-artificer:use-magical-device": {
-   "n": "a:class-artificer:use-magical-device",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T02:10:32.945Z"
-  },
-  "crawl-tree.json.nodes/f:class-artificer:artificer-s-talent": {
-   "n": "f:class-artificer:artificer-s-talent",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T02:10:32.945Z"
-  },
-  "crawl-tree.json.nodes/f:class-artificer:repair-and-dismantle": {
-   "n": "f:class-artificer:repair-and-dismantle",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "added",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T02:10:32.945Z"
-  },
-  "crawl-tree.json.nodes/f:class-artificer:tricks-of-the-trade": {
-   "n": "f:class-artificer:tricks-of-the-trade",
    "f": "crawl-tree.json",
    "c": "nodes",
    "how": "added",
