@@ -91,24 +91,24 @@
    "y": 893
   },
   "a:class-monk:swift-step": {
-   "x": -476,
-   "y": 783
+   "x": -500,
+   "y": 813
   },
   "a:class-monk:sweep-kick": {
-   "x": -538,
-   "y": 824
+   "x": -542,
+   "y": 869
   },
   "a:class-monk:patient-strikes": {
-   "x": -569,
-   "y": 875
+   "x": -526,
+   "y": 936
   },
   "a:class-monk:flurry-of-blows": {
-   "x": -571,
-   "y": 927
+   "x": -459,
+   "y": 983
   },
   "a:class-monk:haymaker": {
-   "x": -399,
-   "y": 775
+   "x": -430,
+   "y": 788
   },
   "f:class-monk:perfect-focus": {
    "x": -362,
