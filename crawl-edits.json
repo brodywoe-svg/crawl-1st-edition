@@ -1,6 +1,22 @@
 {
  "v": 1,
  "edits": {
+  "crawl-glossary.json.entries/Misfire X": {
+   "n": "Misfire X",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:57:00.984Z"
+  },
+  "crawl-glossary.json.entries/Quick Repair": {
+   "n": "Quick Repair",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T00:57:00.984Z"
+  },
   "crawl-classes.json.classes/class-artificer.feats/Artificer's Talent": {
    "n": "Artificer's Talent",
    "f": "crawl-classes.json",
@@ -24,14 +40,6 @@
    "how": "edited",
    "by": "Brody Woelke",
    "at": "2026-10-31T00:48:40.807Z"
-  },
-  "crawl-glossary.json.entries/Misfire X": {
-   "n": "Misfire X",
-   "f": "crawl-glossary.json",
-   "c": "entries",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:37:54.670Z"
   },
   "crawl-classes.json.classes/class-artificer": {
    "n": "Artificer",
