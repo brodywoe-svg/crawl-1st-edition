@@ -5,9 +5,41 @@
    "n": "f:class-wizard:arcane-channeling",
    "f": "crawl-tree.json",
    "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:15:49.104Z"
+  },
+  "crawl-tree.json.nodes/cls:class-ranger": {
+   "n": "cls:class-ranger",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "edited",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:15:49.104Z"
+  },
+  "crawl-tree.json.nodes/f:class-wizard:arcane-major": {
+   "n": "f:class-wizard:arcane-major",
+   "f": "crawl-tree.json",
+   "c": "nodes",
    "how": "added",
    "by": "Brody Woelke",
-   "at": "2026-10-31T02:13:38.552Z"
+   "at": "2026-10-31T02:15:49.104Z"
+  },
+  "crawl-tree.json.nodes/f:class-wizard:arcane-minor": {
+   "n": "f:class-wizard:arcane-minor",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:15:49.104Z"
+  },
+  "crawl-tree.json.nodes/f:class-wizard:somatic-conversion": {
+   "n": "f:class-wizard:somatic-conversion",
+   "f": "crawl-tree.json",
+   "c": "nodes",
+   "how": "added",
+   "by": "Brody Woelke",
+   "at": "2026-10-31T02:15:49.104Z"
   },
   "crawl-tree.json.nodes/f:class-artificer:ingenuity": {
    "n": "f:class-artificer:ingenuity",
@@ -408,14 +440,6 @@
    "how": "added",
    "by": "Brody Woelke",
    "at": "2026-10-31T01:46:57.288Z"
-  },
-  "crawl-tree.json.nodes/cls:class-ranger": {
-   "n": "cls:class-ranger",
-   "f": "crawl-tree.json",
-   "c": "nodes",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T01:40:25.572Z"
   },
   "crawl-tree.json.nodes/a:class-rogue:escape": {
    "n": "a:class-rogue:escape",
