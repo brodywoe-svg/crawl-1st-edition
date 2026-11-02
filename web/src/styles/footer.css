@@ -1,0 +1,6 @@
+/* The site footer. Same look as FOOTER in tools/build.py, moved from inline styles to classes. */
+.sitefoot{max-width:900px;margin:0 auto;padding:0 16px 120px;font-family:Montserrat,Arial,sans-serif;font-size:13px;line-height:1.5;color:#5c5c5c;text-align:center}
+.sitefoot p{margin:0}
+.sitefoot p:first-child{margin-bottom:8px}
+.sitefoot a{color:#000;font-weight:700}
+.sitefoot a.quiet{color:#5c5c5c;font-weight:inherit}

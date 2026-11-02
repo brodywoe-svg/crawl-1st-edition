@@ -1,0 +1,70 @@
+/* Copied as is from tools/sitekit.py NAV_CSS. Keep in sync with the old site until cutover. */
+.sitenav{position:sticky;top:0;z-index:25;background:var(--ink);color:var(--paper);padding-top:env(safe-area-inset-top,0px)}
+.navin{position:relative;padding-inline:20px;display:flex;align-items:center;gap:12px}
+.navlinks{flex:1 1 auto;min-width:0;display:flex;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;gap:0 2px}
+.navctl{flex:none;margin-left:auto;display:flex;align-items:center;gap:6px}
+.navctl .adminbtn,.navctl .modebtn{background:transparent;color:var(--paper);border:2px solid var(--paper);border-radius:999px;padding:4px 11px 4px 9px;font:700 .74rem var(--font);display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+.navctl .adminbtn:hover,.navctl .modebtn:hover{background:var(--barhover)}
+.navctl .adminbtn.on{background:var(--paper);color:var(--ink)}
+.navctl svg{width:13px;height:13px}
+.navctl :focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.navitem{display:inline-flex;align-items:center;gap:6px;font:700 .78rem var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--paper);background:none;border:0;padding:15px 12px;text-decoration:none;cursor:pointer;border-radius:0;white-space:nowrap}
+.navitem svg{width:10px;height:6px}
+a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
+.navitem[aria-current="page"],.navitem[data-current]{box-shadow:inset 0 -3px 0 var(--paper)}
+.navitem.soon{opacity:.5;cursor:default}
+.navitem.adminonly{display:none}
+html.is-admin .navitem.adminonly{display:inline-flex}
+.navitem.soon small{font-size:.55rem;letter-spacing:.1em;border:1px solid currentColor;border-radius:999px;padding:1px 5px}
+.navitem:focus-visible{outline:3px solid var(--paper);outline-offset:-3px}
+.navdrop{position:relative;display:flex}
+.navmenu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);min-width:210px;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22)}
+.navdrop:hover .navmenu,.navdrop:focus-within .navmenu{display:grid}
+@media (hover:none){.navdrop:hover .navmenu{display:none}}
+.navmenu a{display:block;padding:10px 12px;border-radius:8px;font:700 .92rem var(--font);color:var(--ink);text-decoration:none}
+.navmenu a:hover,.navmenu a:focus-visible{background:var(--soft);outline:none}
+.navsub{position:relative}
+.navsub>a{display:flex!important;align-items:center;justify-content:space-between;gap:10px}
+.caretr{width:6px;height:10px;flex:none}
+/* flyouts open to the right and stay open for a moment after the pointer leaves, so moving onto them is easy */
+.navfly{display:grid;visibility:hidden;opacity:0;position:absolute;left:100%;top:-8px;min-width:190px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22);margin-left:2px;z-index:1;transition:opacity .12s ease .3s,visibility 0s linear .42s}
+.navfly::before{content:"";position:absolute;top:-8px;bottom:-8px;left:-16px;width:16px}
+.navsub:hover>.navfly,.navsub:focus-within>.navfly{visibility:visible;opacity:1;z-index:2;transition-delay:0s}
+.navsub:hover>a{background:var(--soft)}
+.navfly.cols2{grid-template-columns:repeat(2,minmax(150px,1fr));column-gap:2px}
+@media (prefers-reduced-motion:reduce){.navfly{transition:visibility 0s linear .35s}}
+@media (hover:none),(max-width:700px){.navfly{visibility:visible;opacity:1;transition:none;position:static;border:0;box-shadow:none;padding:0 0 0 14px;margin:0;min-width:0}.navfly::before{display:none}.caretr{display:none}}
+.navmenuh{display:block;padding:8px 12px 2px;font:800 .62rem var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.navmenu a[aria-current="page"]{text-decoration:underline;text-underline-offset:4px}
+/* NAV_JS steps through these until the links fit on one row beside the buttons */
+.nav-c1 .navitem{padding-inline:9px;letter-spacing:.06em}
+.nav-c2 .navitem.soon small{display:none}
+.nav-c3 .navctl .adminbtn span,.nav-c3 .navctl .modebtn span{display:none}
+.nav-c3 .navctl .adminbtn,.nav-c3 .navctl .modebtn{padding:6px}
+.nav-c4 .navitem{padding-inline:7px;font-size:.72rem;letter-spacing:.04em}
+/* when the links still don't fit (phones, half-width windows): one row that scrolls sideways, with arrows */
+.navarr{display:none;flex:none;align-self:stretch;width:28px;border:0;padding:0;background:var(--ink);color:var(--paper);cursor:pointer;align-items:center;justify-content:center;border-radius:6px}
+.navarr svg{width:8px;height:14px}
+.navarr:hover:not([disabled]){background:var(--barhover)}
+.navarr[disabled]{opacity:.22;cursor:default}
+.navscroll .navarr{display:flex}
+.navscroll .navin{gap:2px}
+.navscroll .navlinks{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth;overscroll-behavior-x:contain;position:relative}
+.navscroll .navarr{position:relative;z-index:1}
+.navscroll .navarr:not([disabled])::after{content:"";position:absolute;top:0;bottom:0;width:16px;pointer-events:none}
+.navscroll .navarr.l:not([disabled])::after{left:100%;background:linear-gradient(to right,var(--ink),transparent)}
+.navscroll .navarr.r:not([disabled])::after{right:100%;background:linear-gradient(to left,var(--ink),transparent)}
+.navscroll .navlinks::-webkit-scrollbar{display:none}
+.navscroll .navdrop{position:static}
+.navscroll .navmenu{position:fixed;transform:none}
+@media (prefers-reduced-motion:reduce){.navscroll .navlinks{scroll-behavior:auto}}
+@media (max-width:700px){
+  .navin{gap:4px;padding-inline:6px}
+  .navscroll .navmenu{max-height:calc(100vh - var(--navh,48px) - 16px);overflow-y:auto}
+  .navitem.soon{display:none}
+  .navitem.soon small,.navctl .adminbtn span,.navctl .modebtn span{display:none}
+  .navctl .adminbtn,.navctl .modebtn{padding:6px}
+  .navitem{padding:10px 7px;font-size:.66rem;letter-spacing:.04em}
+  .navdrop{position:static}
+  .navmenu{left:12px;right:12px;transform:none;min-width:0}
+}

@@ -1,0 +1,33 @@
+/* Copied as is from the admin block in src/page.html (Admin Options, edit history, account modal). Keep in sync with the old site until cutover. */
+html.is-admin #treeBtn{display:none!important}
+.aopt{position:relative;display:inline-flex}.aopt[hidden]{display:none}
+.aoptbtn{display:inline-flex;align-items:center;gap:8px;border:2px solid #d9b25f;border-radius:999px;background:#d9b25f;color:#111;font:800 .8rem var(--font);padding:5px 12px;cursor:pointer;white-space:nowrap}
+.aoptcar{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor}
+.aoptbtn[aria-expanded=true] .aoptcar{transform:rotate(180deg)}
+.aoptmenu{position:absolute;right:0;top:calc(100% + 8px);z-index:80;min-width:270px;background:var(--paper,#fff);color:var(--ink,#111);border:2px solid var(--ink,#111);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.35);padding:6px;display:grid;gap:2px;text-transform:none;letter-spacing:0}
+.aoptmenu[hidden]{display:none}
+.aoptmenu button{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;text-align:left;background:none;border:0;border-radius:8px;padding:9px 10px;color:inherit;font:600 .88rem var(--font);cursor:pointer}
+.aoptmenu button:hover,.aoptmenu button:focus-visible{background:rgba(127,127,127,.15)}
+.aoptmenu button[role=menuitem]{grid-template-columns:1fr}.aoptmenu small{grid-column:1/-1;color:var(--muted,#666);font-weight:600;font-size:.75rem}
+.aoptmenu .aoptout{border-top:1px solid rgba(127,127,127,.3);border-radius:0 0 8px 8px;margin-top:4px}
+.aoptmenu .tsw{width:30px;height:16px;border-radius:999px;background:rgba(127,127,127,.45);position:relative;transition:background .15s}
+.aoptmenu .tsw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform .15s}
+.aoptmenu [aria-checked=true] .tsw{background:#d9b25f}.aoptmenu [aria-checked=true] .tsw::after{transform:translateX(14px)}
+.histpanel{position:fixed;right:12px;top:calc(var(--navh,52px) + 10px);z-index:24;width:min(340px,calc(100vw - 24px));max-height:calc(100vh - var(--navh,52px) - 24px);display:flex;flex-direction:column;background:var(--paper,#fff);color:var(--ink,#111);border:2px solid var(--ink,#111);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden}
+.histpanel[hidden]{display:none}.hph{display:flex;align-items:center;justify-content:space-between;background:var(--ink,#111);color:var(--paper,#fff);padding:8px 12px}
+.hpx{background:none;border:0;color:inherit;font-size:1.3rem;line-height:1;cursor:pointer}
+.hpf{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(127,127,127,.35);flex-wrap:wrap}
+.hpf button{border:2px solid var(--ink,#111);background:none;color:inherit;border-radius:999px;font:700 .75rem var(--font);padding:3px 10px;cursor:pointer}
+.hpf button[aria-pressed=true]{background:var(--ink,#111);color:var(--paper,#fff)}
+.hpf select{margin-left:auto;font:600 .75rem var(--font);border:2px solid var(--ink,#111);border-radius:999px;padding:2px 6px;background:var(--paper,#fff);color:var(--ink,#111)}
+.hpl{overflow:auto;padding:4px 0}.hpi{padding:7px 12px;border-bottom:1px solid rgba(127,127,127,.2);display:grid;gap:2px;font-size:.82rem}
+.hpi b{font-size:.9rem}.hpi small{color:var(--muted,#666);font-weight:600}.hpi .who{font-weight:800}
+.hpi.removed b{text-decoration:line-through;opacity:.7}.hpe{padding:14px 12px;color:var(--muted,#666);font-size:.85rem;font-weight:600}
+.acth{margin:14px 0 2px;font-size:.95rem;font-weight:800}.actrow{display:flex;gap:8px;align-items:center;margin-top:6px}.actrow input{flex:1}
+.actlist{list-style:none;margin:0;padding:0;display:grid;gap:6px}.actlist li{display:flex;align-items:center;gap:8px;justify-content:space-between;border:2px solid rgba(127,127,127,.35);border-radius:10px;padding:6px 10px}
+.acctbox{max-width:480px}.acctbox .btn.gdel{color:#b3261e;border-color:#b3261e}
+.treebtn{display:inline-flex;align-items:center;gap:7px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:4px 12px 4px 6px;font:700 .8rem var(--font);cursor:pointer}
+.treebtn .tsw{width:30px;height:16px;border-radius:999px;background:var(--hair);position:relative;transition:background .15s}
+.treebtn .tsw::after{content:"";position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--paper);box-shadow:0 0 0 1px var(--ink);transition:left .15s}
+.treebtn[aria-checked="true"] .tsw{background:#b8860b}
+.treebtn[aria-checked="true"] .tsw::after{left:16px}

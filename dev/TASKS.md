@@ -12,7 +12,7 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 - [ ] Review the decisions (TypeScript + Vite, React later, Vercel, Supabase): start at [QUICKSTART.md](QUICKSTART.md). Supabase is still open. (@brody)
 - [ ] Connect the repo to Vercel ([QUICKSTART.md](QUICKSTART.md), step 3) (@brody)
 - [ ] Answer the Spells page claude.ai-mode question in the refactor plan (@brody)
-- [ ] Plan the TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md) (@maddox)
+- [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Scaffold and home page done; next is the glossary pages. (@maddox)
 
 ## Next
 
