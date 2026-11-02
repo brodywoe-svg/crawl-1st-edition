@@ -21,8 +21,27 @@ Template:
 
 ---
 
+## 2026-11-02: The UI is built with React
+**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
+**Why:**
+- Today's pages build their HTML as strings and redraw by hand, and that gets harder as the creator and the rules UI grow.
+- We weighed three options:
+  - **plain TypeScript:** the smallest port, but leaves the hand-redrawing as it is,
+  - **Svelte:** lighter, but a smaller ecosystem,
+  - **React:** the largest ecosystem and the most familiar to Claude Code and to anyone who joins later. It also has
+    **React Three Fiber**, the standard way to use Three.js inside React, which matters for the planned 3D views.
+
+**Decision:**
+- Use React with TypeScript, set up by Vite.
+- Game logic stays framework-free: data loading, the markup renderer, Admin saving and, later, the rules engine are plain TypeScript modules.
+  React only draws the UI, so the rules engine can also run on a server later.
+
+**Trade-offs:**
+- Porting a page means rewriting its UI as components, not only renaming files, so the refactor takes longer.
+- It adds about 45 KB of library to each page.
+
 ## 2026-11-02: The client is rebuilt as TypeScript + Vite, one build for web, PC and mobile
-**Status:** proposed · **Who:** maddox
+**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
 **Why:**
 - The site has no module system. `build.py` concatenates plain scripts into one global scope.
 - Three.js and most modern libraries expect ES modules and a bundler.
@@ -37,17 +56,19 @@ Options we weighed:
 **Decision:**
 - Use TypeScript and Vite.
 - **Web:** the Vite build, hosted on GitHub Pages.
-- **PC:** Electron loads the same build.
+- **PC:** Electron loads the same build. It's packaged with `electron-builder` and updates itself
+  from GitHub Releases with `electron-updater`, which replaces the hand-made PowerShell installer.
 - **Mobile, later:** Capacitor wraps the same build.
 
 The migration is planned in [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md).
 **Trade-offs:**
 - We'll need Node.js and npm, which ends the "Python stdlib only, no dependencies" rule.
 - The site will need a build step in CI (GitHub Actions) instead of committed HTML.
-- Whether to use a UI framework (React, Svelte or none) is a separate decision.
+- The UI framework is chosen in the React entry above.
+- The Windows app won't be code-signed at first, so Windows SmartScreen will warn on the first install, as it does today.
 
 ## 2026-11-02: Supabase over Firebase as the backend
-**Status:** proposed · **Who:** maddox
+**Status:** proposed, waiting on Brody · **Who:** maddox
 **Why:** A fully digital Crawl needs things that GitHub and Firebase, as we use them now, can't do well:
 - player accounts,
 - characters saved to the cloud,

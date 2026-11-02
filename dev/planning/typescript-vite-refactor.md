@@ -1,23 +1,24 @@
-# TypeScript + Vite refactor
+# TypeScript + Vite + React refactor
 **Status:** draft  ·  **Owner:** maddox  ·  **Roadmap:** none yet. This is the groundwork for the backend rebuild, fully digital rules and Three.js.
 
 ## Goal
-Move the website and the tabletop off `build.py` and onto one TypeScript + Vite project. Players and Brody shouldn't notice any change:
+Move the website, the tabletop and the Windows app off `build.py` and onto one TypeScript + Vite + React project.
+Players and Brody shouldn't notice any change:
 - the same pages,
 - the same URLs,
 - the same Admin editing.
 
-What changes is underneath. We get a module system, a typed codebase that Three.js, Supabase and a shared rules engine can be built on,
-and one build that also feeds the Windows app.
-See the [decision in DECISIONS.md](../DECISIONS.md).
+What changes is underneath. We get a module system, a typed component-based codebase that Three.js (through React Three Fiber),
+Supabase and a shared rules engine can be built on, and one build that also feeds an auto-updating Windows app.
+See the TypeScript + Vite and React entries in [DECISIONS.md](../DECISIONS.md).
 
 ## Scope
 - **In:**
-  - the Vite + TypeScript project setup,
-  - porting `src/*.js` and `tabletop/` to TypeScript modules,
+  - the Vite + React + TypeScript project setup,
+  - porting every page and the tabletop to React components,
   - loading the JSON at run time instead of embedding it in each page,
   - a GitHub Actions deploy to Pages,
-  - pointing the Electron app at the Vite build,
+  - an auto-updating Electron app,
   - removing `build.py` and the generated files once we cut over.
 - **Out:** each of these gets its own plan later.
   - the Supabase migration,
@@ -25,27 +26,40 @@ See the [decision in DECISIONS.md](../DECISIONS.md).
   - Three.js,
   - automating the rules,
   - any change to the shape of `crawl-*.json`,
-  - a visual redesign,
-  - choosing a UI framework.
+  - a visual redesign.
 
 ## How it works
-**Port, don't rewrite.** Each page keeps its current behavior and markup. Files are converted to TypeScript modules one at a time.
-TypeScript starts in a lenient mode (`allowJs`, loose `strict`), so half-converted code still builds. We tighten it once everything is ported.
+**Same behavior, new structure.** Each page keeps its current behavior, look and CSS. Its UI is rewritten as React components.
+- Today's code builds HTML strings and redraws by hand. In React that becomes components plus state.
+- The logic inside the current files carries over mostly as is: filters, sorting, the creator's proficiency parsing, the spellcasting formulas.
+- TypeScript starts lenient (`allowJs`, loose `strict`) so the port can move fast. We tighten it once everything is ported.
 
 **Layout:** a single Vite project at the repo root:
-- `web/`: the pages, one HTML entry per current page, so the URLs stay `spells.html`, `creator.html`, and so on,
-- `web/src/shared/`: the code every page uses,
-- `web/src/pages/`: per-page code,
-- `web/src/tabletop/`: the tabletop,
-- later, `web/src/rules/`: the rules engine.
+- `web/`: one HTML entry per current page, so the URLs stay `spells.html`, `creator.html`, and so on,
+- `web/src/lib/`: plain TypeScript with no React:
+  - data loading and the content types,
+  - the markup renderer,
+  - Admin sign-in and `putFile`,
+  - dice,
+  - later, `rules/`.
+- `web/src/components/`: shared React pieces:
+  - the nav,
+  - glossary tooltips,
+  - the rich-text component,
+  - the Admin modal,
+  - the text-color sidebar from `editkit`.
+- `web/src/pages/`: one folder per page,
+- `web/src/tabletop/`: the tabletop.
+
+Keeping `lib/` free of React means the same code can later run in a Supabase Edge Function or a game server.
 
 **Shared code is pulled out first.** Several pieces are used by many pages:
 - `GLCORE` (the markup renderer and glossary tooltips), which today is regex-cut from `page.html`. The tabletop also has its own copy of the renderer.
 - `ADMIN` (sign-in and `putFile`).
-- The `$` / `esc` / `arr` / `str` helpers.
+- The helpers.
 - The data loading.
 
-Each of these becomes one module that every page imports. That also gets rid of the fragile regex scraping in `build.py`, and the duplicate renderer in the tabletop.
+Each becomes one module or component that every page imports. That also gets rid of the fragile regex scraping in `build.py`, and the duplicate renderer in the tabletop.
 
 **Data is loaded at run time, with nothing embedded.** Pages `fetch` `crawl-*.json`, as they already do in `STATIC` mode.
 - The deploy copies the JSON files from the repo root into the build output.
@@ -61,34 +75,47 @@ Each of these becomes one module that every page imports. That also gets rid of 
 - Brody can try `/next/creator.html` while the real site stays untouched.
 - We cut over only once every page matches the current site.
 
-**Windows app:**
+**Windows app: auto-updating Electron**
 - Electron loads the Vite build (`base: './'`).
-- The app's spell editing keeps using the `crawlApp` preload API.
+- `electron-builder` makes a normal Windows installer (NSIS). This replaces `installer/`, `install.ps1` and the bundled `rcedit`.
+- `electron-updater` checks GitHub Releases when the app starts, downloads new versions in the background and installs them on the next restart.
+- A GitHub Actions workflow builds the installer and publishes a Release whenever we tag a version, e.g. `v1.4.0`.
+- It keeps the existing `%APPDATA%\Crawl Spell Compendium\` data folder, so saved spells carry over.
+- The app isn't code-signed, so SmartScreen warns on the first install. Updates after that install quietly.
+- Users on the old zip install the new app once by hand. From then on it updates itself.
 
-**What it touches:** almost all of [ARCHITECTURE.md](../ARCHITECTURE.md) §2, §3 and §8, and the Commands and Code style sections of `CLAUDE.md`.
+**What it touches:** almost all of [ARCHITECTURE.md](../ARCHITECTURE.md) §2, §3, §7 and §8, and the Commands and Code style sections of `CLAUDE.md`.
 All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't change.
 
 ## Steps
-- [ ] Brody agrees the two decisions in DECISIONS.md: TypeScript + Vite, and Supabase.
+- [x] Agree TypeScript + Vite, and React (maddox). Brody confirms in the PR.
 - [ ] Set up the scaffold:
-  - Vite + TypeScript, `package.json`, `tsconfig`,
+  - Vite + React + TypeScript, ESLint,
   - an Actions workflow that publishes the current site plus `/next/`,
-  - a README on how to run it.
-- [ ] Pull out the shared modules: helpers, data loading, the markup renderer and glossary tooltips, Admin sign-in and saving, the nav.
-- [ ] Port the pages in rough order of size, simplest first, to shake out the shared modules: glossary and conditions → races → items and crafting → classes, backgrounds and feats → spells → creator and the skill tree.
-- [ ] Move the tabletop in. It's already ES modules, so this is mostly renaming files and adding types. Use the shared renderer, and fix the admin sign-in that broke with `admin.json` v2.
-- [ ] Point the Electron app and installer at the Vite build.
+  - finish [SETUP.md](../SETUP.md) with the real commands.
+- [ ] Pull out the shared code:
+  - `lib/`: data loading, the content types, the markup renderer, Admin sign-in and saving,
+  - `components/`: the nav, rich text and glossary tooltips, the Admin modal.
+- [ ] Port the pages in rough order of size, simplest first, to shake out the shared pieces: glossary and conditions → races → items and crafting → classes, backgrounds and feats → spells → creator and the skill tree.
+- [ ] Move the tabletop in:
+  - port its UI to React,
+  - keep `net.js` and `dice.js` as plain TypeScript in `lib/`,
+  - use the shared renderer,
+  - fix the admin sign-in that broke with `admin.json` v2.
+- [ ] Windows app:
+  - set up `electron-builder` and `electron-updater`,
+  - add a release workflow on version tags,
+  - check that saved spells carry over from the old app.
 - [ ] Cut over:
   1. `/next/` becomes the site,
-  2. delete `build.py`, `sitekit.py`, the root and `app/` HTML, and the committed zip,
+  2. delete `build.py`, `sitekit.py`, the root and `app/` HTML, `installer/` and the committed zip,
   3. update `ARCHITECTURE.md` and `CLAUDE.md`.
 
 ## Open questions
-- **A UI framework or not?** Porting in plain TypeScript keeps the risk low. The creator, and anything with 3D later, might benefit from React or Svelte.
-  Suggestion: port in plain TypeScript first, and decide on a framework as its own entry before building new UI.
-- **The claude.ai artifact mode.** This is the Spells page republishing itself through `window.claude`. Do we still need it?
-  If not, we drop it and the `/*@TPL@*/` self-copy that exists only for it.
-- **Releasing the Windows app.** Keep the installer zip (built by CI and attached to a GitHub Release instead of committed),
-  or move to an auto-updating Electron app, or switch to Tauri?
-- **Node for Brody.** Brody's Admin edits don't need Node. But will Brody also want to run the site locally? If so, setup docs need to cover installing Node.
+- **The claude.ai mode on the Spells page (question for Brody).** The Spells page started life as an artifact made in the claude.ai chat app.
+  It still has code that, when the page is opened inside claude.ai, can save edited spells back to that artifact.
+  On the website and in the Windows app this code does nothing. If Brody no longer edits spells through claude.ai, we drop it.
+  That also drops the copy of itself that the page carries around for it (`/*@TPL@*/`).
 - **The `/next/` URLs.** Are there links or bookmarks to specific pages we must keep working at cutover? The plan keeps every current filename.
+- **Single-page app or not?** One HTML file per page keeps today's URLs simple. A single React app with a router would switch pages faster and share state.
+  Suggestion: keep separate pages for the port, and revisit once the rules UI exists.
