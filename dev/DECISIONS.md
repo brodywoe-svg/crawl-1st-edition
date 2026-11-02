@@ -21,6 +21,73 @@ Template:
 
 ---
 
+## 2026-11-02: The client is rebuilt as TypeScript + Vite, one build for web, PC and mobile
+**Status:** proposed · **Who:** maddox
+**Why:**
+- The site has no module system. `build.py` concatenates plain scripts into one global scope.
+- Three.js and most modern libraries expect ES modules and a bundler.
+- We want web, PC and (later) mobile from one codebase.
+- We want the rules engine to be shared code that runs both on the client and on the server.
+
+Options we weighed:
+- **Keep `build.py` and add modules by hand.** No new tooling, but it fights every library we'd want to use.
+- **TypeScript + Vite.** This is the standard setup for Three.js. It gives fast dev reloads and catches type errors in rules code.
+- **A heavier framework (Next.js etc.).** It's built for server-rendered sites, which we don't need.
+
+**Decision:**
+- Use TypeScript and Vite.
+- **Web:** the Vite build, hosted on GitHub Pages.
+- **PC:** Electron loads the same build.
+- **Mobile, later:** Capacitor wraps the same build.
+
+The migration is planned in [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md).
+**Trade-offs:**
+- We'll need Node.js and npm, which ends the "Python stdlib only, no dependencies" rule.
+- The site will need a build step in CI (GitHub Actions) instead of committed HTML.
+- Whether to use a UI framework (React, Svelte or none) is a separate decision.
+
+## 2026-11-02: Supabase over Firebase as the backend
+**Status:** proposed · **Who:** maddox
+**Why:** A fully digital Crawl needs things that GitHub and Firebase, as we use them now, can't do well:
+- player accounts,
+- characters saved to the cloud,
+- real permissions (today any anonymous user can read and write any tabletop game),
+- rules enforced on the server,
+- proper storage for map images (today they're data URLs inside the database).
+
+Note that Three.js runs entirely in the browser, so it didn't factor into this choice.
+
+Options we weighed:
+- **Firebase** (expand what the tabletop already uses):
+  - **For:** there's nothing to migrate.
+  - **Against:** its document-tree model is awkward for relational rules data (classes → features → costs, characters → items).
+  - **Against:** bandwidth pricing gets expensive with maps and assets.
+  - **Against:** we'd be locked into Google.
+- **Supabase** (hosted Postgres with auth, realtime sync, storage and serverless functions):
+  - **For:** relational data fits the content.
+  - **For:** row-level security enforces permissions like "only the GM can edit fog" on the server.
+  - **For:** it has real file storage.
+  - **For:** its Edge Functions run TypeScript, so they can share the rules code.
+  - **For:** it's open source, self-hostable plain Postgres, so there's no lock-in.
+  - **For:** the free tier covers us while we're testing.
+- **A custom Node server, e.g. Colyseus:**
+  - **For:** full control over live, server-run combat.
+  - **Against:** we'd be running servers ourselves, which is too much for now.
+  - We can add one alongside Supabase later if live combat needs it.
+- **Convex:**
+  - **For:** TypeScript-native and pleasant to use.
+  - **Against:** it's smaller and proprietary.
+
+**Decision:**
+- Use Supabase for accounts, characters, tabletop sync and asset storage.
+- The tabletop moves over by adding a `SupabaseNet` behind the existing `net.js` API. The rest of `app.js` shouldn't need to change.
+- Game content stays in `crawl-*.json` for now (see the entry below). Moving it into Postgres would be its own decision.
+
+**Trade-offs:**
+- It's a new service with its own keys and dashboard to manage.
+- Existing Firebase tabletop games won't carry over unless we write an export.
+- Postgres schema changes need migrations, which is more discipline than JSON.
+
 ## 2026-11-02: Dev docs live in the repo as a few Markdown files
 **Status:** proposed · **Who:** maddox
 **Why:** Two people plus Claude Code agents need shared context that survives between sessions. Agents read
