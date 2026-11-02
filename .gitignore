@@ -3,3 +3,5 @@ __pycache__/
 node_modules/
 .DS_Store
 Thumbs.db
+CLAUDE.local.md
+.claude/settings.local.json
