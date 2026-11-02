@@ -21,6 +21,33 @@ Template:
 
 ---
 
+## 2026-11-02: Host the site on Vercel, replacing GitHub Pages at cutover
+**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
+**Why:** The new Vite site needs a build step, and GitHub Pages can only do that through a GitHub Actions workflow we'd have to maintain.
+We weighed two options:
+- **GitHub Pages + Actions.**
+  - **For:** free, and it's what we use today.
+  - **Against:** no PR previews without extra work, and no server code.
+- **Vercel.**
+  - **For:** it builds Vite automatically.
+  - **For:** every PR gets its own **preview link** to try before merging.
+  - **For:** it can run small server functions if we ever need them.
+  - **For:** custom domains are easy.
+
+**Decision:**
+- Vercel builds `npm run build` and hosts `dist/`. `main` is production, and every PR gets a preview.
+- The old GitHub Pages site stays live until the new one matches it. Then we cut over.
+- Admin saves still commit to `main`, and each one triggers a rebuild of about 1 minute.
+  `vercel.json` skips the rebuild for commits that only touch `crawl-edits.json`, `dev/` or Markdown, so each save costs one build, not two.
+
+**Trade-offs:**
+- **Hobby plan limits.** The free Hobby plan is for **non-commercial use only**. If Crawl is ever sold, we need Pro (about $20/month).
+  It also limits deploys per day (100 at the time of writing; check it when we set up). That's fine unless there's a very heavy Admin editing day.
+- **Brody's account.** Hobby allows one person per account, so the project lives on Brody's Vercel account, since Brody owns the repo.
+  Maddox sees previews through the links Vercel posts on each PR.
+- **The site address changes** from `brodywoe-svg.github.io/crawl-1st-edition/`.
+  At cutover the old pages become redirects. We could also add a custom domain.
+
 ## 2026-11-02: Port to plain TypeScript now, and move the UI to React later
 **Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
 **Why:**
@@ -59,7 +86,7 @@ Options we weighed:
 
 **Decision:**
 - Use TypeScript and Vite.
-- **Web:** the Vite build, hosted on GitHub Pages.
+- **Web:** the Vite build, hosted on Vercel (see the entry above).
 - **PC:** Electron loads the same build. It's packaged with `electron-builder` and updates itself
   from GitHub Releases with `electron-updater`, which replaces the hand-made PowerShell installer.
 - **Mobile, later:** Capacitor wraps the same build.
@@ -67,7 +94,7 @@ Options we weighed:
 The migration is planned in [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md).
 **Trade-offs:**
 - We'll need Node.js and npm, which ends the "Python stdlib only, no dependencies" rule.
-- The site will need a build step in CI (GitHub Actions) instead of committed HTML.
+- The site will need a build step (run by Vercel) instead of committed HTML.
 - The UI framework is covered in the entry above: plain TypeScript now, React later.
 - The Windows app won't be code-signed at first, so Windows SmartScreen will warn on the first install, as it does today.
 

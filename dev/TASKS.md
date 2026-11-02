@@ -9,7 +9,8 @@ Format: `- [ ] Task (@owner)`. The owner is `@brody`, `@maddox`, or left off if 
 If a task needs more than a line of explanation, write a doc in [planning/](planning/) and link it from the task.
 
 ## Now
-- [ ] Review the TypeScript + Vite, "TypeScript now, React later" and Supabase decisions in [DECISIONS.md](DECISIONS.md). Supabase is still open. (@brody)
+- [ ] Review the decisions (TypeScript + Vite, React later, Vercel, Supabase): start at [QUICKSTART.md](QUICKSTART.md). Supabase is still open. (@brody)
+- [ ] Connect the repo to Vercel ([QUICKSTART.md](QUICKSTART.md), step 3) (@brody)
 - [ ] Answer the Spells page claude.ai-mode question in the refactor plan (@brody)
 - [ ] Plan the TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md) (@maddox)
 

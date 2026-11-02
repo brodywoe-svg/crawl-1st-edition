@@ -54,10 +54,17 @@ git pull                  # Admin saves land on main all the time, so always pul
 git checkout -b my-change
 npm install               # after a pull that changed package.json
 npm run dev               # local site with live reload; open the address it prints
-npm run build             # the production build into dist/, the same thing CI runs
+npm run typecheck         # check the TypeScript for mistakes
+npm run build             # the production build into dist/, the same thing Vercel runs
 ```
 
 When you're done, commit, push, and open a PR with `gh pr create`.
+
+## Hosting (Vercel)
+- You don't need the Vercel CLI or an account to develop.
+- Vercel builds every PR and posts a **preview link** on it. Merging into `main` updates the production site.
+- The Vercel project lives on Brody's account. For the one-time connection steps, see [QUICKSTART.md](QUICKSTART.md), step 3.
+- The build settings are in `vercel.json`. For example, commits that only change `crawl-edits.json`, `dev/` or Markdown don't trigger a rebuild.
 
 ## Troubleshooting
 - **"command not found" right after installing:** reopen the terminal. If it still fails, restart the PC.

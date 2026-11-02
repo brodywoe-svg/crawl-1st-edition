@@ -14,6 +14,8 @@ Weigh every change against that direction.
 - What we're working on: [dev/TASKS.md](dev/TASKS.md)
 - Decisions made and why: [dev/DECISIONS.md](dev/DECISIONS.md)
 - Setting up a dev machine: [dev/SETUP.md](dev/SETUP.md)
+- For Brody, in plain words: [dev/SUMMARY.md](dev/SUMMARY.md) (what's changing and why) and [dev/QUICKSTART.md](dev/QUICKSTART.md) (step-by-step: review, Vercel setup, previews).
+  Keep both current whenever a PR needs Brody's decisions or setup.
 
 ## How features get built
 Every feature goes through the same lifecycle. Each stage has a folder in `dev/` with a README and a template:

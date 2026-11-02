@@ -17,7 +17,7 @@ See the TypeScript + Vite and "plain TypeScript now, React later" entries in [DE
   - the Vite + TypeScript project setup,
   - porting `src/*.js` and `tabletop/` to TypeScript modules,
   - loading the JSON at run time instead of embedding it in each page,
-  - a GitHub Actions deploy to Pages,
+  - deploying to Vercel,
   - an auto-updating Electron app,
   - removing `build.py` and the generated files once we cut over.
 - **Out:** each of these gets its own plan later.
@@ -65,14 +65,25 @@ Each becomes one module that every page imports. That also gets rid of the fragi
 - The JSON stays at the repo root, so the Admin UI keeps committing to the same paths.
 - The nav dropdowns get built at run time too, so they can't go stale anymore.
 
-**Deploy:**
-- GitHub Pages switches from serving `main` as is to a GitHub Actions workflow: `npm ci && npm run build`, then publish `dist/`.
-- Every Admin save to `main` triggers a rebuild, which takes about 1–2 minutes. Today a save shows up after about 1 minute.
+**Deploy (Vercel):**
+- Vercel runs `npm run build` and hosts `dist/`.
+- **Production:** `main` deploys to the project's production URL.
+- **Previews:** every PR gets its own preview link, posted as a PR comment.
+- **Paths:** `base: './'` keeps every URL relative, so the same build works at Vercel's root and inside Electron.
+- **Admin saves:** every save to `main` triggers a rebuild, which takes about 1 minute.
+  - `vercel.json` has an `ignoreCommand` that skips commits touching only `crawl-edits.json`, `dev/` or `*.md`.
+    The edit-log commit that follows each save therefore doesn't cost a second deploy.
+  - If we start hitting the daily deploy limit, the fallback is to proxy `crawl-*.json` live from GitHub and skip content-only builds entirely.
 
 **The changeover is opt-in until it's done.**
-- While we port, the workflow publishes the new build under `/next/` next to the current site.
-- Brody can try `/next/creator.html` while the real site stays untouched.
-- We cut over only once every page matches the current site.
+- While we port, the old site stays live on GitHub Pages, untouched.
+- The Vercel production URL is the in-progress new site. Brody can try it at any time, and try each PR's preview before it merges.
+- The nav links pages that aren't ported yet to the old github.io site, so the new site is always usable.
+- **We cut over only once every page matches the current site.** At that point we:
+  - (optionally) point a custom domain at Vercel,
+  - replace the GitHub Pages files with small redirect pages that keep the `?query` and `#hash`,
+  - add the Vercel domain to Firebase's authorized domains, until the tabletop moves to Supabase,
+  - update the hard-coded github.io URLs in `tools/sitekit.py` (the nav's Tabletop link), `tabletop/content.js` (`SITE`) and `tabletop/SETUP.md`.
 
 **Windows app: auto-updating Electron**
 - Electron loads the Vite build (`base: './'`).
@@ -87,12 +98,14 @@ Each becomes one module that every page imports. That also gets rid of the fragi
 All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't change.
 
 ## Steps
-- [x] Agree TypeScript + Vite, and "plain TypeScript now, React later" (maddox). Brody confirms in the PR.
+- [x] Agree TypeScript + Vite, "plain TypeScript now, React later", and Vercel (maddox). Brody confirms in the PR.
 - [ ] Set up the scaffold:
-  - Vite + TypeScript, ESLint,
-  - an Actions workflow that publishes the current site plus `/next/`,
+  - Vite + TypeScript, with `npm run typecheck` (no linter yet, to keep it minimal),
+  - `vercel.json`,
+  - the home page ported, along with the shared nav, theme, data loading and Admin sign-in,
   - finish [SETUP.md](../SETUP.md) with the real commands.
-- [ ] Pull out the shared code: helpers, data loading, the markup renderer and glossary tooltips, Admin sign-in and saving, the nav.
+- [ ] Brody connects the repo to Vercel ([QUICKSTART.md](../QUICKSTART.md), step 3).
+- [ ] Pull out the rest of the shared code: helpers, the markup renderer and glossary tooltips, Admin saving (`putFile`, `recordEdits`).
 - [ ] Port the pages in rough order of size, simplest first, to shake out the shared modules: glossary and conditions → races → items and crafting → classes, backgrounds and feats → spells → creator and the skill tree.
 - [ ] Move the tabletop in:
   - it's already ES modules, so this is mostly renaming files and adding types,
@@ -104,7 +117,7 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
   - add a release workflow on version tags,
   - check that saved spells carry over from the old app.
 - [ ] Cut over:
-  1. `/next/` becomes the site,
+  1. Vercel becomes the main site, and the GitHub Pages files become redirects (see Deploy above),
   2. delete `build.py`, `sitekit.py`, the root and `app/` HTML, `installer/` and the committed zip,
   3. update `ARCHITECTURE.md` and `CLAUDE.md`.
 
@@ -113,4 +126,6 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
   It still has code that, when the page is opened inside claude.ai, can save edited spells back to that artifact.
   On the website and in the Windows app this code does nothing. If Brody no longer edits spells through claude.ai, we drop it.
   That also drops the copy of itself that the page carries around for it (`/*@TPL@*/`).
-- **The `/next/` URLs.** Are there links or bookmarks to specific pages we must keep working at cutover? The plan keeps every current filename.
+- **Links and bookmarks.** Are there links or bookmarks to specific pages we must keep working at cutover?
+  The plan keeps every current filename, and the old site redirects to the new one.
+- **A custom domain?** For example `crawlrpg.com` (about $10–15 a year). Without one, the site lives at a `*.vercel.app` address.
