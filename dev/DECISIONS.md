@@ -21,24 +21,28 @@ Template:
 
 ---
 
-## 2026-11-02: The UI is built with React
+## 2026-11-02: Port to plain TypeScript now, and move the UI to React later
 **Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
 **Why:**
-- Today's pages build their HTML as strings and redraw by hand, and that gets harder as the creator and the rules UI grow.
+- Today's pages build HTML as strings and redraw by hand. That's fine for the compendium, but it gets harder as the creator,
+  the rules automation and the tabletop grow.
 - We weighed three options:
-  - **plain TypeScript:** the smallest port, but leaves the hand-redrawing as it is,
-  - **Svelte:** lighter, but a smaller ecosystem,
-  - **React:** the largest ecosystem and the most familiar to Claude Code and to anyone who joins later. It also has
-    **React Three Fiber**, the standard way to use Three.js inside React, which matters for the planned 3D views.
+  - **plain TypeScript:** the smallest, lowest-risk port, because the current code converts mostly in place,
+  - **React now:** better for complex, live UI, but every page's UI would have to be rewritten during the port, which makes it slower and riskier,
+  - **Svelte:** lighter, but a smaller ecosystem.
+
+  Three.js works with or without React. React Three Fiber, a wrapper for using Three.js inside React, is optional.
 
 **Decision:**
-- Use React with TypeScript, set up by Vite.
-- Game logic stays framework-free: data loading, the markup renderer, Admin saving and, later, the rules engine are plain TypeScript modules.
-  React only draws the UI, so the rules engine can also run on a server later.
+- The Vite refactor ports the site in **plain TypeScript**, with no UI framework.
+- **React is the planned UI framework for later.** It gets adopted page by page, after the port, starting with new rules-automation UI.
+  See [planning/react-migration.md](planning/react-migration.md).
+- To keep that move cheap, game logic stays framework-free in plain TypeScript modules (`lib/`):
+  data loading, the markup renderer, Admin saving and, later, the rules engine.
 
 **Trade-offs:**
-- Porting a page means rewriting its UI as components, not only renaming files, so the refactor takes longer.
-- It adds about 45 KB of library to each page.
+- For a while there will be two UI styles: string-rendered pages and React pages.
+- Some UI ported now will be rewritten later. That's accepted, because the port has to land first and the rules UI is mostly new screens anyway.
 
 ## 2026-11-02: The client is rebuilt as TypeScript + Vite, one build for web, PC and mobile
 **Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
@@ -64,7 +68,7 @@ The migration is planned in [planning/typescript-vite-refactor.md](planning/type
 **Trade-offs:**
 - We'll need Node.js and npm, which ends the "Python stdlib only, no dependencies" rule.
 - The site will need a build step in CI (GitHub Actions) instead of committed HTML.
-- The UI framework is chosen in the React entry above.
+- The UI framework is covered in the entry above: plain TypeScript now, React later.
 - The Windows app won't be code-signed at first, so Windows SmartScreen will warn on the first install, as it does today.
 
 ## 2026-11-02: Supabase over Firebase as the backend

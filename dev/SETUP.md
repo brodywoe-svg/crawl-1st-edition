@@ -3,7 +3,7 @@
 How to get a Windows PC ready to work on Crawl's code. **This isn't needed for editing game content.**
 Admin editing on the website works in any browser with nothing installed.
 
-> The new TypeScript + Vite + React project (see [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md))
+> The new TypeScript + Vite project (see [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md))
 > doesn't exist yet. The `npm` commands below will work once it lands. Until then, use the current commands in `CLAUDE.md`.
 
 ## 1. Install the tools (once)

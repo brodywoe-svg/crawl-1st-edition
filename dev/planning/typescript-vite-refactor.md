@@ -1,26 +1,27 @@
-# TypeScript + Vite + React refactor
+# TypeScript + Vite refactor
 **Status:** draft  ·  **Owner:** maddox  ·  **Roadmap:** none yet. This is the groundwork for the backend rebuild, fully digital rules and Three.js.
 
 ## Goal
-Move the website, the tabletop and the Windows app off `build.py` and onto one TypeScript + Vite + React project.
+Move the website, the tabletop and the Windows app off `build.py` and onto one TypeScript + Vite project.
 Players and Brody shouldn't notice any change:
 - the same pages,
 - the same URLs,
 - the same Admin editing.
 
-What changes is underneath. We get a module system, a typed component-based codebase that Three.js (through React Three Fiber),
-Supabase and a shared rules engine can be built on, and one build that also feeds an auto-updating Windows app.
-See the TypeScript + Vite and React entries in [DECISIONS.md](../DECISIONS.md).
+What changes is underneath. We get a module system, and a typed codebase that Three.js, Supabase and a shared rules engine can be built on.
+One build also feeds an auto-updating Windows app.
+See the TypeScript + Vite and "plain TypeScript now, React later" entries in [DECISIONS.md](../DECISIONS.md).
 
 ## Scope
 - **In:**
-  - the Vite + React + TypeScript project setup,
-  - porting every page and the tabletop to React components,
+  - the Vite + TypeScript project setup,
+  - porting `src/*.js` and `tabletop/` to TypeScript modules,
   - loading the JSON at run time instead of embedding it in each page,
   - a GitHub Actions deploy to Pages,
   - an auto-updating Electron app,
   - removing `build.py` and the generated files once we cut over.
 - **Out:** each of these gets its own plan later.
+  - React. See [react-migration.md](react-migration.md).
   - the Supabase migration,
   - Capacitor/mobile,
   - Three.js,
@@ -29,37 +30,35 @@ See the TypeScript + Vite and React entries in [DECISIONS.md](../DECISIONS.md).
   - a visual redesign.
 
 ## How it works
-**Same behavior, new structure.** Each page keeps its current behavior, look and CSS. Its UI is rewritten as React components.
-- Today's code builds HTML strings and redraws by hand. In React that becomes components plus state.
-- The logic inside the current files carries over mostly as is: filters, sorting, the creator's proficiency parsing, the spellcasting formulas.
-- TypeScript starts lenient (`allowJs`, loose `strict`) so the port can move fast. We tighten it once everything is ported.
+**Port, don't rewrite.** Each page keeps its current behavior, markup and CSS. Files are converted to TypeScript modules one at a time.
+TypeScript starts in a lenient mode (`allowJs`, loose `strict`) so half-converted code still builds. We tighten it once everything is ported.
 
 **Layout:** a single Vite project at the repo root:
-- `web/`: one HTML entry per current page, so the URLs stay `spells.html`, `creator.html`, and so on,
-- `web/src/lib/`: plain TypeScript with no React:
+- `web/`: one HTML entry per current page, so the URLs stay `spells.html`, `creator.html`, and so on.
+- `web/src/lib/`: game logic with **no UI code**:
   - data loading and the content types,
   - the markup renderer,
   - Admin sign-in and `putFile`,
   - dice,
   - later, `rules/`.
-- `web/src/components/`: shared React pieces:
+- `web/src/ui/`: shared UI:
   - the nav,
   - glossary tooltips,
-  - the rich-text component,
   - the Admin modal,
   - the text-color sidebar from `editkit`.
-- `web/src/pages/`: one folder per page,
+- `web/src/pages/`: per-page code.
 - `web/src/tabletop/`: the tabletop.
 
-Keeping `lib/` free of React means the same code can later run in a Supabase Edge Function or a game server.
+Keeping `lib/` free of UI code is what makes the later move to React cheap, and lets the rules engine run on a server too.
+When we port a page, its logic (filters, sorting, the creator's proficiency parsing, the spellcasting formulas) goes in `lib/` wherever it untangles easily.
 
 **Shared code is pulled out first.** Several pieces are used by many pages:
 - `GLCORE` (the markup renderer and glossary tooltips), which today is regex-cut from `page.html`. The tabletop also has its own copy of the renderer.
 - `ADMIN` (sign-in and `putFile`).
-- The helpers.
+- The `$` / `esc` / `arr` / `str` helpers.
 - The data loading.
 
-Each becomes one module or component that every page imports. That also gets rid of the fragile regex scraping in `build.py`, and the duplicate renderer in the tabletop.
+Each becomes one module that every page imports. That also gets rid of the fragile regex scraping in `build.py`, and the duplicate renderer in the tabletop.
 
 **Data is loaded at run time, with nothing embedded.** Pages `fetch` `crawl-*.json`, as they already do in `STATIC` mode.
 - The deploy copies the JSON files from the repo root into the build output.
@@ -88,18 +87,16 @@ Each becomes one module or component that every page imports. That also gets rid
 All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't change.
 
 ## Steps
-- [x] Agree TypeScript + Vite, and React (maddox). Brody confirms in the PR.
+- [x] Agree TypeScript + Vite, and "plain TypeScript now, React later" (maddox). Brody confirms in the PR.
 - [ ] Set up the scaffold:
-  - Vite + React + TypeScript, ESLint,
+  - Vite + TypeScript, ESLint,
   - an Actions workflow that publishes the current site plus `/next/`,
   - finish [SETUP.md](../SETUP.md) with the real commands.
-- [ ] Pull out the shared code:
-  - `lib/`: data loading, the content types, the markup renderer, Admin sign-in and saving,
-  - `components/`: the nav, rich text and glossary tooltips, the Admin modal.
-- [ ] Port the pages in rough order of size, simplest first, to shake out the shared pieces: glossary and conditions → races → items and crafting → classes, backgrounds and feats → spells → creator and the skill tree.
+- [ ] Pull out the shared code: helpers, data loading, the markup renderer and glossary tooltips, Admin sign-in and saving, the nav.
+- [ ] Port the pages in rough order of size, simplest first, to shake out the shared modules: glossary and conditions → races → items and crafting → classes, backgrounds and feats → spells → creator and the skill tree.
 - [ ] Move the tabletop in:
-  - port its UI to React,
-  - keep `net.js` and `dice.js` as plain TypeScript in `lib/`,
+  - it's already ES modules, so this is mostly renaming files and adding types,
+  - `net.js` and `dice.js` go in `lib/`,
   - use the shared renderer,
   - fix the admin sign-in that broke with `admin.json` v2.
 - [ ] Windows app:
@@ -117,5 +114,3 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
   On the website and in the Windows app this code does nothing. If Brody no longer edits spells through claude.ai, we drop it.
   That also drops the copy of itself that the page carries around for it (`/*@TPL@*/`).
 - **The `/next/` URLs.** Are there links or bookmarks to specific pages we must keep working at cutover? The plan keeps every current filename.
-- **Single-page app or not?** One HTML file per page keeps today's URLs simple. A single React app with a router would switch pages faster and share state.
-  Suggestion: keep separate pages for the port, and revisit once the rules UI exists.
