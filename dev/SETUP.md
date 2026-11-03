@@ -80,10 +80,10 @@ Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md). Unti
    ```powershell
    npx supabase login                       # opens the browser
    npx supabase link --project-ref <ref>    # <ref> is in the project's URL: supabase.com/dashboard/project/<ref>
-   npx supabase db push                     # creates the profiles table (supabase/migrations)
+   npx supabase db push --remote            # creates the profiles table (supabase/migrations); without --remote it targets a local database
    npx supabase config push                 # auth settings from supabase/config.toml
    ```
-   `config push` also sets the site URL to localhost. Afterwards, under **Authentication → URL Configuration**, set **Site URL**
+   `config push` shows what it will change and asks first. It also sets the site URL to localhost. Afterwards, under **Authentication → URL Configuration**, set **Site URL**
    to the Vercel address, and keep `http://localhost:5173` under **Redirect URLs**.
 6. **The GitHub key for saving.** On GitHub: **Settings → Developer settings → Fine-grained tokens → Generate new token**.
    - Resource owner: `brodywoe-svg`. Repository access: **only** `crawl-1st-edition`.
@@ -108,7 +108,7 @@ Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md). Unti
 
 **Day to day:**
 - A database change is a new file in `supabase/migrations/` (`npx supabase migration new <name>`), reviewed in a PR,
-  then `npx supabase db push` once it's merged.
+  then `npx supabase db push --remote` once it's merged.
 - After changing `supabase/functions/github`, run `npx supabase functions deploy github`.
 - Free projects pause after a week with no activity. If sign-in stops working, open the dashboard and restore the project.
 
