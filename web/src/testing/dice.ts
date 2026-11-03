@@ -1,7 +1,7 @@
 /* 3D dice roller: a prototype (see dev/testing/3d-dice.md). Not linked from the site.
    Three.js draws the dice and cannon-es throws them. When everything has stopped, each die is read from the face
    pointing up (for a d4, the face pointing down, because a d4 is read at its top point). Dice pass through each other,
-   and any die still moving after 8 s is laid flat on its nearest face, so a roll always finishes. */
+   and any die still moving after 5 s is laid flat on its nearest face, so a roll always finishes. */
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
 
@@ -169,7 +169,7 @@ new ResizeObserver(resize).observe(view); resize();
 // ---------------------------------------------------------------- rolling
 const shapes = new Map<Sides, DieShape>();
 const shapeOf = (s: Sides) => { if (!shapes.has(s)) shapes.set(s, makeShape(s)); return shapes.get(s)! };
-const SETTLE_MS = 8000; // after this, any die still moving is laid flat on its nearest face
+const SETTLE_MS = 5000; // after this, any die still moving is laid flat on its nearest face
 interface Die { sides: Sides; mesh: THREE.Mesh; body: CANNON.Body }
 let dice: Die[] = [], rolling = false, rollStart = 0, still = 0, pending: ((r: { values: number[]; forced: boolean }) => void) | null = null;
 

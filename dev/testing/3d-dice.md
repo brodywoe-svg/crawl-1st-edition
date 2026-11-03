@@ -32,7 +32,7 @@ This doesn't change anything on the site. The test page isn't linked from the na
 - **Round 2 (after Maddox tried it):**
   - With several dice, they knocked into each other and some rolls never settled.
     Now dice **don't collide with each other**, only with the tray. They're thrown in lanes across the tray, so they rarely end up overlapping.
-  - **Hard 8-second limit:** any die still moving or tipped on an edge is then laid flat on its nearest face and read. The result line says when that happened.
+  - **Hard 5-second limit** (it was 8 s at first; Maddox shortened it): any die still moving or tipped on an edge is then laid flat on its nearest face and read. The result line says when that happened.
   - **Layout:** the dice box is a **square canvas taking half the screen**: the left half on a computer, the top half on a phone. The controls sit beside or below it.
 
 ## What we learned
