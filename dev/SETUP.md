@@ -106,9 +106,14 @@ Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md). Unti
    - locally: copy `.env.example` to `.env.local` and fill both in (`.env.local` isn't committed);
    - on Vercel: **Project → Settings → Environment Variables**, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`, then redeploy.
 
+**The staging project** ([planning/supabase-database.md](planning/supabase-database.md)): make a second project, `crawl-dev`, in the same organization.
+Steps 3–8 are the same for it. Point Vercel's **Preview** environment variables at `crawl-dev`, and **Production** at `crawl`.
+Switch which project the CLI talks to with `npx supabase link --project-ref <ref>` before each `db push --remote`.
+
 **Day to day:**
-- A database change is a new file in `supabase/migrations/` (`npx supabase migration new <name>`), reviewed in a PR,
-  then `npx supabase db push --remote` once it's merged.
+- A database change is a new file in `supabase/migrations/` (`npx supabase migration new <name>`), reviewed in a PR.
+  Push it to `crawl-dev` first and test it, then push it to `crawl` once it's merged (`npx supabase db push --remote`, after linking each one).
+- Then refresh the TypeScript types: `npm run db:types` (added with phase 2).
 - After changing `supabase/functions/github`, run `npx supabase functions deploy github`.
 - Free projects pause after a week with no activity. If sign-in stops working, open the dashboard and restore the project.
 

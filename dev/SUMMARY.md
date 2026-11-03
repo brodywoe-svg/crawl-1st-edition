@@ -35,6 +35,8 @@ The full reasoning for each one is in [DECISIONS.md](DECISIONS.md).
 3. **If you say yes to Supabase:** accept Maddox's invite to the "Crawl" organization on supabase.com (it comes by email).
    Maddox sets up your admin account; you'll get a starting password to change after you sign in.
 4. **A custom domain?** Do you want an address like `crawlrpg.com` (about $10–15 a year)? Without one, the site lives at a `something.vercel.app` address.
+   **This now matters for player accounts too:** sign-up and "forgot password" emails have to come from a domain we own.
+   The full database plan is in [planning/supabase-database.md](planning/supabase-database.md).
 
 Already done: Vercel is connected, and the Spells page's old claude.ai editing was dropped on the new site.
 

@@ -21,6 +21,25 @@ Template:
 
 ---
 
+## 2026-11-02: A staging Supabase project; the tabletop's design; anonymous players
+**Status:** proposed, waiting on Brody · **Who:** maddox
+**Why:** Planning the database as a whole ([planning/supabase-database.md](planning/supabase-database.md)) needed three choices.
+**Decision:**
+1. **A staging project.** A second free project, `crawl-dev`, takes every migration first, and Vercel preview links use it.
+   Production (`crawl`) only gets changes that were tested there.
+   - Weighed against: a single project, which is simpler, but then every test touches real accounts.
+2. **The tabletop's tables.** One generic `game_items` table (game, kind, page, item, JSON data), plus `games` and `game_members`,
+   streamed with Supabase Realtime.
+   - Weighed against: a table per kind (tokens, fog, chat…), which is cleaner SQL but means rewriting `app.js`.
+   - The generic table matches today's Firebase tree, so a `SupabaseNet` can sit behind the existing `net.js` API.
+   - RLS on `kind` and `data` still hides GM-only things from players on the server.
+3. **Anonymous sign-in for tabletop players** who join from an invite link, as Firebase does today. They can upgrade to a real account later.
+   - Weighed against: requiring accounts to play, which adds friction for one-off players.
+**Trade-offs:**
+- Two projects to keep in step: migrations must be pushed to both.
+- `game_items` puts most of the data in JSON, so rules about it are written against `data->…` fields. That's harder to read than columns.
+- Anonymous users count toward the monthly user limit, and can spam a game whose invite link leaks. The GM can remove them, and the invite code can be rotated.
+
 ## 2026-11-02: Admins sign in with Supabase accounts; a server function saves to GitHub
 **Status:** proposed, waiting on Brody (depends on the Supabase entry below) · **Who:** maddox
 **Why:** Admin access today is a GitHub key per admin, encrypted with that admin's password and published in `admin.json`.

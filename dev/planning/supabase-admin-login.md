@@ -1,5 +1,6 @@
 # Supabase admin login (and the groundwork for player accounts)
 **Status:** draft, being built on branch `supabase-admin-login`  ·  **Owner:** maddox  ·  **Roadmap:** none yet
+**Next phases:** [supabase-database.md](supabase-database.md) (player accounts, characters, the tabletop).
 **Needs:** Brody's OK on the Supabase entry in [../DECISIONS.md](../DECISIONS.md) (still "proposed"), and on the admin login entry below it.
 
 ## Goal
