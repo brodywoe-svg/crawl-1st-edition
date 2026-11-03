@@ -1,0 +1,7 @@
+/* account.html (new site only): your account, and choosing a new password from a reset email. */
+.acctpage{max-width:460px;margin:8px auto 48px;display:grid;gap:10px}
+.acctpage.mbody{padding:0}
+.acctpage h2{margin:8px 0 0;font-size:1.1rem}
+.acctpage p{margin:0;line-height:1.5;font-weight:600}
+.acctpage .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.acctpage a.btn{text-decoration:none;color:inherit}

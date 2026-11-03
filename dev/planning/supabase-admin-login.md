@@ -31,7 +31,8 @@ That works, but:
 
 ## How it works
 - **Accounts:** Supabase Auth, with email + password (12 characters minimum).
-  - Public sign-up is **off**: admins are invited from the Supabase dashboard.
+  - Public sign-up was **off** at first; since phase 2 (2026-11-03) anyone can make a player account ([supabase-database.md](supabase-database.md)).
+    Admins are still made admins only in the dashboard.
   - Every account gets a row in `public.profiles` (`supabase/migrations/…_profiles.sql`): `display_name`, and `role` (`player` by default).
   - You become an admin only when someone sets `role = 'admin'` in the dashboard.
   - Row-level security (database rules that Supabase enforces itself, whatever the site sends):

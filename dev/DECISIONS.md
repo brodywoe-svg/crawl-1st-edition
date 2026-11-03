@@ -42,10 +42,10 @@ Template:
    - Campaign creation is capped per account (10), and needs a real, confirmed account, to limit spam.
    - Players see each other's characters only as a party summary (name, race, class, level, portrait). The full sheet is visible
      only if its owner shares it with that campaign.
-5. **Free services, no domain, for now.** Account emails (confirmations, password resets) are sent by a dedicated Gmail account over SMTP,
-   about 500 a day. Its app password lives only in Supabase's settings.
-   - Weighed against: buying a domain for a real email service (better delivery, but it costs money).
-   - We can switch later in Supabase's SMTP settings, with no code change.
+5. **Free services, no domain, for now.** Account emails use Supabase's built-in sender, which only reaches our own team (about 2 an hour).
+   So email confirmation is **off**: anyone can make an account and use it straight away. Password resets by email work for the team; anyone else is reset by an admin.
+   - Weighed against: a dedicated Gmail account over SMTP (about 500 a day, free, but one more account to look after), or buying a domain for a real email service.
+   - Before sign-up opens beyond our group: add a CAPTCHA, and a real sender (Gmail or a service) with confirmation on. Both are settings, not code.
 **Trade-offs:**
 - Two projects to keep in step: migrations must be pushed to both.
 - `campaign_items` puts most of the data in JSON, so rules about it are written against `data->…` fields. That's harder to read than columns.
@@ -61,7 +61,7 @@ Options we weighed:
   covers all of that person's public repos, and every admin would need write access to the repo.
 - **Magic link by email:** no password, but it needs an email provider set up, and a link to click every time you sign in.
 **Decision:**
-- On the new site, admins sign in to Supabase with an email and password. Sign-up is off; admins are invited from the dashboard,
+- On the new site, admins sign in to Supabase with an email and password. Sign-up was off at first (opened for player accounts on 2026-11-03, see the entry above); admins are made admins in the dashboard,
   and the admin role is set there.
 - Saves still commit `crawl-*.json` to GitHub, through a Supabase Edge Function that checks the caller is an admin.
 - The same `profiles` table will hold player accounts later.

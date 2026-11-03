@@ -114,9 +114,16 @@ function fixChar(c) {
 chars = chars.map(fixChar);
 function persist(now) {
   clearTimeout(saveT);
-  const go = () => { if (cur) try { cur.snap = snapshot(cur) } catch (e) { } try { localStorage.setItem(LS, JSON.stringify(chars)) } catch (e) { say("This browser couldn't save your character. Use Save to file so you don't lose it.") } };
+  const go = () => { if (cur) try { cur.snap = snapshot(cur) } catch (e) { } try { localStorage.setItem(LS, JSON.stringify(chars)) } catch (e) { say("This browser couldn't save your character. Use Save to file so you don't lose it.") } if (window.crawlCloud) window.crawlCloud.saved(chars) };
   if (now) go(); else saveT = setTimeout(go, 250);
 }
+/* The new site can also save characters to your account (web/src/ui/cloud-characters.ts). It defines window.crawlCloud,
+   and fires this when it has merged your account's characters into this browser. The old site has neither. */
+window.addEventListener("crawl-characters-changed", () => {
+  try { chars = arr(JSON.parse(localStorage.getItem(LS) || "[]")).filter(c => c && c.id).map(fixChar) } catch (e) { return }
+  if (cur) cur = chars.find(x => x.id === cur.id) || cur;
+  if (view === "home") renderHome();
+});
 function touch() { if (!cur) return; cur.edited = Date.now(); if (!chars.includes(cur)) chars.unshift(cur); persist() }
 const raceOf = c => RACE_LIST.find(r => r.id === c.race) || null;
 const subOf = c => { const r = raceOf(c); return r && r.subs.find(s => s.id === c.sub) || null };
@@ -1160,7 +1167,7 @@ function renderHome() {
   const list = chars.slice().sort((a, b) => (b.edited || b.made || 0) - (a.edited || a.made || 0));
   $("cchome").innerHTML = `<div class="cchero"><button type="button" class="ccnew" data-act="new"><span>+</span>Create a new character</button>
 <label class="btn">Open a character file<input type="file" accept=".json,application/json" id="ccImport" hidden></label></div>
-${list.length ? `<h2 class="cch2">My characters <small>Saved in this browser</small></h2><div class="ccchars">${list.map(c => { const r = raceOf(c), s = subOf(c), k = clsOf(c); return `<div class="ccchar" data-id="${esc(c.id)}">
+${list.length ? `<h2 class="cch2">My characters <small>${esc((window.crawlCloud && window.crawlCloud.label) || "Saved in this browser")}</small></h2><div class="ccchars">${list.map(c => { const r = raceOf(c), s = subOf(c), k = clsOf(c); return `<div class="ccchar" data-id="${esc(c.id)}">
 ${c.details.portrait ? `<img src="${esc(c.details.portrait)}" alt="">` : `<span class="ccnopic" aria-hidden="true">${esc((str(c.name) || "?")[0].toUpperCase())}</span>`}
 <div><b>${esc(str(c.name) || "Unnamed character")}</b><small>${esc([s ? s.n : r && r.n, k && k.n].filter(Boolean).join(" · ") || "Not finished")}</small></div>
 <div class="ccbtns"><button type="button" class="btn solid" data-act="open">${c.done ? "Sheet" : "Continue"}</button><button type="button" class="btn" data-act="edit">Edit</button><button type="button" class="btn" data-act="file">Save to file</button><button type="button" class="btn gdel" data-act="del">Delete</button></div></div>` }).join("")}</div>` : `<p class="ccnote">Characters you make are saved in this browser. Use <b>Save to file</b> to keep a copy or move it to another device.</p>`}`;
@@ -1174,7 +1181,7 @@ $("cchome").addEventListener("click", ev => {
   if (b.dataset.act === "file") { saveFile(c); return }
   if (b.dataset.act === "del") {
     if (!b.dataset.sure) { b.dataset.sure = "1"; b.textContent = "Click again to delete"; return }
-    chars = chars.filter(x => x !== c); if (cur === c) cur = null; persist(true); renderHome(); say(`Deleted ${str(c.name) || "the character"}.`);
+    chars = chars.filter(x => x !== c); if (cur === c) cur = null; if (window.crawlCloud) window.crawlCloud.removed(c.id); persist(true); renderHome(); say(`Deleted ${str(c.name) || "the character"}.`);
   }
 });
 $("cchome").addEventListener("change", ev => {

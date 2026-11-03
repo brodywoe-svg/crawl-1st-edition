@@ -75,7 +75,8 @@ Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md). Unti
 2. Under the organization's **Team**, invite the other developer as **Owner**.
 3. **New project:** name it `crawl`, choose the region closest to the players, and let it generate a database password.
    Save that password in your password manager; it's only needed by the CLI.
-4. In the project, open **Authentication → Sign In / Providers**: turn **Allow new users to sign up** off. Keep **Email** on.
+4. In the project, open **Authentication → Sign In / Providers** and keep **Email** on. Sign-up and email confirmation are set by `config push` in step 5
+   (sign-up on, confirmation off for now; see [planning/supabase-database.md](planning/supabase-database.md), phase 2).
 5. In a terminal at the repo root, link the repo to the project and push the database and the auth settings:
    ```powershell
    npx supabase login                       # opens the browser
@@ -83,8 +84,10 @@ Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md). Unti
    npx supabase db push --remote            # creates the profiles table (supabase/migrations); without --remote it targets a local database
    npx supabase config push                 # auth settings from supabase/config.toml
    ```
-   `config push` shows what it will change and asks first. It also sets the site URL to localhost. Afterwards, under **Authentication → URL Configuration**, set **Site URL**
-   to the Vercel address, and keep `http://localhost:5173` under **Redirect URLs**.
+   `config push` shows what it will change and asks first. It also sets the site URL to localhost. Afterwards, under **Authentication → URL Configuration**:
+   - set **Site URL** to the Vercel address;
+   - under **Redirect URLs**, add the Vercel address followed by `/**` (e.g. `https://crawl-1st-edition.vercel.app/**`), and keep the `localhost` ones.
+     Password-reset emails link to `account.html`, and only addresses listed here are allowed.
 6. **The GitHub key for saving.** On GitHub: **Settings → Developer settings → Fine-grained tokens → Generate new token**.
    - Resource owner: `brodywoe-svg`. Repository access: **only** `crawl-1st-edition`.
    - Permissions: **Contents: Read and write**. Nothing else.

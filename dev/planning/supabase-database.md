@@ -11,7 +11,7 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 | Phase | What | Status |
 | --- | --- | --- |
 | 1 | Admins: `profiles`, sign-in, saving to GitHub | Built (PR #8). Waiting on the `GITHUB_TOKEN` secret |
-| 2 | Player accounts, and Character Creator characters saved to the cloud | Planned. Email: a free Gmail account, no domain |
+| 2 | Player accounts, and Character Creator characters saved to the cloud | Built (PR #8); waiting on the migration push and a real test |
 | 3 | Campaigns: dungeon masters see their players' characters and propose changes to them | Planned |
 | 4 | The tabletop on Supabase instead of Firebase, built on campaigns | Planned |
 | Later | Rules checked on the server | Sketch only |
@@ -67,12 +67,14 @@ One plan for everything the database will hold, so each phase fits the next. Eac
   - then test end to end on a preview link.
 
 ## Phase 2: player accounts and characters
-**`characters` table**
+**Status:** built on branch `supabase-admin-login` (PR #8); waiting on the migration push and a real test.
+
+**`characters` table** (`supabase/migrations/20261103090000_characters.sql`)
 
 | Column | Type | Notes |
 | --- | --- | --- |
-| `id` | `text` primary key | The Creator's own id (`pc_…`), so a local copy and its cloud copy match up |
-| `owner_id` | `uuid`, references `profiles`, on delete cascade | Indexed |
+| `owner_id` | `uuid`, references `profiles`, on delete cascade | Defaults to the signed-in user |
+| `id` | `text` | The Creator's own id (`pc_…`), so a local copy and its cloud copy match up. The primary key is (`owner_id`, `id`), so one person's ids can never clash with another's |
 | `name` | `text` | For lists, without loading `data` |
 | `data` | `jsonb` | The whole character, the same shape as `localStorage crawl-characters` (with its `v`) |
 | `edited_at` | `timestamptz` | From the character's `edited`, so the newer copy wins |
@@ -86,32 +88,41 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 
 **Sign-up** (in `supabase/config.toml`, then `config push`):
 - Sign-up turned on.
-- Email confirmation on.
-- A CAPTCHA on sign-up (Cloudflare Turnstile, which is free and works on the `vercel.app` address).
-- **Email, free and with no domain** (decided 2026-11-02): Supabase's built-in email only sends a handful an hour, so it's for testing only.
-  Instead, confirmation and reset emails go through a **dedicated Gmail account** (e.g. a new `crawl…@gmail.com`, not a personal one) over Gmail's SMTP:
-  - Turn on 2-step verification for it, make an **app password**, and enter it in the Supabase dashboard
-    (**Authentication → Emails → SMTP settings**: host `smtp.gmail.com`, port 465, the Gmail address as the user and sender).
-    It's never in the repo.
-  - **Limits:** about 500 emails a day, plenty while testing. Some inboxes may file them as spam.
-  - **Later:** if we get a domain, switch to a proper email service (e.g. Resend) in the same SMTP settings, with no code change.
-- A password-reset page (`web/account.html`) that the reset email links to.
+- **Email confirmation off, for now** (decided 2026-11-03). Supabase's built-in email only reaches members of our Supabase team, about 2 an hour,
+  so players couldn't confirm. Anyone can make an account and use it straight away.
+- **Password reset by email** works only for the team while we use the built-in email. Anyone else is reset by an admin
+  (dashboard: **Authentication → Users**, pick the user, then send a recovery email or set a new password).
+- **Later, before opening sign-up beyond our group:**
+  - a CAPTCHA (Cloudflare Turnstile, free, works on the `vercel.app` address; the slot is in `config.toml`);
+  - a real email sender, so confirmation can be turned on: a dedicated Gmail account over SMTP (about 500 a day, with its app password only in the Supabase dashboard), or a proper email service once there's a domain. Either is a settings change, not a code change.
+- Supabase already limits sign-ups and sign-ins per IP address.
 
 **Site:**
-- `lib/auth.ts` gets `signUp`, `signIn` for any account, `resetPassword` and `onAuthChange`.
-- A new **Account** button in the nav for players. The Admin button stays as it is.
+- `lib/auth.ts`: `signIn` and `signUp` for any account, `sendPasswordReset`, `currentAccount`, `onAuthChange`.
+- **The nav button** reads **Sign in** when Supabase is on.
+  - The sign-in box has three modes: sign in, **create an account** (name, email, password twice), and **forgot password**.
+  - Signed in, the button shows your name and opens your account box (name, password).
+  - Admins get "Admin · name" and the Admin Options menu, as before.
+- **`account.html`**: the page the reset email links to. It asks for a new password, then shows who you're signed in as.
 - **Syncing characters without forking the Creator:**
-  - `src/creator.js` (shared with the old site) gets a one-line hook: `persist()` calls `window.crawlCloud?.save(c)`, and deleting calls `.remove(id)`.
-    It does nothing on the old site.
-  - The new site defines `crawlCloud` in `web/src/lib/characters.ts`.
+  - `src/creator.js` (shared with the old site) calls `window.crawlCloud.saved(chars)` after each save, and `.removed(id)` on delete.
+    It reloads its list when the page fires `crawl-characters-changed`, and shows `crawlCloud.label` next to "My characters".
+    None of this exists on the old site, so nothing changes there.
+  - The new site defines `crawlCloud` in `web/src/ui/cloud-characters.ts`; the merge rule and database calls are in `web/src/lib/characters.ts`.
   - **On sign-in, merge:**
     - characters only on this device are uploaded,
     - characters only in the cloud are downloaded,
     - for the rest, the newer `edited` wins.
-  - localStorage stays as the offline copy.
-- The tabletop's "add character" reads the cloud list when the player is signed in, as well as the same-tab localStorage.
+  - Saves are uploaded about 1.5 seconds after the last change.
+  - localStorage stays as the working copy, so the Creator works offline and signed out.
+  - **A shared computer:** if someone else signs in on the device, the characters there are set aside under `crawl-characters:<their id>`,
+    never uploaded to the new account, and brought back when their owner signs in again.
+- **Not yet:** the tabletop's "add character" still reads only same-tab localStorage. It moves to the cloud list in phase 4.
 
-**RLS checklist:**
+**Checklist:**
+- make an account, sign out, sign back in; the nav shows your name;
+- make a character signed out, then sign in: it's uploaded. Sign in on another browser: it's there;
+- edit it in one browser and reload the other: the newer edit wins;
 - user A can't see, change or delete user B's characters;
 - a signed-out visitor sees nothing;
 - an admin can see both;
@@ -216,12 +227,14 @@ so `app.js` barely changes (as the Supabase decision says). The game data shape 
 - [ ] Brody OKs the player-facing parts of the proposed DECISIONS.md entry: roles, DM proposals, party privacy. The technical parts (staging project, table design) are Maddox's call.
 - [ ] Create `crawl-dev`, add `npm run db:types`, and point Vercel previews at `crawl-dev` (dev/SETUP.md).
 - [ ] Phase 1: `GITHUB_TOKEN` from Brody, then test end to end.
-- [ ] Phase 2: make the Gmail account, add its SMTP settings and Turnstile; build `characters`, sign-up, the account page and sync (own PR).
+- [x] Phase 2 code: `characters`, sign-up, the account page and sync.
+- [ ] Phase 2: push the migration and config, then run the checklist with two test accounts.
+- [ ] Before opening sign-up beyond our group: Turnstile, and a real email sender with confirmation on.
 - [ ] Phase 3: campaigns, members, characters in campaigns, DM change proposals and the Creator's accept/reject (own PR).
 - [ ] Phase 4: the tabletop's tables, RLS, Realtime, storage, `SupabaseNet` (own PR, or two).
 
 ## Decided (2026-11-02, Maddox)
-- **Free services only, no domain for now:** a dedicated Gmail account sends the account emails; the site stays on its `vercel.app` address.
+- **Free services only, no domain for now:** the site stays on its `vercel.app` address. Account emails use Supabase's built-in sender, so email confirmation is off (2026-11-03).
 - **Campaign limit:** 10 per account.
 - **Party privacy:** players can't see each other's full characters unless the owner shares; everyone in the campaign sees the party summary.
 

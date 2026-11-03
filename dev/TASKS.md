@@ -21,7 +21,7 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 - [ ] Add the Vercel site address to Firebase's authorized domains, so online tabletop play works there (@brody)
 
 ## Later
-- [ ] Supabase phase 2: player accounts and cloud-saved characters; make a dedicated Gmail account for the emails: [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 2: player accounts and cloud-saved characters. Built (PR #8): push the migration and config, then test with two accounts: [planning/supabase-database.md](planning/supabase-database.md)
 - [ ] Supabase phase 3: campaigns; DMs see their players' characters and propose changes: [planning/supabase-database.md](planning/supabase-database.md)
 - [ ] Supabase phase 4: the tabletop off Firebase, built on campaigns: [planning/supabase-database.md](planning/supabase-database.md)
 - [ ] Move the UI to React after the Vite refactor: [planning/react-migration.md](planning/react-migration.md)

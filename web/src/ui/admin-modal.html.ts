@@ -1,13 +1,19 @@
-/** The admin sign-in modal. Copied from src/page.html, plus an email field (#emailRow) shown when signing in with Supabase. */
+/** The admin sign-in modal. Copied from src/page.html, plus the Supabase account fields (name, email, password again, Forgot), shown only when Supabase is on. */
 export const ADMIN_MODAL = `<div class="modal" id="adminModal" hidden>
   <form class="mbox" id="adminForm" novalidate role="dialog" aria-modal="true" aria-labelledby="adminTitle">
     <div class="mhead"><h2 id="adminTitle">Admin sign-in</h2></div>
     <div class="mbody">
       <div id="loginPane">
+        <div id="signupRow" hidden><label class="mlabel" for="signupName">Your name</label>
+        <input type="text" id="signupName" autocomplete="nickname" maxlength="40"></div>
         <div id="emailRow" hidden><label class="mlabel" for="adminEmail">Email</label>
         <input type="email" id="adminEmail" autocomplete="username" spellcheck="false"></div>
-        <label class="mlabel" for="adminPass" id="adminPassLabel">Admin password</label>
-        <input type="password" id="adminPass" autocomplete="current-password">
+        <div id="passRow"><label class="mlabel" for="adminPass" id="adminPassLabel">Admin password</label>
+        <input type="password" id="adminPass" autocomplete="current-password"></div>
+        <div id="pass2Row" hidden><label class="mlabel" for="signupPass2">Type the password again</label>
+        <input type="password" id="signupPass2" autocomplete="new-password">
+        <p class="mhelp">Use at least 12 characters. A few random words with a number works well.</p></div>
+        <button type="button" class="mlink" id="adminForgot" hidden>Forgot your password?</button>
       </div>
       <div id="setupPane" hidden>
         <p class="mnote">One-time setup. Paste a GitHub access key that can change this repo, then choose your admin password. The key is locked with your password before it's stored, so only someone with the password can use it.</p>
