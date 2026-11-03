@@ -16,6 +16,7 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 - [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
 
 ## Next
+- [ ] Interactive character sheet: Brody to review the plan and answer its rules questions; decide plain TypeScript or React: [planning/interactive-character-sheet.md](planning/interactive-character-sheet.md) (@brody)
 - [ ] Try the 3D dice prototype on a laptop and a phone, fill in [testing/3d-dice.md](testing/3d-dice.md), then decide ship / iterate / remove (@maddox, @brody)
 - [ ] Wiki menu: built on the new site; Brody to OK the name and the defaults: [planning/wiki-menu.md](planning/wiki-menu.md) (@brody)
 - [ ] Add the Vercel site address to Firebase's authorized domains, so online tabletop play works there (@brody)
