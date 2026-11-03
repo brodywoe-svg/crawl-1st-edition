@@ -56,6 +56,11 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
 - `python tools/build.py`: regenerates every page in the repo root and `app/`, and the installer zip. Run it after changing `src/` or `tools/sitekit.py`.
 - There are no dependencies to install (Python 3 standard library only), no tests and no linter.
 - To preview locally, serve the repo root, e.g. `python -m http.server`, and open `/index.html` or `/tabletop/`. Pages fetch their JSON, so `file://` won't fully work.
+- **New site (`web/`, being ported; see `dev/planning/typescript-vite-refactor.md`):** this needs Node.js (see `dev/SETUP.md`).
+  - `npm install`: once, and again after `package.json` changes.
+  - `npm run dev`: a live-reloading local site.
+  - `npm run typecheck`: run it before every PR.
+  - `npm run build`: builds into `dist/`, which is what Vercel deploys.
 
 ## Rules
 - **Never hand-edit generated files.** These are the root `*.html`, `app/*.html` and `downloads/*.zip`. Edit `src/` or `tools/`, then rebuild.
@@ -70,5 +75,11 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
 ## Code style
 - **Site JS** (`src/*.js`): plain browser JS, no modules. `build.py` concatenates the scripts into one global scope per page, so top-level names must not collide.
 - **Tabletop** (`tabletop/`): native ES modules, served as is.
+- **New site** (`web/`): TypeScript modules, bundled by Vite.
+  - `web/src/lib/`: game logic and data, with **no DOM or UI code**, so it can later run on a server or under React.
+  - `web/src/ui/`: shared UI (nav, theme, admin).
+  - `web/src/pages/`: one entry per page.
+  - When you port a page, add it to `PORTED` in `web/src/config.ts` and to the inputs in `vite.config.ts`.
+  - While both sites exist, port behavior faithfully. Don't change it.
 - **Style:** match the existing compact style, with short helpers (`$`, `esc`, `arr`, `str`) and sparse plain-English comments.
 - **Python:** stdlib only, with a docstring at the top of each file.

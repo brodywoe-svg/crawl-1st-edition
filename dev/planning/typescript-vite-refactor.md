@@ -99,7 +99,7 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
 
 ## Steps
 - [x] Agree TypeScript + Vite, "plain TypeScript now, React later", and Vercel (maddox). Brody confirms in the PR.
-- [ ] Set up the scaffold:
+- [x] Set up the scaffold:
   - Vite + TypeScript, with `npm run typecheck` (no linter yet, to keep it minimal),
   - `vercel.json`,
   - the home page ported, along with the shared nav, theme, data loading and Admin sign-in,

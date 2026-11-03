@@ -228,3 +228,21 @@ The goal is to make Crawl fully digital, with Three.js visualizations eventually
   large asset storage) means adding a real backend. Firebase is already in use and could grow into that role.
 - **Data is duplicated.** Every page embeds all its JSON, and `app/` duplicates every page. A rebuild that loads data at
   runtime would remove most of the generated output.
+
+## 11. In progress: the new site in `web/` (Vite + TypeScript)
+Plan: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Sections 1–10 above still describe the **live** site. This section covers only the new one.
+- **Build:**
+  - `vite.config.ts` builds the pages in `web/` into `dist/`. There's one HTML entry per page, so the URLs stay the same.
+  - `base: './'` keeps every URL relative.
+  - The plugin `web/vite/content-files.ts` serves `crawl-*.json` and `admin.json` from the repo root in dev, and copies them into `dist/` in a build.
+- **Hosting:**
+  - Vercel builds `main` and every PR (`vercel.json`).
+  - It skips commits that only touch `crawl-edits.json`, `dev/` or Markdown.
+- **Ported so far:** the home page (`web/index.html`, `web/src/pages/home.ts`), plus the shared pieces:
+  - the nav (`ui/nav.ts`), which builds its menus from the JSON at load, so they're never stale,
+  - dark mode and Tree mode (`ui/theme.ts`),
+  - the whole admin UI (`ui/admin.ts`): sign-in, setup, the account modal, Admin Options and the edit history,
+  - GitHub saving and the edit log (`lib/github.ts`),
+  - data loading (`lib/data.ts`).
+- **Links to pages not ported yet** are rewritten to the old github.io site (`siteHref`/`fixLinks` and `PORTED` in `web/src/config.ts`).
+- **CSS** is copied as is from `src/page.html` and `tools/sitekit.py` into `web/src/styles/`. Keep the copies in sync until cutover.

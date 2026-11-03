@@ -3,8 +3,8 @@
 How to get a Windows PC ready to work on Crawl's code. **This isn't needed for editing game content.**
 Admin editing on the website works in any browser with nothing installed.
 
-> The new TypeScript + Vite project (see [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md))
-> doesn't exist yet. The `npm` commands below will work once it lands. Until then, use the current commands in `CLAUDE.md`.
+> The new TypeScript + Vite site lives in `web/` (see [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md)).
+> So far only the home page is ported. The old site still uses `python tools/build.py` (see `CLAUDE.md`).
 
 ## 1. Install the tools (once)
 Open PowerShell and run:
@@ -67,6 +67,11 @@ When you're done, commit, push, and open a PR with `gh pr create`.
 - The build settings are in `vercel.json`. For example, commits that only change `crawl-edits.json`, `dev/` or Markdown don't trigger a rebuild.
 
 ## Troubleshooting
-- **"command not found" right after installing:** reopen the terminal. If it still fails, restart the PC.
+- **"npm is not recognized" right after installing:** the terminal still has the PATH from before the install.
+  Fully quit VS Code or Windows Terminal (every window) and reopen it, or restart the PC. To fix only the current window, run:
+  `$env:Path = [Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [Environment]::GetEnvironmentVariable("Path","User")`
+- **"npm.ps1 cannot be loaded because running scripts is disabled":** this is Windows PowerShell's default safety setting. Allow scripts for your own user, once:
+  `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
+  Or skip the setting and type `npm.cmd` instead of `npm`.
 - **Pages show no data:** use `npm run dev`. Opening the HTML file directly doesn't work, because pages fetch their JSON over HTTP.
 - **Every file shows as changed after a build on Windows:** that's line endings (see ARCHITECTURE.md §8). This goes away after the cutover.
