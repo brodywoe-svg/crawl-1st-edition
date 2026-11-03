@@ -13,6 +13,7 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 - [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
 
 ## Next
+- [ ] Try the 3D dice prototype on a laptop and a phone, fill in [testing/3d-dice.md](testing/3d-dice.md), then decide ship / iterate / remove (@maddox, @brody)
 - [ ] Add the Vercel site address to Firebase's authorized domains, so online tabletop play works there (@brody)
 
 ## Later

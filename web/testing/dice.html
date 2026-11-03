@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>3D Dice Test · Crawl 1st Edition</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap">
+<style>
+/* A prototype page (dev/testing/3d-dice.md): its own small styles, not the site's. */
+:root{--ink:#111;--paper:#fff;--red:#8e171c;--muted:#666;font-family:Montserrat,Arial,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:#1b1b1b;color:var(--paper);display:flex;flex-direction:column;height:100vh;height:100dvh}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#000;flex-wrap:wrap}
+header h1{margin:0;font-size:1rem;letter-spacing:.06em;text-transform:uppercase}
+header .tag{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:2px 8px;color:#d9b25f}
+header a{color:var(--paper);font-weight:700;font-size:.85rem;margin-left:auto}
+#view{position:relative;flex:1;min-height:0}
+#view canvas{display:block;width:100%;height:100%}
+#fps{position:absolute;top:8px;right:10px;font-size:.75rem;font-weight:700;color:#aaa}
+.panel{background:var(--paper);color:var(--ink);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+form{display:flex;gap:8px;flex-wrap:wrap}
+input{flex:1;min-width:160px;font:700 1rem Montserrat,Arial,sans-serif;border:2px solid var(--ink);border-radius:10px;padding:8px 12px}
+button{font:800 .9rem Montserrat,Arial,sans-serif;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);padding:7px 14px;cursor:pointer}
+button.solid{background:var(--ink);color:var(--paper)}
+button:disabled{opacity:.5;cursor:default}
+#quick{display:flex;gap:6px;flex-wrap:wrap}
+#result{min-height:1.6em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;font-weight:700}
+#result b{font-size:1.8rem;color:var(--red)}
+#result small{color:var(--muted);font-weight:600}
+#result.bad{color:var(--red)}
+</style>
+<script type="module" src="/src/testing/dice.ts"></script>
+</head>
+<body>
+<header><h1>3D dice</h1><span class="tag">Prototype</span><a href="../index.html">Back to the site</a></header>
+<div id="view"><span id="fps"></span></div>
+<div class="panel">
+  <form id="rollForm">
+    <input id="expr" value="2d6 + 1d20" aria-label="Roll" autocomplete="off" spellcheck="false">
+    <button type="submit" class="solid" id="go">Roll</button>
+  </form>
+  <div id="quick" aria-label="Roll one die"><button type="button" data-d="d4">d4</button><button type="button" data-d="d6">d6</button><button type="button" data-d="d8">d8</button><button type="button" data-d="d10">d10</button><button type="button" data-d="d12">d12</button><button type="button" data-d="d20">d20</button></div>
+  <div id="result" role="status">Type a roll and press Roll.</div>
+</div>
+</body>
+</html>
