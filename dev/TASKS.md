@@ -13,6 +13,7 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 - [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
 
 ## Next
+- [ ] Wiki menu: group the 8 reference sections under one tab, plus a Wiki page: [planning/wiki-menu.md](planning/wiki-menu.md) (@maddox; needs Brody's OK)
 - [ ] Add the Vercel site address to Firebase's authorized domains, so online tabletop play works there (@brody)
 
 ## Later
