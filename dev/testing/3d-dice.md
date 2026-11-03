@@ -29,6 +29,11 @@ This doesn't change anything on the site. The test page isn't linked from the na
   - Roll support: `NdM` terms and `+`/`−` numbers, up to 12 dice.
     Keep/drop (`4d6kh3`), exploding (`!`) and `d%` stay in the tabletop's `dice.js` for now.
 - **On screen:** frames per second, plus how long the dice took to settle.
+- **Round 2 (after Maddox tried it):**
+  - With several dice, they knocked into each other and some rolls never settled.
+    Now dice **don't collide with each other**, only with the tray. They're thrown in lanes across the tray, so they rarely end up overlapping.
+  - **Hard 8-second limit:** any die still moving or tipped on an edge is then laid flat on its nearest face and read. The result line says when that happened.
+  - **Layout:** the dice box is a **square canvas taking half the screen**: the left half on a computer, the top half on a phone. The controls sit beside or below it.
 
 ## What we learned
 _Partly filled in from the first build. The rest needs trying on a laptop and a phone with a real GPU._

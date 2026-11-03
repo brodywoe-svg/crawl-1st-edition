@@ -1,5 +1,5 @@
 # Wiki menu
-**Status:** draft  ·  **Owner:** maddox  ·  **Roadmap:** none yet
+**Status:** built on the new site (PR #5), waiting for Brody's OK  ·  **Owner:** maddox  ·  **Roadmap:** none yet
 
 ## Goal
 The top bar has 12 items. On anything narrower than a wide laptop it squeezes, then turns into a sideways-scrolling row.
@@ -37,10 +37,10 @@ HOME   CHARACTER CREATOR   WIKI ▾   TABLETOP   ABOUT
   Old links keep working, because the URLs don't change.
 
 ## Steps
-- [ ] Brody OKs the idea and the wording ("Wiki"?) in this plan's PR.
-- [ ] Nav: the Wiki dropdown, Wiki marked as current on its pages, the list-menu code removed.
-- [ ] `wiki.html`, with cards and counts.
-- [ ] Check it on desktop and at phone width, then update `dev/ARCHITECTURE.md` §11.
+- [x] Nav: the Wiki dropdown, Wiki marked as current on its pages, the list-menu code removed (Maddox asked to build it with the defaults below).
+- [x] `wiki.html`, with cards and counts.
+- [x] Checked on desktop and at phone width, and `dev/ARCHITECTURE.md` §11 updated.
+- [ ] Brody OKs it, or asks for changes, on PR #5. Built with the defaults: the name "Wiki", the home cards kept, no Combat line, About kept.
 
 ## Open questions
 - **The name:** "Wiki", or something more in-world, such as "Compendium" or "Rules"?

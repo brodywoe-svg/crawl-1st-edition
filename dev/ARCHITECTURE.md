@@ -233,7 +233,7 @@ The goal is to make Crawl fully digital, with Three.js visualizations eventually
 Plan: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Sections 1–10 above still describe the **live** site (GitHub Pages).
 This section covers the new one (Vercel). Every page and the tabletop now run on it. The Windows app and the cutover are still to do.
 - **Build:**
-  - `vite.config.ts` builds the 11 pages in `web/*.html` into `dist/`. URLs and filenames are the same as on the old site.
+  - `vite.config.ts` builds the pages in `web/*.html` into `dist/`: the old site's 11, with the same URLs, plus `wiki.html` and the `testing/` prototypes.
   - `base: './'` keeps every URL relative.
   - `web/vite/content-files.ts` serves `crawl-*.json`, `admin.json` and `tabletop/` from the repo root in dev, and copies them into `dist/` in a build.
     The tabletop is native ES modules, so it's served as is; the old site serves the same files.
@@ -243,7 +243,9 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
 - **Real TypeScript modules** (shared by every page):
   - `lib/markup.ts`: the text markup and glossary matching (was `GLCORE` in `src/page.html`); `ui/tips.ts`: the glossary tooltips.
   - `lib/github.ts`: admin keys, GitHub saving, the edit log; `ui/admin.ts`: the whole admin UI (was the `ADMIN` block).
-  - `ui/nav.ts`: the nav. Its menus are built from the JSON at load, so they're never stale.
+  - `ui/nav.ts`: the nav, shortened to Home · Character Creator · **Wiki** · Tabletop · About ([planning/wiki-menu.md](planning/wiki-menu.md)).
+    The Wiki menu lists the eight reference sections and links to `wiki.html`, a page of section cards with live counts (`ui/counts.ts`).
+    The old per-section menus are gone; the old scripts' `window.crawlNav*` calls are now no-ops.
     Flyouts that wouldn't fit open to the left, so each menu stays under its item (the old nav slid the Glossary menu far to the left).
   - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
   - The home page (`web/src/pages/home.ts`) is fully TypeScript.

@@ -72,3 +72,6 @@ html.is-admin .navitem.adminonly{display:inline-flex}
 .navmenu.flyleft .navfly{left:auto;right:100%;margin-left:0;margin-right:2px}
 .navmenu.flyleft .navfly::before{left:auto;right:-16px}
 @media (hover:none),(max-width:700px){.navmenu.flyleft .navfly{right:auto;margin-right:0}}
+/* New site only: the divider in the Wiki menu, and its last link */
+.navmenu .navsep{display:block;height:0;border-top:1px solid var(--hair);margin:4px 8px}
+.navmenu a[aria-current="page"]{background:var(--soft)}

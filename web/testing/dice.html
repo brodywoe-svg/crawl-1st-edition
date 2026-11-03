@@ -17,10 +17,16 @@ header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#00
 header h1{margin:0;font-size:1rem;letter-spacing:.06em;text-transform:uppercase}
 header .tag{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:2px 8px;color:#d9b25f}
 header a{color:var(--paper);font-weight:700;font-size:.85rem;margin-left:auto}
-#view{position:relative;flex:1;min-height:0}
+/* the dice box: a square canvas taking half the screen (the left half, or the top half on a phone), controls beside it */
+.layout{flex:1;min-height:0;display:flex}
+#view{position:relative;flex:none;width:min(50vw,100%);aspect-ratio:1/1;max-height:100%;align-self:flex-start;background:#1b1b1b}
 #view canvas{display:block;width:100%;height:100%}
 #fps{position:absolute;top:8px;right:10px;font-size:.75rem;font-weight:700;color:#aaa}
-.panel{background:var(--paper);color:var(--ink);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.panel{flex:1;min-width:0;background:var(--paper);color:var(--ink);padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px;overflow:auto}
+.panel h2{margin:0;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.panel .note{margin:0;font-size:.82rem;font-weight:600;color:var(--muted);line-height:1.5}
+@media (min-width:761px){#view{width:min(50vw,calc(100dvh - 44px))}}
+@media (max-width:760px){.layout{flex-direction:column}#view{width:100%}}
 form{display:flex;gap:8px;flex-wrap:wrap}
 input{flex:1;min-width:160px;font:700 1rem Montserrat,Arial,sans-serif;border:2px solid var(--ink);border-radius:10px;padding:8px 12px}
 button{font:800 .9rem Montserrat,Arial,sans-serif;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);padding:7px 14px;cursor:pointer}
@@ -36,14 +42,19 @@ button:disabled{opacity:.5;cursor:default}
 </head>
 <body>
 <header><h1>3D dice</h1><span class="tag">Prototype</span><a href="../index.html">Back to the site</a></header>
+<main class="layout">
 <div id="view"><span id="fps"></span></div>
 <div class="panel">
+  <h2>Roll</h2>
   <form id="rollForm">
     <input id="expr" value="2d6 + 1d20" aria-label="Roll" autocomplete="off" spellcheck="false">
     <button type="submit" class="solid" id="go">Roll</button>
   </form>
   <div id="quick" aria-label="Roll one die"><button type="button" data-d="d4">d4</button><button type="button" data-d="d6">d6</button><button type="button" data-d="d8">d8</button><button type="button" data-d="d10">d10</button><button type="button" data-d="d12">d12</button><button type="button" data-d="d20">d20</button></div>
   <div id="result" role="status">Type a roll and press Roll.</div>
+  <p class="note">Dice pass through each other, and any die still moving after 8 seconds is laid flat on its nearest face.
+  Rolls take NdM terms and + or − numbers (up to 12 dice).</p>
 </div>
+</main>
 </body>
 </html>

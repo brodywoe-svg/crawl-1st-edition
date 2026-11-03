@@ -1,6 +1,7 @@
 /* 3D dice roller: a prototype (see dev/testing/3d-dice.md). Not linked from the site.
    Three.js draws the dice and cannon-es throws them. When everything has stopped, each die is read from the face
-   pointing up (for a d4, the face pointing down, because a d4 is read at its top point). */
+   pointing up (for a d4, the face pointing down, because a d4 is read at its top point). Dice pass through each other,
+   and any die still moving after 8 s is laid flat on its nearest face, so a roll always finishes. */
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
 
@@ -128,47 +129,49 @@ renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadow
 view.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("#1b1b1b");
-const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-camera.position.set(0, 12, 7); camera.lookAt(0, 0, 0.4);
+// The view is a square (see dice.html), and so is the tray, seen from above at a slight angle.
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+camera.position.set(0, 13.5, 5.5); camera.lookAt(0, 0, 0.3);
 scene.add(new THREE.HemisphereLight("#ffffff", "#444444", 1.6));
 const sun = new THREE.DirectionalLight("#ffffff", 2.2);
 sun.position.set(4, 12, 5); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024);
 Object.assign(sun.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8 });
 scene.add(sun);
 
-const TRAY = { w: 10, d: 6.5 };
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(TRAY.w + 6, TRAY.d + 6), new THREE.MeshStandardMaterial({ color: "#2a3b2e", roughness: 0.95 }));
+const TRAY = { w: 8.5, d: 8.5 };
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(TRAY.w + 8, TRAY.d + 8), new THREE.MeshStandardMaterial({ color: "#2a3b2e", roughness: 0.95 }));
 floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 const rim = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(TRAY.w, 0.01, TRAY.d)), new THREE.LineBasicMaterial({ color: "#8e171c" }));
 scene.add(rim);
 
+// Physics. Dice only collide with the floor and walls, never with each other: dice knocking into each other kept
+// some rolls from ever settling. Collision groups: the tray is group 1, dice are group 2 and only collide with group 1.
+const TRAY_GROUP = 1, DICE_GROUP = 2;
 const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -32, 0) });
 world.allowSleep = true;
 const feltMat = new CANNON.Material("felt"), diceMat = new CANNON.Material("dice");
 world.addContactMaterial(new CANNON.ContactMaterial(feltMat, diceMat, { friction: 0.25, restitution: 0.35 }));
-world.addContactMaterial(new CANNON.ContactMaterial(diceMat, diceMat, { friction: 0.1, restitution: 0.4 }));
-const ground = new CANNON.Body({ mass: 0, material: feltMat, shape: new CANNON.Plane() });
+const trayBody = (shape: CANNON.Shape) => new CANNON.Body({ mass: 0, material: feltMat, shape, collisionFilterGroup: TRAY_GROUP, collisionFilterMask: DICE_GROUP });
+const ground = trayBody(new CANNON.Plane());
 ground.quaternion.setFromEuler(-Math.PI / 2, 0, 0); world.addBody(ground);
 // invisible walls round the tray
 for (const [x, z, ry] of [[TRAY.w / 2, 0, -Math.PI / 2], [-TRAY.w / 2, 0, Math.PI / 2], [0, TRAY.d / 2, Math.PI], [0, -TRAY.d / 2, 0]]) {
-  const wall = new CANNON.Body({ mass: 0, material: feltMat, shape: new CANNON.Plane() });
+  const wall = trayBody(new CANNON.Plane());
   wall.position.set(x, 0, z); wall.quaternion.setFromEuler(0, ry, 0); world.addBody(wall);
 }
 
 function resize(): void {
-  const w = view.clientWidth, h = view.clientHeight;
-  renderer.setSize(w, h, false); camera.aspect = w / h;
-  camera.fov = w < h ? 62 : 40; // phones in portrait: see the whole tray
-  camera.updateProjectionMatrix();
+  const size = Math.round(Math.min(view.clientWidth, view.clientHeight)) || 1;
+  renderer.setSize(size, size, false); camera.aspect = 1; camera.updateProjectionMatrix();
 }
 new ResizeObserver(resize).observe(view); resize();
 
 // ---------------------------------------------------------------- rolling
 const shapes = new Map<Sides, DieShape>();
 const shapeOf = (s: Sides) => { if (!shapes.has(s)) shapes.set(s, makeShape(s)); return shapes.get(s)! };
-const COLORS: Record<Sides, string> = { 4: "#f3ead7", 6: "#f3ead7", 8: "#f3ead7", 10: "#f3ead7", 12: "#f3ead7", 20: "#f3ead7" };
+const SETTLE_MS = 8000; // after this, any die still moving is laid flat on its nearest face
 interface Die { sides: Sides; mesh: THREE.Mesh; body: CANNON.Body }
-let dice: Die[] = [], rolling = false, rollStart = 0, still = 0, pending: ((values: number[]) => void) | null = null;
+let dice: Die[] = [], rolling = false, rollStart = 0, still = 0, pending: ((r: { values: number[]; forced: boolean }) => void) | null = null;
 
 function clearDice(): void {
   for (const d of dice) { scene.remove(d.mesh); world.removeBody(d.body) }
@@ -176,28 +179,46 @@ function clearDice(): void {
 }
 function throwDie(sides: Sides, i: number, n: number): Die {
   const shape = shapeOf(sides);
-  const mesh = new THREE.Mesh(shape.geometry, new THREE.MeshStandardMaterial({ color: COLORS[sides], roughness: 0.45, metalness: 0.05, flatShading: true }));
+  const mesh = new THREE.Mesh(shape.geometry, new THREE.MeshStandardMaterial({ color: "#f3ead7", roughness: 0.45, metalness: 0.05, flatShading: true }));
   mesh.castShadow = true; addLabels(mesh, shape, sides); scene.add(mesh);
-  const body = new CANNON.Body({ mass: 1, material: diceMat, shape: shape.physics, sleepSpeedLimit: 0.12, sleepTimeLimit: 0.25, angularDamping: 0.08, linearDamping: 0.05 });
-  // thrown from the near edge, spread out, with a random spin
-  body.position.set(-TRAY.w / 2 + 1.5 + Math.random() * 1.5, 2.5 + Math.random() * 1.5, (i - (n - 1) / 2) * 0.5 + (Math.random() - 0.5) * 0.4);
+  const body = new CANNON.Body({
+    mass: 1, material: diceMat, shape: shape.physics, collisionFilterGroup: DICE_GROUP, collisionFilterMask: TRAY_GROUP,
+    sleepSpeedLimit: 0.12, sleepTimeLimit: 0.25, angularDamping: 0.08, linearDamping: 0.05,
+  });
+  // thrown from the left edge, spread across the tray so they rarely land on top of each other, with a random spin
+  const lane = n > 1 ? (i / (n - 1) - 0.5) * (TRAY.d - 2.5) : 0;
+  body.position.set(-TRAY.w / 2 + 1.2 + Math.random(), 2.5 + Math.random() * 1.5, lane + (Math.random() - 0.5) * 0.4);
   body.quaternion.setFromEuler(Math.random() * 6.3, Math.random() * 6.3, Math.random() * 6.3);
-  body.velocity.set(9 + Math.random() * 6, -2, (Math.random() - 0.5) * 6);
+  body.velocity.set(7 + Math.random() * 5, -2, (Math.random() - 0.5) * 4);
   body.angularVelocity.set((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 30, (Math.random() - 0.5) * 30);
   world.addBody(body);
   return { sides, mesh, body };
 }
-/** The value showing on a die now that it has stopped. */
-function readDie(d: Die): number {
-  const up = new THREE.Vector3(0, 1, 0), q = d.mesh.quaternion;
-  let best: Face | null = null, bestDot = -Infinity;
-  for (const f of shapeOf(d.sides).faces) {
-    const dot = f.normal.clone().applyQuaternion(q).dot(up) * (d.sides === 4 ? -1 : 1); // a d4 is read from the face it rests on
-    if (dot > bestDot) { bestDot = dot; best = f }
+/** The face being read: the one pointing most nearly up (for a d4, down, because a d4 is read at its top point). */
+function readFace(d: Die): { face: Face; dot: number } {
+  const q = d.mesh.quaternion, sign = d.sides === 4 ? -1 : 1, faces = shapeOf(d.sides).faces;
+  let face = faces[0], dot = -Infinity;
+  for (const f of faces) {
+    const v = f.normal.clone().applyQuaternion(q).y * sign;
+    if (v > dot) { dot = v; face = f }
   }
-  return best!.value;
+  return { face, dot };
 }
-function roll(list: Sides[]): Promise<number[]> {
+/** Lay a die flat on the floor with its read face exactly up (for a d4, exactly down), and stop it. */
+function layFlat(d: Die): void {
+  const { face } = readFace(d), target = new THREE.Vector3(0, d.sides === 4 ? -1 : 1, 0);
+  const turn = new THREE.Quaternion().setFromUnitVectors(face.normal.clone().applyQuaternion(d.mesh.quaternion).normalize(), target);
+  const q = turn.multiply(d.mesh.quaternion.clone());
+  // resting height: the centre sits as far above the floor as the face it rests on is from the centre
+  const restFace = d.sides === 4 ? face : shapeOf(d.sides).faces.find(o => o.normal.dot(face.normal) < -0.999) || face;
+  const clamp = (v: number, half: number) => Math.max(-half + 0.8, Math.min(half - 0.8, v));
+  const x = clamp(d.body.position.x, TRAY.w / 2), z = clamp(d.body.position.z, TRAY.d / 2), y = restFace.center.dot(restFace.normal);
+  d.body.position.set(x, y, z);
+  d.body.quaternion.set(q.x, q.y, q.z, q.w);
+  d.body.velocity.setZero(); d.body.angularVelocity.setZero(); d.body.sleep();
+  d.mesh.position.set(x, y, z); d.mesh.quaternion.copy(q);
+}
+function roll(list: Sides[]): Promise<{ values: number[]; forced: boolean }> {
   clearDice();
   dice = list.map((s, i) => throwDie(s, i, list.length));
   rolling = true; rollStart = performance.now(); still = 0;
@@ -214,23 +235,19 @@ renderer.setAnimationLoop(now => {
     for (const d of dice) { d.mesh.position.copy(d.body.position as unknown as THREE.Vector3); d.mesh.quaternion.copy(d.body.quaternion as unknown as THREE.Quaternion) }
     const calm = dice.every(d => d.body.sleepState === CANNON.Body.SLEEPING || (d.body.velocity.length() < 0.05 && d.body.angularVelocity.length() < 0.05));
     still = calm ? still + 1 : 0;
-    // stopped for a few frames, or a die balanced on an edge for too long: nudge it, then give up after 8 s
-    if (still > 8 || now - rollStart > 8000) {
+    const flat = (d: Die) => readFace(d).dot > 0.98;
+    // done when every die has stopped flat, or after SETTLE_MS: then any die still moving or tipped is laid flat
+    if ((still > 8 && dice.every(flat)) || now - rollStart > SETTLE_MS) {
+      const forced = dice.filter(d => !(calm && flat(d)));
+      forced.forEach(layFlat);
       rolling = false;
-      const res = pending; pending = null; res?.(dice.map(readDie));
-    } else if (now - rollStart > 4000) {
-      for (const d of dice) if (Math.abs(1 - maxUpDot(d)) > 0.02 && d.body.velocity.length() < 0.2) d.body.applyImpulse(new CANNON.Vec3(0, 1.5, 0));
+      const res = pending; pending = null; res?.({ values: dice.map(d => readFace(d).face.value), forced: forced.length > 0 });
     }
   }
   renderer.render(scene, camera);
   frames++;
   if (now - fpsAt > 500) { fpsEl.textContent = `${Math.round(frames * 1000 / (now - fpsAt))} fps`; frames = 0; fpsAt = now }
 });
-/** How flat a die is lying: 1 when a face (for a d4, its base) points straight up or down. */
-function maxUpDot(d: Die): number {
-  const q = d.mesh.quaternion;
-  return Math.max(...shapeOf(d.sides).faces.map(f => f.normal.clone().applyQuaternion(q).y * (d.sides === 4 ? -1 : 1)));
-}
 
 // ---------------------------------------------------------------- the form
 /** "2d6 + d20 - 1" -> the dice to throw and the number to add. Only NdM and plain numbers, joined by + or -. */
@@ -268,7 +285,7 @@ form.addEventListener("submit", async e => {
   e.preventDefault();
   let p; try { p = parse(input.value) } catch (x) { out.textContent = (x as Error).message; out.classList.add("bad"); return }
   out.classList.remove("bad"); out.textContent = "Rolling…"; go.disabled = true;
-  const t0 = performance.now(), values = await roll(p.dice), secs = ((performance.now() - t0) / 1000).toFixed(1);
+  const t0 = performance.now(), { values, forced } = await roll(p.dice), secs = ((performance.now() - t0) / 1000).toFixed(1);
   go.disabled = false;
   // put the values back into the terms they came from, keeping their order
   let i = 0;
@@ -282,5 +299,5 @@ form.addEventListener("submit", async e => {
     const before = p.terms.slice(0, k).reduce((c, x) => c + (x.sides ? x.n : 0), 0);
     return acc + t.sign * values.slice(before, before + t.n).reduce((a, b) => a + b, 0);
   }, 0);
-  out.innerHTML = `<b>${total}</b><span>${parts.join(" ").replace(/^\+ /, "")}</span><small>Settled in ${secs} s</small>`;
+  out.innerHTML = `<b>${total}</b><span>${parts.join(" ").replace(/^\+ /, "")}</span><small>${forced ? `Settled by the ${SETTLE_MS / 1000} s limit` : `Settled in ${secs} s`}</small>`;
 });
