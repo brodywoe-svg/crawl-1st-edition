@@ -108,7 +108,8 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
 - [x] Pull out the rest of the shared code: helpers, the markup renderer and glossary tooltips, Admin saving (`putFile`, `recordEdits`).
 - [x] Put every page on the new site (done in one PR, by choice). Each page's script runs unchanged through `web/vite/legacy-pages.ts`, so both sites share it until cutover. See ARCHITECTURE.md §11.
 - [ ] Rewrite each page's scripts as TypeScript modules, one page at a time, and take it off `LEGACY_PAGES`. Start with the smallest: races → glossary → items → classes → spells → creator.
-- [x] Serve the tabletop on the new site (as is, from `tabletop/`), and fix its admin sign-in for `admin.json` v2.
+- [x] Serve the tabletop on the new site (as is, from `tabletop/`).
+- [ ] Tabletop admin sign-in still expects the old single-key `admin.json` (see `dev/ARCHITECTURE.md` §9). A fix was reverted on purpose, because admin login is moving to Supabase.
 - [ ] Move the tabletop into `web/src` as TypeScript: `net.js` and `dice.js` go in `lib/`, and it uses the shared renderer.
 - [ ] Add the Vercel domain to Firebase's authorized domains (Brody, in the Firebase console), so online play works on the new site.
 - [ ] Windows app:

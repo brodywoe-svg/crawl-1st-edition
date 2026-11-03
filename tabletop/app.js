@@ -96,19 +96,13 @@ async function adminSignIn() {
   const pass = $("admPass").value; if (!pass) { $("admPass").focus(); return }
   $("admGo").disabled = true; $("admGo").textContent = "Checking…"; $("lobErr").textContent = "";
   try {
-    let file = null;
-    for (const u of [new URL("../admin.json", location.href).href, content.SITE + "admin.json"]) { try { const r = await fetch(u, { cache: "no-store" }); if (r.ok) { file = await r.json(); break } } catch (e) { } }
-    /* admin.json v2 is {v:2, users:[{name, box}]}, one locked key per admin; v1 was a single box */
-    const boxes = !file ? [] : Array.isArray(file.users) ? file.users.map(u => u && u.box).filter(b => b && b.data) : file.data ? [file] : [];
-    if (!boxes.length) throw new Error("Couldn't reach the Crawl website to check the password.");
+    let box = null;
+    for (const u of [new URL("../admin.json", location.href).href, content.SITE + "admin.json"]) { try { const r = await fetch(u, { cache: "no-store" }); if (r.ok) { box = await r.json(); break } } catch (e) { } }
+    if (!box || !box.data) throw new Error("Couldn't reach the Crawl website to check the password.");
     const unb = x => Uint8Array.from(atob(x), c => c.charCodeAt(0));
     const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
-    let ok = false;
-    for (const box of boxes) {
-      const k = await crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: unb(box.salt), iterations: box.iterations || 600000 }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
-      try { await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb(box.iv) }, k, unb(box.data)); ok = true; break } catch (e) { }
-    }
-    if (!ok) throw new Error("That password isn't right.");
+    const k = await crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: unb(box.salt), iterations: box.iterations || 600000 }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    try { await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb(box.iv) }, k, unb(box.data)) } catch (e) { throw new Error("That password isn't right.") }
     localStorage.setItem("tt-admin", "1"); $("admPass").value = ""; lobbyAccess(); toast("Signed in as admin.");
   } catch (e) { $("lobErr").textContent = e.message }
   $("admGo").disabled = false; $("admGo").textContent = "Sign in";
