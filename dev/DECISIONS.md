@@ -40,6 +40,12 @@ Template:
    - Weighed against: an account-wide DM role granted by admins (less open, and it slows new groups down),
      and DMs editing characters directly (simpler, but a player's sheet could change without them).
    - Campaign creation is capped per account (10), and needs a real, confirmed account, to limit spam.
+   - Players see each other's characters only as a party summary (name, race, class, level, portrait). The full sheet is visible
+     only if its owner shares it with that campaign.
+5. **Free services, no domain, for now.** Account emails (confirmations, password resets) are sent by a dedicated Gmail account over SMTP,
+   about 500 a day. Its app password lives only in Supabase's settings.
+   - Weighed against: buying a domain for a real email service (better delivery, but it costs money).
+   - We can switch later in Supabase's SMTP settings, with no code change.
 **Trade-offs:**
 - Two projects to keep in step: migrations must be pushed to both.
 - `campaign_items` puts most of the data in JSON, so rules about it are written against `data->…` fields. That's harder to read than columns.

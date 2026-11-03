@@ -11,7 +11,7 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 | Phase | What | Status |
 | --- | --- | --- |
 | 1 | Admins: `profiles`, sign-in, saving to GitHub | Built (PR #8). Waiting on the `GITHUB_TOKEN` secret |
-| 2 | Player accounts, and Character Creator characters saved to the cloud | Planned. Blocked on email (see Open questions) |
+| 2 | Player accounts, and Character Creator characters saved to the cloud | Planned. Email: a free Gmail account, no domain |
 | 3 | Campaigns: dungeon masters see their players' characters and propose changes to them | Planned |
 | 4 | The tabletop on Supabase instead of Firebase, built on campaigns | Planned |
 | Later | Rules checked on the server | Sketch only |
@@ -87,8 +87,14 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 **Sign-up** (in `supabase/config.toml`, then `config push`):
 - Sign-up turned on.
 - Email confirmation on.
-- A CAPTCHA on sign-up (Cloudflare Turnstile, which is free).
-- A custom email provider. Supabase's built-in email is only for testing (a handful per hour).
+- A CAPTCHA on sign-up (Cloudflare Turnstile, which is free and works on the `vercel.app` address).
+- **Email, free and with no domain** (decided 2026-11-02): Supabase's built-in email only sends a handful an hour, so it's for testing only.
+  Instead, confirmation and reset emails go through a **dedicated Gmail account** (e.g. a new `crawl…@gmail.com`, not a personal one) over Gmail's SMTP:
+  - Turn on 2-step verification for it, make an **app password**, and enter it in the Supabase dashboard
+    (**Authentication → Emails → SMTP settings**: host `smtp.gmail.com`, port 465, the Gmail address as the user and sender).
+    It's never in the repo.
+  - **Limits:** about 500 emails a day, plenty while testing. Some inboxes may file them as spam.
+  - **Later:** if we get a domain, switch to a proper email service (e.g. Resend) in the same SMTP settings, with no code change.
 - A password-reset page (`web/account.html`) that the reset email links to.
 
 **Site:**
@@ -125,7 +131,7 @@ A **campaign** is a group of players and their characters, run by one or more du
   - a DM can make a player a co-DM, or remove a member;
   - the last DM can't leave without handing over the campaign or deleting it.
 - **`campaign_characters`**:
-  - columns: `campaign_id`, `character_id`, `added_at`;
+  - columns: `campaign_id`, `character_id`, `shared` (the owner lets the party see the full sheet; off by default), `added_at`;
   - a player adds their **own** character to a campaign they're in; the player or a DM can take it out.
 - **`character_changes`**: a DM's proposed edits to a player's character.
   - Columns: `id`, `character_id`, `campaign_id`, `proposed_by`, `changes jsonb` (a list of `{path, from, to}`, e.g. gold 10 → 60),
@@ -139,7 +145,7 @@ A **campaign** is a group of players and their characters, run by one or more du
 | | Player | DM (of this campaign) | Admin |
 | --- | --- | --- | --- |
 | Their own characters | see, change, delete | — | — |
-| Characters in the campaign | their own only | **see** (not change) | see |
+| Characters in the campaign | the **party summary** (below); full sheets only for their own, or ones shared with them | **see** in full (not change) | see |
 | Propose a change to a character | — | yes, for characters in their campaign | — |
 | Accept or reject a proposal | their own characters | withdraw their own proposals | — |
 | Campaign settings, invite code, members | — | yes | yes (support) |
@@ -147,13 +153,17 @@ A **campaign** is a group of players and their characters, run by one or more du
 
 - A DM only sees a character while it's in their campaign. Taking it out, or the player leaving, ends that at once,
   because the database checks membership on every read.
+- **Players can't see each other's full characters, by default** (decided 2026-11-02).
+  - **The party summary.** Members see each character's name, race, class, level and portrait, through `campaign_party(c)`,
+    a server function that returns only those fields, never the whole sheet.
+  - **Sharing.** A player can share their full sheet with the rest of the party: `campaign_characters.shared` (off by default), which they switch on per campaign.
 - Play-time changes (HP, conditions, spent Action Pool) aren't proposals. They go on the campaign's live copy (phase 4), which DMs control, as the tabletop's `snap`/`live` split does today.
 - Helper functions: `is_campaign_member(c)`, `is_campaign_dm(c)`, and `can_view_character(id)` (owner, a DM of a campaign it's in, or an admin).
 
 **RLS checklist:**
 - a DM sees characters in their campaign but not the player's other characters;
 - a DM can't change a character directly, only propose;
-- a player in the same campaign can't see another player's character;
+- a player in the same campaign sees another player's summary but not their full character, until that player shares it;
 - after a character leaves the campaign, the DM can't see it;
 - accepting a stale proposal changes nothing;
 - a wrong invite code doesn't join;
@@ -205,14 +215,15 @@ so `app.js` barely changes (as the Supabase decision says). The game data shape 
 - [ ] Brody OKs Supabase, and the proposed entries in DECISIONS.md (staging project, the tabletop table design, anonymous players, roles).
 - [ ] Create `crawl-dev`, add `npm run db:types`, and point Vercel previews at `crawl-dev` (dev/SETUP.md).
 - [ ] Phase 1: `GITHUB_TOKEN` from Brody, then test end to end.
-- [ ] Phase 2: answer the email question; build `characters`, sign-up, the account page and sync (own PR).
+- [ ] Phase 2: make the Gmail account, add its SMTP settings and Turnstile; build `characters`, sign-up, the account page and sync (own PR).
 - [ ] Phase 3: campaigns, members, characters in campaigns, DM change proposals and the Creator's accept/reject (own PR).
 - [ ] Phase 4: the tabletop's tables, RLS, Realtime, storage, `SupabaseNet` (own PR, or two).
 
+## Decided (2026-11-02, Maddox)
+- **Free services only, no domain for now:** a dedicated Gmail account sends the account emails; the site stays on its `vercel.app` address.
+- **Campaign limit:** 10 per account.
+- **Party privacy:** players can't see each other's full characters unless the owner shares; everyone in the campaign sees the party summary.
+
 ## Open questions
-- **Email for player accounts (blocks phase 2):** confirmation and reset emails need an email provider (e.g. Resend's free tier)
-  **and a domain to send from**. This is the same question as Brody's "custom domain?" in SUMMARY.md.
 - **Can admins see every player's characters?** Planned: yes, for support. Or only their owners?
-- **Can players in a campaign see each other's characters?** Planned: no, only the DMs. The party view on the tabletop uses each character's snapshot there.
-- **Campaign limit:** 10 per account, to stop spam. Is that right?
 - **Chat history:** keep it all, or cap it per game (e.g. the newest 1,000 messages)?
