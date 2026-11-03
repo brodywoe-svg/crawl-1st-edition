@@ -13,6 +13,7 @@ const PAGES = ["index", "wiki", "spells", "glossary", "conditions", "items", "cr
 export default defineConfig({
   root: web,
   base: "./", // relative URLs, so the same build works on Vercel and inside the Electron app
+  envDir: root, // .env.local sits at the repo root (see .env.example)
   plugins: [contentFiles(root), legacyPages(root + "src")],
   build: {
     outDir: fileURLToPath(new URL("./dist", import.meta.url)),

@@ -243,6 +243,13 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
 - **Real TypeScript modules** (shared by every page):
   - `lib/markup.ts`: the text markup and glossary matching (was `GLCORE` in `src/page.html`); `ui/tips.ts`: the glossary tooltips.
   - `lib/github.ts`: admin keys, GitHub saving, the edit log; `ui/admin.ts`: the whole admin UI (was the `ADMIN` block).
+  - `lib/auth.ts`: Supabase sign-in ([planning/supabase-admin-login.md](planning/supabase-admin-login.md)). It's on only when
+    `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are set (`.env.example`); otherwise the new site uses the `admin.json` password, like the old one.
+    With it on, admins sign in with an email and password, and `gh()` sends GitHub calls to the `github` Edge Function, which holds the key.
+- **Supabase** (`supabase/`, managed with `npx supabase`):
+  - `migrations/`: the database. So far, `profiles` (one per account: `display_name`, `role` `player`/`admin`), with row-level security.
+  - `functions/github/`: reads and commits `crawl-*.json` for signed-in admins, using the `GITHUB_TOKEN` secret.
+  - `config.toml`: auth settings (sign-up off, 12-character passwords), pushed with `npx supabase config push`.
   - `ui/nav.ts`: the nav, shortened to Home · Character Creator · **Wiki** · Tabletop · About ([planning/wiki-menu.md](planning/wiki-menu.md)).
     The Wiki menu lists the eight reference sections and links to `wiki.html`, a page of section cards with live counts (`ui/counts.ts`).
     The old per-section menus are gone; the old scripts' `window.crawlNav*` calls are now no-ops.

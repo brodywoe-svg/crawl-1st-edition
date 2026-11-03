@@ -1,10 +1,12 @@
-/** The admin sign-in modal. Copied from src/page.html. */
+/** The admin sign-in modal. Copied from src/page.html, plus an email field (#emailRow) shown when signing in with Supabase. */
 export const ADMIN_MODAL = `<div class="modal" id="adminModal" hidden>
   <form class="mbox" id="adminForm" novalidate role="dialog" aria-modal="true" aria-labelledby="adminTitle">
     <div class="mhead"><h2 id="adminTitle">Admin sign-in</h2></div>
     <div class="mbody">
       <div id="loginPane">
-        <label class="mlabel" for="adminPass">Admin password</label>
+        <div id="emailRow" hidden><label class="mlabel" for="adminEmail">Email</label>
+        <input type="email" id="adminEmail" autocomplete="username" spellcheck="false"></div>
+        <label class="mlabel" for="adminPass" id="adminPassLabel">Admin password</label>
         <input type="password" id="adminPass" autocomplete="current-password">
       </div>
       <div id="setupPane" hidden>

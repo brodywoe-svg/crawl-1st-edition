@@ -21,6 +21,26 @@ Template:
 
 ---
 
+## 2026-11-02: Admins sign in with Supabase accounts; a server function saves to GitHub
+**Status:** proposed, waiting on Brody (depends on the Supabase entry below) · **Who:** maddox
+**Why:** Admin access today is a GitHub key per admin, encrypted with that admin's password and published in `admin.json`.
+Anyone can download it and try passwords offline, and the unlocked key lives in the browser. Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md).
+Options we weighed:
+- **Email + password** (chosen): plain for Brody, with no GitHub sign-in needed. One GitHub key, kept as a server secret.
+- **Sign in with GitHub:** saves would commit as each person's own GitHub account, with no stored key. But GitHub's permission
+  covers all of that person's public repos, and every admin would need write access to the repo.
+- **Magic link by email:** no password, but it needs an email provider set up, and a link to click every time you sign in.
+**Decision:**
+- On the new site, admins sign in to Supabase with an email and password. Sign-up is off; admins are invited from the dashboard,
+  and the admin role is set there.
+- Saves still commit `crawl-*.json` to GitHub, through a Supabase Edge Function that checks the caller is an admin.
+- The same `profiles` table will hold player accounts later.
+- The old site keeps the `admin.json` password until cutover. `admin.json` is retired after that.
+**Trade-offs:**
+- Commits are made by the GitHub account that owns the function's key. "(by name)" in the commit message says who really edited, as it does today.
+- A Supabase outage blocks admin saves on the new site (the old site still works until cutover).
+- Free Supabase projects pause after a week with no activity. Opening the dashboard wakes them.
+
 ## 2026-11-02: Host the site on Vercel, replacing GitHub Pages at cutover
 **Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
 **Why:** The new Vite site needs a build step, and GitHub Pages can only do that through a GitHub Actions workflow we'd have to maintain.

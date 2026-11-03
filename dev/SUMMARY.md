@@ -25,16 +25,18 @@ So we're moving it to a modern setup, **one page at a time**, while the current 
 | **React later** | React is a popular way to build complex screens. We'll use it later for the automated character sheet and combat. Not now. | Maddox agreed, needs your OK |
 | **Vercel** | The service that hosts the new site. It builds it automatically and makes the preview links. Free for non-commercial projects. | Maddox agreed, needs your OK |
 | **Supabase vs Firebase** | Where accounts, saved characters and online tabletop games will live. Maddox suggests Supabase: stronger security, and better suited to game rules. | **Your call** |
+| **Admin sign-in with Supabase** | Instead of the admin password, you'd sign in with your email and a password. Your saves work the same, but there's no secret key hidden in the site any more. Built and switched off until you agree. | **Your call** (goes with the one above) |
 
 The full reasoning for each one is in [DECISIONS.md](DECISIONS.md).
 
 ## What we need from you
 1. **Approve or question the decisions** above, by commenting on the pull request.
 2. **Supabase or Firebase?** If you're unsure, ask Maddox, or ask Claude to explain the trade-offs.
-3. **The old claude.ai editing on the Spells page.** That page started life as an artifact in the claude.ai chat app, and it can still save spells back there.
-   Do you still edit spells that way? If not, we'll remove it.
-4. **Connect Vercel** (about 5 minutes, once). See step 3 of [QUICKSTART.md](QUICKSTART.md).
-5. **A custom domain?** Do you want an address like `crawlrpg.com` (about $10–15 a year)? Without one, the site lives at a `something.vercel.app` address.
+3. **If you say yes to Supabase:** accept Maddox's invite to the "Crawl" organization on supabase.com (it comes by email).
+   Maddox sets up your admin account; you'll get a starting password to change after you sign in.
+4. **A custom domain?** Do you want an address like `crawlrpg.com` (about $10–15 a year)? Without one, the site lives at a `something.vercel.app` address.
+
+Already done: Vercel is connected, and the Spells page's old claude.ai editing was dropped on the new site.
 
 ## What happens next
 1. Maddox ports the pages one by one, starting with the home page. Each one comes as its own pull request with a preview link.
