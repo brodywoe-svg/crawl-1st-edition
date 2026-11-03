@@ -1,10 +1,4 @@
 /* Wiki page (wiki.html): a card for each reference section, with live counts. The nav's Wiki menu lists the same sections. */
-import "../styles/reset.css";
-import "../styles/base.css";
-import "../styles/nav.css";
-import "../styles/conditions.css";
-import "../styles/home.css";
-import "../styles/footer.css";
 import { initNav } from "../ui/nav";
 import { initTheme } from "../ui/theme";
 import { initAdmin, restoreAdmin } from "../ui/admin";

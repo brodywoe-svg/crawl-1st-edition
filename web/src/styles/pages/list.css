@@ -1,0 +1,8 @@
+/* Every stylesheet a list page needs, in the order the old build stacked them (admin.css was added at run time, so it's last).
+   One file per kind of page keeps that order exact in the build. */
+@import "../reset.css";
+@import "../base.css";
+@import "../nav.css";
+@import "../conditions.css";
+@import "../footer.css";
+@import "../admin.css";

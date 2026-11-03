@@ -8,7 +8,7 @@ import { legacyPages } from "./web/vite/legacy-pages.ts";
 const root = fileURLToPath(new URL(".", import.meta.url));
 const web = fileURLToPath(new URL("./web/", import.meta.url));
 const PAGES = ["index", "wiki", "spells", "glossary", "conditions", "items", "crafting", "races", "classes", "backgrounds", "feats", "creator",
-  "testing/dice"]; // prototypes (dev/testing/) are built but not linked from the nav
+  "testing/dice"]; // prototypes (dev/testing/), linked from the admin-only Testing menu (TESTING in web/src/ui/nav.ts)
 
 export default defineConfig({
   root: web,

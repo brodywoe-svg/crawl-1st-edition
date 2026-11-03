@@ -8,7 +8,7 @@ export const LEGACY_SITE = "https://brodywoe-svg.github.io/crawl-1st-edition/";
 
 /** Pages that exist in this build. Links to anything else that's relative (the tabletop, the installer zip) go to the old site. */
 export const PORTED = new Set(["index.html", "wiki.html", "spells.html", "glossary.html", "conditions.html", "items.html", "crafting.html",
-  "races.html", "classes.html", "backgrounds.html", "feats.html", "creator.html", "tabletop/"]);
+  "races.html", "classes.html", "backgrounds.html", "feats.html", "creator.html", "tabletop/", "testing/dice.html"]);
 
 /** Point a relative link at the old site if its page hasn't been ported yet. */
 export function siteHref(href: string): string {

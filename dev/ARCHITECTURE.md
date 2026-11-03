@@ -247,6 +247,8 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     The Wiki menu lists the eight reference sections and links to `wiki.html`, a page of section cards with live counts (`ui/counts.ts`).
     The old per-section menus are gone; the old scripts' `window.crawlNav*` calls are now no-ops.
     Flyouts that wouldn't fit open to the left, so each menu stays under its item (the old nav slid the Glossary menu far to the left).
+    Signed-in admins also see Tabletop and a **Testing** menu listing the prototypes in `web/testing/` (the `TESTING` list in `ui/nav.ts`; add a page there when you build one).
+    It's hidden with CSS only (`html.is-admin`), like Tabletop, so the pages themselves are still reachable by URL.
   - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
   - The home page (`web/src/pages/home.ts`) is fully TypeScript.
 - **Page scripts still shared with the old site** (`src/*.js`, and the Spells script in `src/page.html`):
@@ -260,4 +262,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
   - **To move a page off this:** rewrite its scripts as TypeScript modules under `web/src/pages/`, then remove it from `LEGACY_PAGES`.
 - **Page markup** (`web/*.html`) was generated once from the `sitekit.py` shells and `src/page.html`. The admin modal is left out because `ui/admin.ts` adds it.
 - **CSS** is copied as is from `src/page.html` and `tools/sitekit.py` into `web/src/styles/`. Keep the copies in sync until cutover.
+  - Each page `<link>`s one file from `web/src/styles/pages/` (home, list, classes, creator, spells), which `@import`s the sheets in the old cascade order.
+    Linking it in the HTML (not importing it from the script) means the page is styled before its first paint; CSS imported from JS showed the page as plain HTML for a moment, especially under `npm run dev`.
+  - Each page also starts with an empty `.sitenav-ph` bar the nav's height, which `initNav` swaps for the real nav, so the page doesn't jump down when the nav arrives.
 - **Still on the old site only:** the Windows app (`app/`, the installer zip). The footer's download link still points to github.io.

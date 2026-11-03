@@ -1,7 +1,6 @@
 /* The admin UI shared by every page (ported from the /*@ADMIN@*\/ block in src/page.html):
    the sign-in and setup modal, the account modal (name, password, other admins), the Admin Options menu
    and the "Last edited by" panel. The GitHub and crypto side is in lib/github.ts. */
-import "../styles/admin.css";
 import { $, esc } from "./dom";
 import { ADMIN_MODAL } from "./admin-modal.html";
 import { toggleTree } from "./theme";

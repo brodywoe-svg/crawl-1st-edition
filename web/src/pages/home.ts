@@ -1,11 +1,5 @@
 /* Home page (index.html): cards to every part of the site, with live counts from the content files.
    Ported from src/home.js and home_shell() in tools/sitekit.py. The Wiki page (pages/wiki.ts) works the same way. */
-import "../styles/reset.css";
-import "../styles/base.css";
-import "../styles/nav.css"; // same cascade order as the old site: page, nav, layout, home
-import "../styles/conditions.css";
-import "../styles/home.css";
-import "../styles/footer.css";
 import { fixLinks } from "../config";
 import { refreshCounts } from "../ui/counts";
 import { initNav } from "../ui/nav";

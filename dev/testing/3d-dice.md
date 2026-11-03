@@ -29,6 +29,7 @@ This doesn't change anything on the site. The test page isn't linked from the na
   - Roll support: `NdM` terms and `+`/`−` numbers, up to 12 dice.
     Keep/drop (`4d6kh3`), exploding (`!`) and `d%` stay in the tabletop's `dice.js` for now.
 - **On screen:** frames per second, plus how long the dice took to settle.
+- **Where:** signed-in admins reach it from the **Testing** menu in the nav (visitors don't see the menu).
 - **Round 2 (after Maddox tried it):**
   - With several dice, they knocked into each other and some rolls never settled.
     Now dice **don't collide with each other**, only with the tray. They're thrown in lanes across the tray, so they rarely end up overlapping.
