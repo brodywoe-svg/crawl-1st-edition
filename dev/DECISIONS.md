@@ -21,6 +21,125 @@ Template:
 
 ---
 
+## 2026-11-02: Host the site on Vercel, replacing GitHub Pages at cutover
+**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
+**Why:** The new Vite site needs a build step, and GitHub Pages can only do that through a GitHub Actions workflow we'd have to maintain.
+We weighed two options:
+- **GitHub Pages + Actions.**
+  - **For:** free, and it's what we use today.
+  - **Against:** no PR previews without extra work, and no server code.
+- **Vercel.**
+  - **For:** it builds Vite automatically.
+  - **For:** every PR gets its own **preview link** to try before merging.
+  - **For:** it can run small server functions if we ever need them.
+  - **For:** custom domains are easy.
+
+**Decision:**
+- Vercel builds `npm run build` and hosts `dist/`. `main` is production, and every PR gets a preview.
+- The old GitHub Pages site stays live until the new one matches it. Then we cut over.
+- Admin saves still commit to `main`, and each one triggers a rebuild of about 1 minute.
+  `vercel.json` skips the rebuild for commits that only touch `crawl-edits.json`, `dev/` or Markdown, so each save costs one build, not two.
+
+**Trade-offs:**
+- **Hobby plan limits.** The free Hobby plan is for **non-commercial use only**. If Crawl is ever sold, we need Pro (about $20/month).
+  It also limits deploys per day (100 at the time of writing; check it when we set up). That's fine unless there's a very heavy Admin editing day.
+- **Brody's account.** Hobby allows one person per account, so the project lives on Brody's Vercel account, since Brody owns the repo.
+  Maddox sees previews through the links Vercel posts on each PR.
+- **The site address changes** from `brodywoe-svg.github.io/crawl-1st-edition/`.
+  At cutover the old pages become redirects. We could also add a custom domain.
+
+## 2026-11-02: Port to plain TypeScript now, and move the UI to React later
+**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
+**Why:**
+- Today's pages build HTML as strings and redraw by hand. That's fine for the compendium, but it gets harder as the creator,
+  the rules automation and the tabletop grow.
+- We weighed three options:
+  - **plain TypeScript:** the smallest, lowest-risk port, because the current code converts mostly in place,
+  - **React now:** better for complex, live UI, but every page's UI would have to be rewritten during the port, which makes it slower and riskier,
+  - **Svelte:** lighter, but a smaller ecosystem.
+
+  Three.js works with or without React. React Three Fiber, a wrapper for using Three.js inside React, is optional.
+
+**Decision:**
+- The Vite refactor ports the site in **plain TypeScript**, with no UI framework.
+- **React is the planned UI framework for later.** It gets adopted page by page, after the port, starting with new rules-automation UI.
+  See [planning/react-migration.md](planning/react-migration.md).
+- To keep that move cheap, game logic stays framework-free in plain TypeScript modules (`lib/`):
+  data loading, the markup renderer, Admin saving and, later, the rules engine.
+
+**Trade-offs:**
+- For a while there will be two UI styles: string-rendered pages and React pages.
+- Some UI ported now will be rewritten later. That's accepted, because the port has to land first and the rules UI is mostly new screens anyway.
+
+## 2026-11-02: The client is rebuilt as TypeScript + Vite, one build for web, PC and mobile
+**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
+**Why:**
+- The site has no module system. `build.py` concatenates plain scripts into one global scope.
+- Three.js and most modern libraries expect ES modules and a bundler.
+- We want web, PC and (later) mobile from one codebase.
+- We want the rules engine to be shared code that runs both on the client and on the server.
+
+Options we weighed:
+- **Keep `build.py` and add modules by hand.** No new tooling, but it fights every library we'd want to use.
+- **TypeScript + Vite.** This is the standard setup for Three.js. It gives fast dev reloads and catches type errors in rules code.
+- **A heavier framework (Next.js etc.).** It's built for server-rendered sites, which we don't need.
+
+**Decision:**
+- Use TypeScript and Vite.
+- **Web:** the Vite build, hosted on Vercel (see the entry above).
+- **PC:** Electron loads the same build. It's packaged with `electron-builder` and updates itself
+  from GitHub Releases with `electron-updater`, which replaces the hand-made PowerShell installer.
+- **Mobile, later:** Capacitor wraps the same build.
+
+The migration is planned in [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md).
+**Trade-offs:**
+- We'll need Node.js and npm, which ends the "Python stdlib only, no dependencies" rule.
+- The site will need a build step (run by Vercel) instead of committed HTML.
+- The UI framework is covered in the entry above: plain TypeScript now, React later.
+- The Windows app won't be code-signed at first, so Windows SmartScreen will warn on the first install, as it does today.
+
+## 2026-11-02: Supabase over Firebase as the backend
+**Status:** proposed, waiting on Brody · **Who:** maddox
+**Why:** A fully digital Crawl needs things that GitHub and Firebase, as we use them now, can't do well:
+- player accounts,
+- characters saved to the cloud,
+- real permissions (today any anonymous user can read and write any tabletop game),
+- rules enforced on the server,
+- proper storage for map images (today they're data URLs inside the database).
+
+Note that Three.js runs entirely in the browser, so it didn't factor into this choice.
+
+Options we weighed:
+- **Firebase** (expand what the tabletop already uses):
+  - **For:** there's nothing to migrate.
+  - **Against:** its document-tree model is awkward for relational rules data (classes → features → costs, characters → items).
+  - **Against:** bandwidth pricing gets expensive with maps and assets.
+  - **Against:** we'd be locked into Google.
+- **Supabase** (hosted Postgres with auth, realtime sync, storage and serverless functions):
+  - **For:** relational data fits the content.
+  - **For:** row-level security enforces permissions like "only the GM can edit fog" on the server.
+  - **For:** it has real file storage.
+  - **For:** its Edge Functions run TypeScript, so they can share the rules code.
+  - **For:** it's open source, self-hostable plain Postgres, so there's no lock-in.
+  - **For:** the free tier covers us while we're testing.
+- **A custom Node server, e.g. Colyseus:**
+  - **For:** full control over live, server-run combat.
+  - **Against:** we'd be running servers ourselves, which is too much for now.
+  - We can add one alongside Supabase later if live combat needs it.
+- **Convex:**
+  - **For:** TypeScript-native and pleasant to use.
+  - **Against:** it's smaller and proprietary.
+
+**Decision:**
+- Use Supabase for accounts, characters, tabletop sync and asset storage.
+- The tabletop moves over by adding a `SupabaseNet` behind the existing `net.js` API. The rest of `app.js` shouldn't need to change.
+- Game content stays in `crawl-*.json` for now (see the entry below). Moving it into Postgres would be its own decision.
+
+**Trade-offs:**
+- It's a new service with its own keys and dashboard to manage.
+- Existing Firebase tabletop games won't carry over unless we write an export.
+- Postgres schema changes need migrations, which is more discipline than JSON.
+
 ## 2026-11-02: Dev docs live in the repo as a few Markdown files
 **Status:** proposed · **Who:** maddox
 **Why:** Two people plus Claude Code agents need shared context that survives between sessions. Agents read
