@@ -13,13 +13,17 @@ export type GhError = { code: "bad_key" | "no_access" | "conflict" | "http"; sta
 /** The signed-in admin, if any. Same sessionStorage keys as the old site. */
 export const session = { admin: false, key: null as string | null, name: "" };
 const SS_KEY = "crawl-admin-key", SS_NAME = "crawl-admin-name";
+/* The same state under the old global names, for the page scripts still shared with the old site (see web/vite/legacy-pages.ts).
+   They're live bindings: importers always see the current value, but only this module can change them. */
+export let ADMIN = false, GH_KEY: string | null = null, ADMIN_NAME = "";
+const sync = () => { ADMIN = session.admin; GH_KEY = session.key; ADMIN_NAME = session.name };
 
 export function saveSession(key: string, name: string): void {
-  Object.assign(session, { admin: true, key, name });
+  Object.assign(session, { admin: true, key, name }); sync();
   try { sessionStorage.setItem(SS_KEY, key); sessionStorage.setItem(SS_NAME, name) } catch { /* private mode */ }
 }
 export function clearSession(): void {
-  Object.assign(session, { admin: false, key: null, name: "" });
+  Object.assign(session, { admin: false, key: null, name: "" }); sync();
   try { sessionStorage.removeItem(SS_KEY); sessionStorage.removeItem(SS_NAME) } catch { /* private mode */ }
 }
 export function storedSession(): { key: string; name: string } | null {
@@ -63,7 +67,8 @@ export async function fetchAdminUsers(): Promise<AdminUser[] | null> {
 }
 
 // ---------------------------------------------------------------- the GitHub contents API
-function gh(path: string, opts: RequestInit = {}, key = session.key): Promise<Response> {
+/** A call to the GitHub API for this repo, with the admin's key. */
+export function gh(path: string, opts: RequestInit = {}, key = session.key): Promise<Response> {
   return fetch(`https://api.github.com/repos/${REPO.owner}/${REPO.repo}${path}`, {
     ...opts, cache: "no-store",
     headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + key, "X-GitHub-Api-Version": "2022-11-28", ...(opts.headers as Record<string, string> || {}) },

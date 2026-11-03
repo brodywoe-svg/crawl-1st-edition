@@ -230,19 +230,32 @@ The goal is to make Crawl fully digital, with Three.js visualizations eventually
   runtime would remove most of the generated output.
 
 ## 11. In progress: the new site in `web/` (Vite + TypeScript)
-Plan: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Sections 1–10 above still describe the **live** site. This section covers only the new one.
+Plan: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Sections 1–10 above still describe the **live** site (GitHub Pages).
+This section covers the new one (Vercel). Every page and the tabletop now run on it. The Windows app and the cutover are still to do.
 - **Build:**
-  - `vite.config.ts` builds the pages in `web/` into `dist/`. There's one HTML entry per page, so the URLs stay the same.
+  - `vite.config.ts` builds the 11 pages in `web/*.html` into `dist/`. URLs and filenames are the same as on the old site.
   - `base: './'` keeps every URL relative.
-  - The plugin `web/vite/content-files.ts` serves `crawl-*.json` and `admin.json` from the repo root in dev, and copies them into `dist/` in a build.
+  - `web/vite/content-files.ts` serves `crawl-*.json`, `admin.json` and `tabletop/` from the repo root in dev, and copies them into `dist/` in a build.
+    The tabletop is native ES modules, so it's served as is; the old site serves the same files.
 - **Hosting:**
   - Vercel builds `main` and every PR (`vercel.json`).
   - It skips commits that only touch `crawl-edits.json`, `dev/` or Markdown.
-- **Ported so far:** the home page (`web/index.html`, `web/src/pages/home.ts`), plus the shared pieces:
-  - the nav (`ui/nav.ts`), which builds its menus from the JSON at load, so they're never stale,
-  - dark mode and Tree mode (`ui/theme.ts`),
-  - the whole admin UI (`ui/admin.ts`): sign-in, setup, the account modal, Admin Options and the edit history,
-  - GitHub saving and the edit log (`lib/github.ts`),
-  - data loading (`lib/data.ts`).
-- **Links to pages not ported yet** are rewritten to the old github.io site (`siteHref`/`fixLinks` and `PORTED` in `web/src/config.ts`).
+- **Real TypeScript modules** (shared by every page):
+  - `lib/markup.ts`: the text markup and glossary matching (was `GLCORE` in `src/page.html`); `ui/tips.ts`: the glossary tooltips.
+  - `lib/github.ts`: admin keys, GitHub saving, the edit log; `ui/admin.ts`: the whole admin UI (was the `ADMIN` block).
+  - `ui/nav.ts`: the nav. Its menus are built from the JSON at load, so they're never stale.
+    Flyouts that wouldn't fit open to the left, so each menu stays under its item (the old nav slid the Glossary menu far to the left).
+  - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
+  - The home page (`web/src/pages/home.ts`) is fully TypeScript.
+- **Page scripts still shared with the old site** (`src/*.js`, and the Spells script in `src/page.html`):
+  - `web/vite/legacy-pages.ts` bundles each page's scripts into one module, `virtual:legacy/<page>`, the way `build.py` concatenated them.
+    The two sites therefore run the **same** page code until cutover, and a fix to `src/` lands in both.
+  - Each bundle starts by importing the shared modules under their old global names (`ADMIN`, `putFile`, `glMapOf`…), then
+    `await boot(page)` (`web/src/legacy/boot.ts`) sets up the nav, theme and admin and loads the data the old build embedded (`GLOSSARY`, `CLASSES`, `FEAT_SRC`…).
+  - A name a script declares itself is never imported, so its own version wins (the Spells script has its own `$` and `esc`).
+  - The scripts now run as modules (strict mode). If one assigns to an undeclared variable, it throws on the new site but not on the old one.
+  - The Spells page's claude.ai artifact mode is left out on the new site (it's still in `src/page.html` for the old one).
+  - **To move a page off this:** rewrite its scripts as TypeScript modules under `web/src/pages/`, then remove it from `LEGACY_PAGES`.
+- **Page markup** (`web/*.html`) was generated once from the `sitekit.py` shells and `src/page.html`. The admin modal is left out because `ui/admin.ts` adds it.
 - **CSS** is copied as is from `src/page.html` and `tools/sitekit.py` into `web/src/styles/`. Keep the copies in sync until cutover.
+- **Still on the old site only:** the Windows app (`app/`, the installer zip). The footer's download link still points to github.io.

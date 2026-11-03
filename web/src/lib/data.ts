@@ -13,6 +13,8 @@ export interface ContentFiles {
   "crawl-spells.json": unknown[];
   "crawl-items.json": { items: unknown[]; recipes: unknown[] };
   "crawl-glossary.json": { entries: GlossaryEntry[] };
+  "crawl-creator.json": { rules: Record<string, unknown> };
+  "crawl-tree.json": { nodes: Record<string, unknown>; extra: unknown[]; links: unknown[]; unlinks: unknown[] };
 }
 export type ContentFile = keyof ContentFiles;
 

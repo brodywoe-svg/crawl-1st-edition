@@ -10,7 +10,7 @@ import { fixLinks } from "../config";
 import { loadJson, type ContentFile } from "../lib/data";
 import { initNav } from "../ui/nav";
 import { initTheme } from "../ui/theme";
-import { initAdmin } from "../ui/admin";
+import { initAdmin, restoreAdmin } from "../ui/admin";
 import { ADMIN_BTN, MODE_BTN, TREE_BTN } from "../ui/controls.html";
 
 /** data-count key -> the file and the list in it to count. */
@@ -30,5 +30,6 @@ function refreshCounts(): void {
 initNav("home", ADMIN_BTN + TREE_BTN + MODE_BTN);
 initTheme();
 initAdmin();
+restoreAdmin();
 fixLinks(document.querySelector("main")!);
 refreshCounts();

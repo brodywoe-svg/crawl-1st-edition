@@ -28,7 +28,8 @@ let adminMode: "login" | "setup" = "login";
 let acctUsers: AdminUser[] | null = null, acctSure = "";
 
 // ---------------------------------------------------------------- signed-in state
-function showAdminBtn(): void {
+/** Show the Admin button, menu and panels for the current sign-in state. */
+export function showAdminBtn(): void {
   document.documentElement.classList.toggle("is-admin", session.admin);
   $("adminBtn").classList.toggle("on", session.admin);
   $("adminLabel").textContent = session.admin ? `Admin · ${session.name || "Signed in"}` : "Admin";
@@ -250,6 +251,12 @@ export function initAdmin(): void {
   });
   wireOptions();
   editLogListeners.add(log => { edits = log; histRender() });
+  showAdminBtn();
+}
+
+/** Sign back in from earlier in this tab, if there was a sign-in. Pages call this after setting adminHooks,
+    so their signedIn hook runs (quietly). */
+export function restoreAdmin(): void {
   const s = storedSession();
-  if (s) becomeAdmin(s.key, true, s.name); else showAdminBtn();
+  if (s && !session.admin) becomeAdmin(s.key, true, s.name);
 }

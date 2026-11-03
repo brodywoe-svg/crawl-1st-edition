@@ -27,7 +27,7 @@ const NAV_ITEMS: [string, string | null, Menu][] = [
   ["Items", "items.html", [["Weapons", "items.html?c=weapons"], ["Ammunition", "items.html?c=ammunition"], ["Armor", "items.html?c=armor"], ["Consumables", "items.html?c=consumables"],
     ["Adventuring Gear", "items.html?c=adventuring-gear"], ["Materials", "items.html?c=materials"], ["Magic Items", "items.html?c=magic-items"], ["Miscellaneous", "items.html?c=miscellaneous"]]],
   ["Glossary", "glossary.html", "glossary"],
-  ["Tabletop", "https://brodywoe-svg.github.io/crawl-1st-edition/tabletop/", null],
+  ["Tabletop", "tabletop/", null],
   ["About", null, null],
 ];
 /** Which nav item each page belongs to. */
@@ -81,8 +81,9 @@ export function setNavList(kind: ListKind, items: Named[] | undefined): void {
   fixLinks(m); markCurrent();
 }
 
-/** Fill the Glossary menu: Conditions, then the groups (Combat ▸ ...), then every other section A to Z. */
-export function setNavSections(entries: GlossaryEntry[]): void {
+/** Fill the Glossary menu: Conditions, then the groups (Combat ▸ ...), then every other section A to Z.
+    sections defaults to the sections the entries are in; the Glossary page also passes ones with no entries yet. */
+export function setNavSections(entries: GlossaryEntry[], sections?: string[]): void {
   const menu = document.getElementById("navGlossary"); if (!menu) return;
   const fly: Record<string, string[]> = {};
   const flyKey = (n: string) => { n = n.toLowerCase(); return (/ damage$/.test(n) && n !== "bleeding damage" ? "0" : "1") + n };
@@ -95,7 +96,7 @@ export function setNavSections(entries: GlossaryEntry[]): void {
   };
   const leaves = (items: GNode[]): string[] => items.flatMap(x => (typeof x === "string" ? [x] : leaves(x.items)));
   const seen = new Set(["conditions", ...leaves(GLOSSARY_TREE).map(s => s.toLowerCase())]), rest: string[] = [];
-  entries.map(e => String(e.sec || "Conditions").trim()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+  (sections || entries.map(e => e.sec || "Conditions")).map(s => String(s || "").trim()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .forEach(s => { if (s && !seen.has(s.toLowerCase())) { seen.add(s.toLowerCase()); rest.push(s) } });
   menu.innerHTML = node("Conditions") + GLOSSARY_TREE.map(node).join("") + rest.map(node).join("");
   fixLinks(menu); markCurrent();
@@ -131,8 +132,9 @@ function wireFit(nav: HTMLElement): void {
   };
   links.addEventListener("scroll", arrows, { passive: true });
   ([[arrL, -1], [arrR, 1]] as const).forEach(([b, dir]) => b.addEventListener("click", () => links.scrollBy({ left: dir * Math.max(120, links.clientWidth * 0.7) })));
-  // A menu sits under its item, moved left when needed so it and its flyouts (which open to the right) fit on screen.
-  // In the scrolling row, menus are fixed under the bar so the row doesn't clip them.
+  // A menu sits under its item (nudged only to stay on screen). Its flyouts open to the right, or to the left (.flyleft)
+  // when they wouldn't fit. The old site moved the whole menu left to make room, which pulled the Glossary menu,
+  // with its deep flyouts, far from its item. In the scrolling row, menus are fixed under the bar so the row doesn't clip them.
   const chainW = (el: Element): number => {
     let best = 0;
     for (const c of el.children) { if (!c.classList.contains("navsub")) continue; const f = c.querySelector<HTMLElement>(":scope>.navfly"); if (f) best = Math.max(best, f.offsetWidth + 2 + chainW(f)) }
@@ -143,8 +145,9 @@ function wireFit(nav: HTMLElement): void {
     const m = d.querySelector<HTMLElement>(".navmenu"); if (!m) return;
     const scroll = nav.classList.contains("navscroll");
     if (window.innerWidth <= 700) { m.style.left = ""; m.style.right = ""; m.style.transform = ""; m.style.top = scroll ? nav.getBoundingClientRect().bottom + "px" : ""; return }
-    const r = d.getBoundingClientRect(), w = m.offsetWidth || 220, need = w + chainW(m) + 8;
-    const x = Math.max(8, Math.min(window.innerWidth - need - 8, r.left + r.width / 2 - w / 2));
+    const r = d.getBoundingClientRect(), w = m.offsetWidth || 220;
+    const x = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2));
+    m.classList.toggle("flyleft", x + w + chainW(m) + 8 > window.innerWidth && x - chainW(m) - 8 >= 0);
     if (scroll) { m.style.top = nav.getBoundingClientRect().bottom + "px"; m.style.left = x + "px" } else { m.style.top = ""; m.style.left = x - r.left + "px" }
     m.style.right = "auto"; m.style.transform = "none";
   };
@@ -158,7 +161,26 @@ function wireFit(nav: HTMLElement): void {
   document.addEventListener("keydown", e => { const a = document.activeElement as HTMLElement | null; if (e.key === "Escape" && a?.closest(".navdrop")) a.blur() });
 }
 
-/** Put the nav bar at the top of the page. active: the page key (e.g. "home"). controls: buttons for the right side. */
+/* The page scripts still shared with the old site call these by their old global names. */
+declare global {
+  interface Window {
+    CRAWL_GTREE: GNode[];
+    crawlNavList(kind: ListKind, items: Named[]): void;
+    crawlNavRaces(data: { races?: Named[] } | null): void;
+    crawlNavSections(sections: string[], entries?: GlossaryEntry[]): void;
+    crawlNavMark(): void;
+  }
+}
+Object.assign(window, {
+  CRAWL_GTREE: GLOSSARY_TREE,
+  crawlNavList: setNavList,
+  crawlNavRaces: (data: { races?: Named[] } | null) => { if (data) setNavList("races", data.races) },
+  crawlNavSections: (sections: string[], entries: GlossaryEntry[] = []) => setNavSections(entries, sections),
+  crawlNavMark: markCurrent,
+});
+
+/** Put the nav bar at the top of the page. active: the page key (e.g. "home"). controls: buttons for the right side.
+    The Glossary and Conditions pages fill the Glossary menu themselves, from their live (possibly edited) entries. */
 export function initNav(active: string, controls: string): void {
   document.body.insertAdjacentHTML("afterbegin", navHtml(active, controls));
   const nav = document.querySelector<HTMLElement>(".sitenav")!;
@@ -168,5 +190,5 @@ export function initNav(active: string, controls: string): void {
   (Object.keys(LIST_MENUS) as ListKind[]).forEach(kind => {
     loadJson(`crawl-${kind}.json`).then(j => { if (j) setNavList(kind, (j as Record<ListKind, Named[]>)[kind]) });
   });
-  loadJson("crawl-glossary.json").then(j => { if (j?.entries) setNavSections(j.entries) });
+  if (active !== "glossary" && active !== "conditions") loadJson("crawl-glossary.json").then(j => { if (j?.entries) setNavSections(j.entries) });
 }

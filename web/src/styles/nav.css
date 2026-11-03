@@ -68,3 +68,7 @@ html.is-admin .navitem.adminonly{display:inline-flex}
   .navdrop{position:static}
   .navmenu{left:12px;right:12px;transform:none;min-width:0}
 }
+/* New site only (not in sitekit.py): flyouts that wouldn't fit on the right open to the left, so menus stay under their item */
+.navmenu.flyleft .navfly{left:auto;right:100%;margin-left:0;margin-right:2px}
+.navmenu.flyleft .navfly::before{left:auto;right:-16px}
+@media (hover:none),(max-width:700px){.navmenu.flyleft .navfly{right:auto;margin-right:0}}
