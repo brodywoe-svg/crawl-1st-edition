@@ -22,7 +22,7 @@ Template:
 ---
 
 ## 2026-11-02: A staging Supabase project; the tabletop's design; anonymous players
-**Status:** proposed, waiting on Brody · **Who:** maddox
+**Status:** proposed by maddox. Brody to OK the player-facing parts (4: roles, DM proposals, party privacy) · **Who:** maddox
 **Why:** Planning the database as a whole ([planning/supabase-database.md](planning/supabase-database.md)) needed these choices.
 **Decision:**
 1. **A staging project.** A second free project, `crawl-dev`, takes every migration first, and Vercel preview links use it.
@@ -52,7 +52,7 @@ Template:
 - Anonymous users count toward the monthly user limit, and can spam a game whose invite link leaks. The GM can remove them, and the invite code can be rotated.
 
 ## 2026-11-02: Admins sign in with Supabase accounts; a server function saves to GitHub
-**Status:** proposed, waiting on Brody (depends on the Supabase entry below) · **Who:** maddox
+**Status:** proposed by maddox; Brody OK'd Supabase (below) · **Who:** maddox
 **Why:** Admin access today is a GitHub key per admin, encrypted with that admin's password and published in `admin.json`.
 Anyone can download it and try passwords offline, and the unlocked key lives in the browser. Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md).
 Options we weighed:
@@ -149,7 +149,7 @@ The migration is planned in [planning/typescript-vite-refactor.md](planning/type
 - The Windows app won't be code-signed at first, so Windows SmartScreen will warn on the first install, as it does today.
 
 ## 2026-11-02: Supabase over Firebase as the backend
-**Status:** proposed, waiting on Brody · **Who:** maddox
+**Status:** agreed (Brody OK'd it, talking with Maddox, 2026-11-02) · **Who:** maddox, brody
 **Why:** A fully digital Crawl needs things that GitHub and Firebase, as we use them now, can't do well:
 - player accounts,
 - characters saved to the cloud,

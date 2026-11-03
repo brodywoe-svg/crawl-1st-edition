@@ -1,6 +1,6 @@
 # The Supabase database, in phases
 **Status:** draft  ·  **Owner:** maddox  ·  **Roadmap:** none yet
-**Builds on:** [supabase-admin-login.md](supabase-admin-login.md) (phase 1). **Needs:** Brody's OK on Supabase in [../DECISIONS.md](../DECISIONS.md).
+**Builds on:** [supabase-admin-login.md](supabase-admin-login.md) (phase 1). Supabase is agreed (DECISIONS.md, 2026-11-02). **Needs:** Brody's OK on the player-facing parts: the roles, DM proposals and party privacy (they shape how the game is played).
 
 ## Goal
 One plan for everything the database will hold, so each phase fits the next. Each phase is built and tested in its own PR.
@@ -212,7 +212,8 @@ so `app.js` barely changes (as the Supabase decision says). The game data shape 
 - **Game content in the database:** only as a separate decision, if the JSON-on-GitHub workflow stops working for us.
 
 ## Steps
-- [ ] Brody OKs Supabase, and the proposed entries in DECISIONS.md (staging project, the tabletop table design, anonymous players, roles).
+- [x] Brody OKs Supabase (2026-11-02).
+- [ ] Brody OKs the player-facing parts of the proposed DECISIONS.md entry: roles, DM proposals, party privacy. The technical parts (staging project, table design) are Maddox's call.
 - [ ] Create `crawl-dev`, add `npm run db:types`, and point Vercel previews at `crawl-dev` (dev/SETUP.md).
 - [ ] Phase 1: `GITHUB_TOKEN` from Brody, then test end to end.
 - [ ] Phase 2: make the Gmail account, add its SMTP settings and Turnstile; build `characters`, sign-up, the account page and sync (own PR).

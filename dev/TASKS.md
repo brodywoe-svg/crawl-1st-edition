@@ -9,10 +9,10 @@ Format: `- [ ] Task (@owner)`. The owner is `@brody`, `@maddox`, or left off if 
 If a task needs more than a line of explanation, write a doc in [planning/](planning/) and link it from the task.
 
 ## Now
-- [ ] Review the decisions (TypeScript + Vite, React later, Vercel, Supabase): start at [QUICKSTART.md](QUICKSTART.md). Supabase is still open. (@brody)
-- [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox; Brody to OK)
+- [ ] Review the decisions (TypeScript + Vite, React later, Vercel): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
+- [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox)
 - [ ] Supabase database plan, phases 2–4 (player, DM and admin roles): [planning/supabase-database.md](planning/supabase-database.md). Brody to OK it (@maddox, @brody)
-- [ ] Supabase admins: Brody makes the `GITHUB_TOKEN` and adds it under Edge Functions → Secrets (@brody)
+- [ ] Supabase: accept the org invite, then make the `GITHUB_TOKEN` and add it to Supabase: [QUICKSTART.md](QUICKSTART.md) step 6 (@brody)
 - [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
 
 ## Next

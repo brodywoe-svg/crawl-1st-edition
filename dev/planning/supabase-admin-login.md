@@ -1,7 +1,7 @@
 # Supabase admin login (and the groundwork for player accounts)
 **Status:** draft, being built on branch `supabase-admin-login`  ·  **Owner:** maddox  ·  **Roadmap:** none yet
 **Next phases:** [supabase-database.md](supabase-database.md) (player accounts, characters, the tabletop).
-**Needs:** Brody's OK on the Supabase entry in [../DECISIONS.md](../DECISIONS.md) (still "proposed"), and on the admin login entry below it.
+**Needs:** Brody's GitHub key ([../QUICKSTART.md](../QUICKSTART.md) step 6). Supabase itself is agreed (DECISIONS.md, 2026-11-02).
 
 ## Goal
 Replace the admin password scheme with real accounts, on the new site.
@@ -63,7 +63,7 @@ That works, but:
 
 ## Steps
 - [x] Code: `supabase/` (config, migration, `github` function), `lib/auth.ts`, the `gh()` routing, the admin UI. Off by default.
-- [ ] Brody OKs Supabase, and this login (DECISIONS.md).
+- [x] Brody OKs Supabase (2026-11-02). This login's design is Maddox's call.
 - [ ] Maddox: create the Supabase organization and project, and invite Brody (dev/SETUP.md, "Supabase").
 - [ ] Push the database migration and the auth settings, deploy the function, set `GITHUB_TOKEN` (dev/SETUP.md).
 - [ ] Invite both admins and set their role to admin.

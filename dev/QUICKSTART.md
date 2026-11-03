@@ -50,5 +50,33 @@ On every pull request, Vercel's bot posts a comment with a **Preview** link.
 - **The current site at `brodywoe-svg.github.io/crawl-1st-edition` keeps working exactly as now** until we switch over.
 - Your Admin editing works as normal the whole time.
 
+## 6. Supabase: two small jobs (once, about 10 minutes)
+Supabase is where accounts will live. You don't need to understand it; these are the only two things that need you.
+
+**A. Accept the invite**
+1. Open the email from Supabase inviting you to the **Crawl** organization, and click **Accept**.
+2. Sign in with **Continue with GitHub** (as `brodywoe-svg`).
+
+**B. Make a GitHub key for saving, and give it to Supabase**
+This lets the site save your Admin edits to GitHub without keeping a key in the website.
+It can only change the files in this one repo.
+1. On **github.com**, click your profile picture (top right) → **Settings**.
+2. At the bottom of the left menu: **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**.
+3. Fill it in:
+   - **Token name:** `Crawl Supabase saves`
+   - **Expiration:** 1 year. Put a reminder in your calendar to make a new one before then.
+   - **Resource owner:** `brodywoe-svg`
+   - **Repository access:** **Only select repositories** → `crawl-1st-edition`
+   - **Permissions** → **Repository permissions** → **Contents** → **Read and write**. Leave everything else alone.
+4. Click **Generate token**, and **copy** it. GitHub shows it only once.
+5. Go to **supabase.com/dashboard** → the **Crawl** project → **Edge Functions** (left menu) → **Secrets** → **Add new secret**:
+   - **Name:** `GITHUB_TOKEN`
+   - **Value:** paste the token
+   - Click **Save**.
+6. That's it. **Don't send the token to anyone, Maddox included**, and don't paste it into a chat or a pull request.
+   If it ever leaks, delete it on GitHub (same page as step 2) and make a new one.
+
+Tell Maddox when it's done, and he'll test that saving works.
+
 ## Want to run the code yourself?
 That's optional. See [SETUP.md](SETUP.md).
