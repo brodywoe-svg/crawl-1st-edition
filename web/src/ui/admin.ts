@@ -1,7 +1,6 @@
 /* The admin UI shared by every page (ported from the /*@ADMIN@*\/ block in src/page.html):
    the sign-in and setup modal, the account modal (name, password, other admins), the Admin Options menu
    and the "Last edited by" panel. The GitHub and crypto side is in lib/github.ts. */
-import "../styles/admin.css";
 import { $, esc } from "./dom";
 import { ADMIN_MODAL } from "./admin-modal.html";
 import { toggleTree } from "./theme";
@@ -28,7 +27,8 @@ let adminMode: "login" | "setup" = "login";
 let acctUsers: AdminUser[] | null = null, acctSure = "";
 
 // ---------------------------------------------------------------- signed-in state
-function showAdminBtn(): void {
+/** Show the Admin button, menu and panels for the current sign-in state. */
+export function showAdminBtn(): void {
   document.documentElement.classList.toggle("is-admin", session.admin);
   $("adminBtn").classList.toggle("on", session.admin);
   $("adminLabel").textContent = session.admin ? `Admin · ${session.name || "Signed in"}` : "Admin";
@@ -250,6 +250,12 @@ export function initAdmin(): void {
   });
   wireOptions();
   editLogListeners.add(log => { edits = log; histRender() });
+  showAdminBtn();
+}
+
+/** Sign back in from earlier in this tab, if there was a sign-in. Pages call this after setting adminHooks,
+    so their signedIn hook runs (quietly). */
+export function restoreAdmin(): void {
   const s = storedSession();
-  if (s) becomeAdmin(s.key, true, s.name); else showAdminBtn();
+  if (s && !session.admin) becomeAdmin(s.key, true, s.name);
 }

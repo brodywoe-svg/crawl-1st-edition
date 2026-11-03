@@ -104,14 +104,14 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
   - `vercel.json`,
   - the home page ported, along with the shared nav, theme, data loading and Admin sign-in,
   - finish [SETUP.md](../SETUP.md) with the real commands.
-- [ ] Brody connects the repo to Vercel ([QUICKSTART.md](../QUICKSTART.md), step 3).
-- [ ] Pull out the rest of the shared code: helpers, the markup renderer and glossary tooltips, Admin saving (`putFile`, `recordEdits`).
-- [ ] Port the pages in rough order of size, simplest first, to shake out the shared modules: glossary and conditions → races → items and crafting → classes, backgrounds and feats → spells → creator and the skill tree.
-- [ ] Move the tabletop in:
-  - it's already ES modules, so this is mostly renaming files and adding types,
-  - `net.js` and `dice.js` go in `lib/`,
-  - use the shared renderer,
-  - fix the admin sign-in that broke with `admin.json` v2.
+- [x] Brody connects the repo to Vercel ([QUICKSTART.md](../QUICKSTART.md), step 3).
+- [x] Pull out the rest of the shared code: helpers, the markup renderer and glossary tooltips, Admin saving (`putFile`, `recordEdits`).
+- [x] Put every page on the new site (done in one PR, by choice). Each page's script runs unchanged through `web/vite/legacy-pages.ts`, so both sites share it until cutover. See ARCHITECTURE.md §11.
+- [ ] Rewrite each page's scripts as TypeScript modules, one page at a time, and take it off `LEGACY_PAGES`. Start with the smallest: races → glossary → items → classes → spells → creator.
+- [x] Serve the tabletop on the new site (as is, from `tabletop/`).
+- [ ] Tabletop admin sign-in still expects the old single-key `admin.json` (see `dev/ARCHITECTURE.md` §9). A fix was reverted on purpose, because admin login is moving to Supabase.
+- [ ] Move the tabletop into `web/src` as TypeScript: `net.js` and `dice.js` go in `lib/`, and it uses the shared renderer.
+- [ ] Add the Vercel domain to Firebase's authorized domains (Brody, in the Firebase console), so online play works on the new site.
 - [ ] Windows app:
   - set up `electron-builder` and `electron-updater`,
   - add a release workflow on version tags,
@@ -122,10 +122,7 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
   3. update `ARCHITECTURE.md` and `CLAUDE.md`.
 
 ## Open questions
-- **The claude.ai mode on the Spells page (question for Brody).** The Spells page started life as an artifact made in the claude.ai chat app.
-  It still has code that, when the page is opened inside claude.ai, can save edited spells back to that artifact.
-  On the website and in the Windows app this code does nothing. If Brody no longer edits spells through claude.ai, we drop it.
-  That also drops the copy of itself that the page carries around for it (`/*@TPL@*/`).
+- **The claude.ai mode on the Spells page:** decided 2026-11-02 (Maddox). It's dropped on the new site, and `/*@TPL@*/` goes at cutover.
 - **Links and bookmarks.** Are there links or bookmarks to specific pages we must keep working at cutover?
   The plan keeps every current filename, and the old site redirects to the new one.
 - **A custom domain?** For example `crawlrpg.com` (about $10–15 a year). Without one, the site lives at a `*.vercel.app` address.

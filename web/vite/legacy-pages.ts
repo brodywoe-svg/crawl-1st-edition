@@ -1,0 +1,92 @@
+/* Vite plugin: the page scripts that are still shared with the old site.
+   Until each page is rewritten as a TypeScript module, its code stays where it is (src/*.js, and the Spells script in
+   src/page.html), so the old and new sites run the same code and a fix lands in both. This plugin bundles a page's scripts
+   into one module, `virtual:legacy/<page>`, the way tools/build.py concatenated them into one <script>:
+     1. imports for the shared code they expect as globals (markup, tooltips, admin), now real modules in web/src,
+     2. `const {...} = await boot(page)` for the data the old build embedded in the page (see web/src/legacy/boot.ts),
+     3. the scripts themselves, unchanged.
+   A name a script declares itself is never imported, so its own version wins (the Spells script has its own $ and esc).
+   The scripts now run as a module (strict mode, no globals). */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import type { Plugin } from "vite";
+
+/** Each page's scripts, in the order tools/build.py concatenated them. "page.html" means the Spells script. */
+export const LEGACY_PAGES: Record<string, string[]> = {
+  glossary: ["editkit.js", "glossary.js"],
+  conditions: ["editkit.js", "glossary.js"],
+  items: ["editkit.js", "catalog.js"],
+  crafting: ["editkit.js", "catalog.js"],
+  races: ["editkit.js", "races.js"],
+  classes: ["editkit.js", "crawldata.js", "classes.js"],
+  backgrounds: ["editkit.js", "crawldata.js", "classes.js"],
+  feats: ["editkit.js", "crawldata.js", "classes.js"],
+  creator: ["editkit.js", "crawldata.js", "creator.js", "treeicons.js", "skilltree.js"],
+  spells: ["page.html"],
+};
+
+/** Shared names the scripts use as globals: module -> the names it provides (`a as b` imports a under the old name b). */
+const IMPORTS: Record<string, string[]> = {
+  "/src/ui/dom.ts": ["$", "esc"],
+  "/src/lib/markup.ts": ["normGlossary", "richInline", "blocks", "paras", "featBlock", "plainText", "singular", "tipOn", "glMapOf", "tipHTML", "ACTION_SECS"],
+  "/src/ui/tips.ts": ["markTips", "tipRuntime"],
+  "/src/lib/github.ts": ["ADMIN", "GH_KEY", "ADMIN_NAME", "gh", "putFile"],
+  "/src/ui/admin.ts": ["adminHooks as AdminHooks", "showAdminBtn", "restoreAdmin"],
+  "/src/config.ts": ["REPO"],
+};
+/** Constants boot() returns (tools/build.py's embedded data, plus the page mode). */
+const DATA = ["APP", "STATIC", "GLOSSARY", "CATALOG", "RACES", "CREATOR", "SPELLS", "FEATS", "TREE", "FEAT_SRC", "CLASSES", "BACKGROUNDS", "SCHOOLS"];
+
+/** The Spells script from src/page.html: the last <script>, without the shared blocks (now modules) and the claude.ai artifact mode. */
+function spellsScript(srcDir: string): string {
+  const t = readFileSync(join(srcDir, "page.html"), "utf8");
+  const cut = (s: string, a: string, b: string) => s.slice(0, s.indexOf(a)) + s.slice(s.indexOf(b) + b.length);
+  let js = t.slice(t.lastIndexOf("<script>\nlet SPELLS") + "<script>".length, t.lastIndexOf("</script>"));
+  js = cut(js, "/*@GLCORE@*/", "/*@GLCORE-END@*/");
+  js = cut(js, "/*@ADMIN@*/", "/*@ADMIN-END@*/");
+  return js
+    .replace("/*@DATA@*/", "__D.SPELLS")
+    .replace("/*@GLOSSARY@*/null", "__D.GLOSSARY")
+    .replace("/*@TPL@*/", '""') // the template copy only existed for republishing on claude.ai
+    .replace(/^if\(!APP&&!STATIC\)\(function hook\(n\)\{.*$/m, "/* claude.ai artifact mode dropped on the new site */");
+}
+
+/** Names declared at the top level of a script (a declaration at the start of a line). */
+function topLevelNames(js: string): Set<string> {
+  const out = new Set<string>();
+  for (const m of js.matchAll(/^(?:async\s+)?(?:function\s*\*?\s*|class\s+|(?:const|let|var)\s+)([A-Za-z_$][\w$]*)/gm)) out.add(m[1]);
+  return out;
+}
+
+export function legacyPages(srcDir: string): Plugin {
+  const PREFIX = "virtual:legacy/", RESOLVED = "\0" + PREFIX;
+  return {
+    name: "crawl-legacy-pages",
+    resolveId(id) { return id.startsWith(PREFIX) ? "\0" + id : null },
+    load(id) {
+      if (!id.startsWith(RESOLVED)) return null;
+      const page = id.slice(RESOLVED.length), files = LEGACY_PAGES[page];
+      if (!files) throw new Error(`No legacy page "${page}" (see LEGACY_PAGES in web/vite/legacy-pages.ts)`);
+      const parts = files.map(f => {
+        const path = join(srcDir, f);
+        this.addWatchFile(path);
+        return `/* ---- src/${f === "page.html" ? "page.html (Spells script)" : f} ---- */\n` + (f === "page.html" ? spellsScript(srcDir) : readFileSync(path, "utf8"));
+      });
+      const code = parts.join("\n");
+      const own = topLevelNames(code), oldName = (spec: string) => spec.split(" as ").pop()!;
+      const imports = Object.entries(IMPORTS)
+        .map(([mod, names]) => [mod, names.filter(n => !own.has(oldName(n)))] as const)
+        .filter(([, names]) => names.length)
+        .map(([mod, names]) => `import { ${names.join(", ")} } from ${JSON.stringify(mod)};`);
+      const data = DATA.filter(n => !own.has(n));
+      return [
+        `/* Generated by web/vite/legacy-pages.ts from the old site's scripts. Edit those, not this. */`,
+        `import { boot } from "/src/legacy/boot.ts";`,
+        ...imports,
+        `const __D = await boot(${JSON.stringify(page)});`,
+        `const { ${data.join(", ")} } = __D;`,
+        code,
+      ].join("\n");
+    },
+  };
+}

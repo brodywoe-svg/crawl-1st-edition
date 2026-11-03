@@ -10,14 +10,17 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 
 ## Now
 - [ ] Review the decisions (TypeScript + Vite, React later, Vercel, Supabase): start at [QUICKSTART.md](QUICKSTART.md). Supabase is still open. (@brody)
-- [ ] Connect the repo to Vercel ([QUICKSTART.md](QUICKSTART.md), step 3) (@brody)
-- [ ] Answer the Spells page claude.ai-mode question in the refactor plan (@brody)
-- [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Scaffold and home page done; next is the glossary pages. (@maddox)
+- [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
 
 ## Next
+- [ ] Try the 3D dice prototype on a laptop and a phone, fill in [testing/3d-dice.md](testing/3d-dice.md), then decide ship / iterate / remove (@maddox, @brody)
+- [ ] Wiki menu: built on the new site; Brody to OK the name and the defaults: [planning/wiki-menu.md](planning/wiki-menu.md) (@brody)
+- [ ] Add the Vercel site address to Firebase's authorized domains, so online tabletop play works there (@brody)
 
 ## Later
 - [ ] Move the UI to React after the Vite refactor: [planning/react-migration.md](planning/react-migration.md)
 
 ## Done
+- [x] Connect the repo to Vercel (@brody)
+- [x] Spells page claude.ai mode: dropped on the new site (@maddox, 2026-11-02)
 - [x] Dev docs set up: `CLAUDE.md`, `dev/ARCHITECTURE.md`, `dev/DATA-MODEL.md`, this list, `dev/DECISIONS.md` (@maddox)

@@ -15,6 +15,9 @@ a.navitem:hover,.navdrop:hover>.navitem{background:var(--barhover)}
 .navitem.soon{opacity:.5;cursor:default}
 .navitem.adminonly{display:none}
 html.is-admin .navitem.adminonly{display:inline-flex}
+/* new site only: admin-only dropdowns (the Testing menu) */
+.navdrop.adminonly{display:none}
+html.is-admin .navdrop.adminonly{display:flex}
 .navitem.soon small{font-size:.55rem;letter-spacing:.1em;border:1px solid currentColor;border-radius:999px;padding:1px 5px}
 .navitem:focus-visible{outline:3px solid var(--paper);outline-offset:-3px}
 .navdrop{position:relative;display:flex}
@@ -68,3 +71,13 @@ html.is-admin .navitem.adminonly{display:inline-flex}
   .navdrop{position:static}
   .navmenu{left:12px;right:12px;transform:none;min-width:0}
 }
+/* New site only (not in sitekit.py): flyouts that wouldn't fit on the right open to the left, so menus stay under their item */
+.navmenu.flyleft .navfly{left:auto;right:100%;margin-left:0;margin-right:2px}
+.navmenu.flyleft .navfly::before{left:auto;right:-16px}
+@media (hover:none),(max-width:700px){.navmenu.flyleft .navfly{right:auto;margin-right:0}}
+/* New site only: the divider in the Wiki menu, and its last link */
+.navmenu .navsep{display:block;height:0;border-top:1px solid var(--hair);margin:4px 8px}
+.navmenu a[aria-current="page"]{background:var(--soft)}
+/* New site only: the placeholder bar in each page's HTML, the nav's height, until the nav (built by ui/nav.ts) replaces it */
+.sitenav-ph{height:45px}
+@media (max-width:700px){.sitenav-ph{height:33px}}
