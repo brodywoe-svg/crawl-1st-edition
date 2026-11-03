@@ -61,6 +61,8 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
   - `npm run dev`: a live-reloading local site.
   - `npm run typecheck`: run it before every PR.
   - `npm run build`: builds into `dist/`, which is what Vercel deploys.
+- **Supabase** (`supabase/`: database migrations, Edge Functions, auth config): `npx supabase …`. Setup and deploy steps are in `dev/SETUP.md`.
+  A database change is a new migration file, never an edit to one already pushed.
 
 ## Rules
 - **Never hand-edit generated files.** These are the root `*.html`, `app/*.html` and `downloads/*.zip`. Edit `src/` or `tools/`, then rebuild.
@@ -68,6 +70,7 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
   - don't change these files,
   - don't change their shape without agreeing it first (log it in DECISIONS.md).
 - **Never modify `admin.json`.** Never write tokens or passwords anywhere.
+  That includes Supabase's secret key, the database password and `GITHUB_TOKEN`. Only `.env.example` (empty) is committed; `.env.local` never is.
 - **Game content (rules, spells, classes, lore) is © Brody Woelke.** Don't invent or rewrite it unless asked.
 - **Work on a branch and open a PR.** Pull `main` first, because Admin saves land there constantly.
 - **Keep the docs true.** If your change alters how something in `dev/ARCHITECTURE.md` works, update it in the same PR. Tick or add items in `dev/TASKS.md` as you go.

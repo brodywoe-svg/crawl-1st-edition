@@ -1,13 +1,19 @@
 /* The admin UI shared by every page (ported from the /*@ADMIN@*\/ block in src/page.html):
    the sign-in and setup modal, the account modal (name, password, other admins), the Admin Options menu
-   and the "Last edited by" panel. The GitHub and crypto side is in lib/github.ts. */
+   and the "Last edited by" panel. The GitHub and crypto side is in lib/github.ts.
+   Two ways to sign in: the old admin.json password, or, when Supabase is on (lib/auth.ts), an account with an email and password.
+   With Supabase anyone can make an account (a player); accounts with the admin role also get the admin tools. */
 import { $, esc } from "./dom";
 import { ADMIN_MODAL } from "./admin-modal.html";
 import { toggleTree } from "./theme";
 import {
   session, saveSession, clearSession, storedSession, lockKey, unlockKey, adminUsers, fetchAdminUsers,
-  getRepoText, putFile, editLogListeners, EDIT_LOG, EDIT_PAGES, type AdminUser, type EditLog, type GhError,
+  getRepoText, putFile, editLogListeners, EDIT_LOG, EDIT_PAGES, saveSupabaseSession, type AdminUser, type EditLog, type GhError,
 } from "../lib/github";
+import {
+  SUPABASE_ON, signIn, signUp, sendPasswordReset, currentAccount, onAuthChange, signOutSupabase, setDisplayName, setPassword, adminNames,
+  type Account, type AuthError,
+} from "../lib/auth";
 
 /** Pages can react to signing in and out, or block signing out (e.g. with unsaved edits). */
 export const adminHooks = { canSignOut: () => true, signedIn: (_quiet: boolean) => {}, signedOut: () => {} };
@@ -23,39 +29,79 @@ const HIST_SS = "crawl-hist";
 const histOn = () => { try { return sessionStorage.getItem(HIST_SS) === "1" } catch { return false } };
 
 let edits: EditLog | null = null, histFilter = "page", histWho = "";
-let adminMode: "login" | "setup" = "login";
+let adminMode: "login" | "setup" | "signup" | "forgot" = "login";
+/** Supabase: whoever is signed in, player or admin (an admin also has the admin session in lib/github.ts). */
+let account: Account | null = null;
 let acctUsers: AdminUser[] | null = null, acctSure = "";
 
 // ---------------------------------------------------------------- signed-in state
 /** Show the Admin button, menu and panels for the current sign-in state. */
 export function showAdminBtn(): void {
   document.documentElement.classList.toggle("is-admin", session.admin);
-  $("adminBtn").classList.toggle("on", session.admin);
-  $("adminLabel").textContent = session.admin ? `Admin · ${session.name || "Signed in"}` : "Admin";
+  $("adminBtn").classList.toggle("on", session.admin || !!account);
+  $("adminLabel").textContent = session.admin ? `Admin · ${session.name || "Signed in"}`
+    : account ? account.name || "Your account" : SUPABASE_ON ? "Sign in" : "Admin";
   $("aoptWrap").hidden = !session.admin;
   aoptSync(); histShow();
 }
 function becomeAdmin(key: string, quiet: boolean, name: string): void {
   saveSession(key, name); closeAdmin(); showAdminBtn(); adminHooks.signedIn(quiet);
 }
+/** Supabase: someone signed in. Admins also get the admin session (saving, the Admin Options menu). */
+function enterAccount(a: Account, quiet: boolean): void {
+  account = a; closeAdmin();
+  if (a.role === "admin") { saveSupabaseSession(a.name); showAdminBtn(); adminHooks.signedIn(quiet) }
+  else showAdminBtn();
+}
+/** Signed out here, or (Supabase) in another tab. */
+function leaveAccount(): void {
+  const wasAdmin = session.admin;
+  account = null; clearSession(); closeAcct(); showAdminBtn();
+  if (wasAdmin) adminHooks.signedOut();
+}
 function signOut(): void {
-  if (!adminHooks.canSignOut()) return;
-  clearSession(); closeAcct(); showAdminBtn(); adminHooks.signedOut();
+  if (session.admin && !adminHooks.canSignOut()) return;
+  if (SUPABASE_ON && account) signOutSupabase().catch(() => { /* signed out here anyway */ });
+  leaveAccount();
 }
 
 // ---------------------------------------------------------------- sign-in / setup modal
-function setAdminMode(m: "login" | "setup"): void {
+function setAdminMode(m: typeof adminMode): void {
   adminMode = m;
-  $("loginPane").hidden = m !== "login"; $("setupPane").hidden = m !== "setup";
-  $("adminTitle").textContent = m === "login" ? "Admin sign-in" : "Set up admin access";
-  $("adminGo").textContent = m === "login" ? "Unlock" : "Save and unlock";
-  $("adminSwitch").textContent = m === "login" ? "First time? Set up admin access" : "Back to sign-in";
+  if (SUPABASE_ON) {
+    // one pane for all three: sign in, create an account, reset a password
+    $("loginPane").hidden = false; $("setupPane").hidden = true;
+    $("signupRow").hidden = $("pass2Row").hidden = m !== "signup";
+    $("passRow").hidden = m === "forgot"; $("adminForgot").hidden = m !== "login";
+    $("adminTitle").textContent = m === "signup" ? "Create an account" : m === "forgot" ? "Reset your password" : "Sign in";
+    $("adminGo").textContent = m === "signup" ? "Create account" : m === "forgot" ? "Send reset link" : "Sign in";
+    $("adminSwitch").textContent = m === "login" ? "New here? Create an account" : "Back to sign-in";
+    $<HTMLInputElement>("adminPass").autocomplete = m === "signup" ? "new-password" : "current-password";
+  } else {
+    $("loginPane").hidden = m !== "login"; $("setupPane").hidden = m !== "setup";
+    $("adminTitle").textContent = m === "login" ? "Admin sign-in" : "Set up admin access";
+    $("adminGo").textContent = m === "login" ? "Unlock" : "Save and unlock";
+    $("adminSwitch").textContent = m === "login" ? "First time? Set up admin access" : "Back to sign-in";
+  }
   $("adminErr").textContent = "";
 }
-const focusFirst = () => (adminMode === "login" ? $("adminPass") : $("setupKey")).focus();
+const focusFirst = () => (SUPABASE_ON ? (adminMode === "signup" ? $("signupName") : $("adminEmail")) : adminMode === "login" ? $("adminPass") : $("setupKey")).focus();
+/** What to tell someone when a Supabase sign-in, sign-up or reset fails. */
+function authMsg(x: unknown): string {
+  switch ((x as AuthError)?.code) {
+    case "bad_login": return "That email and password don't match an account.";
+    case "taken": return "There's already an account with that email. Sign in instead, or reset its password.";
+    case "weak_password": return "That password is too easy to guess. Try a longer one.";
+    case "confirm_email": return "Check your email for a link to confirm your account, then sign in.";
+    case "rate_limit": return "Too many tries. Wait a few minutes and try again.";
+    case "offline": return "Couldn't reach the sign-in service. Check your connection and try again.";
+    default: return "Something went wrong. Try again in a moment.";
+  }
+}
 async function openAdmin(): Promise<void> {
   $<HTMLFormElement>("adminForm").reset();
-  setAdminMode((await fetchAdminUsers()) ? "login" : "setup");
+  // With Supabase there's no first-time setup here: admins are invited from the Supabase dashboard (dev/SETUP.md).
+  setAdminMode(SUPABASE_ON || (await fetchAdminUsers()) ? "login" : "setup");
   $("adminModal").hidden = false; focusFirst();
 }
 function closeAdmin(): void { $("adminModal").hidden = true; $<HTMLFormElement>("adminForm").reset(); $("adminErr").textContent = "" }
@@ -65,6 +111,29 @@ async function submitAdmin(e: SubmitEvent): Promise<void> {
   e.preventDefault();
   const err = (m: string) => { $("adminErr").textContent = m };
   const go = $<HTMLButtonElement>("adminGo");
+  if (SUPABASE_ON) {
+    const email = val("adminEmail").trim(), pass = val("adminPass");
+    let name = "";
+    if (adminMode === "signup") { name = val("signupName").trim(); if (!name) { err("Type your name. It's shown to the people you play with."); return } }
+    if (!email) { err("Type your email."); return }
+    if (adminMode === "forgot") {
+      go.disabled = true; err("Sending…");
+      try {
+        await sendPasswordReset(email, new URL("account.html", location.href).href);
+        err("If that email has an account, a link to reset the password is on its way. While we're testing, these emails only reach the Crawl team. Anyone else: ask an admin to reset it.");
+      } catch (x) { err(authMsg(x)) } finally { go.disabled = false }
+      return;
+    }
+    if (!pass) { err("Type your password."); return }
+    if (adminMode === "signup") {
+      if (pass.length < 12) { err("Use at least 12 characters for the password."); return }
+      if (pass !== val("signupPass2")) { err("The two passwords don't match."); return }
+    }
+    go.disabled = true; err(adminMode === "signup" ? "Creating your account…" : "Signing in…");
+    try { enterAccount(adminMode === "signup" ? await signUp(email, pass, name) : await signIn(email, pass), false) }
+    catch (x) { err(authMsg(x)) } finally { go.disabled = false }
+    return;
+  }
   if (!window.crypto || !crypto.subtle) { err("This browser can't do the secure unlock. Open the site over https in a current browser."); return }
   if (adminMode === "login") {
     const pass = val("adminPass"); if (!pass) { err("Type your admin password."); return }
@@ -120,8 +189,52 @@ function acctHTML(): string {
 <div class="actrow"><button type="button" class="btn solid" data-acct="add">Add admin</button></div>
 <p class="merr" id="acctErr" role="alert"></p>`;
 }
+// With Supabase: your name and password here. Admins also see the admin list; adding and removing admins is done in the Supabase dashboard.
+let sbAdmins: string[] | null = null;
+function acctHTMLSupabase(): string {
+  const me = account?.name || "", us = sbAdmins;
+  const intro = session.admin ? "Your name is shown next to everything you edit." : "Characters you make in the Character Creator are saved to this account.";
+  return `<p class="mnote">Signed in as <b>${esc(me || "you")}</b> (${esc(account?.email || "")}). ${intro}</p>
+<h3 class="acth">Your name</h3><div class="actrow"><input type="text" id="acName" value="${esc(me)}" maxlength="40" autocomplete="off"><button type="button" class="btn" data-acct="sbname">Change name</button></div>
+<h3 class="acth">Change your password</h3>
+<label class="mlabel" for="acP1">New password</label><input type="password" id="acP1" autocomplete="new-password">
+<label class="mlabel" for="acP2">Type it again</label><input type="password" id="acP2" autocomplete="new-password">
+<div class="actrow"><button type="button" class="btn solid" data-acct="sbpass">Change my password</button></div>
+${session.admin ? `<h3 class="acth">Admins</h3>${us == null ? `<p class="mnote">Couldn't load the admin list. Check your connection and reopen this.</p>` : `<ul class="actlist">${us.map(n => `<li><b>${esc(n)}</b>${n === me ? ` <small>(you)</small>` : ""}</li>`).join("")}</ul>`}
+<p class="mnote">To add or remove an admin, use the Supabase dashboard (see dev/SETUP.md in the repo).</p>` : ""}
+<p class="merr" id="acctErr" role="alert"></p>`;
+}
+async function sbAcctClick(a: string): Promise<void> {
+  const err = (m: string) => { $("acctErr").textContent = m };
+  if (a === "sbname") {
+    const n = val("acName").trim(); if (!n) { err("Type a name."); return }
+    if (!account || n === account.name) return;
+    if (session.admin && (sbAdmins || []).some(x => x !== account!.name && x.toLowerCase() === n.toLowerCase())) { err("Another admin already has that name."); return }
+    err("Saving…");
+    try {
+      const old = account.name; await setDisplayName(n); account.name = n;
+      if (session.admin) { saveSupabaseSession(n); sbAdmins = (sbAdmins || []).map(x => (x === old ? n : x)) }
+      showAdminBtn(); err("Name changed.");
+    }
+    catch { err("Saving failed. Check your connection and try again.") }
+    return;
+  }
+  if (a === "sbpass") {
+    const p1 = val("acP1"), p2 = val("acP2");
+    if (p1.length < 12) { err("Use at least 12 characters for the password."); return } if (p1 !== p2) { err("The two passwords don't match."); return }
+    err("Saving…");
+    try { await setPassword(p1); $<HTMLInputElement>("acP1").value = $<HTMLInputElement>("acP2").value = ""; err("Password changed. Use the new one next time you sign in.") }
+    catch (x) { err((x as AuthError)?.code === "weak_password" ? "That password is too easy to guess. Try a longer one." : "Saving failed. Check your connection and try again.") }
+  }
+}
+
 async function openAcct(): Promise<void> {
   acctSure = ""; $("acctTitle").textContent = "Admin"; $("acctBody").innerHTML = `<p class="mnote">Loading…</p>`; $("acctModal").hidden = false;
+  if (SUPABASE_ON && account) {
+    $("acctTitle").textContent = session.admin ? "Admin" : "Your account";
+    if (session.admin) { try { sbAdmins = await adminNames() } catch { sbAdmins = null } }
+    $("acctBody").innerHTML = acctHTMLSupabase(); return;
+  }
   await loadAcct(); $("acctBody").innerHTML = acctHTML();
 }
 function closeAcct(): void { const m = document.getElementById("acctModal"); if (m) m.hidden = true }
@@ -135,7 +248,9 @@ async function saveUsers(users: AdminUser[], msg: string, done: string): Promise
   }
 }
 async function acctClick(e: MouseEvent): Promise<void> {
-  const b = (e.target as HTMLElement).closest<HTMLElement>("[data-acct]"); if (!b || !acctUsers) return;
+  const b = (e.target as HTMLElement).closest<HTMLElement>("[data-acct]"); if (!b) return;
+  if (SUPABASE_ON && account) { await sbAcctClick(b.dataset.acct!); return }
+  if (!acctUsers) return;
   const a = b.dataset.acct, err = (m: string) => { $("acctErr").textContent = m };
   const users = acctUsers.map(u => ({ ...u })), meI = users.findIndex(u => u.name === session.name);
   if (a === "name") {
@@ -234,8 +349,13 @@ export function initAdmin(): void {
   ab.insertAdjacentHTML("afterend", AOPT);
   document.body.insertAdjacentHTML("beforeend", ADMIN_MODAL + ACCT_MODAL + HIST_PANEL);
   ab.hidden = false;
-  ab.addEventListener("click", () => { if (session.admin) openAcct(); else openAdmin() });
-  $("adminSwitch").addEventListener("click", () => { setAdminMode(adminMode === "login" ? "setup" : "login"); focusFirst() });
+  ab.addEventListener("click", () => { if (session.admin || account) openAcct(); else openAdmin() });
+  if (SUPABASE_ON) {
+    $("emailRow").hidden = false; $("adminPassLabel").textContent = "Password";
+    $("adminForgot").addEventListener("click", () => { setAdminMode("forgot"); focusFirst() });
+    $("aoptMenu").querySelector('[data-aopt="acct"] small')!.textContent = "Change your name or password";
+  }
+  $("adminSwitch").addEventListener("click", () => { setAdminMode(adminMode === "login" ? (SUPABASE_ON ? "signup" : "setup") : "login"); focusFirst() });
   $("adminCancel").addEventListener("click", closeAdmin);
   $("adminModal").addEventListener("click", e => { if (e.target === $("adminModal")) closeAdmin() });
   $<HTMLFormElement>("adminForm").addEventListener("submit", submitAdmin);
@@ -256,6 +376,11 @@ export function initAdmin(): void {
 /** Sign back in from earlier in this tab, if there was a sign-in. Pages call this after setting adminHooks,
     so their signedIn hook runs (quietly). */
 export function restoreAdmin(): void {
+  if (SUPABASE_ON) {
+    currentAccount().then(a => { if (a && !account) enterAccount(a, true) }, () => { /* offline: stay signed out */ });
+    onAuthChange(event => { if (event === "SIGNED_OUT" && account) leaveAccount() }).catch(() => { /* offline */ }); // e.g. signed out in another tab
+    return;
+  }
   const s = storedSession();
   if (s && !session.admin) becomeAdmin(s.key, true, s.name);
 }

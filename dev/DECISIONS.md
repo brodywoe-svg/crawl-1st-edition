@@ -21,6 +21,56 @@ Template:
 
 ---
 
+## 2026-11-02: A staging Supabase project; the tabletop's design; anonymous players
+**Status:** proposed by maddox. Brody to OK the player-facing parts (4: roles, DM proposals, party privacy) · **Who:** maddox
+**Why:** Planning the database as a whole ([planning/supabase-database.md](planning/supabase-database.md)) needed these choices.
+**Decision:**
+1. **A staging project.** A second free project, `crawl-dev`, takes every migration first, and Vercel preview links use it.
+   Production (`crawl`) only gets changes that were tested there.
+   - Weighed against: a single project, which is simpler, but then every test touches real accounts.
+2. **The tabletop's tables.** One generic `campaign_items` table (campaign, kind, page, item, JSON data), on top of the campaign tables
+   (decision 4), streamed with Supabase Realtime.
+   - Weighed against: a table per kind (tokens, fog, chat…), which is cleaner SQL but means rewriting `app.js`.
+   - The generic table matches today's Firebase tree, so a `SupabaseNet` can sit behind the existing `net.js` API.
+   - RLS on `kind` and `data` still hides GM-only things from players on the server.
+3. **Anonymous sign-in for tabletop players** who join from an invite link, as Firebase does today. They can upgrade to a real account later.
+   - Weighed against: requiring accounts to play, which adds friction for one-off players.
+4. **Roles.** Accounts are `player` or `admin`. **Dungeon master is a role per campaign**, and anyone can start a campaign and be its DM.
+   DMs see the characters in their campaign, and only **propose** changes to them; the player accepts or rejects each proposal.
+   - Weighed against: an account-wide DM role granted by admins (less open, and it slows new groups down),
+     and DMs editing characters directly (simpler, but a player's sheet could change without them).
+   - Campaign creation is capped per account (10), and needs a real, confirmed account, to limit spam.
+   - Players see each other's characters only as a party summary (name, race, class, level, portrait). The full sheet is visible
+     only if its owner shares it with that campaign.
+5. **Free services, no domain, for now.** Account emails use Supabase's built-in sender, which only reaches our own team (about 2 an hour).
+   So email confirmation is **off**: anyone can make an account and use it straight away. Password resets by email work for the team; anyone else is reset by an admin.
+   - Weighed against: a dedicated Gmail account over SMTP (about 500 a day, free, but one more account to look after), or buying a domain for a real email service.
+   - Before sign-up opens beyond our group: add a CAPTCHA, and a real sender (Gmail or a service) with confirmation on. Both are settings, not code.
+**Trade-offs:**
+- Two projects to keep in step: migrations must be pushed to both.
+- `campaign_items` puts most of the data in JSON, so rules about it are written against `data->…` fields. That's harder to read than columns.
+- Anonymous users count toward the monthly user limit, and can spam a game whose invite link leaks. The GM can remove them, and the invite code can be rotated.
+
+## 2026-11-02: Admins sign in with Supabase accounts; a server function saves to GitHub
+**Status:** proposed by maddox; Brody OK'd Supabase (below) · **Who:** maddox
+**Why:** Admin access today is a GitHub key per admin, encrypted with that admin's password and published in `admin.json`.
+Anyone can download it and try passwords offline, and the unlocked key lives in the browser. Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md).
+Options we weighed:
+- **Email + password** (chosen): plain for Brody, with no GitHub sign-in needed. One GitHub key, kept as a server secret.
+- **Sign in with GitHub:** saves would commit as each person's own GitHub account, with no stored key. But GitHub's permission
+  covers all of that person's public repos, and every admin would need write access to the repo.
+- **Magic link by email:** no password, but it needs an email provider set up, and a link to click every time you sign in.
+**Decision:**
+- On the new site, admins sign in to Supabase with an email and password. Sign-up was off at first (opened for player accounts on 2026-11-03, see the entry above); admins are made admins in the dashboard,
+  and the admin role is set there.
+- Saves still commit `crawl-*.json` to GitHub, through a Supabase Edge Function that checks the caller is an admin.
+- The same `profiles` table will hold player accounts later.
+- The old site keeps the `admin.json` password until cutover. `admin.json` is retired after that.
+**Trade-offs:**
+- Commits are made by the GitHub account that owns the function's key. "(by name)" in the commit message says who really edited, as it does today.
+- A Supabase outage blocks admin saves on the new site (the old site still works until cutover).
+- Free Supabase projects pause after a week with no activity. Opening the dashboard wakes them.
+
 ## 2026-11-02: Host the site on Vercel, replacing GitHub Pages at cutover
 **Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
 **Why:** The new Vite site needs a build step, and GitHub Pages can only do that through a GitHub Actions workflow we'd have to maintain.
@@ -99,7 +149,7 @@ The migration is planned in [planning/typescript-vite-refactor.md](planning/type
 - The Windows app won't be code-signed at first, so Windows SmartScreen will warn on the first install, as it does today.
 
 ## 2026-11-02: Supabase over Firebase as the backend
-**Status:** proposed, waiting on Brody · **Who:** maddox
+**Status:** agreed (Brody OK'd it, talking with Maddox, 2026-11-02) · **Who:** maddox, brody
 **Why:** A fully digital Crawl needs things that GitHub and Firebase, as we use them now, can't do well:
 - player accounts,
 - characters saved to the cloud,

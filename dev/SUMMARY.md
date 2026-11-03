@@ -24,21 +24,27 @@ So we're moving it to a modern setup, **one page at a time**, while the current 
 | **TypeScript + Vite** | TypeScript is JavaScript that catches mistakes before they reach players. Vite is the tool that turns the code into the website. | Maddox agreed, needs your OK |
 | **React later** | React is a popular way to build complex screens. We'll use it later for the automated character sheet and combat. Not now. | Maddox agreed, needs your OK |
 | **Vercel** | The service that hosts the new site. It builds it automatically and makes the preview links. Free for non-commercial projects. | Maddox agreed, needs your OK |
-| **Supabase vs Firebase** | Where accounts, saved characters and online tabletop games will live. Maddox suggests Supabase: stronger security, and better suited to game rules. | **Your call** |
+| **Supabase** | The "backend": where accounts, saved characters and online tabletop games will live. Like a locked filing cabinet on the internet that only lets each person open their own drawer. | **Agreed** (you OK'd it) |
+| **Admin sign-in with Supabase** | Instead of the admin password, you'll sign in with your email and a password. Your saves work the same, but there's no secret key hidden in the site any more. Built, and switched on once the setup below is done. | Maddox is handling it |
 
 The full reasoning for each one is in [DECISIONS.md](DECISIONS.md).
 
 ## What we need from you
 1. **Approve or question the decisions** above, by commenting on the pull request.
-2. **Supabase or Firebase?** If you're unsure, ask Maddox, or ask Claude to explain the trade-offs.
-3. **The old claude.ai editing on the Spells page.** That page started life as an artifact in the claude.ai chat app, and it can still save spells back there.
-   Do you still edit spells that way? If not, we'll remove it.
-4. **Connect Vercel** (about 5 minutes, once). See step 3 of [QUICKSTART.md](QUICKSTART.md).
-5. **A custom domain?** Do you want an address like `crawlrpg.com` (about $10–15 a year)? Without one, the site lives at a `something.vercel.app` address.
+2. **Two small Supabase jobs** (about 10 minutes, once). You don't need to know anything about backends: follow step 6 of [QUICKSTART.md](QUICKSTART.md).
+   - Accept Maddox's invite to the "Crawl" organization on supabase.com.
+   - Make one GitHub key and paste it into Supabase. Only you can, because the repo is on your GitHub account.
+
+   Maddox sets up your admin account; you'll get a starting password to change after you sign in.
+3. **A custom domain?** Do you want an address like `crawlrpg.com` (about $10–15 a year)? Without one, the site lives at a `something.vercel.app` address.
+   **Not needed for now:** we're sticking to free services, and player account emails will come from a dedicated Gmail account instead.
+   The full database plan is in [planning/supabase-database.md](planning/supabase-database.md).
+
+Already done: Vercel is connected, and the Spells page's old claude.ai editing was dropped on the new site.
 
 ## What happens next
 1. Maddox ports the pages one by one, starting with the home page. Each one comes as its own pull request with a preview link.
 2. When every page matches the current site, we switch over, and the old address forwards to the new one.
-3. After that come the Windows app, accounts and online play (Supabase or Firebase), and then the rules automation.
+3. After that come the Windows app, player accounts and online play (on Supabase), and then the rules automation.
 
 The detailed plan is in [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md).

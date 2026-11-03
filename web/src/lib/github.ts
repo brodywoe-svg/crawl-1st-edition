@@ -1,8 +1,11 @@
 /* Admin access and saving to GitHub (ported from the /*@ADMIN@*\/ block in src/page.html). No DOM code here.
    admin.json is public and holds one locked copy of a GitHub key per admin: {v:2, users:[{name, box}]}.
    A box is the key encrypted with AES-256-GCM, using a key derived from that admin's password (PBKDF2-SHA256).
-   The unlocked key lives in sessionStorage, so a sign-in lasts while the tab is open, across pages. */
+   The unlocked key lives in sessionStorage, so a sign-in lasts while the tab is open, across pages.
+   With Supabase on (lib/auth.ts) there's no key in the browser: gh() sends each call to the github server function,
+   which checks the admin and adds the key itself. Everything built on gh() works the same either way. */
 import { REPO } from "../config";
+import { githubFunction } from "./auth";
 
 export interface Box { v?: number; cipher?: string; kdf?: string; iterations?: number; salt: string; iv: string; data: string }
 export interface AdminUser { name: string; box: Box }
@@ -10,8 +13,10 @@ export interface EditRecord { n: string; f: string; c: string; how: "added" | "e
 export interface EditLog { v: number; edits: Record<string, EditRecord> }
 export type GhError = { code: "bad_key" | "no_access" | "conflict" | "http"; status?: number };
 
-/** The signed-in admin, if any. Same sessionStorage keys as the old site. */
-export const session = { admin: false, key: null as string | null, name: "" };
+/** The signed-in admin, if any. Same sessionStorage keys as the old site. via: how saves reach GitHub. */
+export const session = { admin: false, key: null as string | null, name: "", via: "key" as "key" | "supabase" };
+/** What GH_KEY holds for a Supabase sign-in: there's no real key, but the old scripts check GH_KEY before saving. */
+const VIA_SUPABASE = "(supabase)";
 const SS_KEY = "crawl-admin-key", SS_NAME = "crawl-admin-name";
 /* The same state under the old global names, for the page scripts still shared with the old site (see web/vite/legacy-pages.ts).
    They're live bindings: importers always see the current value, but only this module can change them. */
@@ -19,15 +24,20 @@ export let ADMIN = false, GH_KEY: string | null = null, ADMIN_NAME = "";
 const sync = () => { ADMIN = session.admin; GH_KEY = session.key; ADMIN_NAME = session.name };
 
 export function saveSession(key: string, name: string): void {
-  Object.assign(session, { admin: true, key, name }); sync();
+  Object.assign(session, { admin: true, key, name, via: "key" }); sync();
   try { sessionStorage.setItem(SS_KEY, key); sessionStorage.setItem(SS_NAME, name) } catch { /* private mode */ }
 }
+/** Signed in with Supabase (which keeps its own sign-in). The marker in sessionStorage tells the tabletop, opened in this tab, you're an admin. */
+export function saveSupabaseSession(name: string): void {
+  Object.assign(session, { admin: true, key: VIA_SUPABASE, name, via: "supabase" }); sync();
+  try { sessionStorage.setItem(SS_KEY, VIA_SUPABASE); sessionStorage.setItem(SS_NAME, name) } catch { /* private mode */ }
+}
 export function clearSession(): void {
-  Object.assign(session, { admin: false, key: null, name: "" }); sync();
+  Object.assign(session, { admin: false, key: null, name: "", via: "key" }); sync();
   try { sessionStorage.removeItem(SS_KEY); sessionStorage.removeItem(SS_NAME) } catch { /* private mode */ }
 }
 export function storedSession(): { key: string; name: string } | null {
-  try { const key = sessionStorage.getItem(SS_KEY); return key ? { key, name: sessionStorage.getItem(SS_NAME) || "" } : null } catch { return null }
+  try { const key = sessionStorage.getItem(SS_KEY); return key && key !== VIA_SUPABASE ? { key, name: sessionStorage.getItem(SS_NAME) || "" } : null } catch { return null }
 }
 
 // ---------------------------------------------------------------- locking keys with a password
@@ -67,13 +77,24 @@ export async function fetchAdminUsers(): Promise<AdminUser[] | null> {
 }
 
 // ---------------------------------------------------------------- the GitHub contents API
-/** A call to the GitHub API for this repo, with the admin's key. */
+/** A call to the GitHub API for this repo, with the admin's key, or through the github server function with Supabase. */
 export function gh(path: string, opts: RequestInit = {}, key = session.key): Promise<Response> {
+  if (session.via === "supabase" && key === VIA_SUPABASE) return viaFunction(path, opts);
   return fetch(`https://api.github.com/repos/${REPO.owner}/${REPO.repo}${path}`, {
     ...opts, cache: "no-store",
     headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + key, "X-GitHub-Api-Version": "2022-11-28", ...(opts.headers as Record<string, string> || {}) },
   });
 }
+/** The same call, made by the github server function. It only reads and commits content files (crawl-*.json). */
+function viaFunction(path: string, opts: RequestInit): Promise<Response> {
+  const m = /^\/contents\/([^?]+)/.exec(path), method = (opts.method || "GET").toUpperCase();
+  if (!m) return Promise.resolve(new Response(null, { status: 400 }));
+  const file = decodeURIComponent(m[1]), accept = String((opts.headers as Record<string, string> | undefined)?.Accept || "");
+  if (method === "GET") return githubFunction({ method, file, raw: accept.includes("raw") });
+  const b = JSON.parse(String(opts.body || "{}"));
+  return githubFunction({ method, file, message: b.message, content: b.content, sha: b.sha });
+}
+
 /** A file's current text on the branch, or null if it doesn't exist. */
 export async function getRepoText(path: string): Promise<string | null> {
   const r = await gh(`/contents/${encodeURIComponent(path)}?ref=${REPO.branch}`, { headers: { Accept: "application/vnd.github.raw+json" } });

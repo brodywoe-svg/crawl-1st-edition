@@ -243,6 +243,20 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
 - **Real TypeScript modules** (shared by every page):
   - `lib/markup.ts`: the text markup and glossary matching (was `GLCORE` in `src/page.html`); `ui/tips.ts`: the glossary tooltips.
   - `lib/github.ts`: admin keys, GitHub saving, the edit log; `ui/admin.ts`: the whole admin UI (was the `ADMIN` block).
+  - `lib/auth.ts`: Supabase accounts ([planning/supabase-admin-login.md](planning/supabase-admin-login.md), [planning/supabase-database.md](planning/supabase-database.md)).
+    It's on only when `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are set (`.env.example`); otherwise the new site uses the `admin.json` password, like the old one.
+    With it on:
+    - the nav button reads **Sign in**, and anyone can make an account (a player);
+    - accounts with the admin role also get the admin tools, and `gh()` sends their GitHub calls to the `github` Edge Function, which holds the key;
+    - `account.html` is where password-reset emails land;
+    - the Character Creator syncs its characters to the `characters` table (`ui/cloud-characters.ts` and `lib/characters.ts`).
+      It's done through a small hook in `src/creator.js` (`window.crawlCloud`) that does nothing on the old site.
+- **Supabase** (`supabase/`, managed with `npx supabase`):
+  - `migrations/`: the database, with row-level security on every table. So far:
+    - `profiles`: one per account (`display_name`, `role` `player`/`admin`);
+    - `characters`: Character Creator characters, one per (owner, id).
+  - `functions/github/`: reads and commits `crawl-*.json` for signed-in admins, using the `GITHUB_TOKEN` secret.
+  - `config.toml`: auth settings (sign-up on, no email confirmation for now, 12-character passwords), pushed with `npx supabase config push`.
   - `ui/nav.ts`: the nav, shortened to Home · Character Creator · **Wiki** · Tabletop · About ([planning/wiki-menu.md](planning/wiki-menu.md)).
     The Wiki menu lists the eight reference sections and links to `wiki.html`, a page of section cards with live counts (`ui/counts.ts`).
     The old per-section menus are gone; the old scripts' `window.crawlNav*` calls are now no-ops.

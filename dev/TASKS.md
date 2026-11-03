@@ -9,7 +9,10 @@ Format: `- [ ] Task (@owner)`. The owner is `@brody`, `@maddox`, or left off if 
 If a task needs more than a line of explanation, write a doc in [planning/](planning/) and link it from the task.
 
 ## Now
-- [ ] Review the decisions (TypeScript + Vite, React later, Vercel, Supabase): start at [QUICKSTART.md](QUICKSTART.md). Supabase is still open. (@brody)
+- [ ] Review the decisions (TypeScript + Vite, React later, Vercel): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
+- [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox)
+- [ ] Supabase database plan, phases 2–4 (player, DM and admin roles): [planning/supabase-database.md](planning/supabase-database.md). Brody to OK it (@maddox, @brody)
+- [ ] Supabase: accept the org invite, then make the `GITHUB_TOKEN` and add it to Supabase: [QUICKSTART.md](QUICKSTART.md) step 6 (@brody)
 - [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
 
 ## Next
@@ -18,6 +21,9 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 - [ ] Add the Vercel site address to Firebase's authorized domains, so online tabletop play works there (@brody)
 
 ## Later
+- [ ] Supabase phase 2: player accounts and cloud-saved characters. Built (PR #8): push the migration and config, then test with two accounts: [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 3: campaigns; DMs see their players' characters and propose changes: [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 4: the tabletop off Firebase, built on campaigns: [planning/supabase-database.md](planning/supabase-database.md)
 - [ ] Move the UI to React after the Vite refactor: [planning/react-migration.md](planning/react-migration.md)
 
 ## Done
