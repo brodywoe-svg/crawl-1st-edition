@@ -14,6 +14,7 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 
 ## Next
 - [ ] Try the 3D dice prototype on a laptop and a phone, fill in [testing/3d-dice.md](testing/3d-dice.md), then decide ship / iterate / remove (@maddox, @brody)
+- [ ] Wiki menu: group the 8 reference sections under one tab, plus a Wiki page: [planning/wiki-menu.md](planning/wiki-menu.md) (@maddox; needs Brody's OK)
 - [ ] Add the Vercel site address to Firebase's authorized domains, so online tabletop play works there (@brody)
 
 ## Later
