@@ -1,0 +1,17 @@
+{
+  "name": "crawl-1st-edition",
+  "private": true,
+  "type": "module",
+  "description": "Crawl 1st Edition website (new Vite build in web/). See dev/planning/typescript-vite-refactor.md.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}
