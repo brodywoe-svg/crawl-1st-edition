@@ -11,7 +11,7 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 ## Now
 - [ ] Review the decisions (TypeScript + Vite, React later, Vercel, Supabase): start at [QUICKSTART.md](QUICKSTART.md). Supabase is still open. (@brody)
 - [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox; Brody to OK)
-- [ ] Supabase database plan, phases 2 and 3: [planning/supabase-database.md](planning/supabase-database.md). Brody to OK it, and to answer the email/domain question (@maddox, @brody)
+- [ ] Supabase database plan, phases 2–4 (player, DM and admin roles): [planning/supabase-database.md](planning/supabase-database.md). Brody to OK it, and to answer the email/domain question (@maddox, @brody)
 - [ ] Supabase admins: Brody makes the `GITHUB_TOKEN` and adds it under Edge Functions → Secrets (@brody)
 - [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
 
@@ -22,7 +22,8 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 
 ## Later
 - [ ] Supabase phase 2: player accounts and cloud-saved characters: [planning/supabase-database.md](planning/supabase-database.md)
-- [ ] Supabase phase 3: the tabletop off Firebase: [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 3: campaigns; DMs see their players' characters and propose changes: [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 4: the tabletop off Firebase, built on campaigns: [planning/supabase-database.md](planning/supabase-database.md)
 - [ ] Move the UI to React after the Vite refactor: [planning/react-migration.md](planning/react-migration.md)
 
 ## Done

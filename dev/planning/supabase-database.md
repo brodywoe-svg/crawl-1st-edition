@@ -12,16 +12,26 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 | --- | --- | --- |
 | 1 | Admins: `profiles`, sign-in, saving to GitHub | Built (PR #8). Waiting on the `GITHUB_TOKEN` secret |
 | 2 | Player accounts, and Character Creator characters saved to the cloud | Planned. Blocked on email (see Open questions) |
-| 3 | The tabletop on Supabase instead of Firebase | Planned |
+| 3 | Campaigns: dungeon masters see their players' characters and propose changes to them | Planned |
+| 4 | The tabletop on Supabase instead of Firebase, built on campaigns | Planned |
 | Later | Rules checked on the server | Sketch only |
+
+## Roles: players, dungeon masters, admins
+- **Account roles** (`profiles.role`, from phase 1):
+  - `player`: everyone, by default.
+  - `admin`: edits game content, and can see everything for support. Set in the Supabase dashboard only.
+- **Campaign roles** (`campaign_members.role`, phase 3):
+  - `dm` or `player`, per campaign.
+  - **Anyone can be a DM.** Whoever creates a campaign is its DM, and can make other members co-DMs. One account can be the DM of one campaign and a player in another.
+- **What a DM can do with a player's character:** see it while it's in their campaign, and **propose** changes, which the player accepts or rejects.
+  A DM never changes a player's saved character directly.
 
 ## Ground rules (every phase)
 - **Row-level security (RLS) on every table.** These are database rules that Supabase enforces whatever the site sends,
   so permissions no longer depend on client code (today the tabletop's GM-only actions are enforced only in the browser, ARCHITECTURE §6).
 - **Shared helper functions.** They're `security definer` with `search_path = ''`, like `public.is_admin()` in phase 1:
   - `is_admin()`,
-  - `is_game_member(game uuid)`,
-  - `is_game_gm(game uuid)` (from phase 3).
+  - `is_campaign_member(campaign uuid)`, `is_campaign_dm(campaign uuid)`, `can_view_character(id text)` (from phase 3).
 - **Migrations:**
   - one new file per change (`npx supabase migration new <name>`);
   - never edit one that's already been pushed;
@@ -72,7 +82,7 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 - RLS:
   - you can see, add, change and delete only your own characters;
   - admins can see all of them (for support; see Open questions);
-  - phase 3 adds: the GMs of a game a character is in can see it.
+  - phase 3 adds: the DMs of a campaign a character is in can see it.
 
 **Sign-up** (in `supabase/config.toml`, then `config push`):
 - Sign-up turned on.
@@ -101,70 +111,108 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 - an admin can see both;
 - a 2 MB character is refused.
 
-## Phase 3: the tabletop
+## Phase 3: campaigns, and what DMs can see
+A **campaign** is a group of players and their characters, run by one or more dungeon masters. In phase 4 it also becomes the tabletop game.
+
+**Tables**
+- **`campaigns`**:
+  - columns: `id`, `name`, `created_by`, `invite_code` (random, unique; the DM can make a new one), `settings jsonb`, `created_at`;
+  - any signed-in account with a confirmed email (not an anonymous one) can create a campaign, up to 10 each, checked on the server;
+  - its creator becomes its DM automatically.
+- **`campaign_members`**:
+  - columns: `campaign_id`, `user_id`, `role` (`dm` | `player`), `name`, `color`, `joined_at`; primary key (`campaign_id`, `user_id`);
+  - you join as a player through `join_campaign(code)`, a server function that checks the invite code;
+  - a DM can make a player a co-DM, or remove a member;
+  - the last DM can't leave without handing over the campaign or deleting it.
+- **`campaign_characters`**:
+  - columns: `campaign_id`, `character_id`, `added_at`;
+  - a player adds their **own** character to a campaign they're in; the player or a DM can take it out.
+- **`character_changes`**: a DM's proposed edits to a player's character.
+  - Columns: `id`, `character_id`, `campaign_id`, `proposed_by`, `changes jsonb` (a list of `{path, from, to}`, e.g. gold 10 → 60),
+    `note` ("Loot from the goblin cave"), `status` (`pending` | `accepted` | `rejected` | `withdrawn` | `stale`), `created_at`, `decided_at`.
+  - **Accepting** goes through `accept_change(id)`, a server function. It checks you own the character, applies every change in one step,
+    and marks the proposal `stale` instead if the character has changed since (a `from` no longer matches).
+  - **Where it shows:** the player sees "Your DM proposed 2 changes" in the Character Creator, with Accept and Reject.
+
+**Who sees and changes what**
+
+| | Player | DM (of this campaign) | Admin |
+| --- | --- | --- | --- |
+| Their own characters | see, change, delete | — | — |
+| Characters in the campaign | their own only | **see** (not change) | see |
+| Propose a change to a character | — | yes, for characters in their campaign | — |
+| Accept or reject a proposal | their own characters | withdraw their own proposals | — |
+| Campaign settings, invite code, members | — | yes | yes (support) |
+| Create a campaign | yes, and become its DM | — | yes |
+
+- A DM only sees a character while it's in their campaign. Taking it out, or the player leaving, ends that at once,
+  because the database checks membership on every read.
+- Play-time changes (HP, conditions, spent Action Pool) aren't proposals. They go on the campaign's live copy (phase 4), which DMs control, as the tabletop's `snap`/`live` split does today.
+- Helper functions: `is_campaign_member(c)`, `is_campaign_dm(c)`, and `can_view_character(id)` (owner, a DM of a campaign it's in, or an admin).
+
+**RLS checklist:**
+- a DM sees characters in their campaign but not the player's other characters;
+- a DM can't change a character directly, only propose;
+- a player in the same campaign can't see another player's character;
+- after a character leaves the campaign, the DM can't see it;
+- accepting a stale proposal changes nothing;
+- a wrong invite code doesn't join;
+- an 11th campaign is refused.
+
+## Phase 4: the tabletop
 This replaces `FirebaseNet` with a `SupabaseNet` behind the same `tabletop/net.js` API (`on`/`get`/`set`/`update`/`push`/`remove`/`presence`),
 so `app.js` barely changes (as the Supabase decision says). The game data shape is in the header comment of `tabletop/app.js`.
 
-**Tables**
-- **`games`**: `id`, `name`, `owner_id`, `settings jsonb` (`playerPage`, `fps`), `invite_code` (random, unique), `created_at`.
-  Only admins can create games while the tabletop is in private testing.
-- **`game_members`**:
-  - columns: `game_id`, `user_id`, `role` (`gm` | `player`), `name`, `color`; primary key (`game_id`, `user_id`);
-  - replaces `meta.gm`, `meta.gms` and `players`;
-  - you join only through `join_game(code)`, a server function that adds you as a player when the invite code is right.
-- **`game_items`**: everything else, one row per leaf of today's tree.
-  - Columns: `game_id`, `kind` (`page` · `token` · `draw` · `fog` · `char` · `handout` · `turn` · `chat`), `page_id` (for per-page kinds),
+- **A tabletop game is a campaign.** Today's `meta.gm`/`meta.gms`/`players` become `campaign_members`. Players' characters come from `campaign_characters`:
+  the game's `snap` is the saved character, and `live` is the play state.
+- **`campaign_items`**: everything else, one row per leaf of today's tree.
+  - Columns: `campaign_id`, `kind` (`page` · `token` · `draw` · `fog` · `char` · `handout` · `turn` · `chat`), `page_id` (for per-page kinds),
     `item_id`, `data jsonb`, `updated_by`, `updated_at`.
-  - Primary key (`game_id`, `kind`, `item_id`).
+  - Primary key (`campaign_id`, `kind`, `item_id`).
   - `SupabaseNet` maps each path onto it, e.g. `tokens/<pid>/<tid>` is kind `token`, page `pid`, item `tid`.
-
-**Who sees and changes what** (RLS):
-- **Members see their game. Players don't see:**
-  - tokens and drawings on the GM layer,
-  - handouts that aren't shown,
-  - characters marked hidden, unless they own them,
-  - whispers that aren't to or from them.
-- **The GM can change everything. Players can:**
-  - move tokens they control (`data.ctrl`),
-  - change their own characters,
-  - post chat as themselves,
-  - draw and erase their own drawings on the player layer.
-
-**Live updates:** Supabase Realtime.
-- Changes to `game_items` are streamed to each member. The stream respects RLS, so hidden things never reach a player's browser.
-- A Presence channel per game shows who's online (replacing `players.online`).
-
-**Files:**
-- a private `game-assets` bucket, laid out as `<game>/maps/<page>`, `/tokens/…`, `/handouts/…`;
-- members can read, and GMs can upload;
-- maps stop being data URLs inside the database.
-
-**Players without accounts:** Supabase's anonymous sign-in, used for invite links, as Firebase does today. It's turned on only when phase 3 ships.
-An anonymous player can later turn their session into a real account.
-
-**Out of scope:** moving existing Firebase games across (agreed: they won't carry over). Firebase stays as a fallback until phase 3 is tested, then it's removed.
-
-**RLS checklist:**
-- a non-member sees nothing;
-- a player can't see GM-layer tokens, hidden handouts or others' whispers, and can't move others' tokens or edit fog;
-- the GM can do everything;
-- a wrong invite code doesn't join;
-- an anonymous player can join and play.
+- **Who sees and changes what** (RLS):
+  - **Members see their campaign's table. Players don't see:**
+    - tokens and drawings on the GM layer,
+    - handouts that aren't shown,
+    - characters marked hidden, unless they own them,
+    - whispers that aren't to or from them.
+  - **DMs can change everything. Players can:**
+    - move tokens they control (`data.ctrl`),
+    - change their own character's live state,
+    - post chat as themselves,
+    - draw and erase their own drawings on the player layer.
+- **Live updates:** Supabase Realtime.
+  - Changes to `campaign_items` are streamed to each member, respecting RLS, so hidden things never reach a player's browser.
+  - A Presence channel per campaign shows who's online.
+- **Files:**
+  - a private `campaign-assets` bucket: `<campaign>/maps/<page>`, `/tokens/…`, `/handouts/…`;
+  - members can read, and DMs can upload;
+  - maps stop being data URLs inside the database.
+- **Players without accounts:** Supabase's anonymous sign-in for invite links, as Firebase does today, turned on only when phase 4 ships.
+  An anonymous player can play, but can't create a campaign, and can later turn their session into a real account.
+- **Out of scope:** moving existing Firebase games across (agreed: they won't carry over). Firebase stays as a fallback until phase 4 is tested.
+- **RLS checklist:**
+  - a non-member sees nothing;
+  - a player can't see GM-layer tokens, hidden handouts or others' whispers, and can't move others' tokens or edit fog;
+  - DMs can do everything;
+  - an anonymous player can join and play.
 
 ## Later (sketch)
 - **Rules on the server:** Edge Functions or database functions that check actions (e.g. spending from the Action Pool), once the rules are structured data.
 - **Game content in the database:** only as a separate decision, if the JSON-on-GitHub workflow stops working for us.
 
 ## Steps
-- [ ] Brody OKs Supabase, and the proposed entries in DECISIONS.md (staging project, the tabletop table design, anonymous players).
+- [ ] Brody OKs Supabase, and the proposed entries in DECISIONS.md (staging project, the tabletop table design, anonymous players, roles).
 - [ ] Create `crawl-dev`, add `npm run db:types`, and point Vercel previews at `crawl-dev` (dev/SETUP.md).
 - [ ] Phase 1: `GITHUB_TOKEN` from Brody, then test end to end.
 - [ ] Phase 2: answer the email question; build `characters`, sign-up, the account page and sync (own PR).
-- [ ] Phase 3: tables, RLS, Realtime, storage, `SupabaseNet` (own PR, or two).
+- [ ] Phase 3: campaigns, members, characters in campaigns, DM change proposals and the Creator's accept/reject (own PR).
+- [ ] Phase 4: the tabletop's tables, RLS, Realtime, storage, `SupabaseNet` (own PR, or two).
 
 ## Open questions
 - **Email for player accounts (blocks phase 2):** confirmation and reset emails need an email provider (e.g. Resend's free tier)
   **and a domain to send from**. This is the same question as Brody's "custom domain?" in SUMMARY.md.
 - **Can admins see every player's characters?** Planned: yes, for support. Or only their owners?
-- **After testing, who can create tabletop games:** any player, or still only admins?
+- **Can players in a campaign see each other's characters?** Planned: no, only the DMs. The party view on the tabletop uses each character's snapshot there.
+- **Campaign limit:** 10 per account, to stop spam. Is that right?
 - **Chat history:** keep it all, or cap it per game (e.g. the newest 1,000 messages)?
