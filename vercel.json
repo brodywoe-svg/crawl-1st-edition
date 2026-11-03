@@ -6,7 +6,7 @@
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)crawl-edits.json' ':(exclude)dev' ':(exclude)*.md'",
   "headers": [
     {
-      "source": "/(crawl-.*\.json|admin\.json)",
+      "source": "/(crawl-.*\\.json|admin\\.json)",
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     }
   ]
