@@ -47,6 +47,8 @@ Session 1 is on paper. By session 2, players make and track their characters on 
 3. **A custom domain?** Do you want an address like `crawlrpg.com` (about $10–15 a year)? Without one, the site lives at a `something.vercel.app` address.
    **Not needed for now:** we're sticking to free services, and player account emails will come from a dedicated Gmail account instead.
    The full database plan is in [planning/supabase-database.md](planning/supabase-database.md).
+4. **A setup session with Maddox.** Every account, key and setting the backend needs, with who does each, is in one list:
+   [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md). Its "Open questions" at the bottom are the decisions we'll make together.
 
 Already done: Vercel is connected, and the Spells page's old claude.ai editing was dropped on the new site.
 
