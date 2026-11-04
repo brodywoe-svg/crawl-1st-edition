@@ -21,6 +21,31 @@ Template:
 
 ---
 
+## 2026-11-04: Focus on a playtest MVP; the tabletop and Tree mode are proofs of concept; characters are build + state + events
+**Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
+**Why:** Session 1 of the first campaign is on paper. We want the site ready for session 2, a couple of weeks later, for one campaign.
+The previous plan went straight from accounts (phase 2) to campaigns with DM proposals (phase 3) and the tabletop on Supabase (phase 4).
+That's more than the playtest needs, and builds on the tabletop before we've agreed what a final tabletop looks like.
+Plans: [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md), [planning/character-data.md](planning/character-data.md).
+**Decision:**
+1. **The next goal is the playtest MVP:** players make and track their characters on the site in one campaign, and the DM sees the party.
+   Order: character data and state, then prototypes (stat display, dice rolling), then the build.
+2. **The tabletop (`tabletop/`) and Tree mode are proofs of concept.** We learn from them but don't build on them until a final design is agreed.
+   Phase 4 (the tabletop on Supabase) is on hold. Phase 3 is cut down for the MVP (no DM proposals yet).
+   The long-term vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
+3. **A character has three layers:**
+   - **build:** the player's choices;
+   - **state:** what changes in play;
+   - **derived:** numbers worked out from the rules, never saved.
+
+   State changes only through **events** handled by one pure function, which is the start of the rules engine.
+   - Weighed against: keeping the Creator's single object and its saved `snap` (simplest, but saved numbers go stale whenever Brody changes a rule).
+   - Weighed against: editing state fields directly (simpler now, but no undo, no history, and a rewrite when the tabletop or a server needs to check actions).
+**Trade-offs:**
+- Characters saved today need a migration (`v: 1` → `v: 2`). The old site's Creator has to cope with it until cutover.
+- More code up front: porting the Creator's maths into `web/src/lib/` (which the TypeScript refactor needs anyway).
+- The tabletop proof of concept falls further behind, and stays on Firebase meanwhile.
+
 ## 2026-11-02: A staging Supabase project; the tabletop's design; anonymous players
 **Status:** proposed by maddox. Brody to OK the player-facing parts (4: roles, DM proposals, party privacy) · **Who:** maddox
 **Why:** Planning the database as a whole ([planning/supabase-database.md](planning/supabase-database.md)) needed these choices.

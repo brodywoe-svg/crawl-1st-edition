@@ -29,6 +29,14 @@ So we're moving it to a modern setup, **one page at a time**, while the current 
 
 The full reasoning for each one is in [DECISIONS.md](DECISIONS.md).
 
+## The next goal: the site ready for session 2 (proposed 2026-11-04)
+Session 1 is on paper. By session 2, players make and track their characters on the site (HP, Action Pool, conditions, gear, dice rolls), and the DM sees the party.
+- **Your tabletop and Tree mode** are treated as proofs of concept: we learn from them, but don't build on them until we agree a final design.
+  The big digital-tabletop vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
+- **Please check one table:** "Events: the state system" in [planning/character-data.md](planning/character-data.md).
+  It's how the site will track the Action Pool, HP and so on, taken from your glossary. Tell us what's wrong or missing.
+- The plan is in [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md), and the decision to OK is the 2026-11-04 entry in [DECISIONS.md](DECISIONS.md).
+
 ## What we need from you
 1. **Approve or question the decisions** above, by commenting on the pull request.
 2. **Two small Supabase jobs** (about 10 minutes, once). You don't need to know anything about backends: follow step 6 of [QUICKSTART.md](QUICKSTART.md).

@@ -9,6 +9,10 @@ Format: `- [ ] Task (@owner)`. The owner is `@brody`, `@maddox`, or left off if 
 If a task needs more than a line of explanation, write a doc in [planning/](planning/) and link it from the task.
 
 ## Now
+Goal: the playtest MVP, ready for session 2: [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md).
+- [ ] Agree the change of focus (DECISIONS.md, 2026-11-04) and check the events table in [planning/character-data.md](planning/character-data.md) (@brody)
+- [ ] Character data and the state system: types, `apply`, `derive`, migration, dice: [planning/character-data.md](planning/character-data.md) (@maddox)
+- [ ] Prototypes: the stat display / play sheet, and dice rolling, built on the above (testing docs to come)
 - [ ] Review the decisions (TypeScript + Vite, React later, Vercel): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
 - [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox)
 - [ ] Supabase database plan, phases 2–4 (player, DM and admin roles): [planning/supabase-database.md](planning/supabase-database.md). Brody to OK it (@maddox, @brody)
@@ -22,8 +26,8 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 
 ## Later
 - [ ] Supabase phase 2: player accounts and cloud-saved characters. Built (PR #8): push the migration and config, then test with two accounts: [planning/supabase-database.md](planning/supabase-database.md)
-- [ ] Supabase phase 3: campaigns; DMs see their players' characters and propose changes: [planning/supabase-database.md](planning/supabase-database.md)
-- [ ] Supabase phase 4: the tabletop off Firebase, built on campaigns: [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 3, cut down for the MVP: campaigns, join by code, the DM's live party view (proposals deferred): [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 4: the tabletop off Firebase. **On hold**: the tabletop is a proof of concept ([roadmap/digital-tabletop.md](roadmap/digital-tabletop.md))
 - [ ] Move the UI to React after the Vite refactor: [planning/react-migration.md](planning/react-migration.md)
 
 ## Done

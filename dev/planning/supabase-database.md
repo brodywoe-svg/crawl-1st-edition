@@ -12,8 +12,8 @@ One plan for everything the database will hold, so each phase fits the next. Eac
 | --- | --- | --- |
 | 1 | Admins: `profiles`, sign-in, saving to GitHub | Built (PR #8). Waiting on the `GITHUB_TOKEN` secret |
 | 2 | Player accounts, and Character Creator characters saved to the cloud | Built (PR #8); waiting on the migration push and a real test |
-| 3 | Campaigns: dungeon masters see their players' characters and propose changes to them | Planned |
-| 4 | The tabletop on Supabase instead of Firebase, built on campaigns | Planned |
+| 3 | Campaigns: dungeon masters see their players' characters and propose changes to them | Planned. For the playtest MVP, cut down to campaigns, join by code and the DM's live party view; proposals later ([roadmap/playtest-mvp.md](../roadmap/playtest-mvp.md)) |
+| 4 | The tabletop on Supabase instead of Firebase, built on campaigns | **On hold** (proposed 2026-11-04): the tabletop is a proof of concept until its design is agreed ([roadmap/digital-tabletop.md](../roadmap/digital-tabletop.md)) |
 | Later | Rules checked on the server | Sketch only |
 
 ## Roles: players, dungeon masters, admins
