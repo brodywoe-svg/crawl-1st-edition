@@ -38,7 +38,10 @@ Session 1 is on paper. By session 2, players make and track their characters on 
 - **The current site stays exactly as it is** at its usual address, so players can use it for session 1. Your Admin editing there keeps working.
 - **The new site moves to React now**, not later. React is the most popular way to build screens that update live, like a sheet where spending AP changes several numbers.
   Doing it now means we don't build the same screens twice.
-- The plan is in [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md). The two decisions to OK are the 2026-11-04 entries in [DECISIONS.md](DECISIONS.md).
+- **Your wiki content gets a "rules data" layer** so the app can use it: costs, dice, damage and effects, kept **beside** your text, never replacing it.
+  Nothing in your files changes for now, and your Admin editing works as before.
+  Please read the open questions at the bottom of [planning/content-schema.md](planning/content-schema.md). In particular: who writes the rules data, you, or us with your sign-off?
+- The plan is in [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md). The three decisions to OK are the 2026-11-04 entries in [DECISIONS.md](DECISIONS.md).
 
 ## What we need from you
 1. **Approve or question the decisions** above, by commenting on the pull request.

@@ -123,6 +123,8 @@ All of it is pure TypeScript in `web/src/lib/`, with no DOM, so it can later run
 | `lib/character/migrate.ts` | `v: 1` (the Creator's object) → `v: 2` |
 | `lib/dice.ts` | The dice parser, moved from `tabletop/dice.js` so the sheet and the tabletop share it |
 
+`derive` and `apply` read content through `lib/content` (typed records with ids, [content-schema.md](content-schema.md) stage A), not the raw `crawl-*.json`.
+
 Porting the maths into `derive.ts` comes first. The Creator is then rebuilt in React on top of it ([react-migration.md](react-migration.md)), and writes the new shape directly.
 
 ### Saving and syncing

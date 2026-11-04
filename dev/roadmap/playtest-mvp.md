@@ -38,6 +38,7 @@ It's built so the step after it doesn't mean starting over, but it doesn't try t
 ## Features
 - [planning/react-migration.md](../planning/react-migration.md): the new site in React (planning)
 - [planning/character-data.md](../planning/character-data.md): character data and the state system (planning)
+- [planning/content-schema.md](../planning/content-schema.md): stage A only, typed content for the play sheet (planning)
 - Stat display / play sheet prototype: not started (testing)
 - Dice rolling prototype: not started (testing). Builds on [testing/3d-dice.md](../testing/3d-dice.md) and `tabletop/dice.js`
 - Campaigns, cut down: from [planning/supabase-database.md](../planning/supabase-database.md) phase 3 (planning)

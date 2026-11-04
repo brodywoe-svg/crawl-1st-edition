@@ -45,5 +45,6 @@ These are experiments to learn from. They are **not** foundations to build on un
 - **Paying for it:** at thousands of campaigns, free plans won't do. Is Crawl ever sold? (TBD)
 
 ## Features
+- [planning/content-schema.md](../planning/content-schema.md): the wiki's content schema, typed for the tabletop (planning)
 - [roadmap/playtest-mvp.md](playtest-mvp.md): the first step (active)
 - Tabletop on Supabase: [planning/supabase-database.md](../planning/supabase-database.md) phase 4 (on hold)

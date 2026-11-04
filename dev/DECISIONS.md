@@ -21,6 +21,32 @@ Template:
 
 ---
 
+## 2026-11-04: Game content gets a typed schema; structured rules data sits beside the prose
+**Status:** proposed by maddox. Brody to OK (it changes content shape, and the structured data translates his rules) · **Who:** maddox, brody
+**Why:** A virtual tabletop needs content a program can use: ids, numbers that are numbers, costs, rolls and effects.
+Today most mechanics are prose or loose strings, and spells and glossary entries have no ids.
+And every Admin editor drops fields it doesn't know, so new fields can't simply be added to `crawl-*.json` yet.
+Plan: [planning/content-schema.md](planning/content-schema.md).
+Options we weighed:
+- **Add fields to the records now:** Admin saves would erase them, on both sites.
+- **Rewrite the prose as structured data:** it loses Brody's wording, and it's his content.
+- **Move content into the database:** a much bigger change, already ruled out for now ("`crawl-*.json` stays the source of truth").
+**Decision:**
+1. One schema for all content, as TypeScript + Zod in `web/src/lib/content/`:
+   - stable ids;
+   - references by id;
+   - shared building blocks: `Cost`, `Roll`, `Damage`, `Effect`, `Modifier`, `Grant`, `Choice`;
+   - actions and conditions as their own kinds.
+2. **Prose stays the rule.** Structured fields are optional, added a slice at a time, and signed off by Brody.
+3. Three stages:
+   - **A. Adapters:** convert today's files on load, with no file changes;
+   - **B. A side file:** structured data in `crawl-rules.json`, keyed by id, which the old editors never touch;
+   - **C. Merged:** the data moves into the records once the editors are rebuilt in React and the old site is retired.
+**Trade-offs:**
+- Until stage C, a record's data lives in two files, and renaming a spell or glossary entry orphans its id until it's re-attached (validation flags it).
+- The adapters parse loose text, so they'll misread some records. Those stay as hand-tracked `text` effects, with a warning.
+- Writing structured data for 438 spells is a lot of content work. It's done in slices, starting with conditions and weapon actions.
+
 ## 2026-11-04: Move the new site to React now; the old site stays frozen at its URL until cutover
 **Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
 **Replaces:** "Port to plain TypeScript now, and move the UI to React later" (2026-11-02), once agreed.

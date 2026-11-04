@@ -10,9 +10,10 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 
 ## Now
 Goal: the playtest MVP, ready for session 2: [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md).
-- [ ] Agree the two 2026-11-04 decisions (playtest focus; React now, old site frozen) and check the events table in [planning/character-data.md](planning/character-data.md) (@brody)
+- [ ] Agree the three 2026-11-04 decisions (playtest focus; React now, old site frozen; content schema), answer the content-schema open questions, and check the events table in [planning/character-data.md](planning/character-data.md) (@brody)
 - [ ] React shell: router, nav, theme, sign-in, Vitest: [planning/react-migration.md](planning/react-migration.md) (@maddox)
 - [ ] Character data and the state system: types, `apply`, `derive`, migration, dice: [planning/character-data.md](planning/character-data.md) (@maddox)
+- [ ] Content schema, stage A (types, adapters, `content:check`) for what the play sheet needs: [planning/content-schema.md](planning/content-schema.md) (@maddox)
 - [ ] Prototypes: the stat display / play sheet, and dice rolling, built on the above (testing docs to come)
 - [ ] Go through the backend and API setup checklist together, and settle its open questions: [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md) (@maddox, @brody)
 - [ ] Review the decisions (TypeScript + Vite, Vercel; React is now proposed for now, not later): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
