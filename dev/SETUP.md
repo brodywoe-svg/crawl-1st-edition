@@ -116,7 +116,7 @@ Switch which project the CLI talks to with `npx supabase link --project-ref <ref
 **Day to day:**
 - A database change is a new file in `supabase/migrations/` (`npx supabase migration new <name>`), reviewed in a PR.
   Push it to `crawl-dev` first and test it, then push it to `crawl` once it's merged (`npx supabase db push --remote`, after linking each one).
-- Then refresh the TypeScript types: `npm run db:types` (added with phase 2).
+- Then refresh the TypeScript types: `npm run db:types` (not added yet; see [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md), step 2.4).
 - After changing `supabase/functions/github`, run `npx supabase functions deploy github`.
 - Free projects pause after a week with no activity. If sign-in stops working, open the dashboard and restore the project.
 

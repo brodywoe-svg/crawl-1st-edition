@@ -9,6 +9,7 @@ Format: `- [ ] Task (@owner)`. The owner is `@brody`, `@maddox`, or left off if 
 If a task needs more than a line of explanation, write a doc in [planning/](planning/) and link it from the task.
 
 ## Now
+- [ ] Go through the backend and API setup checklist together, and settle its open questions: [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md) (@maddox, @brody)
 - [ ] Review the decisions (TypeScript + Vite, React later, Vercel): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
 - [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox)
 - [ ] Supabase database plan, phases 2–4 (player, DM and admin roles): [planning/supabase-database.md](planning/supabase-database.md). Brody to OK it (@maddox, @brody)
