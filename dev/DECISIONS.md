@@ -21,6 +21,34 @@ Template:
 
 ---
 
+## 2026-11-04: Move the new site to React now; the old site stays frozen at its URL until cutover
+**Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
+**Replaces:** "Port to plain TypeScript now, and move the UI to React later" (2026-11-02), once agreed.
+**Why:**
+- The playtest MVP is mostly new, live UI: a play sheet where one event updates many numbers, dice rolls, and a DM view that updates live.
+  That's what React is for.
+- Porting the page scripts to plain TypeScript first, then to React, would rewrite the same UI twice.
+- Players use the **old site** (`brodywoe-svg.github.io/crawl-1st-edition/`) for session 1, so it must keep working exactly as it does.
+  Plan: [planning/react-migration.md](planning/react-migration.md).
+- Weighed against:
+  - **keeping the plan:** plain TS now, React later. Less to learn now, but double work, and the MVP UI would be built in the style we're leaving.
+  - **React only for new screens**, with the old pages still running the shared `src/*.js`. Less work now, but the Creator has to write the new character format, so it gets rewritten anyway.
+**Decision:**
+1. **The old site is frozen.** GitHub Pages keeps serving the generated root `*.html`. We don't run `tools/build.py`, except to fix a real problem there.
+   - Its content still updates: pages fetch fresh `crawl-*.json`, and Admin editing there keeps working. Content shape changes must therefore still work on it (as now).
+   - `src/*.js` stops being shared code: a change there no longer has to work on both sites, because the old site only changes when rebuilt.
+2. **The new site is React** (React 19, TypeScript, Vite), as a single-page app with a router.
+   - The MVP's screens (play sheet, dice, characters list, Creator, campaign) are built in React first.
+   - The other pages keep running their legacy scripts on the new site until they're ported.
+   - Game logic stays framework-free in `web/src/lib/`, as before.
+3. **Ports may change behavior** where the MVP needs it. "Port faithfully" applied while both sites shared code.
+   Game content and rules are still Brody's: UI changes are fine, changes to rules text or content are not.
+**Trade-offs:**
+- More up front before session 2. The Creator (about 1,300 lines) is the biggest port. Fallback if it isn't ready: keep the legacy Creator, and convert its characters with `migrate()`.
+- Tree mode isn't ported (it's a proof of concept). It stays on the old site.
+- Bug fixes made on the new site don't reach the old one. That's fine while it's only for session 1 and a fallback.
+- One more library to learn, and a router: URLs become `/spells` instead of `spells.html` (the old filenames redirect at cutover).
+
 ## 2026-11-04: Focus on a playtest MVP; the tabletop and Tree mode are proofs of concept; characters are build + state + events
 **Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
 **Why:** Session 1 of the first campaign is on paper. We want the site ready for session 2, a couple of weeks later, for one campaign.
@@ -124,7 +152,7 @@ We weighed two options:
   At cutover the old pages become redirects. We could also add a custom domain.
 
 ## 2026-11-02: Port to plain TypeScript now, and move the UI to React later
-**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
+**Status:** agreed by maddox; Brody to confirm in the PR. **To be replaced by** "Move the new site to React now" (2026-11-04) once that's agreed · **Who:** maddox
 **Why:**
 - Today's pages build HTML as strings and redraw by hand. That's fine for the compendium, but it gets harder as the creator,
   the rules automation and the tabletop grow.

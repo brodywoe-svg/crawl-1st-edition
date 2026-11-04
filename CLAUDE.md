@@ -53,7 +53,9 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
 - **Leave things better documented than you found them.** If something in the docs is wrong or missing, fix it in the same PR.
 
 ## Commands
-- `python tools/build.py`: regenerates every page in the repo root and `app/`, and the installer zip. Run it after changing `src/` or `tools/sitekit.py`.
+- `python tools/build.py`: regenerates every page in the repo root and `app/`, and the installer zip.
+  **Don't run it for now.** The old site (GitHub Pages) is frozen exactly as it is, so players can use it for session 1 (DECISIONS.md, 2026-11-04).
+  Run it only to fix a real problem on the old site, and only after agreeing it with the other developer.
 - There are no dependencies to install (Python 3 standard library only), no tests and no linter.
 - To preview locally, serve the repo root, e.g. `python -m http.server`, and open `/index.html` or `/tabletop/`. Pages fetch their JSON, so `file://` won't fully work.
 - **New site (`web/`, being ported; see `dev/planning/typescript-vite-refactor.md`):** this needs Node.js (see `dev/SETUP.md`).
@@ -82,7 +84,8 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
   - `web/src/lib/`: game logic and data, with **no DOM or UI code**, so it can later run on a server or under React.
   - `web/src/ui/`: shared UI (nav, theme, admin).
   - `web/src/pages/`: one entry per page. Most still run the old `src/*.js` scripts through `web/vite/legacy-pages.ts` (see `dev/ARCHITECTURE.md` §11),
-    so until cutover **a change to `src/*.js` changes both sites**. Check it on both (`python tools/build.py`, and `npm run dev`).
+    so a change to `src/*.js` changes the new site at once. It reaches the old site only if `build.py` is run, which it isn't while the old site is frozen (see Commands).
+    The new site is moving to React ([dev/planning/react-migration.md](dev/planning/react-migration.md), proposed).
   - A new page goes in `web/<page>.html`, `PORTED` in `web/src/config.ts`, and `PAGES` in `vite.config.ts`.
   - While both sites exist, port behavior faithfully. Don't change it.
 - **Style:** match the existing compact style, with short helpers (`$`, `esc`, `arr`, `str`) and sparse plain-English comments.

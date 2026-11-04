@@ -35,7 +35,10 @@ Session 1 is on paper. By session 2, players make and track their characters on 
   The big digital-tabletop vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
 - **Please check one table:** "Events: the state system" in [planning/character-data.md](planning/character-data.md).
   It's how the site will track the Action Pool, HP and so on, taken from your glossary. Tell us what's wrong or missing.
-- The plan is in [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md), and the decision to OK is the 2026-11-04 entry in [DECISIONS.md](DECISIONS.md).
+- **The current site stays exactly as it is** at its usual address, so players can use it for session 1. Your Admin editing there keeps working.
+- **The new site moves to React now**, not later. React is the most popular way to build screens that update live, like a sheet where spending AP changes several numbers.
+  Doing it now means we don't build the same screens twice.
+- The plan is in [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md). The two decisions to OK are the 2026-11-04 entries in [DECISIONS.md](DECISIONS.md).
 
 ## What we need from you
 1. **Approve or question the decisions** above, by commenting on the pull request.

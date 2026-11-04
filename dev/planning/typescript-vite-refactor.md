@@ -1,5 +1,6 @@
 # TypeScript + Vite refactor
 **Status:** draft  ·  **Owner:** maddox  ·  **Roadmap:** none yet. This is the groundwork for the backend rebuild, fully digital rules and Three.js.
+**Update 2026-11-04 (proposed):** pages are now rewritten in React instead of plain TypeScript, and the old site stays frozen until cutover. See [react-migration.md](react-migration.md) and DECISIONS.md.
 
 ## Goal
 Move the website, the tabletop and the Windows app off `build.py` and onto one TypeScript + Vite project.
@@ -107,10 +108,10 @@ All of these get rewritten at cutover. [DATA-MODEL.md](../DATA-MODEL.md) doesn't
 - [x] Brody connects the repo to Vercel ([QUICKSTART.md](../QUICKSTART.md), step 3).
 - [x] Pull out the rest of the shared code: helpers, the markup renderer and glossary tooltips, Admin saving (`putFile`, `recordEdits`).
 - [x] Put every page on the new site (done in one PR, by choice). Each page's script runs unchanged through `web/vite/legacy-pages.ts`, so both sites share it until cutover. See ARCHITECTURE.md §11.
-- [ ] Rewrite each page's scripts as TypeScript modules, one page at a time, and take it off `LEGACY_PAGES`. Start with the smallest: races → glossary → items → classes → spells → creator.
+- [ ] ~~Rewrite each page's scripts as TypeScript modules~~ Replaced (proposed 2026-11-04): pages are rewritten in React, MVP screens first ([react-migration.md](react-migration.md)).
 - [x] Serve the tabletop on the new site (as is, from `tabletop/`).
 - [ ] Tabletop admin sign-in still expects the old single-key `admin.json` (see `dev/ARCHITECTURE.md` §9). A fix was reverted on purpose, because admin login is moving to Supabase.
-- [ ] Move the tabletop into `web/src` as TypeScript: `net.js` and `dice.js` go in `lib/`, and it uses the shared renderer.
+- [ ] Move the tabletop into `web/src` as TypeScript: `net.js` and `dice.js` go in `lib/`, and it uses the shared renderer. On hold: the tabletop is a proof of concept ([roadmap/digital-tabletop.md](../roadmap/digital-tabletop.md)); `dice.js` moves to `lib/dice.ts` with the character work.
 - [ ] Add the Vercel domain to Firebase's authorized domains (Brody, in the Firebase console), so online play works on the new site.
 - [ ] Windows app:
   - set up `electron-builder` and `electron-updater`,

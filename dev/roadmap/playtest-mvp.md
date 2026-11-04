@@ -19,7 +19,11 @@ It's built so the step after it doesn't mean starting over, but it doesn't try t
 - Session 2 runs on it without anyone falling back to paper.
 
 ## Order of work
-1. **Character data and the state system** (planning): the shape everything else builds on.
+1. **React shell and character data** (planning):
+   - the new site moves to React ([planning/react-migration.md](../planning/react-migration.md));
+   - the character shape and state system ([planning/character-data.md](../planning/character-data.md)), which everything else builds on.
+
+   Session 1 uses the old site, which stays exactly as it is.
 2. **Prototypes** (testing): the stat display / play sheet, and dice rolling. They answer what players need to see at a glance, and how rolling should feel.
 3. **Build the agreed version**, and a cut-down campaign (join by code, the DM's party view).
 4. **Switch on the backend:** [planning/backend-setup-checklist.md](../planning/backend-setup-checklist.md) (needed by step 3 at the latest).
@@ -32,6 +36,7 @@ It's built so the step after it doesn't mean starting over, but it doesn't try t
 - Rules enforcement beyond the Action Pool, HP and conditions.
 
 ## Features
+- [planning/react-migration.md](../planning/react-migration.md): the new site in React (planning)
 - [planning/character-data.md](../planning/character-data.md): character data and the state system (planning)
 - Stat display / play sheet prototype: not started (testing)
 - Dice rolling prototype: not started (testing). Builds on [testing/3d-dice.md](../testing/3d-dice.md) and `tabletop/dice.js`

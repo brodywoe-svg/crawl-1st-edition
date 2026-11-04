@@ -123,7 +123,7 @@ All of it is pure TypeScript in `web/src/lib/`, with no DOM, so it can later run
 | `lib/character/migrate.ts` | `v: 1` (the Creator's object) → `v: 2` |
 | `lib/dice.ts` | The dice parser, moved from `tabletop/dice.js` so the sheet and the tabletop share it |
 
-The Creator keeps working as it is. Porting `derive` overlaps the TypeScript refactor (moving page scripts out of `src/*.js`); this work does the Creator's maths first.
+Porting the maths into `derive.ts` comes first. The Creator is then rebuilt in React on top of it ([react-migration.md](react-migration.md)), and writes the new shape directly.
 
 ### Saving and syncing
 - **Today's sync stays.** The working copy is in `localStorage`, synced to the `characters` table by `lib/characters.ts`, and the newer `edited` wins.
@@ -135,22 +135,23 @@ The Creator keeps working as it is. Porting `derive` overlaps the TypeScript ref
 - **Offline:** the sheet works from `localStorage` and syncs when it's back online. The site needs to be cached for a full offline start; that's a separate, small step.
 
 ### Moving existing characters
-`migrate()` runs on load, on the old site and the new:
+`migrate()` runs on load, **on the new site only**. The old site is frozen for session 1 and keeps its own `v: 1` characters ([react-migration.md](react-migration.md)):
 - choices → `build`;
 - `sheet` → `overrides` where the key is a number we derive, the rest kept in `build.sheetNotes`;
 - a fresh `state`: full HP, empty pool, `inv` from the build;
 - `snap` dropped;
 - `creator` UI fields kept.
 
-**Risk:** the old site's Creator must still read the new shape until cutover. Either it learns `v: 2`, or the migration stays new-site only and the old Creator ignores state.
-That's the first thing to settle when building this.
+- The two sites are on different addresses, so their browser storage never mixes. A session 1 character comes across through **Save to file** on the old site and **Open** on the new one.
+- Characters already synced to an account (the new site, phase 2) are migrated the first time they load.
+- **Decided 2026-11-04 (Maddox):** the old site stays exactly as it is, so it never sees `v: 2`.
 
 ## Steps
 - [ ] Brody reads the events table and corrects anything that isn't how Crawl works.
 - [ ] Settle the open questions below.
 - [ ] `lib/character/types.ts`, `apply.ts` (Action Pool, HP, conditions) and `lib/dice.ts`.
 - [ ] `derive.ts`: port the Creator's maths, checked against the Creator's own numbers for a few test characters.
-- [ ] `migrate.ts`, and the decision on the old site (see the risk above).
+- [ ] `migrate.ts`, tested on characters saved by the old Creator (files and localStorage).
 - [ ] Prototypes (testing stage): the stat display / play sheet, and dice rolling, both built on these modules. Each gets a doc in `dev/testing/`.
 - [ ] Update DATA-MODEL.md with the character shape when this ships.
 
