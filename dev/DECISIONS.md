@@ -21,6 +21,85 @@ Template:
 
 ---
 
+## 2026-11-04: Game content gets a typed schema; structured rules data sits beside the prose
+**Status:** proposed by maddox. Brody to OK (it changes content shape, and the structured data translates his rules) · **Who:** maddox, brody
+**Why:** A virtual tabletop needs content a program can use: ids, numbers that are numbers, costs, rolls and effects.
+Today most mechanics are prose or loose strings, and spells and glossary entries have no ids.
+And every Admin editor drops fields it doesn't know, so new fields can't simply be added to `crawl-*.json` yet.
+Plan: [planning/content-schema.md](planning/content-schema.md).
+Options we weighed:
+- **Add fields to the records now:** Admin saves would erase them, on both sites.
+- **Rewrite the prose as structured data:** it loses Brody's wording, and it's his content.
+- **Move content into the database:** a much bigger change, already ruled out for now ("`crawl-*.json` stays the source of truth").
+**Decision:**
+1. One schema for all content, as TypeScript + Zod in `web/src/lib/content/`:
+   - stable ids;
+   - references by id;
+   - shared building blocks: `Cost`, `Roll`, `Damage`, `Effect`, `Modifier`, `Grant`, `Choice`;
+   - actions and conditions as their own kinds.
+2. **Prose stays the rule.** Structured fields are optional, added a slice at a time, and signed off by Brody.
+3. Three stages:
+   - **A. Adapters:** convert today's files on load, with no file changes;
+   - **B. A side file:** structured data in `crawl-rules.json`, keyed by id, which the old editors never touch;
+   - **C. Merged:** the data moves into the records once the editors are rebuilt in React and the old site is retired.
+**Trade-offs:**
+- Until stage C, a record's data lives in two files, and renaming a spell or glossary entry orphans its id until it's re-attached (validation flags it).
+- The adapters parse loose text, so they'll misread some records. Those stay as hand-tracked `text` effects, with a warning.
+- Writing structured data for 438 spells is a lot of content work. It's done in slices, starting with conditions and weapon actions.
+
+## 2026-11-04: Move the new site to React now; the old site stays frozen at its URL until cutover
+**Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
+**Replaces:** "Port to plain TypeScript now, and move the UI to React later" (2026-11-02), once agreed.
+**Why:**
+- The playtest MVP is mostly new, live UI: a play sheet where one event updates many numbers, dice rolls, and a DM view that updates live.
+  That's what React is for.
+- Porting the page scripts to plain TypeScript first, then to React, would rewrite the same UI twice.
+- Players use the **old site** (`brodywoe-svg.github.io/crawl-1st-edition/`) for session 1, so it must keep working exactly as it does.
+  Plan: [planning/react-migration.md](planning/react-migration.md).
+- Weighed against:
+  - **keeping the plan:** plain TS now, React later. Less to learn now, but double work, and the MVP UI would be built in the style we're leaving.
+  - **React only for new screens**, with the old pages still running the shared `src/*.js`. Less work now, but the Creator has to write the new character format, so it gets rewritten anyway.
+**Decision:**
+1. **The old site is frozen.** GitHub Pages keeps serving the generated root `*.html`. We don't run `tools/build.py`, except to fix a real problem there.
+   - Its content still updates: pages fetch fresh `crawl-*.json`, and Admin editing there keeps working. Content shape changes must therefore still work on it (as now).
+   - `src/*.js` stops being shared code: a change there no longer has to work on both sites, because the old site only changes when rebuilt.
+2. **The new site is React** (React 19, TypeScript, Vite), as a single-page app with a router.
+   - The MVP's screens (play sheet, dice, characters list, Creator, campaign) are built in React first.
+   - The other pages keep running their legacy scripts on the new site until they're ported.
+   - Game logic stays framework-free in `web/src/lib/`, as before.
+3. **Ports may change behavior** where the MVP needs it. "Port faithfully" applied while both sites shared code.
+   Game content and rules are still Brody's: UI changes are fine, changes to rules text or content are not.
+**Trade-offs:**
+- More up front before session 2. The Creator (about 1,300 lines) is the biggest port. Fallback if it isn't ready: keep the legacy Creator, and convert its characters with `migrate()`.
+- Tree mode isn't ported (it's a proof of concept). It stays on the old site.
+- Bug fixes made on the new site don't reach the old one. That's fine while it's only for session 1 and a fallback.
+- One more library to learn, and a router: URLs become `/spells` instead of `spells.html` (the old filenames redirect at cutover).
+
+## 2026-11-04: Focus on a playtest MVP; the tabletop and Tree mode are proofs of concept; characters are build + state + events
+**Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
+**Why:** Session 1 of the first campaign is on paper. We want the site ready for session 2, a couple of weeks later, for one campaign.
+The previous plan went straight from accounts (phase 2) to campaigns with DM proposals (phase 3) and the tabletop on Supabase (phase 4).
+That's more than the playtest needs, and builds on the tabletop before we've agreed what a final tabletop looks like.
+Plans: [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md), [planning/character-data.md](planning/character-data.md).
+**Decision:**
+1. **The next goal is the playtest MVP:** players make and track their characters on the site in one campaign, and the DM sees the party.
+   Order: character data and state, then prototypes (stat display, dice rolling), then the build.
+2. **The tabletop (`tabletop/`) and Tree mode are proofs of concept.** We learn from them but don't build on them until a final design is agreed.
+   Phase 4 (the tabletop on Supabase) is on hold. Phase 3 is cut down for the MVP (no DM proposals yet).
+   The long-term vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
+3. **A character has three layers:**
+   - **build:** the player's choices;
+   - **state:** what changes in play;
+   - **derived:** numbers worked out from the rules, never saved.
+
+   State changes only through **events** handled by one pure function, which is the start of the rules engine.
+   - Weighed against: keeping the Creator's single object and its saved `snap` (simplest, but saved numbers go stale whenever Brody changes a rule).
+   - Weighed against: editing state fields directly (simpler now, but no undo, no history, and a rewrite when the tabletop or a server needs to check actions).
+**Trade-offs:**
+- Characters saved today need a migration (`v: 1` → `v: 2`). The old site's Creator has to cope with it until cutover.
+- More code up front: porting the Creator's maths into `web/src/lib/` (which the TypeScript refactor needs anyway).
+- The tabletop proof of concept falls further behind, and stays on Firebase meanwhile.
+
 ## 2026-11-02: A staging Supabase project; the tabletop's design; anonymous players
 **Status:** proposed by maddox. Brody to OK the player-facing parts (4: roles, DM proposals, party privacy) · **Who:** maddox
 **Why:** Planning the database as a whole ([planning/supabase-database.md](planning/supabase-database.md)) needed these choices.
@@ -99,7 +178,7 @@ We weighed two options:
   At cutover the old pages become redirects. We could also add a custom domain.
 
 ## 2026-11-02: Port to plain TypeScript now, and move the UI to React later
-**Status:** agreed by maddox; Brody to confirm in the PR · **Who:** maddox
+**Status:** agreed by maddox; Brody to confirm in the PR. **To be replaced by** "Move the new site to React now" (2026-11-04) once that's agreed · **Who:** maddox
 **Why:**
 - Today's pages build HTML as strings and redraw by hand. That's fine for the compendium, but it gets harder as the creator,
   the rules automation and the tabletop grow.

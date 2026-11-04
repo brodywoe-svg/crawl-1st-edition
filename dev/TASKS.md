@@ -9,11 +9,18 @@ Format: `- [ ] Task (@owner)`. The owner is `@brody`, `@maddox`, or left off if 
 If a task needs more than a line of explanation, write a doc in [planning/](planning/) and link it from the task.
 
 ## Now
-- [ ] Review the decisions (TypeScript + Vite, React later, Vercel): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
+Goal: the playtest MVP, ready for session 2: [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md).
+- [ ] Agree the three 2026-11-04 decisions (playtest focus; React now, old site frozen; content schema), answer the content-schema open questions, and check the events table in [planning/character-data.md](planning/character-data.md) (@brody)
+- [ ] React shell: router, nav, theme, sign-in, Vitest: [planning/react-migration.md](planning/react-migration.md) (@maddox)
+- [ ] Character data and the state system: types, `apply`, `derive`, migration, dice: [planning/character-data.md](planning/character-data.md) (@maddox)
+- [ ] Content schema, stage A (types, adapters, `content:check`) for what the play sheet needs: [planning/content-schema.md](planning/content-schema.md) (@maddox)
+- [ ] Prototypes: the stat display / play sheet, and dice rolling, built on the above (testing docs to come)
+- [ ] Go through the backend and API setup checklist together, and settle its open questions: [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md) (@maddox, @brody)
+- [ ] Review the decisions (TypeScript + Vite, Vercel; React is now proposed for now, not later): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
 - [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox)
 - [ ] Supabase database plan, phases 2–4 (player, DM and admin roles): [planning/supabase-database.md](planning/supabase-database.md). Brody to OK it (@maddox, @brody)
 - [ ] Supabase: accept the org invite, then make the `GITHUB_TOKEN` and add it to Supabase: [QUICKSTART.md](QUICKSTART.md) step 6 (@brody)
-- [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; next, rewrite the page scripts as TypeScript, then the Windows app and cutover. (@maddox)
+- [ ] TypeScript + Vite refactor: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Every page and the tabletop now run on the new site; pages are now rewritten in React, MVP screens first ([planning/react-migration.md](planning/react-migration.md)), then the Windows app and cutover. **Don't run `tools/build.py`:** the old site stays frozen for session 1. (@maddox)
 
 ## Next
 - [ ] Try the 3D dice prototype on a laptop and a phone, fill in [testing/3d-dice.md](testing/3d-dice.md), then decide ship / iterate / remove (@maddox, @brody)
@@ -22,8 +29,8 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 
 ## Later
 - [ ] Supabase phase 2: player accounts and cloud-saved characters. Built (PR #8): push the migration and config, then test with two accounts: [planning/supabase-database.md](planning/supabase-database.md)
-- [ ] Supabase phase 3: campaigns; DMs see their players' characters and propose changes: [planning/supabase-database.md](planning/supabase-database.md)
-- [ ] Supabase phase 4: the tabletop off Firebase, built on campaigns: [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 3, cut down for the MVP: campaigns, join by code, the DM's live party view (proposals deferred): [planning/supabase-database.md](planning/supabase-database.md)
+- [ ] Supabase phase 4: the tabletop off Firebase. **On hold**: the tabletop is a proof of concept ([roadmap/digital-tabletop.md](roadmap/digital-tabletop.md))
 - [ ] Move the UI to React after the Vite refactor: [planning/react-migration.md](planning/react-migration.md)
 
 ## Done
