@@ -84,8 +84,10 @@ The legacy pages stay at `spells.html` etc. and are linked from the React nav.
 6. **After the MVP:** the compendium pages and their Admin editing, one at a time, then delete `web/vite/legacy-pages.ts`, `ui/` and `legacy/`.
 
 ## Steps
-- [ ] Brody OKs the decision (React now, old site frozen).
-- [ ] Shell: React, the router, Zustand, Vitest, the SPA rewrite in `vercel.json`, nav/theme/sign-in components, home.
+- [x] Brody OKs the decision (React now, old site frozen): PR #11, 2026-11-04.
+- [x] Shell (PR A, `react-shell`): React, the router, the SPA rewrite in `vercel.json`, `base: '/'`, home, not found.
+  The nav, theme and sign-in are reused from `ui/` by `components/Layout.tsx` instead of rewritten, so there's one nav while legacy pages exist; a React nav comes when they're gone.
+  Zustand and Vitest come with the character work (PR B), which is the first code that needs them.
 - [ ] `lib/character` and `lib/dice`, with tests.
 - [ ] Play sheet and dice prototypes, with testing docs.
 - [ ] Characters list and Creator in React (or the fallback).

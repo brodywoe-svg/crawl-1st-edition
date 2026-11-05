@@ -80,13 +80,13 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
 ## Code style
 - **Site JS** (`src/*.js`): plain browser JS, no modules. `build.py` concatenates the scripts into one global scope per page, so top-level names must not collide.
 - **Tabletop** (`tabletop/`): native ES modules, served as is.
-- **New site** (`web/`): TypeScript modules, bundled by Vite.
+- **New site** (`web/`): TypeScript modules, bundled by Vite, moving to React ([dev/planning/react-migration.md](dev/planning/react-migration.md)).
+  - `web/src/app/`: the React app (`web/index.html`): the home page and every screen at an address without `.html`. New screens go here, as routes in `app/main.tsx`.
   - `web/src/lib/`: game logic and data, with **no DOM or UI code**, so it can later run on a server or under React.
   - `web/src/ui/`: shared UI (nav, theme, admin).
-  - `web/src/pages/`: one entry per page. Most still run the old `src/*.js` scripts through `web/vite/legacy-pages.ts` (see `dev/ARCHITECTURE.md` §11),
+  - `web/src/pages/`: one entry per page not yet in the React app. Most still run the old `src/*.js` scripts through `web/vite/legacy-pages.ts` (see `dev/ARCHITECTURE.md` §11),
     so a change to `src/*.js` changes the new site at once. It reaches the old site only if `build.py` is run, which it isn't while the old site is frozen (see Commands).
-    The new site is moving to React ([dev/planning/react-migration.md](dev/planning/react-migration.md), proposed).
-  - A new page goes in `web/<page>.html`, `PORTED` in `web/src/config.ts`, and `PAGES` in `vite.config.ts`.
-  - While both sites exist, port behavior faithfully. Don't change it.
+  - A page outside the React app goes in `web/<page>.html`, `PORTED` in `web/src/config.ts`, and `PAGES` in `vite.config.ts`. Prefer a route in the app.
+  - Moving a page into React may change its UI where the playtest MVP needs it (DECISIONS.md, 2026-11-04). Game content and rules text stay Brody's: don't change them.
 - **Style:** match the existing compact style, with short helpers (`$`, `esc`, `arr`, `str`) and sparse plain-English comments.
 - **Python:** stdlib only, with a docstring at the top of each file.

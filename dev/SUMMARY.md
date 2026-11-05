@@ -29,7 +29,8 @@ So we're moving it to a modern setup, **one page at a time**, while the current 
 
 The full reasoning for each one is in [DECISIONS.md](DECISIONS.md).
 
-## The next goal: the site ready for session 2 (proposed 2026-11-04)
+## The next goal: the site ready for session 2 (agreed 2026-11-04)
+_Status: the new site's home page now runs on React (it looks the same). Next: the play sheet and dice roller prototypes._
 Session 1 is on paper. By session 2, players make and track their characters on the site (HP, Action Pool, conditions, gear, dice rolls), and the DM sees the party.
 - **Your tabletop and Tree mode** are treated as proofs of concept: we learn from them, but don't build on them until we agree a final design.
   The big digital-tabletop vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
