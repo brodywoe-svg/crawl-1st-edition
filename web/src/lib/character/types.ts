@@ -88,7 +88,7 @@ export interface Snap {
   hp?: number | null; hd?: string; ac?: number | null; init?: number; speed?: string;
   pool?: { max: string | number; die: string };
   passive?: Record<string, number>;
-  spells?: { n: string; lv: number | null; rank: number; cost: string; time: string; range: string; dmg: string; desc: string; atk: number | null; dc: number | null }[];
+  spells?: { n: string; lv: number | null; rank: number; cost: string; time: string; range: string; dmg: string; desc: string; conc?: boolean; atk: number | null; dc: number | null }[];
   weapons?: { n: string; props: string; actions: string; acts: { n: string; ap: string; dmg: string; type: string; d: string }[]; sub: string }[];
   inv?: { n: string; qty: number; slot: string; weight: string; value: string; iid: string }[];
   wealth?: string;

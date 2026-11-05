@@ -14,6 +14,8 @@ export const WIKI: [label: string, href: string][] = [
 ];
 /** Prototypes being tested (dev/testing/), under the admin-only Testing menu. Add a page here when it's built. */
 export const TESTING: [label: string, href: string][] = [
+  ["Play sheet", "testing/sheet"],
+  ["Dice roller", "testing/roll"],
   ["3D dice roller", "testing/dice.html"],
 ];
 /** Nav items only a signed-in admin sees (CSS hides them unless <html> has the is-admin class), with their tooltips. */

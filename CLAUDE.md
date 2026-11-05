@@ -56,13 +56,15 @@ Every feature goes through the same lifecycle. Each stage has a folder in `dev/`
 - `python tools/build.py`: regenerates every page in the repo root and `app/`, and the installer zip.
   **Don't run it for now.** The old site (GitHub Pages) is frozen exactly as it is, so players can use it for session 1 (DECISIONS.md, 2026-11-04).
   Run it only to fix a real problem on the old site, and only after agreeing it with the other developer.
-- There are no dependencies to install (Python 3 standard library only), no tests and no linter.
+- The old build has no dependencies to install (Python 3 standard library only). There's no linter.
 - To preview locally, serve the repo root, e.g. `python -m http.server`, and open `/index.html` or `/tabletop/`. Pages fetch their JSON, so `file://` won't fully work.
 - **New site (`web/`, being ported; see `dev/planning/typescript-vite-refactor.md`):** this needs Node.js (see `dev/SETUP.md`).
   - `npm install`: once, and again after `package.json` changes.
   - `npm run dev`: a live-reloading local site.
   - `npm run typecheck`: run it before every PR.
   - `npm run build`: builds into `dist/`, which is what Vercel deploys.
+  - `npm test`: the Vitest tests (`web/src/lib/**/*.test.ts`: dice, content, the character rules). Run it before every PR.
+  - `npm run content:check`: checks the real `crawl-*.json` against the content schema and prints coverage and warnings ([dev/planning/content-schema.md](dev/planning/content-schema.md)).
 - **Supabase** (`supabase/`: database migrations, Edge Functions, auth config): `npx supabase …`. Setup and deploy steps are in `dev/SETUP.md`.
   A database change is a new migration file, never an edit to one already pushed.
 

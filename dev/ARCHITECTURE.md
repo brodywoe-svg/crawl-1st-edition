@@ -267,11 +267,19 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     It's hidden with CSS only (`html.is-admin`), like Tabletop, so the pages themselves are still reachable by URL.
   - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
 - **The React app** (`web/src/app/`, page `web/index.html`; plan: [planning/react-migration.md](planning/react-migration.md)):
-  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`) and a not-found page so far.
-  - `vercel.json` sends every address without a file extension (except `tabletop/`, `testing/` and `assets/`) to `index.html`, and the router picks the screen. The dev server and `vite preview` do the same.
+  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`), the prototypes `/testing/sheet` (`routes/PlaySheet.tsx`) and `/testing/roll` (`routes/Roller.tsx`), and a not-found page.
+  - `vercel.json` sends every address without a file extension (except `tabletop/` and `assets/`) to `index.html`, and the router picks the screen. The dev server and `vite preview` do the same.
   - `components/Layout.tsx` sets up the nav, dark mode and Admin from the `ui/` modules above, once, so the app and the other pages share one nav.
     It also turns clicks on links to the app's own screens into in-app navigation; links to `.html` pages load normally.
   - `app/main.tsx` imports `ui/cloud-characters.ts`, so characters sync with your account on every screen.
+  - `app/store/character.ts` (Zustand): the open character. It reads and writes the Creator's `localStorage crawl-characters`, replacing only that character, and calls `crawlCloud.saved()` so it syncs.
+    The open character's id is kept in `sessionStorage crawl-play-open`. `src/creator.js` reloads when another tab saves (the `storage` event).
+  - Styles: `web/index.html` links `styles/pages/app.css` (the home page's sheets plus `styles/play.css`).
+- **Game rules and typed content** (`web/src/lib/`, no DOM or React; tests next to the code, run with `npm test`):
+  - `lib/dice.ts`: the dice parser (from `tabletop/dice.js`).
+  - `lib/content/`: stage A of [planning/content-schema.md](planning/content-schema.md). Zod schemas (`types.ts`), and adapters (`adapt.ts`) that turn today's class charts, items and glossary entries into typed records with ids, without changing the files. `load.ts` loads them once per page.
+  - `lib/character/`: [planning/character-data.md](planning/character-data.md). A character is the Creator's object plus `v: 2`, `state`, `log`, `logBase` and `overrides`.
+    `apply.ts` is the state system (every change is an event), `derive.ts` works out Max Pool and Action Die from the chart (the rest still comes from the Creator's `snap`), and `migrate.ts` adds the play layers.
 - **Page scripts still shared with the old site** (`src/*.js`, and the Spells script in `src/page.html`):
   - `web/vite/legacy-pages.ts` bundles each page's scripts into one module, `virtual:legacy/<page>`, the way `build.py` concatenated them.
     The new site therefore runs the same page code as the old one. A fix to `src/` reaches the old site only if `build.py` is run, which it isn't while that site is frozen for the playtest (DECISIONS.md, 2026-11-04).
