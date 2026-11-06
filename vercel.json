@@ -6,7 +6,7 @@
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)crawl-edits.json' ':(exclude)dev' ':(exclude)*.md'",
   "rewrites": [
     {
-      "source": "/((?!tabletop/|testing/|assets/)[^.]*)",
+      "source": "/((?!tabletop/|assets/)[^.]*)",
       "destination": "/index.html"
     }
   ],

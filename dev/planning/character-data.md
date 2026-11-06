@@ -32,6 +32,11 @@ It has to work for the MVP (players tracking one campaign's characters in sessio
 
 ## How it works
 
+> **Built 2026-11-04 (PR B), with one change, decided by Maddox:** the format is **additive**. The Creator's fields stay at the top level as the build,
+> and `state`, `log`, `logBase` and `overrides` are added next to them. The old Creator keeps fields it doesn't know (`fixChar()`), so the Creator and the play sheet share one object.
+> Nesting under `build` waits for the React Creator. The undo base is `logBase`, not `base`: the Creator already uses `base` for ability scores.
+> `derive.ts` is minimal for now: Max Pool and Action Die from the chart, everything else from the Creator's `snap`. Prototype: [testing/play-sheet.md](../testing/play-sheet.md).
+
 ### Three layers
 | Layer | What | Changes when | Saved? |
 | --- | --- | --- | --- |
@@ -151,10 +156,10 @@ Porting the maths into `derive.ts` comes first. The Creator is then rebuilt in R
 ## Steps
 - [ ] Brody reads the events table and corrects anything that isn't how Crawl works.
 - [ ] Settle the open questions below.
-- [ ] `lib/character/types.ts`, `apply.ts` (Action Pool, HP, conditions) and `lib/dice.ts`.
-- [ ] `derive.ts`: port the Creator's maths, checked against the Creator's own numbers for a few test characters.
-- [ ] `migrate.ts`, tested on characters saved by the old Creator (files and localStorage).
-- [ ] Prototypes (testing stage): the stat display / play sheet, and dice rolling, both built on these modules. Each gets a doc in `dev/testing/`.
+- [x] `lib/character/types.ts`, `apply.ts` (Action Pool, HP, conditions) and `lib/dice.ts`.
+- [ ] `derive.ts`: port the Creator's maths, checked against the Creator's own numbers for a few test characters. (Minimal version done; the full port comes with the React Creator.)
+- [x] `migrate.ts`, tested on characters saved by the old Creator, including a round trip through its `fixChar()`. (Opening `.crawl.json` files: still to do, with the React Creator.)
+- [x] Prototypes (testing stage): [testing/play-sheet.md](../testing/play-sheet.md) and [testing/dice-rolling.md](../testing/dice-rolling.md).
 - [ ] Update DATA-MODEL.md with the character shape when this ships.
 
 ## Open questions

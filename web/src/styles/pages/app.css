@@ -1,0 +1,3 @@
+/* The React app (web/index.html): everything the home page has, plus the screens built in the app. */
+@import "./home.css";
+@import "../play.css";

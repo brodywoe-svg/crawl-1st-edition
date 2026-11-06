@@ -124,6 +124,9 @@ window.addEventListener("crawl-characters-changed", () => {
   if (cur) cur = chars.find(x => x.id === cur.id) || cur;
   if (view === "home") renderHome();
 });
+/* Another tab saved the characters (the new site's play sheet): reload them the same way, so this tab's next save
+   doesn't put back its older copy. Only the new site runs this file now; the old site is frozen (not rebuilt). */
+window.addEventListener("storage", e => { if (e.key === LS) window.dispatchEvent(new Event("crawl-characters-changed")) });
 function touch() { if (!cur) return; cur.edited = Date.now(); if (!chars.includes(cur)) chars.unshift(cur); persist() }
 const raceOf = c => RACE_LIST.find(r => r.id === c.race) || null;
 const subOf = c => { const r = raceOf(c); return r && r.subs.find(s => s.id === c.sub) || null };

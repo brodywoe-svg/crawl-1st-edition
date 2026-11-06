@@ -30,7 +30,8 @@ So we're moving it to a modern setup, **one page at a time**, while the current 
 The full reasoning for each one is in [DECISIONS.md](DECISIONS.md).
 
 ## The next goal: the site ready for session 2 (agreed 2026-11-04)
-_Status: the new site's home page now runs on React (it looks the same). Next: the play sheet and dice roller prototypes._
+_Status: the new site's home page runs on React, and there are two prototypes to try (the Testing menu, when signed in as admin): a **play sheet** and a **dice roller**._
+_Please read the questions for you in [testing/play-sheet.md](testing/play-sheet.md): they're about how the Action Pool rules should work. Also: 6 classes have no Max Pool / Action Die chart yet._
 Session 1 is on paper. By session 2, players make and track their characters on the site (HP, Action Pool, conditions, gear, dice rolls), and the DM sees the party.
 - **Your tabletop and Tree mode** are treated as proofs of concept: we learn from them, but don't build on them until we agree a final design.
   The big digital-tabletop vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
