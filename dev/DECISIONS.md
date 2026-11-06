@@ -22,7 +22,7 @@ Template:
 ---
 
 ## 2026-11-04: Game content gets a typed schema; structured rules data sits beside the prose
-**Status:** proposed by maddox. Brody to OK (it changes content shape, and the structured data translates his rules) · **Who:** maddox, brody
+**Status:** agreed (Brody approved PR #11, 2026-11-04) · **Who:** maddox, brody
 **Why:** A virtual tabletop needs content a program can use: ids, numbers that are numbers, costs, rolls and effects.
 Today most mechanics are prose or loose strings, and spells and glossary entries have no ids.
 And every Admin editor drops fields it doesn't know, so new fields can't simply be added to `crawl-*.json` yet.
@@ -48,8 +48,8 @@ Options we weighed:
 - Writing structured data for 438 spells is a lot of content work. It's done in slices, starting with conditions and weapon actions.
 
 ## 2026-11-04: Move the new site to React now; the old site stays frozen at its URL until cutover
-**Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
-**Replaces:** "Port to plain TypeScript now, and move the UI to React later" (2026-11-02), once agreed.
+**Status:** agreed (Brody approved PR #11, 2026-11-04) · **Who:** maddox, brody
+**Replaces:** "Port to plain TypeScript now, and move the UI to React later" (2026-11-02).
 **Why:**
 - The playtest MVP is mostly new, live UI: a play sheet where one event updates many numbers, dice rolls, and a DM view that updates live.
   That's what React is for.
@@ -76,7 +76,7 @@ Options we weighed:
 - One more library to learn, and a router: URLs become `/spells` instead of `spells.html` (the old filenames redirect at cutover).
 
 ## 2026-11-04: Focus on a playtest MVP; the tabletop and Tree mode are proofs of concept; characters are build + state + events
-**Status:** proposed by maddox. Brody to OK · **Who:** maddox, brody
+**Status:** agreed (Brody approved PR #11, 2026-11-04) · **Who:** maddox, brody
 **Why:** Session 1 of the first campaign is on paper. We want the site ready for session 2, a couple of weeks later, for one campaign.
 The previous plan went straight from accounts (phase 2) to campaigns with DM proposals (phase 3) and the tabletop on Supabase (phase 4).
 That's more than the playtest needs, and builds on the tabletop before we've agreed what a final tabletop looks like.
@@ -178,7 +178,7 @@ We weighed two options:
   At cutover the old pages become redirects. We could also add a custom domain.
 
 ## 2026-11-02: Port to plain TypeScript now, and move the UI to React later
-**Status:** agreed by maddox; Brody to confirm in the PR. **To be replaced by** "Move the new site to React now" (2026-11-04) once that's agreed · **Who:** maddox
+**Status:** **Replaced by** "Move the new site to React now" (2026-11-04) · **Who:** maddox
 **Why:**
 - Today's pages build HTML as strings and redraw by hand. That's fine for the compendium, but it gets harder as the creator,
   the rules automation and the tabletop grow.

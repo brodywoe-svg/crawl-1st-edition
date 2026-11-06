@@ -229,12 +229,14 @@ The goal is to make Crawl fully digital, with Three.js visualizations eventually
 - **Data is duplicated.** Every page embeds all its JSON, and `app/` duplicates every page. A rebuild that loads data at
   runtime would remove most of the generated output.
 
-## 11. In progress: the new site in `web/` (Vite + TypeScript)
+## 11. In progress: the new site in `web/` (Vite + TypeScript + React)
 Plan: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Sections 1–10 above still describe the **live** site (GitHub Pages).
 This section covers the new one (Vercel). Every page and the tabletop now run on it. The Windows app and the cutover are still to do.
 - **Build:**
   - `vite.config.ts` builds the pages in `web/*.html` into `dist/`: the old site's 11, with the same URLs, plus `wiki.html` and the `testing/` prototypes.
-  - `base: './'` keeps every URL relative.
+  - `base: '/'`: URLs start at the site root, because the React app's nested routes (`/characters/abc`) would break relative ones.
+    `siteHref()` in `web/src/config.ts` makes every nav and card link absolute, and `lib/data.ts` fetches content from the root.
+    (It was `'./'` so the build could run from `file://` in Electron; the Windows app will serve it over an `app://` protocol instead.)
   - `web/vite/content-files.ts` serves `crawl-*.json`, `admin.json` and `tabletop/` from the repo root in dev, and copies them into `dist/` in a build.
     The tabletop is native ES modules, so it's served as is; the old site serves the same files.
 - **Hosting:**
@@ -264,10 +266,15 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     Signed-in admins also see Tabletop and a **Testing** menu listing the prototypes in `web/testing/` (the `TESTING` list in `ui/nav.ts`; add a page there when you build one).
     It's hidden with CSS only (`html.is-admin`), like Tabletop, so the pages themselves are still reachable by URL.
   - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
-  - The home page (`web/src/pages/home.ts`) is fully TypeScript.
+- **The React app** (`web/src/app/`, page `web/index.html`; plan: [planning/react-migration.md](planning/react-migration.md)):
+  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`) and a not-found page so far.
+  - `vercel.json` sends every address without a file extension (except `tabletop/`, `testing/` and `assets/`) to `index.html`, and the router picks the screen. The dev server and `vite preview` do the same.
+  - `components/Layout.tsx` sets up the nav, dark mode and Admin from the `ui/` modules above, once, so the app and the other pages share one nav.
+    It also turns clicks on links to the app's own screens into in-app navigation; links to `.html` pages load normally.
+  - `app/main.tsx` imports `ui/cloud-characters.ts`, so characters sync with your account on every screen.
 - **Page scripts still shared with the old site** (`src/*.js`, and the Spells script in `src/page.html`):
   - `web/vite/legacy-pages.ts` bundles each page's scripts into one module, `virtual:legacy/<page>`, the way `build.py` concatenated them.
-    The two sites therefore run the **same** page code until cutover, and a fix to `src/` lands in both.
+    The new site therefore runs the same page code as the old one. A fix to `src/` reaches the old site only if `build.py` is run, which it isn't while that site is frozen for the playtest (DECISIONS.md, 2026-11-04).
   - Each bundle starts by importing the shared modules under their old global names (`ADMIN`, `putFile`, `glMapOf`…), then
     `await boot(page)` (`web/src/legacy/boot.ts`) sets up the nav, theme and admin and loads the data the old build embedded (`GLOSSARY`, `CLASSES`, `FEAT_SRC`…).
   - A name a script declares itself is never imported, so its own version wins (the Spells script has its own `$` and `esc`).

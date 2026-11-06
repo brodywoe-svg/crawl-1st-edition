@@ -1,6 +1,8 @@
-/* Vite config for the new site. The pages live in web/ (one HTML file per page, so URLs stay the same),
-   and the build goes to dist/, which is what Vercel serves. See dev/planning/typescript-vite-refactor.md. */
+/* Vite config for the new site. The pages live in web/. index.html is the React app (web/src/app/, see
+   dev/planning/react-migration.md); the other HTML files are pages not yet moved into it, at the same URLs as the old site.
+   The build goes to dist/, which is what Vercel serves. See dev/planning/typescript-vite-refactor.md. */
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
 import { contentFiles } from "./web/vite/content-files.ts";
 import { legacyPages } from "./web/vite/legacy-pages.ts";
@@ -12,9 +14,11 @@ const PAGES = ["index", "wiki", "spells", "glossary", "conditions", "items", "cr
 
 export default defineConfig({
   root: web,
-  base: "./", // relative URLs, so the same build works on Vercel and inside the Electron app
+  // Absolute URLs: the React app has nested routes (/characters/abc), where relative asset URLs would break.
+  // The Windows app will serve the build over its own app:// protocol, so "/" works there too.
+  base: "/",
   envDir: root, // .env.local sits at the repo root (see .env.example)
-  plugins: [contentFiles(root), legacyPages(root + "src")],
+  plugins: [react(), contentFiles(root), legacyPages(root + "src")],
   build: {
     outDir: fileURLToPath(new URL("./dist", import.meta.url)),
     emptyOutDir: true,

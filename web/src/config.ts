@@ -10,11 +10,12 @@ export const LEGACY_SITE = "https://brodywoe-svg.github.io/crawl-1st-edition/";
 export const PORTED = new Set(["index.html", "wiki.html", "spells.html", "glossary.html", "conditions.html", "items.html", "crafting.html",
   "races.html", "classes.html", "backgrounds.html", "feats.html", "creator.html", "account.html", "tabletop/", "testing/dice.html"]);
 
-/** Point a relative link at the old site if its page hasn't been ported yet. */
+/** Make a relative link absolute: from the site root if its page is in this build, else on the old site.
+    Absolute, because the React app's nested routes (/characters/abc) would resolve a relative "creator.html" under them. */
 export function siteHref(href: string): string {
-  if (/^[a-z]+:|^\/\/|^#/i.test(href)) return href;
+  if (/^[a-z]+:|^\/|^#/i.test(href)) return href;
   const page = href.split(/[?#]/)[0] || "index.html";
-  return PORTED.has(page) ? href : LEGACY_SITE + href;
+  return PORTED.has(page) ? import.meta.env.BASE_URL + href : LEGACY_SITE + href;
 }
 
 /** Rewrite every relative link under root with siteHref. Safe to run more than once. */

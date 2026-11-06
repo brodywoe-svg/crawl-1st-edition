@@ -4,10 +4,21 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)crawl-edits.json' ':(exclude)dev' ':(exclude)*.md'",
+  "rewrites": [
+    {
+      "source": "/((?!tabletop/|testing/|assets/)[^.]*)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(crawl-.*\\.json|admin\\.json)",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
     }
   ]
 }

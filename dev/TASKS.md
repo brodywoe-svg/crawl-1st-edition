@@ -10,8 +10,8 @@ If a task needs more than a line of explanation, write a doc in [planning/](plan
 
 ## Now
 Goal: the playtest MVP, ready for session 2: [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md).
-- [ ] Agree the three 2026-11-04 decisions (playtest focus; React now, old site frozen; content schema), answer the content-schema open questions, and check the events table in [planning/character-data.md](planning/character-data.md) (@brody)
-- [ ] React shell: router, nav, theme, sign-in, Vitest: [planning/react-migration.md](planning/react-migration.md) (@maddox)
+- [ ] Answer the open questions in the planning docs (rules-data authoring, coins, XP, monsters, an Actions section), and check the events table in [planning/character-data.md](planning/character-data.md) (@brody)
+- [x] React shell: router, home, the SPA rewrite; nav, theme and sign-in reused from `ui/`: [planning/react-migration.md](planning/react-migration.md) (@maddox)
 - [ ] Character data and the state system: types, `apply`, `derive`, migration, dice: [planning/character-data.md](planning/character-data.md) (@maddox)
 - [ ] Content schema, stage A (types, adapters, `content:check`) for what the play sheet needs: [planning/content-schema.md](planning/content-schema.md) (@maddox)
 - [ ] Prototypes: the stat display / play sheet, and dice rolling, built on the above (testing docs to come)

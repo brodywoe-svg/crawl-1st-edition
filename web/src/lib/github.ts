@@ -70,7 +70,7 @@ export function adminUsers(j: any): AdminUser[] | null {
 /** The deployed admin.json, or null if it's missing or has no admins yet. */
 export async function fetchAdminUsers(): Promise<AdminUser[] | null> {
   try {
-    const r = await fetch("admin.json?t=" + Date.now(), { cache: "no-store" });
+    const r = await fetch(import.meta.env.BASE_URL + "admin.json?t=" + Date.now(), { cache: "no-store" });
     if (r.ok) { const u = adminUsers(await r.json()); if (u && u.length) return u }
   } catch { /* offline */ }
   return null;

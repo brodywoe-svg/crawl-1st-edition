@@ -23,7 +23,8 @@ const cache = new Map<string, Promise<unknown>>();
 /** Fetch a content file once per page load, always revalidating with the server. Resolves to null on any failure. */
 export function loadJson<F extends ContentFile>(file: F): Promise<ContentFiles[F] | null> {
   if (!cache.has(file)) {
-    cache.set(file, fetch(file, { cache: "no-cache" }).then(r => (r.ok ? r.json() : null)).catch(() => null));
+    // from the site root, so it works from the React app's nested routes too
+    cache.set(file, fetch(import.meta.env.BASE_URL + file, { cache: "no-cache" }).then(r => (r.ok ? r.json() : null)).catch(() => null));
   }
   return cache.get(file) as Promise<ContentFiles[F] | null>;
 }

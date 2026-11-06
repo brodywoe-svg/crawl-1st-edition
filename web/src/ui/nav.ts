@@ -63,7 +63,7 @@ function navHtml(active: string, controls: string): string {
 /** Underline the menu link for the page we're on. */
 function markCurrent(): void {
   const page = location.pathname.split("/").pop() || "index.html", here = page === "conditions.html" ? "glossary.html" : page;
-  document.querySelectorAll(".navmenu a").forEach(a => { if (a.getAttribute("href") === here && !a.textContent!.startsWith("All of")) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current") });
+  document.querySelectorAll(".navmenu a").forEach(a => { if (a.getAttribute("href")!.split("/").pop() === here && !a.textContent!.startsWith("All of")) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current") });
 }
 
 /** Keep the links on one row: tighten them step by step, then fall back to a sideways-scrolling row with arrows. */
