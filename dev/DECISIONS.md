@@ -21,6 +21,30 @@ Template:
 
 ---
 
+## 2026-11-07: Where admin saves go: GitHub through a key, or game content in Supabase
+**Status:** proposed by maddox, **to decide with Brody on 2026-11-08** · **Who:** maddox, brody
+**Why:** On the new site, admin saves go through the `github` Edge Function, which needs a GitHub key (`GITHUB_TOKEN`) that Brody makes, pastes in and renews every year.
+Supabase could hold the content itself, so there'd be no key at all. That would change two agreed entries:
+"`crawl-*.json` stays the source of truth" (2026-11-02) and "a server function saves to GitHub" (2026-11-02).
+Options:
+
+| | **A. Keep GitHub (with the key)** | **B. Content in Supabase (no key)** |
+| --- | --- | --- |
+| Setup for the MVP | Done except the key: Brody makes it and pastes it (about 10 minutes) | About 2–3 days: tables, rules, moving saves and reads, a backup, testing |
+| Secrets | One GitHub key, renewed yearly; if it leaks, someone can change the repo | None beyond Supabase itself |
+| A save shows up | After Vercel rebuilds, 1–2 minutes | At once |
+| History and undo | Every save is a git commit: full history, diffs, `git revert` | Our own history table: every save kept (fixes the edit log's "latest change only"), but no git tools |
+| Backups | Git is the backup | The free plan has no downloadable backups, so we'd add a nightly export of the content to the repo (a GitHub Action with GitHub's built-in token, not a personal key) |
+| Who's affected | Nothing changes | Everything that reads the files changes or goes stale: the old GitHub Pages site (frozen for session 1), the tabletop, the Windows app, `build.py`. The `CLAUDE.md` rules about `crawl-*.json` change |
+| Permissions | The function checks the admin role, then commits with Brody's key | The database rules check the admin role directly; no function, no GitHub account in the middle |
+| Outages | Saves need GitHub and Supabase | Saves and reading content need Supabase; free projects pause after a week idle |
+| Free plan | No limits that matter | The content is about 630 KB; well inside the 500 MB database and 5 GB monthly transfer |
+| Long term | Content stays files, as today | Fits the typed content schema and automated rules, which want content in a database |
+
+**Proposal:** **A for the MVP, then B after session 2**, together with stage B of the typed content schema ([planning/content-schema.md](planning/content-schema.md)).
+A is built and needs only the key, and B is real work two weeks before session 2. If Brody would rather never handle a GitHub key, we go straight to B and the admin saves wait until it's built.
+**Trade-offs:** With A, Brody owns a key and a yearly renewal for now. With B, content history moves out of git, and we must keep a backup running.
+
 ## 2026-11-07: Playtest home page is about your characters; Tree mode moves to the Testing menu; short account passwords
 **Status:** agreed by Maddox; **Brody to agree** (Tree mode is his prototype) · **Who:** maddox
 **Why:** For the playtest, players come to the site to run their character, so the home page should get them there in one tap, on a phone.

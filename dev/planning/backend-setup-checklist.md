@@ -33,6 +33,7 @@ Steps are in order. The numbers (1.4…) point to the tables below; the click-by
   - [ ] **Shared passwords:** which password manager holds the database password and, later, the Gmail and Cloudflare logins? (Suggestion: Bitwarden, free.)
   - [ ] **Can `crawl-dev` save to GitHub?** Suggestion: no. Give it no `GITHUB_TOKEN`, so an admin save from a preview link fails safely instead of committing to the real `main`.
   - [ ] **Custom domain:** not now (agreed: free services). Confirm.
+  - [ ] **Where admin saves go:** A, GitHub with Brody's key (built; needs only the key), or B, game content in Supabase (no key, 2–3 days of work). The full comparison is in [../DECISIONS.md](../DECISIONS.md), 2026-11-07. Suggestion: A now, B after session 2. **If B:** skip steps 1.5, 1.6 and 1.12 below, and admin saving waits for B to be built.
 
 ### B. Supabase: admins (40 min)
 - [ ] (1.2) Brody accepts the invite to the **Crawl** organization. If there's no invite yet, Maddox sends one: Organization → Team → Invite, as **Owner**.

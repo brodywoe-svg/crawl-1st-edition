@@ -230,6 +230,17 @@ The goal is to make Crawl fully digital, with Three.js visualizations eventually
   runtime would remove most of the generated output.
 
 ## 11. In progress: the new site in `web/` (Vite + TypeScript + React)
+
+### Sign-in: what's where (2026-11-07)
+| Where | How you sign in | Who can | Saves go | Status |
+| --- | --- | --- | --- | --- |
+| Old site (GitHub Pages) | The `admin.json` password, which unlocks that admin's GitHub key in the browser | Admins only; no player accounts | Straight to GitHub with the key | Frozen; retired at cutover with `admin.json` |
+| New site, Supabase **off** (no `VITE_SUPABASE_*` variables: production today, local without `.env.local`) | The same `admin.json` password, same code path | Admins only | Straight to GitHub with the key | A fallback until the variables are set; removed at cutover |
+| New site, Supabase **on** (the intended production) | **Sign in**: email and password (Supabase Auth). Each account has a `profiles` row with `role` `player` or `admin` | Anyone can make a player account; admins are set in the dashboard | Through the `github` Edge Function and its `GITHUB_TOKEN` (or the database, if DECISIONS.md 2026-11-07 option B is chosen); the browser never holds a key | Built; on once Vercel has the variables |
+| Tabletop (`/tabletop/`) | Its own admin check (`tt-admin`, or the old site's `crawl-admin-key`); players join by invite link as anonymous Firebase users | Admins make games | Firebase | Proof of concept; its own sign-in is broken (§9) |
+
+Not to be confused with them: members of the Supabase **organization** (who can open the dashboard: Maddox and Brody), and the GitHub account that owns the repo and the key.
+
 Plan: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Sections 1–10 above still describe the **live** site (GitHub Pages).
 This section covers the new one (Vercel). Every page and the tabletop now run on it. The Windows app and the cutover are still to do.
 - **Build:**
