@@ -17,13 +17,16 @@ Steps are in order. The numbers (1.4…) point to the tables below; the click-by
 **Where things stand (checked 2026-11-07 from Maddox's PC):**
 - **Done:**
   - the "Crawl" organization and project exist (`rdyqicarngehabyvilha`, US East), and the repo is linked to it;
-  - both database migrations are pushed (`profiles`, `characters`).
+  - both database migrations are pushed (`profiles`, `characters`);
+  - the auth settings match `config.toml` (`npx supabase config diff` shows no differences; the repo's pooler numbers were changed to match the live project, so a later `config push` changes nothing);
+  - the `github` function is deployed (2026-11-07). Without a signed-in admin it answers 401, as it should.
 - **Not done:**
-  - the `github` function isn't deployed, and there's no `GITHUB_TOKEN` secret;
+  - there's no `GITHUB_TOKEN` secret, so admin saves through the function fail until Brody adds it;
+  - the Site URL is still `localhost` (step 1.4);
   - `crawl-dev` doesn't exist;
   - `npm run db:types` doesn't exist;
   - there's no `.env.local` on Maddox's PC.
-- **Unknown, check at the start:** whether Brody accepted the org invite, whether the auth settings were pushed, the admin roles, and Vercel's environment variables.
+- **Unknown, check at the start:** whether Brody accepted the org invite, the admin roles, and Vercel's environment variables.
 
 ### A. Start (15 min)
 - [ ] **Merge PR #14** (it brings PR #13's play sheet into `main`, plus the phone menus). Look at its preview first.
@@ -34,13 +37,13 @@ Steps are in order. The numbers (1.4…) point to the tables below; the click-by
 
 ### B. Supabase: admins (40 min)
 - [ ] (1.2) Brody accepts the invite to the **Crawl** organization. If there's no invite yet, Maddox sends one: Organization → Team → Invite, as **Owner**.
-- [ ] (1.3) Maddox: `npx supabase config push`. Read what it says it will change before saying yes (sign-up on, email confirmation off, 12-character passwords).
+- [x] (1.3) Maddox: auth settings. Already in sync (checked with `npx supabase config diff`, 2026-11-07). Nothing to push.
 - [ ] (1.4) Dashboard → **Authentication → URL Configuration**:
   - Site URL = the Vercel production address;
   - Redirect URLs = that address + `/**`, the `http://localhost:5173/**` ones, and the preview pattern `https://crawl-1st-edition-*.vercel.app/**`.
 - [ ] (1.5) **Brody** makes the GitHub key: QUICKSTART step 6B (fine-grained, this repo only, Contents read and write, 1-year expiry).
 - [ ] (1.6) **Brody** pastes it as the `GITHUB_TOKEN` secret (Edge Functions → Secrets). **Not in chat, not to Maddox.**
-- [ ] (1.6) Maddox: `npx supabase functions deploy github`, then `npx supabase functions list` shows it.
+- [x] (1.6) Maddox: `npx supabase functions deploy github` (done 2026-11-07). Redeploy only if the function's code changes; secrets don't need a redeploy.
 - [ ] (1.12) Brody: a calendar reminder to renew the key in 11 months.
 - [ ] (1.7) Admin accounts:
   - Authentication → Users → **Add user** for each of you, with a starting password (12+ characters);
