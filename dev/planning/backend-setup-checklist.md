@@ -24,7 +24,7 @@ Steps are in order. The numbers (1.4…) point to the tables below; the click-by
   - there's no `GITHUB_TOKEN` secret, so admin saves through the function fail until Brody adds it;
   - `crawl-dev` doesn't exist;
   - `npm run db:types` doesn't exist;
-  - there's no `.env.local` on Maddox's PC.
+  - Brody's admin account (Maddox's exists and is an admin, 2026-11-07; Maddox's `.env.local` is set up).
 - **Unknown, check at the start:** whether Brody accepted the org invite, the admin roles, and Vercel's environment variables.
 
 ### A. Start (15 min)
@@ -53,7 +53,7 @@ Steps are in order. The numbers (1.4…) point to the tables below; the click-by
   - add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` from Supabase → Project Settings → API Keys (the **publishable** key, never the secret one);
   - for now, the same values for **Production and Preview** (Preview moves to `crawl-dev` in E);
   - then **Redeploy**.
-- [ ] Maddox: copy `.env.example` to `.env.local` and fill in the same two values (never committed).
+- [x] Maddox: `.env.local` with the same two values (done 2026-11-07; never committed).
 
 ### D. Test together (30 min), on the production site after the redeploy
 - [ ] **Admin:**
