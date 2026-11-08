@@ -16,6 +16,8 @@ Goal: the playtest MVP, ready for session 2: [roadmap/playtest-mvp.md](roadmap/p
 - [x] Content schema, stage A (types, adapters, `content:check`) for what the play sheet needs: [planning/content-schema.md](planning/content-schema.md) (@maddox)
 - [ ] Try the play sheet and dice roller prototypes, then decide ship / iterate / remove: [testing/play-sheet.md](testing/play-sheet.md), [testing/dice-rolling.md](testing/dice-rolling.md) (@maddox, @brody)
 - [ ] Answer the rules questions in [testing/play-sheet.md](testing/play-sheet.md): EP in a full pool, temp HP, classes without a chart, Exploration (@brody)
+- [ ] **2026-11-08 with Brody:** accounts and APIs, following the session to-do at the top of [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md) (@maddox, @brody)
+- [ ] Home page as a playtest landing page (characters, rules search, what's new): [planning/home-page.md](planning/home-page.md) (@maddox)
 - [ ] Go through the backend and API setup checklist together, and settle its open questions: [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md) (@maddox, @brody)
 - [ ] Review the decisions (TypeScript + Vite, Vercel, React now): start at [QUICKSTART.md](QUICKSTART.md). Supabase is agreed. (@brody)
 - [ ] Supabase admin login: code is in (off until configured); next, create the project and set it up: [planning/supabase-admin-login.md](planning/supabase-admin-login.md) (@maddox)

@@ -10,6 +10,83 @@ This doc doesn't change any plan. The "how" for each step lives in the doc it li
 - **Needs:** a decision we must make first (marked **Decide**), or another step.
 - Secrets (tokens, passwords, secret keys) are typed straight into the dashboard or your own terminal. **Never into chat, a PR, or the repo.**
 
+## Session to-do: Maddox + Brody, 2026-11-08 (about 2 hours)
+Goal: **real accounts on the new site.** Admins sign in with email and password and save content, players make accounts, and characters sync between devices.
+Steps are in order. The numbers (1.4…) point to the tables below; the click-by-click is in [../SETUP.md](../SETUP.md) "Supabase" and [../QUICKSTART.md](../QUICKSTART.md) step 6.
+
+**Where things stand (checked 2026-11-07 from Maddox's PC):**
+- **Done:**
+  - the "Crawl" organization and project exist (`rdyqicarngehabyvilha`, US East), and the repo is linked to it;
+  - both database migrations are pushed (`profiles`, `characters`).
+- **Not done:**
+  - the `github` function isn't deployed, and there's no `GITHUB_TOKEN` secret;
+  - `crawl-dev` doesn't exist;
+  - `npm run db:types` doesn't exist;
+  - there's no `.env.local` on Maddox's PC.
+- **Unknown, check at the start:** whether Brody accepted the org invite, whether the auth settings were pushed, the admin roles, and Vercel's environment variables.
+
+### A. Start (15 min)
+- [ ] **Merge PR #14** (it brings PR #13's play sheet into `main`, plus the phone menus). Look at its preview first.
+- [ ] Decide together:
+  - [ ] **Shared passwords:** which password manager holds the database password and, later, the Gmail and Cloudflare logins? (Suggestion: Bitwarden, free.)
+  - [ ] **Can `crawl-dev` save to GitHub?** Suggestion: no. Give it no `GITHUB_TOKEN`, so an admin save from a preview link fails safely instead of committing to the real `main`.
+  - [ ] **Custom domain:** not now (agreed: free services). Confirm.
+
+### B. Supabase: admins (40 min)
+- [ ] (1.2) Brody accepts the invite to the **Crawl** organization. If there's no invite yet, Maddox sends one: Organization → Team → Invite, as **Owner**.
+- [ ] (1.3) Maddox: `npx supabase config push`. Read what it says it will change before saying yes (sign-up on, email confirmation off, 12-character passwords).
+- [ ] (1.4) Dashboard → **Authentication → URL Configuration**:
+  - Site URL = the Vercel production address;
+  - Redirect URLs = that address + `/**`, the `http://localhost:5173/**` ones, and the preview pattern `https://crawl-1st-edition-*.vercel.app/**`.
+- [ ] (1.5) **Brody** makes the GitHub key: QUICKSTART step 6B (fine-grained, this repo only, Contents read and write, 1-year expiry).
+- [ ] (1.6) **Brody** pastes it as the `GITHUB_TOKEN` secret (Edge Functions → Secrets). **Not in chat, not to Maddox.**
+- [ ] (1.6) Maddox: `npx supabase functions deploy github`, then `npx supabase functions list` shows it.
+- [ ] (1.12) Brody: a calendar reminder to renew the key in 11 months.
+- [ ] (1.7) Admin accounts:
+  - Authentication → Users → **Add user** for each of you, with a starting password (12+ characters);
+  - then the SQL from SETUP.md step 7 sets `role = 'admin'` and your names.
+- [ ] (1.11) Dashboard → **Advisors**: security and performance show no warnings.
+
+### C. Turn it on (15 min)
+- [ ] (1.8) **Brody**, in Vercel → Project → Settings → Environment Variables:
+  - add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` from Supabase → Project Settings → API Keys (the **publishable** key, never the secret one);
+  - for now, the same values for **Production and Preview** (Preview moves to `crawl-dev` in E);
+  - then **Redeploy**.
+- [ ] Maddox: copy `.env.example` to `.env.local` and fill in the same two values (never committed).
+
+### D. Test together (30 min), on the production site after the redeploy
+- [ ] **Admin:**
+  - each of you signs in with email and password, and changes your password (Admin Options → Admins and sign-in);
+  - make a tiny content edit and save;
+  - on GitHub, the commit says "(by your name)" and the edit history shows it;
+  - sign out.
+- [ ] **Players:**
+  - each make a test player account (any email you can read);
+  - make a character signed out, then sign in: it uploads;
+  - sign in on a second browser or your phone: it's there.
+- [ ] **Privacy:** player A can't see B's characters; an admin can see both. (Checklist in [supabase-database.md](supabase-database.md), phase 2.)
+- [ ] **Play sheet:** open your character on two devices; change HP on one, reload the other, and the change is there.
+- [ ] **Refused:** a player account has no admin tools, and a save attempt fails.
+- [ ] **Password reset** by email works for a team member's address.
+- [ ] Note anything that went wrong in [../testing/play-sheet.md](../testing/play-sheet.md) or here.
+
+### E. If there's time: staging and loose ends
+- [ ] (2.1, 2.2) Create `crawl-dev` (same org), and push the migrations and config to it. **No `GITHUB_TOKEN`**, as decided in A.
+- [ ] (2.3) Brody: in Vercel, point **Preview** at `crawl-dev`.
+- [ ] (2.4) Maddox: add `npm run db:types`.
+- [ ] (2.5) Brody: Firebase console → Authentication → Authorized domains: add the Vercel address, so the old tabletop works there.
+
+### F. Game questions for Brody (15 min, any time)
+- [ ] The rules questions in [../testing/play-sheet.md](../testing/play-sheet.md): EP in a full pool, temp HP, Exploration's 3 AP.
+- [ ] Classes with no Max Pool / Action Die chart: Cleric, Druid, Paladin, Sorcerer and Warlock, plus Ranger's blank rows.
+- [ ] Coin rates (C 1 / S 10 / G 100 / P 1000?), XP or milestones, who writes the rules data, and monsters.
+- [ ] The home page questions in [home-page.md](home-page.md).
+
+### Not tomorrow (needed before people outside the group sign up)
+- Section 3: Turnstile and a Gmail sender, then email confirmation on.
+- Phase 3 (campaigns).
+- Backups.
+
 ## Accounts and services at a glance
 | Service | What it's for | Account owner | Plan | Status |
 | --- | --- | --- | --- | --- |
