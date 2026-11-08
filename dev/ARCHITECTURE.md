@@ -263,6 +263,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     The Wiki menu lists the eight reference sections and links to `wiki.html`, a page of section cards with live counts (`ui/counts.ts`).
     The old per-section menus are gone; the old scripts' `window.crawlNav*` calls are now no-ops.
     Flyouts that wouldn't fit open to the left, so each menu stays under its item (the old nav slid the Glossary menu far to the left).
+    On touch screens (no hover), the first tap on a menu's name opens its menu instead of following the link, and a second tap, a tap outside, scrolling the bar or picking an item closes it (`wireTouchMenus`). A mouse still opens menus on hover.
     Signed-in admins also see Tabletop and a **Testing** menu listing the prototypes in `web/testing/` (the `TESTING` list in `ui/nav.ts`; add a page there when you build one).
     It's hidden with CSS only (`html.is-admin`), like Tabletop, so the pages themselves are still reachable by URL.
   - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
