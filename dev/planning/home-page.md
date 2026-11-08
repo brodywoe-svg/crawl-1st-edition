@@ -84,6 +84,9 @@ Wiki (all sections), Character Creator, and the Windows app download, as today.
   - Suggestion: yes, labelled "Play (testing)". Move it to a proper address, such as `/characters/<id>`, when the prototype is agreed (ship).
 - **Brody:** does "what changed" belong on the home page? Is it OK to show his name on each change, as the edit log records it?
 
+- **Two views of the same edit log.** Admin Options → "Last edited by" (`histRender()` in `ui/admin.ts`: admins only, live through GitHub, one row per record, who and when, filters) and the home page's "What's new in the rules" (`lib/edits.ts`: everyone, from the deployed file, grouped per thing and day, no names, links).
+  We may want to remove one or merge them, e.g. "What's new" reads live data and shows names for admins, and the panel goes. Both share a limit: the log keeps only the latest change per record, so neither is a full history (an append-only log would need a DECISIONS.md entry). Decide with Brody.
+
 ## Steps
 - [x] Agree this plan (Maddox). The cards link to the Creator's sheet, not the prototype (DECISIONS.md, 2026-11-07).
 - [x] **Characters first:** the home route (`routes/Home.tsx`) with character cards (level, race, class, HP, AC, Max Pool, Action Die; a **Character sheet** button), unfinished characters (Continue), the empty state, the sync label, rules links. Checked at 390px in both themes, with and without characters. The play sheet prototype also fits at 390px.
