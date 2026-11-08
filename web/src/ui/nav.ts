@@ -14,7 +14,10 @@ export const WIKI: [label: string, href: string][] = [
 ];
 /** Prototypes being tested (dev/testing/), under the admin-only Testing menu. Add a page here when it's built. */
 export const TESTING: [label: string, href: string][] = [
+  ["Play sheet", "testing/sheet"],
+  ["Dice roller", "testing/roll"],
   ["3D dice roller", "testing/dice.html"],
+  ["Skill tree (Tree mode)", "creator.html?tree=1"],
 ];
 /** Nav items only a signed-in admin sees (CSS hides them unless <html> has the is-admin class), with their tooltips. */
 const ADMIN_ONLY: Record<string, string> = {
@@ -51,7 +54,7 @@ function navHtml(active: string, controls: string): string {
     const tip = ADMIN_ONLY[label], only = tip ? " adminonly" : "", title = tip ? ` title="${tip}"` : "";
     if (!menu) return `<a class="navitem${only}" href="${href}"${cur}${title}>${label}</a>`;
     const inner = menu.map(([t, h]) => (h ? `<a href="${h}">${esc(t)}</a>` : t ? `<span class="navmenuh">${esc(t)}</span>` : `<span class="navsep" role="separator"></span>`)).join("");
-    return `<div class="navdrop${only}"><a class="navitem" href="${href}"${cur}${title} aria-haspopup="true">${label}${CARET}</a><div class="navmenu">${inner}</div></div>`;
+    return `<div class="navdrop${only}"><a class="navitem" href="${href}"${cur}${title} aria-haspopup="true" aria-expanded="false">${label}${CARET}</a><div class="navmenu">${inner}</div></div>`;
   }).join("");
   return `<nav class="sitenav" aria-label="Crawl"><div class="navin">`
     + `<button type="button" class="navarr l" tabindex="-1" aria-label="Show earlier menu items">${ARROW("M7 1L1 7l6 6")}</button>`
@@ -110,13 +113,46 @@ function wireFit(nav: HTMLElement): void {
     m.style.right = "auto"; m.style.transform = "none";
   };
   nav.addEventListener("mouseover", place); nav.addEventListener("focusin", place);
-  links.addEventListener("scroll", () => { const a = document.activeElement as HTMLElement | null; if (a?.closest(".navdrop") && !a.closest(".navmenu")) a.blur() }, { passive: true });
+  wireTouchMenus(nav, place);
+  links.addEventListener("scroll", () => { const a = document.activeElement as HTMLElement | null; if (a?.closest(".navdrop") && !a.closest(".navmenu")) a.blur(); closeMenus(nav) }, { passive: true });
   fit(); window.addEventListener("resize", fit); window.addEventListener("load", fit);
   document.fonts?.ready.then(fit);
   const refit = () => requestAnimationFrame(fit);
   new MutationObserver(refit).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
   new MutationObserver(refit).observe(nav.querySelector(".navctl")!, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["hidden"] });
   document.addEventListener("keydown", e => { const a = document.activeElement as HTMLElement | null; if (e.key === "Escape" && a?.closest(".navdrop")) a.blur() });
+}
+
+/** Close any menu opened by a tap. */
+function closeMenus(nav: HTMLElement, except?: Element): void {
+  nav.querySelectorAll(".navdrop.open").forEach(d => {
+    if (d === except) return;
+    d.classList.remove("open");
+    const t = d.querySelector(":scope>.navitem"); t?.setAttribute("aria-expanded", "false");
+    if (d.contains(document.activeElement)) (document.activeElement as HTMLElement).blur(); // or :focus-within keeps it open
+  });
+}
+
+/** Touch screens can't hover, so a tap on a menu's name (Wiki, Testing) opens its menu instead of following the link,
+    and a second tap closes it. Tapping outside, picking an item, scrolling the bar or Escape closes it too.
+    A mouse still opens menus on hover, and a click on the name still goes to its page. */
+function wireTouchMenus(nav: HTMLElement, place: (e: Event) => void): void {
+  let touch = false; // whether the click about to happen came from a finger or pen
+  nav.addEventListener("pointerdown", e => { touch = e.pointerType !== "mouse" }, { capture: true });
+  nav.addEventListener("click", e => {
+    const t = (e.target as HTMLElement).closest(".navdrop>.navitem"), d = t?.parentElement;
+    if (t && d && touch) {
+      e.preventDefault();
+      if (d.classList.contains("open")) { closeMenus(nav); return }
+      closeMenus(nav, d);
+      d.classList.add("open"); t.setAttribute("aria-expanded", "true");
+      place(e);
+      return;
+    }
+    if ((e.target as HTMLElement).closest(".navmenu a")) closeMenus(nav); // an item was picked (the React app may not reload the page)
+  });
+  document.addEventListener("click", e => { if (!(e.target as HTMLElement).closest?.(".navdrop.open")) closeMenus(nav) });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenus(nav) });
 }
 
 /* The page scripts still shared with the old site call these by their old global names. They used to refill the

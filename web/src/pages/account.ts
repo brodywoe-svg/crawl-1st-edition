@@ -4,11 +4,11 @@
 import { initNav } from "../ui/nav";
 import { initTheme } from "../ui/theme";
 import { initAdmin, restoreAdmin } from "../ui/admin";
-import { ADMIN_BTN, MODE_BTN, TREE_BTN } from "../ui/controls.html";
+import { ADMIN_BTN, MODE_BTN } from "../ui/controls.html";
 import { $, esc } from "../ui/dom";
-import { SUPABASE_ON, currentAccount, onAuthChange, setPassword, type AuthError } from "../lib/auth";
+import { MIN_PASSWORD, SUPABASE_ON, currentAccount, onAuthChange, setPassword, type AuthError } from "../lib/auth";
 
-initNav("account", ADMIN_BTN + TREE_BTN + MODE_BTN);
+initNav("account", ADMIN_BTN + MODE_BTN);
 initTheme();
 initAdmin();
 restoreAdmin();
@@ -33,13 +33,13 @@ function showReset(): void {
   box.innerHTML = `<h2>Choose a new password</h2>
 <label class="mlabel" for="np1">New password</label><input type="password" id="np1" autocomplete="new-password">
 <label class="mlabel" for="np2">Type it again</label><input type="password" id="np2" autocomplete="new-password">
-<p class="mhelp">Use at least 12 characters. A few random words with a number works well.</p>
+<p class="mhelp">Use at least ${MIN_PASSWORD} characters.</p>
 <div class="row"><button type="button" class="btn solid" data-go="save">Save new password</button></div><p class="merr" id="npErr" role="alert"></p>`;
   $("np1").focus();
 }
 async function saveReset(): Promise<void> {
   const err = (m: string) => { $("npErr").textContent = m }, p1 = $<HTMLInputElement>("np1").value, p2 = $<HTMLInputElement>("np2").value;
-  if (p1.length < 12) { err("Use at least 12 characters for the password."); return }
+  if (p1.length < MIN_PASSWORD) { err(`Use at least ${MIN_PASSWORD} characters for the password.`); return }
   if (p1 !== p2) { err("The two passwords don't match."); return }
   err("Saving…");
   try {

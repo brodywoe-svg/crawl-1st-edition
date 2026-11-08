@@ -21,6 +21,41 @@ Template:
 
 ---
 
+## 2026-11-07: Where admin saves go: GitHub through a key, or game content in Supabase
+**Status:** proposed by maddox, **to decide with Brody on 2026-11-08** · **Who:** maddox, brody
+**Why:** On the new site, admin saves go through the `github` Edge Function, which needs a GitHub key (`GITHUB_TOKEN`) that Brody makes, pastes in and renews every year.
+Supabase could hold the content itself, so there'd be no key at all. That would change two agreed entries:
+"`crawl-*.json` stays the source of truth" (2026-11-02) and "a server function saves to GitHub" (2026-11-02).
+Options:
+
+| | **A. Keep GitHub (with the key)** | **B. Content in Supabase (no key)** |
+| --- | --- | --- |
+| Setup for the MVP | Done except the key: Brody makes it and pastes it (about 10 minutes) | About 2–3 days: tables, rules, moving saves and reads, a backup, testing |
+| Secrets | One GitHub key, renewed yearly; if it leaks, someone can change the repo | None beyond Supabase itself |
+| A save shows up | After Vercel rebuilds, 1–2 minutes | At once |
+| History and undo | Every save is a git commit: full history, diffs, `git revert` | Our own history table: every save kept (fixes the edit log's "latest change only"), but no git tools |
+| Backups | Git is the backup | The free plan has no downloadable backups, so we'd add a nightly export of the content to the repo (a GitHub Action with GitHub's built-in token, not a personal key) |
+| Who's affected | Nothing changes | Everything that reads the files changes or goes stale: the old GitHub Pages site (frozen for session 1), the tabletop, the Windows app, `build.py`. The `CLAUDE.md` rules about `crawl-*.json` change |
+| Permissions | The function checks the admin role, then commits with Brody's key | The database rules check the admin role directly; no function, no GitHub account in the middle |
+| Outages | Saves need GitHub and Supabase | Saves and reading content need Supabase; free projects pause after a week idle |
+| Free plan | No limits that matter | The content is about 630 KB; well inside the 500 MB database and 5 GB monthly transfer |
+| Long term | Content stays files, as today | Fits the typed content schema and automated rules, which want content in a database |
+
+**Proposal:** **A for the MVP, then B after session 2**, together with stage B of the typed content schema ([planning/content-schema.md](planning/content-schema.md)).
+A is built and needs only the key, and B is real work two weeks before session 2. If Brody would rather never handle a GitHub key, we go straight to B and the admin saves wait until it's built.
+**Trade-offs:** With A, Brody owns a key and a yearly renewal for now. With B, content history moves out of git, and we must keep a backup running.
+
+## 2026-11-07: Playtest home page is about your characters; Tree mode moves to the Testing menu; short account passwords
+**Status:** agreed by Maddox; **Brody to agree** (Tree mode is his prototype) · **Who:** maddox
+**Why:** For the playtest, players come to the site to run their character, so the home page should get them there in one tap, on a phone.
+Tree mode's switch sat in every page's nav bar, crowded it on phones, and could be left on by accident, but it's a proof of concept.
+And while a handful of friends make accounts, password rules only get in the way.
+**Decision:**
+- **Home** lists your characters (level, race, class, HP, AC, Max Pool, Action Die). Each opens its **character sheet in the Creator**, as it works today. The interactive play sheet stays a prototype in the Testing menu (`/testing/sheet`), where we keep developing it; players don't see it yet. Rules search and "what's new" wait ([planning/home-page.md](planning/home-page.md)).
+- **Tree mode** has no switch in the nav or the Admin menu any more. The admin-only Testing menu opens the Creator with `?tree=1`, which turns it on for that page only; it isn't remembered. Nothing in Tree mode itself changed.
+- **Account passwords** (Supabase) need 6 characters, the lowest Supabase allows, with no other rules. The old `admin.json` password stays at 12, because it guards a GitHub key that anyone can download.
+**Trade-offs:** Admin accounts can now have weak passwords and they can save to GitHub, so admins should still choose long ones. Raise the minimum before the site opens beyond the playtest group. To bring Tree mode back for everyone, add a switch again (`ui/theme.ts`).
+
 ## 2026-11-04: Game content gets a typed schema; structured rules data sits beside the prose
 **Status:** agreed (Brody approved PR #11, 2026-11-04) · **Who:** maddox, brody
 **Why:** A virtual tabletop needs content a program can use: ids, numbers that are numbers, costs, rolls and effects.

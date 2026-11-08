@@ -24,6 +24,9 @@ html.is-admin .navdrop.adminonly{display:flex}
 .navmenu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);min-width:210px;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:6px;box-shadow:0 10px 28px rgba(0,0,0,.22)}
 .navdrop:hover .navmenu,.navdrop:focus-within .navmenu{display:grid}
 @media (hover:none){.navdrop:hover .navmenu{display:none}}
+/* new site only: a menu opened by a tap on a touch screen (wireTouchMenus in web/src/ui/nav.ts) */
+.sitenav .navdrop.open .navmenu{display:grid}
+.sitenav .navdrop.open>.navitem{background:var(--barhover)}
 .navmenu a{display:block;padding:10px 12px;border-radius:8px;font:700 .92rem var(--font);color:var(--ink);text-decoration:none}
 .navmenu a:hover,.navmenu a:focus-visible{background:var(--soft);outline:none}
 .navsub{position:relative}

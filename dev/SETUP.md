@@ -97,7 +97,7 @@ Plan: [planning/supabase-admin-login.md](planning/supabase-admin-login.md). Unti
    npx supabase secrets set GITHUB_TOKEN=<paste the token>   # typed in your own terminal; don't paste it anywhere else
    npx supabase functions deploy github
    ```
-7. **Admins.** **Authentication → Users → Add user** for each admin, with their email and a starting password (12+ characters).
+7. **Admins.** **Authentication → Users → Add user** for each admin, with their email and a starting password (6+ characters; choose a long one anyway, since admins can save to GitHub).
    Then, in the **SQL Editor**, make them admins and set their names:
    ```sql
    update public.profiles p set role = 'admin', display_name = 'Brody Woelke'

@@ -8,7 +8,8 @@ export const LEGACY_SITE = "https://brodywoe-svg.github.io/crawl-1st-edition/";
 
 /** Pages that exist in this build. Links to anything else that's relative (the tabletop, the installer zip) go to the old site. */
 export const PORTED = new Set(["index.html", "wiki.html", "spells.html", "glossary.html", "conditions.html", "items.html", "crafting.html",
-  "races.html", "classes.html", "backgrounds.html", "feats.html", "creator.html", "account.html", "tabletop/", "testing/dice.html"]);
+  "races.html", "classes.html", "backgrounds.html", "feats.html", "creator.html", "account.html", "tabletop/", "testing/dice.html",
+  "testing/sheet", "testing/roll"]); // routes in the React app (web/src/app/main.tsx)
 
 /** Make a relative link absolute: from the site root if its page is in this build, else on the old site.
     Absolute, because the React app's nested routes (/characters/abc) would resolve a relative "creator.html" under them. */

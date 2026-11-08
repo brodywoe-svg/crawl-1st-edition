@@ -230,6 +230,17 @@ The goal is to make Crawl fully digital, with Three.js visualizations eventually
   runtime would remove most of the generated output.
 
 ## 11. In progress: the new site in `web/` (Vite + TypeScript + React)
+
+### Sign-in: what's where (2026-11-07)
+| Where | How you sign in | Who can | Saves go | Status |
+| --- | --- | --- | --- | --- |
+| Old site (GitHub Pages) | The `admin.json` password, which unlocks that admin's GitHub key in the browser | Admins only; no player accounts | Straight to GitHub with the key | Frozen; retired at cutover with `admin.json` |
+| New site, Supabase **off** (no `VITE_SUPABASE_*` variables: production today, local without `.env.local`) | The same `admin.json` password, same code path | Admins only | Straight to GitHub with the key | A fallback until the variables are set; removed at cutover |
+| New site, Supabase **on** (the intended production) | **Sign in**: email and password (Supabase Auth). Each account has a `profiles` row with `role` `player` or `admin` | Anyone can make a player account; admins are set in the dashboard | Through the `github` Edge Function and its `GITHUB_TOKEN` (or the database, if DECISIONS.md 2026-11-07 option B is chosen); the browser never holds a key | Built; on once Vercel has the variables |
+| Tabletop (`/tabletop/`) | Its own admin check (`tt-admin`, or the old site's `crawl-admin-key`); players join by invite link as anonymous Firebase users | Admins make games | Firebase | Proof of concept; its own sign-in is broken (§9) |
+
+Not to be confused with them: members of the Supabase **organization** (who can open the dashboard: Maddox and Brody), and the GitHub account that owns the repo and the key.
+
 Plan: [planning/typescript-vite-refactor.md](planning/typescript-vite-refactor.md). Sections 1–10 above still describe the **live** site (GitHub Pages).
 This section covers the new one (Vercel). Every page and the tabletop now run on it. The Windows app and the cutover are still to do.
 - **Build:**
@@ -241,7 +252,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     The tabletop is native ES modules, so it's served as is; the old site serves the same files.
 - **Hosting:**
   - Vercel builds `main` and every PR (`vercel.json`).
-  - It skips commits that only touch `crawl-edits.json`, `dev/` or Markdown.
+  - It skips commits that only touch `dev/` or Markdown. Edit-log commits (`crawl-edits.json`) do deploy, because the home page's "What's new" reads that file from the deployed site.
 - **Real TypeScript modules** (shared by every page):
   - `lib/markup.ts`: the text markup and glossary matching (was `GLCORE` in `src/page.html`); `ui/tips.ts`: the glossary tooltips.
   - `lib/github.ts`: admin keys, GitHub saving, the edit log; `ui/admin.ts`: the whole admin UI (was the `ADMIN` block).
@@ -258,20 +269,30 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     - `profiles`: one per account (`display_name`, `role` `player`/`admin`);
     - `characters`: Character Creator characters, one per (owner, id).
   - `functions/github/`: reads and commits `crawl-*.json` for signed-in admins, using the `GITHUB_TOKEN` secret.
-  - `config.toml`: auth settings (sign-up on, no email confirmation for now, 12-character passwords), pushed with `npx supabase config push`.
+  - `config.toml`: auth settings (sign-up on, no email confirmation for now, 6-character passwords, the Site URL and redirect URLs), pushed with `npx supabase config push`.
   - `ui/nav.ts`: the nav, shortened to Home · Character Creator · **Wiki** · Tabletop · About ([planning/wiki-menu.md](planning/wiki-menu.md)).
     The Wiki menu lists the eight reference sections and links to `wiki.html`, a page of section cards with live counts (`ui/counts.ts`).
     The old per-section menus are gone; the old scripts' `window.crawlNav*` calls are now no-ops.
     Flyouts that wouldn't fit open to the left, so each menu stays under its item (the old nav slid the Glossary menu far to the left).
+    On touch screens (no hover), the first tap on a menu's name opens its menu instead of following the link, and a second tap, a tap outside, scrolling the bar or picking an item closes it (`wireTouchMenus`). A mouse still opens menus on hover.
     Signed-in admins also see Tabletop and a **Testing** menu listing the prototypes in `web/testing/` (the `TESTING` list in `ui/nav.ts`; add a page there when you build one).
     It's hidden with CSS only (`html.is-admin`), like Tabletop, so the pages themselves are still reachable by URL.
-  - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
+  - `ui/theme.ts`: dark mode, and Tree mode, which is on only for a page opened with `?tree=1` (the Testing menu's "Skill tree" link; there's no switch in the nav any more, DECISIONS.md 2026-11-07); `lib/data.ts`: loading content files.
 - **The React app** (`web/src/app/`, page `web/index.html`; plan: [planning/react-migration.md](planning/react-migration.md)):
-  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`) and a not-found page so far.
-  - `vercel.json` sends every address without a file extension (except `tabletop/`, `testing/` and `assets/`) to `index.html`, and the router picks the screen. The dev server and `vite preview` do the same.
+  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`: your characters, each linking to its sheet in the Creator; an example sheet, `creator.html?example=1`, built by `exampleChar()` in `src/creator.js` and never saved; the Wiki's main sections; "What's new in the rules" from `lib/edits.ts`), the prototypes `/testing/sheet` (`routes/PlaySheet.tsx`) and `/testing/roll` (`routes/Roller.tsx`), and a not-found page.
+  - `vercel.json` sends every address without a file extension (except `tabletop/` and `assets/`) to `index.html`, and the router picks the screen. The dev server and `vite preview` do the same.
   - `components/Layout.tsx` sets up the nav, dark mode and Admin from the `ui/` modules above, once, so the app and the other pages share one nav.
     It also turns clicks on links to the app's own screens into in-app navigation; links to `.html` pages load normally.
   - `app/main.tsx` imports `ui/cloud-characters.ts`, so characters sync with your account on every screen.
+  - `app/store/character.ts` (Zustand): the open character. It reads and writes the Creator's `localStorage crawl-characters`, replacing only that character, and calls `crawlCloud.saved()` so it syncs.
+    The open character's id is kept in `sessionStorage crawl-play-open`. `src/creator.js` reloads when another tab saves (the `storage` event).
+  - Styles: `web/index.html` links `styles/pages/app.css` (the home page's sheets plus `styles/play.css`).
+- **Game rules and typed content** (`web/src/lib/`, no DOM or React; tests next to the code, run with `npm test`):
+  - `lib/dice.ts`: the dice parser (from `tabletop/dice.js`).
+  - `lib/edits.ts`: "What's new": the edit log (`crawl-edits.json`) grouped into one line per class, race or background, or per page of glossary entries, spells or items, per day. The skill tree and Creator settings are left out.
+  - `lib/content/`: stage A of [planning/content-schema.md](planning/content-schema.md). Zod schemas (`types.ts`), and adapters (`adapt.ts`) that turn today's class charts, items and glossary entries into typed records with ids, without changing the files. `load.ts` loads them once per page.
+  - `lib/character/`: [planning/character-data.md](planning/character-data.md). A character is the Creator's object plus `v: 2`, `state`, `log`, `logBase` and `overrides`.
+    `apply.ts` is the state system (every change is an event), `derive.ts` works out Max Pool and Action Die from the chart (the rest still comes from the Creator's `snap`), and `migrate.ts` adds the play layers.
 - **Page scripts still shared with the old site** (`src/*.js`, and the Spells script in `src/page.html`):
   - `web/vite/legacy-pages.ts` bundles each page's scripts into one module, `virtual:legacy/<page>`, the way `build.py` concatenated them.
     The new site therefore runs the same page code as the old one. A fix to `src/` reaches the old site only if `build.py` is run, which it isn't while that site is frozen for the playtest (DECISIONS.md, 2026-11-04).

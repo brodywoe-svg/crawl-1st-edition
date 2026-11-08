@@ -1,5 +1,5 @@
 # Backend and API setup: the full checklist
-**Status:** draft, for Brody and Maddox to go through together (week of 2026-11-04)  ·  **Owner:** maddox, brody  ·  **Roadmap:** none yet
+**Status:** in progress; the 2026-11-08 session to-do is at the top  ·  **Owner:** maddox, brody  ·  **Roadmap:** none yet
 
 ## Goal
 One list of every outside service, key and dashboard setting the backend needs, now and later, so we can work through it in one sitting and know who does what.
@@ -9,6 +9,93 @@ This doc doesn't change any plan. The "how" for each step lives in the doc it li
 - **Who:** `B` Brody, `M` Maddox, `B+M` together.
 - **Needs:** a decision we must make first (marked **Decide**), or another step.
 - Secrets (tokens, passwords, secret keys) are typed straight into the dashboard or your own terminal. **Never into chat, a PR, or the repo.**
+
+## Session to-do: Maddox + Brody, 2026-11-08 (about 2 hours)
+Goal: **real accounts on the live site.** Players make accounts and their characters sync between devices; admins sign in with email and password.
+Work top to bottom. In section 2 we pick **Path A or Path B** for admin saves; sections 3A and 3B are the only parts that differ.
+The numbers (1.4…) point to the tables below; the click-by-click is in [../SETUP.md](../SETUP.md) "Supabase" and [../QUICKSTART.md](../QUICKSTART.md) step 6.
+
+### Where things stand (checked 2026-11-07 evening)
+| | Status |
+| --- | --- |
+| Supabase project "Crawl" (`rdyqicarngehabyvilha`), linked to the repo | ✅ |
+| Database: `profiles` and `characters`, with row-level security | ✅ pushed |
+| Auth settings: sign-up on, 6-character passwords, Site URL `https://crawl-1st-edition.vercel.app`, redirects for it, previews and localhost | ✅ pushed (`config diff` is clean) |
+| `github` Edge Function | ✅ deployed; answers 401 without an admin. **No `GITHUB_TOKEN`**, so saves through it fail |
+| Maddox: admin account and `.env.local`; Supabase sign-in works on his local server | ✅ |
+| Live site uses Supabase | ❌ Vercel has no `VITE_SUPABASE_*` variables, so it still uses the `admin.json` password |
+| PR #14 (home page, phone menus, Tree mode in Testing, play sheet code) | ❌ not merged; the live site is the old `main` |
+| Brody: org invite, admin account | ❓ check at the start |
+
+### 1. Start (10 min)
+- [ ] Brody is in the **Crawl** Supabase organization (Organization → Team). If not, Maddox invites him as **Owner** and he accepts.
+- [ ] Look at the PR #14 preview together: the home page, the example sheet, What's new, the phone menus, Tree mode under Testing. Then **merge it**.
+
+### 2. Decide together (20 min)
+- [ ] **Where admin saves go** (the proposal is in [../DECISIONS.md](../DECISIONS.md), 2026-11-07):
+
+  | | **Path A: GitHub (with a key)** | **Path B: game content in Supabase** |
+  | --- | --- | --- |
+  | In short | Saves commit `crawl-*.json` to GitHub, through the `github` function and Brody's key | The content lives in Supabase tables; admins save straight to the database; no key |
+  | Ready for the MVP | Yes: only the key is missing (about 10 min) | No: 2–3 days of Maddox's work |
+  | Good | Built and deployed. Git keeps every version (diffs, `git revert`). The old site, tabletop and Windows app keep working. Nothing extra to back up | No key to make, store or renew. A save shows at once (no 1–2 min rebuild). Real permissions in the database. A full edit history (fixes "latest change only"). Fits the typed content schema and automated rules |
+  | Bad | Brody owns a key with write access to the repo, renewed yearly. Saves wait for a Vercel rebuild. The edit log keeps only the latest change per record | Content history leaves git. Needs an export to the repo as a backup (the free plan has no downloadable backups). The old site, tabletop and Windows app read the repo's files, so they go stale unless the export keeps them updated. Brody's workflow and the `crawl-*.json` rules change. Saves and reading content both depend on Supabase |
+  | Suggestion | **A now**, for the MVP | **B after session 2**, with stage B of the content schema |
+- [ ] **Shared passwords:** which password manager holds the database password and, later, the email and Cloudflare logins? (Suggestion: Bitwarden, free.)
+- [ ] **Custom domain:** not now (free services). Confirm.
+- [ ] Write the answers into DECISIONS.md (status **agreed**) before going on.
+
+### 3A. If Path A: GitHub with the key (25 min)
+- [ ] (1.5) **Brody** makes the key: QUICKSTART step 6B. Fine-grained, **this repo only**, Contents **read and write**, 1-year expiry.
+- [ ] (1.6) **Brody** pastes it as the `GITHUB_TOKEN` secret: Supabase → Edge Functions → Secrets. **Not in chat, not to Maddox, not in a file.** No redeploy needed.
+- [ ] (1.12) **Brody:** a calendar reminder to renew it in 11 months.
+- [ ] Maddox: on his local server, a tiny admin save now **works**, and the GitHub commit says "(by Maddox Turner)". Undo it with a second save.
+
+### 3B. If Path B: game content in Supabase (10 min tomorrow, then Maddox builds it)
+- [ ] **Don't make a GitHub key.** Skip 1.5, 1.6 and 1.12. The `github` function stays deployed but unused, and is removed when B ships.
+- [ ] Agree how Brody edits until B ships: **on the old site** (GitHub Pages Admin, as today). Saves on the new site fail until then, safely.
+- [ ] Agree the switch-over: on the day B ships, a one-time import copies `crawl-*.json` into Supabase, and from then on Brody edits only on the new site.
+- [ ] Agree the backup: a GitHub Action exports the content back to `crawl-*.json` in the repo (nightly, or after each save), with GitHub's built-in token. It also keeps the old site and tabletop up to date.
+- [ ] Maddox writes `dev/planning/content-in-supabase.md` (tables `content` and `content_history`, readable by everyone, writable by admins; `putFile()` and `loadJson()` switch over; the export Action) and claims it in TASKS.md.
+
+### 4. Both paths: Brody's admin account, and switching the live site on (20 min)
+- [ ] (1.7) **Brody's admin account:** Authentication → Users → Add user (his email, a long password he chooses, **Auto Confirm User**). Then the SQL from SETUP.md step 7 with his email and `display_name = 'Brody Woelke'`. Check with:
+  ```sql
+  select u.email, p.display_name, p.role from public.profiles p join auth.users u on u.id = p.id;
+  ```
+- [ ] (1.11) Dashboard → **Advisors**: Security and Performance show no warnings.
+- [ ] (1.8) **Brody**, in Vercel → Project → Settings → Environment Variables:
+  - `VITE_SUPABASE_URL` = `https://rdyqicarngehabyvilha.supabase.co`;
+  - `VITE_SUPABASE_PUBLISHABLE_KEY` = the **publishable** key (`sb_publishable_…`), never the secret one;
+  - for both **Production and Preview** (Preview moves to `crawl-dev` later);
+  - then **Redeploy** production. The live site's nav button now reads **Sign in**.
+
+### 5. Test together on the live site (30 min)
+- [ ] **Admins:** each signs in, sees Admin Options and Testing, and changes their display name.
+- [ ] **Admin save:**
+  - Path A: a tiny edit saves; the GitHub commit says "(by name)"; What's new shows it after the rebuild. Undo it.
+  - Path B: a save fails with an error, and nothing changes on GitHub (expected until B ships).
+- [ ] **Players:** each makes a test player account (any email). No admin tools.
+- [ ] **Sync:** make a character signed out, then sign in: it uploads. Sign in on a phone: it's there, and home says "Saved to your account".
+- [ ] **Privacy:** player A can't see player B's characters; an admin can see both (checklist in [supabase-database.md](supabase-database.md), phase 2).
+- [ ] **Password reset** by email works for a team member's address. (Other addresses get no email until we set up a sender, so for now an admin resets players' passwords in the dashboard.)
+- [ ] Note anything that went wrong here.
+
+### 6. If there's time
+- [ ] (2.1–2.3) Create `crawl-dev`, push the migrations and config to it, give it **no `GITHUB_TOKEN`**, and point Vercel's **Preview** at it.
+- [ ] (2.4) Maddox: `npm run db:types`.
+- [ ] (2.5) Brody: Firebase → Authentication → Authorized domains: add the Vercel address, so the old tabletop works there.
+- [ ] Game questions for Brody:
+  - the rules questions in [../testing/play-sheet.md](../testing/play-sheet.md) (EP in a full pool, temp HP, Exploration's 3 AP);
+  - classes with no Max Pool / Action Die chart (Cleric, Druid, Paladin, Sorcerer, Warlock; Ranger's blank rows);
+  - coin rates, XP or milestones, who writes the rules data, monsters;
+  - Tree mode moving to Testing, and showing his name in What's new ([../DECISIONS.md](../DECISIONS.md) 2026-11-07, [home-page.md](home-page.md));
+  - keep both Admin "Last edited by" and What's new, or merge them.
+
+### Not tomorrow (before people outside the group sign up)
+- An email sender (Gmail) and Turnstile, then email confirmation on (section 3 below).
+- Phase 3: campaigns.
+- Backups (with Path B, the export Action comes first).
 
 ## Accounts and services at a glance
 | Service | What it's for | Account owner | Plan | Status |

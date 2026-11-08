@@ -3,10 +3,10 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)crawl-edits.json' ':(exclude)dev' ':(exclude)*.md'",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)dev' ':(exclude)*.md'",
   "rewrites": [
     {
-      "source": "/((?!tabletop/|testing/|assets/)[^.]*)",
+      "source": "/((?!tabletop/|assets/)[^.]*)",
       "destination": "/index.html"
     }
   ],

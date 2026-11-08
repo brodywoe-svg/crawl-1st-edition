@@ -12,7 +12,7 @@ export const ADMIN_MODAL = `<div class="modal" id="adminModal" hidden>
         <input type="password" id="adminPass" autocomplete="current-password"></div>
         <div id="pass2Row" hidden><label class="mlabel" for="signupPass2">Type the password again</label>
         <input type="password" id="signupPass2" autocomplete="new-password">
-        <p class="mhelp">Use at least 12 characters. A few random words with a number works well.</p></div>
+        <p class="mhelp">Use at least 6 characters.</p></div>
         <button type="button" class="mlink" id="adminForgot" hidden>Forgot your password?</button>
       </div>
       <div id="setupPane" hidden>

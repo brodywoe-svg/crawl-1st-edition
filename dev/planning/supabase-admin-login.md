@@ -30,7 +30,7 @@ That works, but:
   - password reset by email (an admin who forgets their password is reset from the dashboard).
 
 ## How it works
-- **Accounts:** Supabase Auth, with email + password (12 characters minimum).
+- **Accounts:** Supabase Auth, with email + password (6 characters minimum while we playtest; it was 12, see DECISIONS.md 2026-11-07).
   - Public sign-up was **off** at first; since phase 2 (2026-11-03) anyone can make a player account ([supabase-database.md](supabase-database.md)).
     Admins are still made admins only in the dashboard.
   - Every account gets a row in `public.profiles` (`supabase/migrations/…_profiles.sql`): `display_name`, and `role` (`player` by default).

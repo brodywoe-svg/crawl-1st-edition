@@ -8,12 +8,17 @@ import { RouterProvider } from "react-router/dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./routes/Home";
 import { NotFound } from "./routes/NotFound";
+import { PlaySheet } from "./routes/PlaySheet";
+import { Roller } from "./routes/Roller";
 import "../ui/cloud-characters"; // keeps this browser's characters in step with your account, on every screen
 
 /** The app's screens. Layout also uses this list to tell links to these screens from links to other pages. */
 const screens: RouteObject[] = [
   { index: true, element: <Home /> },
   { path: "index.html", element: <Home /> }, // the nav's Home link, and old bookmarks
+  // prototypes (dev/testing/), in the admin-only Testing menu (TESTING in web/src/ui/nav.ts)
+  { path: "testing/sheet", element: <PlaySheet /> },
+  { path: "testing/roll", element: <Roller /> },
   { path: "*", element: <NotFound /> },
 ];
 const routes: RouteObject[] = [{ path: "/", element: <Layout routes={screens} />, children: screens }];

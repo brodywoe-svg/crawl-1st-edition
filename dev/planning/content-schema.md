@@ -147,7 +147,7 @@ It runs in the Vercel build as **warnings only**, because Admin saves land on `m
 
 ## Steps
 - [ ] Brody OKs the approach and the decision. In particular: prose stays his, the structured data is a translation he signs off.
-- [ ] Stage A, with the MVP:
+- [x] Stage A, with the MVP (PR B). `npm run content:check` on 2026-11-04: 7 of 13 classes have a usable chart, 234 of 241 item values and 239 weights read, 22 of 23 weapons' damage, 20 conditions, 40 properties, 16 damage types, 32 actions (30 with a cost):
   - `lib/content/` types and Zod schemas for the kinds the play sheet needs (class chart, item, condition, action, damage);
   - the adapters;
   - `content:check`.

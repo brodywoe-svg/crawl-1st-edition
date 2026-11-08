@@ -8,6 +8,8 @@ const URL_ = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
 /** Whether this build signs in with Supabase. */
 export const SUPABASE_ON = !!(URL_ && KEY);
+/** The shortest account password: the lowest Supabase allows (supabase/config.toml). Not the admin.json password, which stays at 12. */
+export const MIN_PASSWORD = 6;
 
 export interface Account { id: string; email: string; name: string; role: "player" | "admin" }
 export type AuthError = {

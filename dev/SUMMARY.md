@@ -30,9 +30,12 @@ So we're moving it to a modern setup, **one page at a time**, while the current 
 The full reasoning for each one is in [DECISIONS.md](DECISIONS.md).
 
 ## The next goal: the site ready for session 2 (agreed 2026-11-04)
-_Status: the new site's home page now runs on React (it looks the same). Next: the play sheet and dice roller prototypes._
+_Status: the new site's home page runs on React, and there are two prototypes to try (the Testing menu, when signed in as admin): a **play sheet** and a **dice roller**._
+_Please read the questions for you in [testing/play-sheet.md](testing/play-sheet.md): they're about how the Action Pool rules should work. Also: 6 classes have no Max Pool / Action Die chart yet._
 Session 1 is on paper. By session 2, players make and track their characters on the site (HP, Action Pool, conditions, gear, dice rolls), and the DM sees the party.
+- **A decision for you (2026-11-08):** where your Admin saves go. **Path A:** GitHub, as today, which needs a GitHub key from you (about 10 minutes, renewed yearly). **Path B:** the game content moves into Supabase, with no key, but about 2–3 days of Maddox's work. We suggest A now and B after session 2. The comparison is in [planning/backend-setup-checklist.md](planning/backend-setup-checklist.md), section 2.
 - **Your tabletop and Tree mode** are treated as proofs of concept: we learn from them, but don't build on them until we agree a final design.
+- **Please check (2026-11-07):** on the new site, Tree mode's switch is gone from the nav bar. It's now **Testing → Skill tree (Tree mode)**, which opens the Creator with Tree mode on. Nothing in it changed. The home page now lists your characters; each opens its character sheet in the Creator. The play sheet stays in the Testing menu for now. Account passwords only need 6 characters while we playtest. (DECISIONS.md, 2026-11-07)
   The big digital-tabletop vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
 - **Please check one table:** "Events: the state system" in [planning/character-data.md](planning/character-data.md).
   It's how the site will track the Action Pool, HP and so on, taken from your glossary. Tell us what's wrong or missing.
