@@ -1,11 +1,12 @@
 # Home page: a landing page for the playtest
-**Status:** draft  ·  **Owner:** maddox  ·  **Roadmap:** [playtest-mvp.md](../roadmap/playtest-mvp.md)
+**Status:** building (characters first)  ·  **Owner:** maddox  ·  **Roadmap:** [playtest-mvp.md](../roadmap/playtest-mvp.md)
 
 ## Goal
 The home page is the first thing a playtester sees, so it should get them to **their character** and the **rules** fast, and show **what changed** since last session.
 Today it's mostly a copy of the Wiki page: a grid of section cards. The section cards stay on the Wiki page.
 
 ## Decided (Maddox, 2026-11-07)
+- **Characters first** (second answer, same day): the home page is mostly your characters, and **Play** opens the play sheet, which must work well on a phone. Built first. Search and "what's new" come later (below).
 - **For playtest players.** No pitch or marketing text for now; this is a landing page for playtesting. (A newcomers' page can come later, with Brody's words.)
 - **Three sections:** your characters, wiki search, what's new.
 - **Look:** the site's black and white style and logo, but bolder. A smaller logo, fewer and larger blocks, and clear buttons. It must work well on a phone.
@@ -84,7 +85,8 @@ Wiki (all sections), Character Creator, and the Windows app download, as today.
 - **Brody:** does "what changed" belong on the home page? Is it OK to show his name on each change, as the edit log records it?
 
 ## Steps
-- [ ] Agree this plan (Maddox), and the open questions with Brody.
-- [ ] `lib/edits.ts` and `lib/search.ts`, with tests.
-- [ ] The home route and styles, then check it at phone width (390px), in both themes, signed in and out, and with and without characters.
+- [x] Agree this plan (Maddox). Play links to the prototype sheet, labelled just **Play** (DECISIONS.md, 2026-11-07).
+- [x] **Characters first:** the home route (`routes/Home.tsx`) with character cards (HP, Action Pool, In combat, conditions; Play and Edit), unfinished characters, the empty state, the sync label, rules links. Checked at 390px in both themes, with and without characters; the play sheet at 390px has no sideways scroll, and its "All characters" button goes home.
+- [ ] Later: `lib/search.ts` (search the rules) and `lib/edits.ts` (what's new), with tests.
+- [ ] Brody: the name question above, when what's new is built.
 - [ ] Update ARCHITECTURE.md §11.

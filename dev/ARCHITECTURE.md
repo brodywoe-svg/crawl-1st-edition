@@ -258,7 +258,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     - `profiles`: one per account (`display_name`, `role` `player`/`admin`);
     - `characters`: Character Creator characters, one per (owner, id).
   - `functions/github/`: reads and commits `crawl-*.json` for signed-in admins, using the `GITHUB_TOKEN` secret.
-  - `config.toml`: auth settings (sign-up on, no email confirmation for now, 12-character passwords), pushed with `npx supabase config push`.
+  - `config.toml`: auth settings (sign-up on, no email confirmation for now, 6-character passwords, the Site URL and redirect URLs), pushed with `npx supabase config push`.
   - `ui/nav.ts`: the nav, shortened to Home · Character Creator · **Wiki** · Tabletop · About ([planning/wiki-menu.md](planning/wiki-menu.md)).
     The Wiki menu lists the eight reference sections and links to `wiki.html`, a page of section cards with live counts (`ui/counts.ts`).
     The old per-section menus are gone; the old scripts' `window.crawlNav*` calls are now no-ops.
@@ -266,9 +266,9 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     On touch screens (no hover), the first tap on a menu's name opens its menu instead of following the link, and a second tap, a tap outside, scrolling the bar or picking an item closes it (`wireTouchMenus`). A mouse still opens menus on hover.
     Signed-in admins also see Tabletop and a **Testing** menu listing the prototypes in `web/testing/` (the `TESTING` list in `ui/nav.ts`; add a page there when you build one).
     It's hidden with CSS only (`html.is-admin`), like Tabletop, so the pages themselves are still reachable by URL.
-  - `ui/theme.ts`: dark mode and Tree mode; `lib/data.ts`: loading content files.
+  - `ui/theme.ts`: dark mode, and Tree mode, which is on only for a page opened with `?tree=1` (the Testing menu's "Skill tree" link; there's no switch in the nav any more, DECISIONS.md 2026-11-07); `lib/data.ts`: loading content files.
 - **The React app** (`web/src/app/`, page `web/index.html`; plan: [planning/react-migration.md](planning/react-migration.md)):
-  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`), the prototypes `/testing/sheet` (`routes/PlaySheet.tsx`) and `/testing/roll` (`routes/Roller.tsx`), and a not-found page.
+  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`: your characters, each with Play and Edit), the prototypes `/testing/sheet` (`routes/PlaySheet.tsx`) and `/testing/roll` (`routes/Roller.tsx`), and a not-found page.
   - `vercel.json` sends every address without a file extension (except `tabletop/` and `assets/`) to `index.html`, and the router picks the screen. The dev server and `vite preview` do the same.
   - `components/Layout.tsx` sets up the nav, dark mode and Admin from the `ui/` modules above, once, so the app and the other pages share one nav.
     It also turns clicks on links to the app's own screens into in-app navigation; links to `.html` pages load normally.

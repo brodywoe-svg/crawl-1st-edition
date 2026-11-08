@@ -7,7 +7,7 @@ import { Outlet, matchRoutes, useNavigate, type RouteObject } from "react-router
 import { initNav } from "../../ui/nav";
 import { initTheme } from "../../ui/theme";
 import { initAdmin, restoreAdmin } from "../../ui/admin";
-import { ADMIN_BTN, MODE_BTN, TREE_BTN } from "../../ui/controls.html";
+import { ADMIN_BTN, MODE_BTN } from "../../ui/controls.html";
 
 let started = false; // React's StrictMode runs effects twice in development; the nav must be set up only once
 
@@ -20,7 +20,7 @@ export function Layout({ routes }: { routes: RouteObject[] }) {
   useEffect(() => {
     if (started) return;
     started = true;
-    initNav(navSection(location.pathname), ADMIN_BTN + TREE_BTN + MODE_BTN);
+    initNav(navSection(location.pathname), ADMIN_BTN + MODE_BTN);
     initTheme();
     initAdmin();
     restoreAdmin();

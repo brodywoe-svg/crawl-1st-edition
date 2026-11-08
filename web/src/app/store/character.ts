@@ -26,7 +26,8 @@ function save(c: PlayCharacter): void {
 
 interface CharacterStore {
   content: Content | null;
-  list: Character[];                 // every character in this browser (and, once synced, your account)
+  list: Character[];                 // every finished character in this browser (and, once synced, your account)
+  drafts: Character[];               // characters still being made in the Creator
   char: PlayCharacter | null;
   derived: Derived | null;
   sample: boolean;                   // the built-in sample: played in memory, never saved
@@ -48,7 +49,7 @@ export const useCharacter = create<CharacterStore>((set, get) => {
   const commit = (char: PlayCharacter) => { char.edited = Date.now(); if (!get().sample) save(char); show(char) };
 
   return {
-    content: null, list: [], char: null, derived: null, sample: false, warnings: [],
+    content: null, list: [], drafts: [], char: null, derived: null, sample: false, warnings: [],
     init() {
       get().refreshList();
       if (started) return; // once per page: listeners and content
@@ -61,7 +62,7 @@ export const useCharacter = create<CharacterStore>((set, get) => {
       window.addEventListener("storage", e => { if (e.key === LS) reload() });
       window.addEventListener("crawl-characters-changed", reload);
     },
-    refreshList() { set({ list: readAll().filter(c => c.done || c.snap) }) },
+    refreshList() { const all = readAll(), ready = (c: Character) => !!(c.done || c.snap); set({ list: all.filter(ready), drafts: all.filter(c => !ready(c)) }) },
     open(id) { const c = readAll().find(x => x.id === id); if (c) { set({ warnings: [] }); show(migrate(c), false); remember(id) } },
     openSample() { if (get().char?.id === "pc_sample") return; set({ warnings: [] }); show(migrate(SAMPLE()), true); remember("pc_sample") },
     close() { set({ char: null, derived: null, sample: false, warnings: [] }); remember("") },

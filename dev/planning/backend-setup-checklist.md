@@ -22,7 +22,6 @@ Steps are in order. The numbers (1.4…) point to the tables below; the click-by
   - the `github` function is deployed (2026-11-07). Without a signed-in admin it answers 401, as it should.
 - **Not done:**
   - there's no `GITHUB_TOKEN` secret, so admin saves through the function fail until Brody adds it;
-  - the Site URL is still `localhost` (step 1.4);
   - `crawl-dev` doesn't exist;
   - `npm run db:types` doesn't exist;
   - there's no `.env.local` on Maddox's PC.
@@ -38,15 +37,13 @@ Steps are in order. The numbers (1.4…) point to the tables below; the click-by
 ### B. Supabase: admins (40 min)
 - [ ] (1.2) Brody accepts the invite to the **Crawl** organization. If there's no invite yet, Maddox sends one: Organization → Team → Invite, as **Owner**.
 - [x] (1.3) Maddox: auth settings. Already in sync (checked with `npx supabase config diff`, 2026-11-07). Nothing to push.
-- [ ] (1.4) Dashboard → **Authentication → URL Configuration**:
-  - Site URL = the Vercel production address;
-  - Redirect URLs = that address + `/**`, the `http://localhost:5173/**` ones, and the preview pattern `https://crawl-1st-edition-*.vercel.app/**`.
+- [x] (1.4) **URL Configuration**: set from `supabase/config.toml` and pushed (2026-11-07). Site URL `https://crawl-1st-edition.vercel.app` (the site, not the vercel.com dashboard address); redirects for it, Vercel previews and localhost. Passwords: 6 characters minimum.
 - [ ] (1.5) **Brody** makes the GitHub key: QUICKSTART step 6B (fine-grained, this repo only, Contents read and write, 1-year expiry).
 - [ ] (1.6) **Brody** pastes it as the `GITHUB_TOKEN` secret (Edge Functions → Secrets). **Not in chat, not to Maddox.**
 - [x] (1.6) Maddox: `npx supabase functions deploy github` (done 2026-11-07). Redeploy only if the function's code changes; secrets don't need a redeploy.
 - [ ] (1.12) Brody: a calendar reminder to renew the key in 11 months.
 - [ ] (1.7) Admin accounts:
-  - Authentication → Users → **Add user** for each of you, with a starting password (12+ characters);
+  - Authentication → Users → **Add user** for each of you, with a starting password (6+ characters, but choose a long one: admins can save to GitHub);
   - then the SQL from SETUP.md step 7 sets `role = 'admin'` and your names.
 - [ ] (1.11) Dashboard → **Advisors**: security and performance show no warnings.
 

@@ -6,7 +6,7 @@
 import { initNav } from "../ui/nav";
 import { initTheme } from "../ui/theme";
 import { initAdmin } from "../ui/admin";
-import { ADMIN_BTN, MODE_BTN, TREE_BTN } from "../ui/controls.html";
+import { ADMIN_BTN, MODE_BTN } from "../ui/controls.html";
 import { loadJson, type ContentFile } from "../lib/data";
 
 export type LegacyPage = "glossary" | "conditions" | "items" | "crafting" | "races" | "classes" | "backgrounds" | "feats" | "creator" | "spells";
@@ -63,7 +63,7 @@ export async function boot(page: LegacyPage): Promise<Record<string, any>> {
   window.CRAWL_STATIC = true; // the old "GitHub Pages" mode: fetch fresh data and offer Admin
   if (page !== "spells") window.GL_PAGE = page;
   document.documentElement.classList.add("hasnav");
-  initNav(page, ADMIN_BTN + (page === "spells" ? "" : TREE_BTN) + MODE_BTN);
+  initNav(page, ADMIN_BTN + MODE_BTN);
   initTheme();
   initAdmin();
 

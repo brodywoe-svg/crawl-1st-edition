@@ -17,6 +17,7 @@ export const TESTING: [label: string, href: string][] = [
   ["Play sheet", "testing/sheet"],
   ["Dice roller", "testing/roll"],
   ["3D dice roller", "testing/dice.html"],
+  ["Skill tree (Tree mode)", "creator.html?tree=1"],
 ];
 /** Nav items only a signed-in admin sees (CSS hides them unless <html> has the is-admin class), with their tooltips. */
 const ADMIN_ONLY: Record<string, string> = {

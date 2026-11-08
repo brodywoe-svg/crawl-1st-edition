@@ -1,5 +1,6 @@
-/* Dark mode and Tree mode switches (ported from mode_js in tools/build.py). Both are remembered in this browser,
-   under the same localStorage keys as the old site. An inline script in each page's <head> applies dark mode
+/* Dark mode, and Tree mode (ported from mode_js in tools/build.py). Dark mode is remembered in this browser,
+   under the same localStorage key as the old site. Tree mode is a prototype: it's on only for a page opened with ?tree=1,
+   which the admin-only Testing menu links to (DECISIONS.md, 2026-11-07). An inline script in each page's <head> applies dark mode
    before first paint, so there's no flash of the light theme. */
 const root = document.documentElement;
 const MOON = "M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3z";
@@ -13,15 +14,12 @@ function showMode(): void {
   document.getElementById("modeIcon")?.setAttribute("d", dark ? SUN : MOON);
 }
 
-/** Tree mode: the Character Creator shows the Class step as a skill tree. Fires "crawl-tree-mode" on window. */
-export function setTree(on: boolean, remember = true): void {
+/** Tree mode: the Character Creator shows the Class step as a skill tree. */
+function setTree(on: boolean): void {
   if (on) root.setAttribute("data-tree", "on"); else root.removeAttribute("data-tree");
-  document.getElementById("treeBtn")?.setAttribute("aria-checked", String(on));
-  if (remember) { store("crawl-tree-mode", on ? "1" : "0"); window.dispatchEvent(new Event("crawl-tree-mode")) }
 }
-export const toggleTree = () => setTree(root.getAttribute("data-tree") !== "on");
 
-/** Wire up #modeBtn and #treeBtn, if the page has them. */
+/** Wire up #modeBtn, if the page has it, and turn Tree mode on for ?tree=1. */
 export function initTheme(): void {
   document.getElementById("modeBtn")?.addEventListener("click", () => {
     const dark = root.getAttribute("data-mode") !== "dark";
@@ -29,7 +27,6 @@ export function initTheme(): void {
     store("crawl-mode", dark ? "dark" : "light"); showMode();
   });
   showMode();
-  let on = false; try { on = localStorage.getItem("crawl-tree-mode") === "1" } catch { /* private mode */ }
-  setTree(on, false);
-  document.getElementById("treeBtn")?.addEventListener("click", toggleTree);
+  setTree(new URLSearchParams(location.search).get("tree") === "1");
+  try { localStorage.removeItem("crawl-tree-mode") } catch { /* private mode */ } // the old switch's memory, so it can't stick on
 }

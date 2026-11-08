@@ -21,6 +21,17 @@ Template:
 
 ---
 
+## 2026-11-07: Playtest home page is about your characters; Tree mode moves to the Testing menu; short account passwords
+**Status:** agreed by Maddox; **Brody to agree** (Tree mode is his prototype) · **Who:** maddox
+**Why:** For the playtest, players come to the site to run their character, so the home page should get them there in one tap, on a phone.
+Tree mode's switch sat in every page's nav bar, crowded it on phones, and could be left on by accident, but it's a proof of concept.
+And while a handful of friends make accounts, password rules only get in the way.
+**Decision:**
+- **Home** lists your characters (HP, Action Pool, Play and Edit). **Play** opens the play sheet, which is still a prototype at `/testing/sheet`: this is the first prototype shown to players. Rules search and "what's new" wait ([planning/home-page.md](planning/home-page.md)).
+- **Tree mode** has no switch in the nav or the Admin menu any more. The admin-only Testing menu opens the Creator with `?tree=1`, which turns it on for that page only; it isn't remembered. Nothing in Tree mode itself changed.
+- **Account passwords** (Supabase) need 6 characters, the lowest Supabase allows, with no other rules. The old `admin.json` password stays at 12, because it guards a GitHub key that anyone can download.
+**Trade-offs:** Admin accounts can now have weak passwords and they can save to GitHub, so admins should still choose long ones. Raise the minimum before the site opens beyond the playtest group. To bring Tree mode back for everyone, add a switch again (`ui/theme.ts`).
+
 ## 2026-11-04: Game content gets a typed schema; structured rules data sits beside the prose
 **Status:** agreed (Brody approved PR #11, 2026-11-04) · **Who:** maddox, brody
 **Why:** A virtual tabletop needs content a program can use: ids, numbers that are numbers, costs, rolls and effects.

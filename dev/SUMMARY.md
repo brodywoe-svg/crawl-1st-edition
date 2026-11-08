@@ -34,6 +34,7 @@ _Status: the new site's home page runs on React, and there are two prototypes to
 _Please read the questions for you in [testing/play-sheet.md](testing/play-sheet.md): they're about how the Action Pool rules should work. Also: 6 classes have no Max Pool / Action Die chart yet._
 Session 1 is on paper. By session 2, players make and track their characters on the site (HP, Action Pool, conditions, gear, dice rolls), and the DM sees the party.
 - **Your tabletop and Tree mode** are treated as proofs of concept: we learn from them, but don't build on them until we agree a final design.
+- **Please check (2026-11-07):** on the new site, Tree mode's switch is gone from the nav bar. It's now **Testing → Skill tree (Tree mode)**, which opens the Creator with Tree mode on. Nothing in it changed. The home page now lists your characters, with **Play** to open the play sheet. Account passwords only need 6 characters while we playtest. (DECISIONS.md, 2026-11-07)
   The big digital-tabletop vision is kept as ideas in [roadmap/digital-tabletop.md](roadmap/digital-tabletop.md).
 - **Please check one table:** "Events: the state system" in [planning/character-data.md](planning/character-data.md).
   It's how the site will track the Action Pool, HP and so on, taken from your glossary. Tell us what's wrong or missing.

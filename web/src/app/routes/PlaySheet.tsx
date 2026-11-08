@@ -59,7 +59,7 @@ function Sheet() {
         <div className="prow">
           <ModeSwitch />
           <Link className="pbtn" to="/testing/roll">Dice roller</Link>
-          <button type="button" className="pbtn" onClick={close}>Switch character</button>
+          <Link className="pbtn" to="/" onClick={close}>All characters</Link>
         </div>
       </header>
       {sample && <p className="pnote">This is the sample character. Changes aren't saved.</p>}

@@ -5,13 +5,12 @@
    With Supabase anyone can make an account (a player); accounts with the admin role also get the admin tools. */
 import { $, esc } from "./dom";
 import { ADMIN_MODAL } from "./admin-modal.html";
-import { toggleTree } from "./theme";
 import {
   session, saveSession, clearSession, storedSession, lockKey, unlockKey, adminUsers, fetchAdminUsers,
   getRepoText, putFile, editLogListeners, EDIT_LOG, EDIT_PAGES, saveSupabaseSession, type AdminUser, type EditLog, type GhError,
 } from "../lib/github";
 import {
-  SUPABASE_ON, signIn, signUp, sendPasswordReset, currentAccount, onAuthChange, signOutSupabase, setDisplayName, setPassword, adminNames,
+  MIN_PASSWORD, SUPABASE_ON, signIn, signUp, sendPasswordReset, currentAccount, onAuthChange, signOutSupabase, setDisplayName, setPassword, adminNames,
   type Account, type AuthError,
 } from "../lib/auth";
 
@@ -126,7 +125,7 @@ async function submitAdmin(e: SubmitEvent): Promise<void> {
     }
     if (!pass) { err("Type your password."); return }
     if (adminMode === "signup") {
-      if (pass.length < 12) { err("Use at least 12 characters for the password."); return }
+      if (pass.length < MIN_PASSWORD) { err(`Use at least ${MIN_PASSWORD} characters for the password.`); return }
       if (pass !== val("signupPass2")) { err("The two passwords don't match."); return }
     }
     go.disabled = true; err(adminMode === "signup" ? "Creating your account…" : "Signing in…");
@@ -221,7 +220,7 @@ async function sbAcctClick(a: string): Promise<void> {
   }
   if (a === "sbpass") {
     const p1 = val("acP1"), p2 = val("acP2");
-    if (p1.length < 12) { err("Use at least 12 characters for the password."); return } if (p1 !== p2) { err("The two passwords don't match."); return }
+    if (p1.length < MIN_PASSWORD) { err(`Use at least ${MIN_PASSWORD} characters for the password.`); return } if (p1 !== p2) { err("The two passwords don't match."); return }
     err("Saving…");
     try { await setPassword(p1); $<HTMLInputElement>("acP1").value = $<HTMLInputElement>("acP2").value = ""; err("Password changed. Use the new one next time you sign in.") }
     catch (x) { err((x as AuthError)?.code === "weak_password" ? "That password is too easy to guess. Try a longer one." : "Saving failed. Check your connection and try again.") }
@@ -283,7 +282,6 @@ async function acctClick(e: MouseEvent): Promise<void> {
 const AOPT = `<div class="aopt" id="aoptWrap" hidden><button type="button" class="aoptbtn" id="aoptBtn" aria-haspopup="true" aria-expanded="false">Admin Options<span class="aoptcar" aria-hidden="true"></span></button>
 <div class="aoptmenu" id="aoptMenu" role="menu" hidden>
 <button type="button" role="menuitem" data-aopt="acct"><b>Admins and sign-in</b><small>Add or remove admins, change your name or password</small></button>
-<button type="button" role="menuitemcheckbox" data-aopt="tree" aria-checked="false"><span class="tsw" aria-hidden="true"></span><b>Tree mode</b></button>
 <button type="button" role="menuitemcheckbox" data-aopt="hist" id="histBtn" aria-checked="false"><span class="tsw" aria-hidden="true"></span><b>Last edited by</b></button>
 <button type="button" role="menuitem" data-aopt="out" class="aoptout"><b>Sign out</b></button></div></div>`;
 const HIST_PANEL = `<aside class="histpanel" id="histPanel" hidden aria-label="Edit history"><div class="hph"><b>Last edited by</b><button type="button" class="hpx" id="histX" aria-label="Close edit history">×</button></div>
@@ -291,7 +289,6 @@ const HIST_PANEL = `<aside class="histpanel" id="histPanel" hidden aria-label="E
 
 function aoptSync(): void {
   const m = document.getElementById("aoptMenu"); if (!m) return;
-  m.querySelector('[data-aopt="tree"]')?.setAttribute("aria-checked", String(document.documentElement.getAttribute("data-tree") === "on"));
   m.querySelector('[data-aopt="hist"]')?.setAttribute("aria-checked", String(session.admin && histOn()));
 }
 async function histLoad(): Promise<void> {
@@ -321,7 +318,6 @@ function histRender(): void {
 
 function wireOptions(): void {
   const menu = $("aoptMenu"), btn = $("aoptBtn"), openM = (o: boolean) => { menu.hidden = !o; btn.setAttribute("aria-expanded", String(o)) };
-  window.addEventListener("crawl-tree-mode", aoptSync);
   btn.addEventListener("click", e => { e.stopPropagation(); openM(menu.hidden !== false) });
   document.addEventListener("click", e => { if (e.isTrusted && !(e.target as HTMLElement).closest("#aoptWrap")) openM(false) });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { openM(false); btn.focus() } });
@@ -331,7 +327,6 @@ function wireOptions(): void {
     if (a === "acct") { openM(false); openAcct(); return }
     if (a === "out") { openM(false); signOut(); return }
     if (a === "hist") { const on = !histOn(); try { sessionStorage.setItem(HIST_SS, on ? "1" : "0") } catch { /* private mode */ } histShow(); aoptSync(); return }
-    if (a === "tree") { toggleTree(); openM(true); aoptSync() }
   });
   $("histX").addEventListener("click", () => { try { sessionStorage.setItem(HIST_SS, "0") } catch { /* private mode */ } histShow(); aoptSync() });
   $("histPanel").addEventListener("click", e => {
