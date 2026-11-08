@@ -15,6 +15,7 @@ export interface ContentFiles {
   "crawl-glossary.json": { entries: GlossaryEntry[] };
   "crawl-creator.json": { rules: Record<string, unknown> };
   "crawl-tree.json": { nodes: Record<string, unknown>; extra: unknown[]; links: unknown[]; unlinks: unknown[] };
+  "crawl-edits.json": import("./edits").EditLog;
 }
 export type ContentFile = keyof ContentFiles;
 

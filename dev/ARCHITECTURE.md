@@ -241,7 +241,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     The tabletop is native ES modules, so it's served as is; the old site serves the same files.
 - **Hosting:**
   - Vercel builds `main` and every PR (`vercel.json`).
-  - It skips commits that only touch `crawl-edits.json`, `dev/` or Markdown.
+  - It skips commits that only touch `dev/` or Markdown. Edit-log commits (`crawl-edits.json`) do deploy, because the home page's "What's new" reads that file from the deployed site.
 - **Real TypeScript modules** (shared by every page):
   - `lib/markup.ts`: the text markup and glossary matching (was `GLCORE` in `src/page.html`); `ui/tips.ts`: the glossary tooltips.
   - `lib/github.ts`: admin keys, GitHub saving, the edit log; `ui/admin.ts`: the whole admin UI (was the `ADMIN` block).
@@ -268,7 +268,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     It's hidden with CSS only (`html.is-admin`), like Tabletop, so the pages themselves are still reachable by URL.
   - `ui/theme.ts`: dark mode, and Tree mode, which is on only for a page opened with `?tree=1` (the Testing menu's "Skill tree" link; there's no switch in the nav any more, DECISIONS.md 2026-11-07); `lib/data.ts`: loading content files.
 - **The React app** (`web/src/app/`, page `web/index.html`; plan: [planning/react-migration.md](planning/react-migration.md)):
-  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`: your characters, each linking to its sheet in the Creator), the prototypes `/testing/sheet` (`routes/PlaySheet.tsx`) and `/testing/roll` (`routes/Roller.tsx`), and a not-found page.
+  - React 19 and React Router 8. `app/main.tsx` lists the screens: home (`routes/Home.tsx`: your characters, each linking to its sheet in the Creator; an example sheet, `creator.html?example=1`, built by `exampleChar()` in `src/creator.js` and never saved; the Wiki's main sections; "What's new in the rules" from `lib/edits.ts`), the prototypes `/testing/sheet` (`routes/PlaySheet.tsx`) and `/testing/roll` (`routes/Roller.tsx`), and a not-found page.
   - `vercel.json` sends every address without a file extension (except `tabletop/` and `assets/`) to `index.html`, and the router picks the screen. The dev server and `vite preview` do the same.
   - `components/Layout.tsx` sets up the nav, dark mode and Admin from the `ui/` modules above, once, so the app and the other pages share one nav.
     It also turns clicks on links to the app's own screens into in-app navigation; links to `.html` pages load normally.
@@ -278,6 +278,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
   - Styles: `web/index.html` links `styles/pages/app.css` (the home page's sheets plus `styles/play.css`).
 - **Game rules and typed content** (`web/src/lib/`, no DOM or React; tests next to the code, run with `npm test`):
   - `lib/dice.ts`: the dice parser (from `tabletop/dice.js`).
+  - `lib/edits.ts`: "What's new": the edit log (`crawl-edits.json`) grouped into one line per class, race or background, or per page of glossary entries, spells or items, per day. The skill tree and Creator settings are left out.
   - `lib/content/`: stage A of [planning/content-schema.md](planning/content-schema.md). Zod schemas (`types.ts`), and adapters (`adapt.ts`) that turn today's class charts, items and glossary entries into typed records with ids, without changing the files. `load.ts` loads them once per page.
   - `lib/character/`: [planning/character-data.md](planning/character-data.md). A character is the Creator's object plus `v: 2`, `state`, `log`, `logBase` and `overrides`.
     `apply.ts` is the state system (every change is an event), `derive.ts` works out Max Pool and Action Die from the chart (the rest still comes from the Creator's `snap`), and `migrate.ts` adds the play layers.

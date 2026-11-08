@@ -129,6 +129,15 @@ a.pbtn{display:inline-flex;align-items:center;text-decoration:none}
 .hempty{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .hempty p{margin:0}
 .homeplay>section>.psmall{margin:10px 0 0}
-.hrules{display:flex;flex-wrap:wrap;gap:8px}
-.hrules a{font-weight:700;color:var(--ink);text-decoration:none;border:2px solid var(--ink);border-radius:999px;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center}
-.hrules a:hover{background:var(--ink);color:var(--paper)}
+.hlead{margin:-4px 0 10px}
+.hgrid.hwiki{margin-top:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.hwiki .hcard{padding:12px 14px 14px;border-radius:12px}
+.hwiki .hct{font-size:1rem}
+.hwiki .hcd{font-size:.8rem}
+.hday h3{font-size:.8rem;color:var(--muted);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.06em}
+.hday:first-of-type h3{margin-top:0}
+.hnew{list-style:none;margin:0 0 6px;padding:0}
+.hnew li{padding:6px 0;border-top:1px solid var(--hair);overflow-wrap:anywhere}
+.hnew li:first-child{border-top:0}
+.hnew a{color:var(--ink)}
+.hwhat{display:block;font-size:.88rem;color:var(--muted)}

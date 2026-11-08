@@ -1268,9 +1268,18 @@ async function refreshFromGitHub() {
 }
 
 /* ---------------------------------------------------------------- start */
+/* An example character to look at (creator.html?example=1, linked from the new site's home page). It's built from whatever
+   content there is now (the first race and subrace, Fighter, a background) and never saved: it isn't in `chars`. */
+function exampleChar() {
+  const c = blankChar(), r = RACE_LIST[0], k = CR.classes.find(x => x.id === "class-fighter") || CR.classes[0];
+  const b = CR.backgrounds.find(x => /soldier/i.test(x.n)) || CR.backgrounds[0];
+  return Object.assign(c, { id: "pc_example", name: "Example Character", race: r ? r.id : "", sub: r && r.subs[0] ? r.subs[0].id : "", cls: k ? k.id : "", bg: b ? b.id : "",
+    method: "manual", base: { str: 15, dex: 13, con: 14, int: 8, wis: 12, cha: 10 }, done: true });
+}
 function start() {
-  let id = ""; try { id = new URLSearchParams(location.search).get("c") || "" } catch (e) { }
+  let id = "", ex = false; try { const q = new URLSearchParams(location.search); id = q.get("c") || ""; ex = q.get("example") === "1" } catch (e) { }
   const c = id && chars.find(x => x.id === id);
+  if (ex) { cur = exampleChar(); show("sheet", true); say("This is an example character. Nothing you change here is saved."); return }
   if (c) { cur = c; show(c.done ? "sheet" : "create", true) } else show("home", true);
 }
 if (STATIC) {

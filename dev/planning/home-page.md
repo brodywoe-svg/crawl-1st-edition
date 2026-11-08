@@ -87,6 +87,8 @@ Wiki (all sections), Character Creator, and the Windows app download, as today.
 ## Steps
 - [x] Agree this plan (Maddox). The cards link to the Creator's sheet, not the prototype (DECISIONS.md, 2026-11-07).
 - [x] **Characters first:** the home route (`routes/Home.tsx`) with character cards (level, race, class, HP, AC, Max Pool, Action Die; a **Character sheet** button), unfinished characters (Continue), the empty state, the sync label, rules links. Checked at 390px in both themes, with and without characters. The play sheet prototype also fits at 390px.
-- [ ] Later: `lib/search.ts` (search the rules) and `lib/edits.ts` (what's new), with tests.
-- [ ] Brody: the name question above, when what's new is built.
+- [x] An **example character sheet** when you have no characters, or aren't signed in: `creator.html?example=1` builds one from the current content (the first race and subrace, Fighter, a background, set scores) and never saves it.
+- [x] **Wiki** section: the six most-used sections as cards with live counts, and "All sections" (wiki.html).
+- [x] **What's new in the rules** (`lib/edits.ts`, with tests): newest 6 lines, "Show more" up to 30. Who made each change is left out until Brody answers the question above (the data has it: `Change.by`).
+- [ ] Later: `lib/search.ts` (search the rules), with tests.
 - [ ] Update ARCHITECTURE.md §11.
