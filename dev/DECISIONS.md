@@ -27,7 +27,7 @@ Template:
 Tree mode's switch sat in every page's nav bar, crowded it on phones, and could be left on by accident, but it's a proof of concept.
 And while a handful of friends make accounts, password rules only get in the way.
 **Decision:**
-- **Home** lists your characters (HP, Action Pool, Play and Edit). **Play** opens the play sheet, which is still a prototype at `/testing/sheet`: this is the first prototype shown to players. Rules search and "what's new" wait ([planning/home-page.md](planning/home-page.md)).
+- **Home** lists your characters (level, race, class, HP, AC, Max Pool, Action Die). Each opens its **character sheet in the Creator**, as it works today. The interactive play sheet stays a prototype in the Testing menu (`/testing/sheet`), where we keep developing it; players don't see it yet. Rules search and "what's new" wait ([planning/home-page.md](planning/home-page.md)).
 - **Tree mode** has no switch in the nav or the Admin menu any more. The admin-only Testing menu opens the Creator with `?tree=1`, which turns it on for that page only; it isn't remembered. Nothing in Tree mode itself changed.
 - **Account passwords** (Supabase) need 6 characters, the lowest Supabase allows, with no other rules. The old `admin.json` password stays at 12, because it guards a GitHub key that anyone can download.
 **Trade-offs:** Admin accounts can now have weak passwords and they can save to GitHub, so admins should still choose long ones. Raise the minimum before the site opens beyond the playtest group. To bring Tree mode back for everyone, add a switch again (`ui/theme.ts`).

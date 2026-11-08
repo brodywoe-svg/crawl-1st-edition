@@ -6,7 +6,7 @@ The home page is the first thing a playtester sees, so it should get them to **t
 Today it's mostly a copy of the Wiki page: a grid of section cards. The section cards stay on the Wiki page.
 
 ## Decided (Maddox, 2026-11-07)
-- **Characters first** (second answer, same day): the home page is mostly your characters, and **Play** opens the play sheet, which must work well on a phone. Built first. Search and "what's new" come later (below).
+- **Characters first** (same day): the home page is mostly your characters. Each card opens the character's sheet in the Creator (`creator.html?c=<id>`). The interactive play sheet stays in the Testing menu and is developed there, not linked from home. Built first. Search and "what's new" come later (below).
 - **For playtest players.** No pitch or marketing text for now; this is a landing page for playtesting. (A newcomers' page can come later, with Brody's words.)
 - **Three sections:** your characters, wiki search, what's new.
 - **Look:** the site's black and white style and logo, but bolder. A smaller logo, fewer and larger blocks, and clear buttons. It must work well on a phone.
@@ -85,8 +85,8 @@ Wiki (all sections), Character Creator, and the Windows app download, as today.
 - **Brody:** does "what changed" belong on the home page? Is it OK to show his name on each change, as the edit log records it?
 
 ## Steps
-- [x] Agree this plan (Maddox). Play links to the prototype sheet, labelled just **Play** (DECISIONS.md, 2026-11-07).
-- [x] **Characters first:** the home route (`routes/Home.tsx`) with character cards (HP, Action Pool, In combat, conditions; Play and Edit), unfinished characters, the empty state, the sync label, rules links. Checked at 390px in both themes, with and without characters; the play sheet at 390px has no sideways scroll, and its "All characters" button goes home.
+- [x] Agree this plan (Maddox). The cards link to the Creator's sheet, not the prototype (DECISIONS.md, 2026-11-07).
+- [x] **Characters first:** the home route (`routes/Home.tsx`) with character cards (level, race, class, HP, AC, Max Pool, Action Die; a **Character sheet** button), unfinished characters (Continue), the empty state, the sync label, rules links. Checked at 390px in both themes, with and without characters. The play sheet prototype also fits at 390px.
 - [ ] Later: `lib/search.ts` (search the rules) and `lib/edits.ts` (what's new), with tests.
 - [ ] Brody: the name question above, when what's new is built.
 - [ ] Update ARCHITECTURE.md §11.

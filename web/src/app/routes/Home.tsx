@@ -1,7 +1,7 @@
-/* Home: the playtest landing page (dev/planning/home-page.md). It's about your characters: each one opens on the play sheet.
+/* Home: the playtest landing page (dev/planning/home-page.md). It's about your characters: each one opens on its character sheet in the Creator.
+   The interactive play sheet is a prototype, in the Testing menu (/testing/sheet).
    The section cards to every part of the wiki are on the Wiki page (wiki.html). */
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import { siteHref } from "../../config";
 import { derive } from "../../lib/character/derive";
 import { migrate } from "../../lib/character/migrate";
@@ -14,8 +14,8 @@ const RULES: [string, string][] = [
   ["Combat", "glossary.html?s=combat"], ["Conditions", "conditions.html"], ["Spells", "spells.html"],
   ["Items", "items.html"], ["Classes", "classes.html"], ["Glossary", "glossary.html"], ["Everything", "wiki.html"],
 ];
-const sheetHref = (id: string) => `/testing/sheet?c=${encodeURIComponent(id)}`;
-const editHref = (id: string) => siteHref(`creator.html?c=${encodeURIComponent(id)}`);
+/** The Creator opens a finished character on its sheet, and an unfinished one where it was left. */
+const sheetHref = (id: string) => siteHref(`creator.html?c=${encodeURIComponent(id)}`);
 const label = () => window.crawlCloud?.label || "Saved in this browser";
 
 export function Home() {
@@ -47,12 +47,12 @@ export function Home() {
               <article key={c.id} className="pcard hchar draft">
                 <h3>{String(c.name || "Unnamed character")}</h3>
                 <p className="pmuted">In progress: finish it in the Character Creator to play it.</p>
-                <div className="prow"><a className="pbtn" href={editHref(c.id)}>Continue</a></div>
+                <div className="prow"><a className="pbtn" href={sheetHref(c.id)}>Continue</a></div>
               </article>
             ))}
           </div>
         )}
-        <p className="pmuted psmall">{where}. <Link to="/testing/sheet?sample=1">Try the sample character</Link></p>
+        <p className="pmuted psmall">{where}.</p>
       </section>
 
       <section className="pcard" aria-labelledby="rules">
@@ -73,32 +73,17 @@ function Empty() {
   );
 }
 
-/** One character: who they are, their HP and Action Pool, and buttons to play or edit. */
+/** One character: who they are, and a button to their character sheet in the Creator. */
 function CharCard({ c }: { c: Character }) {
   const content = useCharacter(s => s.content);
-  const pc = migrate(c), d = derive(pc, content), s = pc.state;
-  const max = d.maxHp, slots = d.maxPool ?? 0;
-  const dots = [...Array(s.pool.ap).fill("ap"), ...Array(s.pool.mp).fill("mp"), ...Array(s.pool.ep).fill("ep")];
+  const d = derive(migrate(c), content);
+  const stats = [d.maxHp != null && `HP ${d.maxHp}`, d.ac != null && `AC ${d.ac}`, d.maxPool != null && `Max Pool ${d.maxPool}`, d.die && `Action Die ${d.die}`].filter(Boolean).join(" · ");
   return (
     <article className="pcard hchar">
-      <div className="hctop">
-        <h3>{d.name || "Unnamed character"}</h3>
-        {s.mode === "combat" && <span className="hbadge">In combat</span>}
-      </div>
+      <h3>{d.name || "Unnamed character"}</h3>
       <p className="pmuted">Level {d.level}{d.race && ` · ${d.race}`}{d.cls && ` · ${d.cls}`}</p>
-      <p className="hhp"><b>HP {s.hp}</b>{max != null && <small> / {max}</small>}{s.tempHp > 0 && <span className="ptemp">+{s.tempHp} temp</span>}</p>
-      {max != null && <div className="pbar" aria-hidden="true"><i style={{ width: `${Math.min(100, (s.hp / Math.max(1, max)) * 100)}%` }} /></div>}
-      {slots > 0 && (
-        <div className="hpool" aria-label={`Action Pool: ${s.pool.ap} AP, ${s.pool.mp} MP, ${s.pool.ep} EP of ${slots}`}>
-          {Array.from({ length: Math.max(slots, dots.length) }, (_, i) => <span key={i} className={"hdot " + (dots[i] || "")} />)}
-          {s.pool.ep > 0 && <small className="ep">{s.pool.ep} EP</small>}
-        </div>
-      )}
-      {s.conds.length > 0 && <p className="psmall pmuted">{s.conds.map(id => content?.conditions.get(id)?.n || id).join(", ")}</p>}
-      <div className="prow">
-        <Link className="pbtn solid grow" to={sheetHref(c.id)}>Play</Link>
-        <a className="pbtn" href={editHref(c.id)}>Edit</a>
-      </div>
+      {stats && <p className="hstats">{stats}</p>}
+      <div className="prow"><a className="pbtn solid grow" href={sheetHref(c.id)}>Character sheet</a></div>
     </article>
   );
 }
