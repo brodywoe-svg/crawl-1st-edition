@@ -15,24 +15,24 @@ Goal: **real accounts on the live site.** Players make accounts and their charac
 Work top to bottom. In section 2 we pick **Path A or Path B** for admin saves; sections 3A and 3B are the only parts that differ.
 The numbers (1.4…) point to the tables below; the click-by-click is in [../SETUP.md](../SETUP.md) "Supabase" and [../QUICKSTART.md](../QUICKSTART.md) step 6.
 
-### Where things stand (checked 2026-11-07 evening)
+### Where things stand (updated 2026-11-22, setup session)
 | | Status |
 | --- | --- |
 | Supabase project "Crawl" (`rdyqicarngehabyvilha`), linked to the repo | ✅ |
 | Database: `profiles` and `characters`, with row-level security | ✅ pushed |
 | Auth settings: sign-up on, 6-character passwords, Site URL `https://crawl-1st-edition.vercel.app`, redirects for it, previews and localhost | ✅ pushed (`config diff` is clean) |
-| `github` Edge Function | ✅ deployed; answers 401 without an admin. **No `GITHUB_TOKEN`**, so saves through it fail |
+| `github` Edge Function | ✅ deployed; answers 401 without an admin. `GITHUB_TOKEN` saved by Brody 2026-11-22 (Path A) |
 | Maddox: admin account and `.env.local`; Supabase sign-in works on his local server | ✅ |
-| Live site uses Supabase | ❌ Vercel has no `VITE_SUPABASE_*` variables, so it still uses the `admin.json` password |
-| PR #14 (home page, phone menus, Tree mode in Testing, play sheet code) | ❌ not merged; the live site is the old `main` |
-| Brody: org invite, admin account | ❓ check at the start |
+| Live site uses Supabase | ✅ `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` set in Vercel (plain, not sensitive) and redeployed 2026-11-22; accounts work |
+| PR #14 (home page, phone menus, Tree mode in Testing, play sheet code) | ✅ merged |
+| Brody: org invite, admin account | ✅ |
 
 ### 1. Start (10 min)
-- [ ] Brody is in the **Crawl** Supabase organization (Organization → Team). If not, Maddox invites him as **Owner** and he accepts.
-- [ ] Look at the PR #14 preview together: the home page, the example sheet, What's new, the phone menus, Tree mode under Testing. Then **merge it**.
+- [x] Brody is in the **Crawl** Supabase organization (Organization → Team). If not, Maddox invites him as **Owner** and he accepts.
+- [x] Look at the PR #14 preview together: the home page, the example sheet, What's new, the phone menus, Tree mode under Testing. Then **merge it**.
 
 ### 2. Decide together (20 min)
-- [ ] **Where admin saves go** (the proposal is in [../DECISIONS.md](../DECISIONS.md), 2026-11-07):
+- [x] **Where admin saves go** (2026-11-22: **Path A**) (the proposal is in [../DECISIONS.md](../DECISIONS.md), 2026-11-07):
 
   | | **Path A: GitHub (with a key)** | **Path B: game content in Supabase** |
   | --- | --- | --- |
@@ -46,8 +46,8 @@ The numbers (1.4…) point to the tables below; the click-by-click is in [../SET
 - [ ] Write the answers into DECISIONS.md (status **agreed**) before going on.
 
 ### 3A. If Path A: GitHub with the key (25 min)
-- [ ] (1.5) **Brody** makes the key: QUICKSTART step 6B. Fine-grained, **this repo only**, Contents **read and write**, 1-year expiry.
-- [ ] (1.6) **Brody** pastes it as the `GITHUB_TOKEN` secret: Supabase → Edge Functions → Secrets. **Not in chat, not to Maddox, not in a file.** No redeploy needed.
+- [x] (1.5) **Brody** makes the key: QUICKSTART step 6B. Fine-grained, **this repo only**, Contents **read and write**, 1-year expiry.
+- [x] (1.6) **Brody** pastes it as the `GITHUB_TOKEN` secret: Supabase → Edge Functions → Secrets. **Not in chat, not to Maddox, not in a file.** No redeploy needed.
 - [ ] (1.12) **Brody:** a calendar reminder to renew it in 11 months.
 - [ ] Maddox: on his local server, a tiny admin save now **works**, and the GitHub commit says "(by Maddox Turner)". Undo it with a second save.
 
@@ -59,12 +59,12 @@ The numbers (1.4…) point to the tables below; the click-by-click is in [../SET
 - [ ] Maddox writes `dev/planning/content-in-supabase.md` (tables `content` and `content_history`, readable by everyone, writable by admins; `putFile()` and `loadJson()` switch over; the export Action) and claims it in TASKS.md.
 
 ### 4. Both paths: Brody's admin account, and switching the live site on (20 min)
-- [ ] (1.7) **Brody's admin account:** Authentication → Users → Add user (his email, a long password he chooses, **Auto Confirm User**). Then the SQL from SETUP.md step 7 with his email and `display_name = 'Brody Woelke'`. Check with:
+- [x] (1.7) **Brody's admin account:** Authentication → Users → Add user (his email, a long password he chooses, **Auto Confirm User**). Then the SQL from SETUP.md step 7 with his email and `display_name = 'Brody Woelke'`. Check with:
   ```sql
   select u.email, p.display_name, p.role from public.profiles p join auth.users u on u.id = p.id;
   ```
 - [ ] (1.11) Dashboard → **Advisors**: Security and Performance show no warnings.
-- [ ] (1.8) **Brody**, in Vercel → Project → Settings → Environment Variables:
+- [x] (1.8) **Brody**, in Vercel → Project → Settings → Environment Variables:
   - `VITE_SUPABASE_URL` = `https://rdyqicarngehabyvilha.supabase.co`;
   - `VITE_SUPABASE_PUBLISHABLE_KEY` = the **publishable** key (`sb_publishable_…`), never the secret one;
   - for both **Production and Preview** (Preview moves to `crawl-dev` later);
@@ -80,6 +80,7 @@ The numbers (1.4…) point to the tables below; the click-by-click is in [../SET
 - [ ] **Privacy:** player A can't see player B's characters; an admin can see both (checklist in [supabase-database.md](supabase-database.md), phase 2).
 - [ ] **Password reset** by email works for a team member's address. (Other addresses get no email until we set up a sender, so for now an admin resets players' passwords in the dashboard.)
 - [ ] Note anything that went wrong here.
+  - 2026-11-22: **an admin's character list showed everyone's characters.** Admins may read every character (for the DM view later), and the sync didn't filter by owner, so Maddox's characters appeared in Brody's list. Fixed in `lib/characters.ts` (filter by owner, and drop local copies of other accounts' characters instead of uploading them). Re-test sync and privacy after it's merged.
 
 ### 6. If there's time
 - [ ] (2.1–2.3) Create `crawl-dev`, push the migrations and config to it, give it **no `GITHUB_TOKEN`**, and point Vercel's **Preview** at it.
