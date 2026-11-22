@@ -231,12 +231,12 @@ The goal is to make Crawl fully digital, with Three.js visualizations eventually
 
 ## 11. In progress: the new site in `web/` (Vite + TypeScript + React)
 
-### Sign-in: what's where (2026-11-07)
+### Sign-in: what's where (updated 2026-11-22)
 | Where | How you sign in | Who can | Saves go | Status |
 | --- | --- | --- | --- | --- |
 | Old site (GitHub Pages) | The `admin.json` password, which unlocks that admin's GitHub key in the browser | Admins only; no player accounts | Straight to GitHub with the key | Frozen; retired at cutover with `admin.json` |
-| New site, Supabase **off** (no `VITE_SUPABASE_*` variables: production today, local without `.env.local`) | The same `admin.json` password, same code path | Admins only | Straight to GitHub with the key | A fallback until the variables are set; removed at cutover |
-| New site, Supabase **on** (the intended production) | **Sign in**: email and password (Supabase Auth). Each account has a `profiles` row with `role` `player` or `admin` | Anyone can make a player account; admins are set in the dashboard | Through the `github` Edge Function and its `GITHUB_TOKEN` (or the database, if DECISIONS.md 2026-11-07 option B is chosen); the browser never holds a key | Built; on once Vercel has the variables |
+| New site, Supabase **off** (no `VITE_SUPABASE_*` variables: local without `.env.local`) | The same `admin.json` password, same code path | Admins only | Straight to GitHub with the key | A fallback when the variables aren't set; removed at cutover |
+| New site, Supabase **on** (production, since 2026-11-22) | **Sign in**: email and password (Supabase Auth). Each account has a `profiles` row with `role` `player` or `admin` | Anyone can make a player account; admins are set in the dashboard | Through the `github` Edge Function and its `GITHUB_TOKEN` (or the database, if DECISIONS.md 2026-11-07 option B is chosen); the browser never holds a key | Live: Vercel has the variables, and Brody's `GITHUB_TOKEN` is set (Path A) |
 | Tabletop (`/tabletop/`) | Its own admin check (`tt-admin`, or the old site's `crawl-admin-key`); players join by invite link as anonymous Firebase users | Admins make games | Firebase | Proof of concept; its own sign-in is broken (§9) |
 
 Not to be confused with them: members of the Supabase **organization** (who can open the dashboard: Maddox and Brody), and the GitHub account that owns the repo and the key.
@@ -264,6 +264,7 @@ This section covers the new one (Vercel). Every page and the tabletop now run on
     - `account.html` is where password-reset emails land;
     - the Character Creator syncs its characters to the `characters` table (`ui/cloud-characters.ts` and `lib/characters.ts`).
       It's done through a small hook in `src/creator.js` (`window.crawlCloud`) that does nothing on the old site.
+      The sync reads only your own rows (`owner_id`): admins may read everyone's characters, but those never go into their own list.
 - **Supabase** (`supabase/`, managed with `npx supabase`):
   - `migrations/`: the database, with row-level security on every table. So far:
     - `profiles`: one per account (`display_name`, `role` `player`/`admin`);

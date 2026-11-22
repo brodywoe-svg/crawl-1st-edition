@@ -54,7 +54,8 @@ async function connect(uid: string): Promise<void> {
     write(aside(owner), local); local = read(aside(uid)); localStorage.removeItem(aside(uid));
   }
   try {
-    const { merged, upload } = mergeCharacters(local, await fetchCharacters());
+    const { mine, others } = await fetchCharacters(uid);
+    const { merged, upload } = mergeCharacters(local, mine, others);
     write(LS, merged); localStorage.setItem(OWNER, uid);
     merged.forEach(c => sent.set(c.id, stamp(c)));
     upload.forEach(c => sent.delete(c.id));

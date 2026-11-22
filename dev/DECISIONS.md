@@ -22,7 +22,7 @@ Template:
 ---
 
 ## 2026-11-07: Where admin saves go: GitHub through a key, or game content in Supabase
-**Status:** proposed by maddox, **to decide with Brody on 2026-11-08** · **Who:** maddox, brody
+**Status:** **agreed: A for the MVP** (2026-11-22, setup session: Brody made the key and saved it as `GITHUB_TOKEN`). B is revisited after session 2 · **Who:** maddox, brody
 **Why:** On the new site, admin saves go through the `github` Edge Function, which needs a GitHub key (`GITHUB_TOKEN`) that Brody makes, pastes in and renews every year.
 Supabase could hold the content itself, so there'd be no key at all. That would change two agreed entries:
 "`crawl-*.json` stays the source of truth" (2026-11-02) and "a server function saves to GitHub" (2026-11-02).
