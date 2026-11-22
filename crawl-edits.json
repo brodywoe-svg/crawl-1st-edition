@@ -1,6 +1,1790 @@
 {
  "v": 1,
  "edits": {
+  "crawl-glossary.json.entries/Broken": {
+   "n": "Broken",
+   "f": "crawl-glossary.json",
+   "c": "entries",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-buckler": {
+   "n": "Buckler",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-hood": {
+   "n": "Linen Hood",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-hood.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-collar": {
+   "n": "Embroidered Choker",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-collar.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-mantle": {
+   "n": "Linen Mantle",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-mantle.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-mv933s37shd0": {
+   "n": "Linen Robe",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-sash": {
+   "n": "Linen Sash",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-sash.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-sleeves": {
+   "n": "Linen Sleeves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-sleeves.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-wraps": {
+   "n": "Linen Wraps",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-wraps.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-trousers": {
+   "n": "Linen Trousers",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-trousers.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-shoes": {
+   "n": "Linen Shoes",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-linen-shoes.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-quilted-hood": {
+   "n": "Quilted Hood",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-quilted-hood.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-collar": {
+   "n": "Padded Collar",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-collar.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-mantle": {
+   "n": "Padded Mantle",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-mantle.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-gambeson": {
+   "n": "Padded Gambeson",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-gambeson.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-quilted-sash": {
+   "n": "Quilted Sash",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-quilted-sash.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-sleeves": {
+   "n": "Padded Sleeves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-cloth-wraps": {
+   "n": "Cloth Wraps",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-cloth-wraps.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-padded-trousers": {
+   "n": "Padded Trousers",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-cloth-shoes": {
+   "n": "Cloth Shoes",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-cloth-shoes.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-cap": {
+   "n": "Leather Cap",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-cap.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-collar": {
+   "n": "Leather Collar",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-collar.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-pauldrons": {
+   "n": "Leather Pauldrons",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-pauldrons.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-jerkin": {
+   "n": "Leather Jerkin",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-jerkin.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-belt-skirt": {
+   "n": "Leather Belt-Skirt",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-belt-skirt.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-bracers": {
+   "n": "Leather Bracers",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-bracers.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-gloves": {
+   "n": "Leather Gloves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-gloves.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-leggings": {
+   "n": "Padded Leggings",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-boots": {
+   "n": "Leather Boots",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-boots.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-hardened-leather-helm": {
+   "n": "Hardened Leather Helm",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-hardened-leather-helm.pdefs/Helmet": {
+   "n": "Helmet",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-studded-leather-collar": {
+   "n": "Studded Leather Collar",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-studded-leather-collar.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-hardened-leather-pauldrons": {
+   "n": "Hardened Leather Pauldrons",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-hardened-leather-pauldrons.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-studded-leather-vest": {
+   "n": "Studded Leather Vest",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-studded-leather-vest.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-studded-leather-belt": {
+   "n": "Studded Leather Belt",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-studded-leather-belt.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-hardened-leather-bracers": {
+   "n": "Hardened Leather Bracers",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-gauntlets": {
+   "n": "Leather Gauntlets",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-leather-gauntlets.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-studded-leather-leggings": {
+   "n": "Studded Leather Leggings",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-hardened-leather-boots": {
+   "n": "Hardened Leather Boots",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-hardened-leather-boots.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-nasal-helm": {
+   "n": "Nasal Helm",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-nasal-helm.pdefs/Helmet": {
+   "n": "Helmet",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-coif": {
+   "n": "Mail Coif",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-coif.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-mantle": {
+   "n": "Mail Mantle",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-mantle.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-shirt": {
+   "n": "Mail Shirt",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-shirt.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-fauld": {
+   "n": "Mail Fauld",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-fauld.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-sleeves": {
+   "n": "Mail Sleeves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-sleeves.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-mittens": {
+   "n": "Mail Mittens",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-mittens.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-chausses": {
+   "n": "Mail Chausses",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-chausses.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-boots": {
+   "n": "Reinforced Boots",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-mail-boots.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-helm": {
+   "n": "Scale Helm",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-helm.pdefs/Helmet": {
+   "n": "Helmet",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-gorget": {
+   "n": "Scale Gorget",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-gorget.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-spaulders": {
+   "n": "Scale Spaulders",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-spaulders.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-coat": {
+   "n": "Scale Coat",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-coat.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-skirt": {
+   "n": "Scale Skirt",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-skirt.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-vambraces": {
+   "n": "Scale Vambraces",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-vambraces.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-gloves": {
+   "n": "Scale Gloves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-gloves.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-greaves": {
+   "n": "Scale Greaves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-greaves.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-boots": {
+   "n": "Scale Boots",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-scale-boots.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-sallet": {
+   "n": "Steel Sallet",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-sallet.pdefs/Helmet": {
+   "n": "Helmet",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-bevor": {
+   "n": "Steel Bevor",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-bevor.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-spaulders": {
+   "n": "Steel Spaulders",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-spaulders.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-breastplate": {
+   "n": "Steel Breastplate",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-breastplate.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-tassets": {
+   "n": "Steel Tassets",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-tassets.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-half-vambraces": {
+   "n": "Half Vambraces",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-half-vambraces.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-gauntlets": {
+   "n": "Steel Gauntlets",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-gauntlets.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-cuisses": {
+   "n": "Steel Cuisses",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-cuisses.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-toed-boots": {
+   "n": "Steel-Toed Boots",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-steel-toed-boots.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-close-helm": {
+   "n": "Close Helm",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-close-helm.pdefs/Helmet": {
+   "n": "Helmet",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-gorget": {
+   "n": "Plate Gorget",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-gorget.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-pauldrons": {
+   "n": "Plate Pauldrons",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-pauldrons.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-cuirass": {
+   "n": "Plate Cuirass",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-cuirass.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-tassets": {
+   "n": "Plate Tassets",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-tassets.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-vambraces": {
+   "n": "Plate Vambraces",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-gauntlets": {
+   "n": "Plate Gauntlets",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-gauntlets.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-greaves": {
+   "n": "Plate Greaves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-greaves.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-sabatons": {
+   "n": "Plate Sabatons",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-iron-plate-sabatons.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-great-helm": {
+   "n": "Great Helm",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-great-helm.pdefs/Helmet": {
+   "n": "Helmet",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-gorget": {
+   "n": "Splint Gorget",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-gorget.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-pauldrons": {
+   "n": "Splint Pauldrons",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-pauldrons.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-cuirass": {
+   "n": "Splint Cuirass",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-cuirass.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-tassets": {
+   "n": "Splint Tassets",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-tassets.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-vambraces": {
+   "n": "Splint Vambraces",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-gauntlets": {
+   "n": "Splint Gauntlets",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-gauntlets.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-greaves": {
+   "n": "Splint Greaves",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-sabatons": {
+   "n": "Splint Sabatons",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-splint-sabatons.pdefs/Benefit": {
+   "n": "Benefit",
+   "f": "crawl-items.json",
+   "c": "pdefs",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-kite-shield": {
+   "n": "Kite Shield",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-round-shield": {
+   "n": "Round Shield",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-tower-shield": {
+   "n": "Tower Shield",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-whisperweave-boots": {
+   "n": "Whisperweave Boots",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-whisperweave-hood": {
+   "n": "Whisperweave Hood",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-whisperweave-mantle": {
+   "n": "Whisperweave Mantle",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-buckler": {
+   "n": "Buckler",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-kite-shield": {
+   "n": "Kite Shield",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-round-shield": {
+   "n": "Round Shield",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-tower-shield": {
+   "n": "Tower Shield",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.items/i-mvhe9m2yctga": {
+   "n": "Iron Kettle Helmet",
+   "f": "crawl-items.json",
+   "c": "items",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-close-helm": {
+   "n": "Iron Close Helm",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-boots": {
+   "n": "Iron Mail Boots",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-chausses": {
+   "n": "Iron Mail Chausses",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-coif": {
+   "n": "Iron Mail Coif",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-fauld": {
+   "n": "Iron Mail Fauld",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-mantle": {
+   "n": "Iron Mail Mantle",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-mittens": {
+   "n": "Iron Mail Mittens",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-shirt": {
+   "n": "Iron Mail Shirt",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-mail-sleeves": {
+   "n": "Iron Mail Sleeves",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-nasal-helm": {
+   "n": "Iron Nasal Helm",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-cuirass": {
+   "n": "Iron Plate Cuirass",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-gauntlets": {
+   "n": "Iron Plate Gauntlets",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-gorget": {
+   "n": "Iron Plate Gorget",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-greaves": {
+   "n": "Iron Plate Greaves",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-pauldrons": {
+   "n": "Iron Plate Pauldrons",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-sabatons": {
+   "n": "Iron Plate Sabatons",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-tassets": {
+   "n": "Iron Plate Tassets",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-plate-vambraces": {
+   "n": "Iron Plate Vambraces",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-boots": {
+   "n": "Iron Scale Boots",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-coat": {
+   "n": "Iron Scale Coat",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-gloves": {
+   "n": "Iron Scale Gloves",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-gorget": {
+   "n": "Iron Scale Gorget",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-greaves": {
+   "n": "Iron Scale Greaves",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-helm": {
+   "n": "Iron Scale Helm",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-skirt": {
+   "n": "Iron Scale Skirt",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-spaulders": {
+   "n": "Iron Scale Spaulders",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-iron-scale-vambraces": {
+   "n": "Iron Scale Vambraces",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-belt-skirt": {
+   "n": "Leather Belt-Skirt",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-boots": {
+   "n": "Leather Boots",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-bracers": {
+   "n": "Leather Bracers",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-cap": {
+   "n": "Leather Cap",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-collar": {
+   "n": "Leather Collar",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-gloves": {
+   "n": "Leather Gloves",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-jerkin": {
+   "n": "Leather Jerkin",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-leggings": {
+   "n": "Leather Leggings",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-leather-pauldrons": {
+   "n": "Leather Pauldrons",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-linen-collar": {
+   "n": "Linen Collar",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-linen-hood": {
+   "n": "Linen Hood",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-linen-mantle": {
+   "n": "Linen Mantle",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-linen-sash": {
+   "n": "Linen Sash",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-linen-shoes": {
+   "n": "Linen Shoes",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-linen-wraps": {
+   "n": "Linen Wraps",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-padded-gambeson": {
+   "n": "Padded Gambeson",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-padded-sleeves": {
+   "n": "Padded Sleeves",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-padded-trousers": {
+   "n": "Padded Trousers",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-items.json.presets/p-studded-leather-vest": {
+   "n": "Studded Leather Vest",
+   "f": "crawl-items.json",
+   "c": "presets",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-bard.loadouts/Troubadour's Kit": {
+   "n": "Troubadour's Kit",
+   "f": "crawl-classes.json",
+   "c": "loadouts",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-bard.loadouts/Troubadour's Kit.gear/Padded Leggings": {
+   "n": "Padded Leggings",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-fighter.loadouts/Mercenary Kit": {
+   "n": "Mercenary Kit",
+   "f": "crawl-classes.json",
+   "c": "loadouts",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-fighter.loadouts/Mercenary Kit.gear/Nasal Helm": {
+   "n": "Nasal Helm",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-fighter.loadouts/Mercenary Kit.gear/Padded Leggings": {
+   "n": "Padded Leggings",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-rogue.loadouts/Thieves Kit": {
+   "n": "Thieves Kit",
+   "f": "crawl-classes.json",
+   "c": "loadouts",
+   "how": "edited",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-rogue.loadouts/Thieves Kit.gear/Padded Leggings": {
+   "n": "Padded Leggings",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "added",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-bard.loadouts/Troubadour's Kit.gear/Leather Leggings": {
+   "n": "Leather Leggings",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-fighter.loadouts/Mercenary Kit.gear/Iron Nasal Helm": {
+   "n": "Iron Nasal Helm",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-fighter.loadouts/Mercenary Kit.gear/Leather Leggings": {
+   "n": "Leather Leggings",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
+  "crawl-classes.json.classes/class-rogue.loadouts/Thieves Kit.gear/Leather Leggings": {
+   "n": "Leather Leggings",
+   "f": "crawl-classes.json",
+   "c": "gear",
+   "how": "removed",
+   "by": "Claude (for Brody Woelke)",
+   "at": "2026-11-22T03:10:33.000Z"
+  },
   "crawl-tree.json.nodes/f:class-wizard:arcane-channeling": {
    "n": "f:class-wizard:arcane-channeling",
    "f": "crawl-tree.json",
@@ -592,14 +2376,6 @@
    "how": "edited",
    "by": "Brody Woelke",
    "at": "2026-10-31T00:49:42.747Z"
-  },
-  "crawl-glossary.json.entries/Broken": {
-   "n": "Broken",
-   "f": "crawl-glossary.json",
-   "c": "entries",
-   "how": "edited",
-   "by": "Brody Woelke",
-   "at": "2026-10-31T00:48:40.807Z"
   },
   "crawl-classes.json.classes/class-artificer": {
    "n": "Artificer",
