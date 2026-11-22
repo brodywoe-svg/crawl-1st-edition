@@ -155,7 +155,8 @@
    "tipClasses": true,
    "tipFeats": true,
    "tipCreator": true,
-   "hideRefs": true
+   "hideRefs": true,
+   "rev": true
   },
   {
    "n": "Charge",
@@ -953,7 +954,8 @@
    "tipCreator": true,
    "hideRefs": true,
    "ap": "3",
-   "req": "Martial Arts"
+   "req": "Martial Arts",
+   "rev": true
   },
   {
    "n": "Petrified",
@@ -1485,7 +1487,8 @@
    "tip": true,
    "hideRefs": true,
    "ap": "+1 AP",
-   "req": "Axe Mastery"
+   "req": "Axe Mastery",
+   "rev": true
   },
   {
    "n": "Sweep Kick",
@@ -1516,7 +1519,8 @@
    "tipFeats": false,
    "tipCreator": true,
    "ap": "1",
-   "req": "Martial Arts"
+   "req": "Martial Arts",
+   "rev": true
   },
   {
    "n": "Targeting",
@@ -1575,7 +1579,8 @@
    "tip": true,
    "hideRefs": true,
    "ap": "+1 AP",
-   "req": "Cudgel Mastery"
+   "req": "Cudgel Mastery",
+   "rev": true
   },
   {
    "n": "Two-Handed",

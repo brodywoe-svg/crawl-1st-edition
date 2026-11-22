@@ -95,6 +95,8 @@ Content text uses a small custom markup, rendered by `GLCORE` (and copied in `ta
 
 Glossary entry names, and their "tooltip words", are found automatically in all text and turned into hover tooltips.
 
+Anything marked `rev: true` (a class feature or option, a feat, a glossary entry, an item) shows a red **Revision needed** badge, drawn by `revTag()` in `src/editkit.js`. Admin forms have a checkbox for it.
+
 ### What lives in the browser
 - **`localStorage`:**
   - `crawl-mode` (dark mode), `crawl-tree-mode`, view/filter prefs

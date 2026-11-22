@@ -21,6 +21,21 @@ Template:
 
 ---
 
+## 2026-11-21: Armor gives AC and benefits instead of Armor %; a `rev` flag marks content to rewrite
+**Status:** agreed by brody (his request); **maddox to confirm the `rev` field** · **Who:** brody, maddox
+**Why:** Brody redesigned armor in a spreadsheet (CRAWL-Armor-Sets.xlsx). Each piece now gives AC (Head helmets, Torso, Arms, Legs) or a benefit (Neck, Shoulders, Waist, Hands, Feet), and the Armored status is gone.
+Rules written around Armor % or Armored status need rewriting, and he wants to see at a glance which ones.
+**Decision:**
+- The armor content was replaced straight on `main` (commit d1bb6c0), the way an Admin save would, at Brody's choice: 81 pieces in 9 sets, shields at +1 to +3 AC.
+  Pieces that match an old one keep its `id`, price and description, so kits, recipes and saved characters still work. The admin-only armor presets were removed.
+- A new optional field, `rev: true`, on class features and their options, feats, glossary entries and items, shows a red **Revision needed** badge; Admin can set and clear it ([DATA-MODEL.md](DATA-MODEL.md)).
+  It's a small addition to the content's shape, so it needs Maddox's OK.
+- The Creator's sheet adds up `+N AC` from worn pieces instead of Armor %.
+**Trade-offs:**
+- The flagged rules still describe the old system until Brody rewrites them.
+- Saving one of these pages from the old (frozen) GitHub Pages site drops the `rev` flags, because its code doesn't know them. Edit on the new site.
+- Typed content (stage B of [planning/content-schema.md](planning/content-schema.md)) should give armor real `ac` and `benefit` fields, instead of reading `props`.
+
 ## 2026-11-07: Where admin saves go: GitHub through a key, or game content in Supabase
 **Status:** proposed by maddox, **to decide with Brody on 2026-11-08** · **Who:** maddox, brody
 **Why:** On the new site, admin saves go through the `github` Edge Function, which needs a GitHub key (`GITHUB_TOKEN`) that Brody makes, pastes in and renews every year.

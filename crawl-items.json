@@ -1387,7 +1387,8 @@
     }
    ],
    "desc": "A simple linen hood that keeps out the rain, the cold and the eyes of strangers.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-linen-collar",
@@ -1502,7 +1503,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-linen-wraps",
@@ -1550,7 +1552,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-linen-shoes",
@@ -1598,7 +1601,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-padded-collar",
@@ -1622,7 +1626,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-padded-mantle",
@@ -1646,7 +1651,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-padded-gambeson",
@@ -1670,7 +1676,8 @@
     }
    ],
    "desc": "A thick coat of quilted linen and wool. Worn alone it turns aside glancing blows; worn under plate, it's what keeps knights alive.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-quilted-sash",
@@ -1694,7 +1701,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-padded-sleeves",
@@ -1737,7 +1745,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-padded-trousers",
@@ -1780,7 +1789,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-leather-cap",
@@ -1876,7 +1886,8 @@
     }
    ],
    "desc": "A sleeveless leather vest lined with linen. Tough on the outside and comfortable on the inside, so it can be worn for days on the road.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-leather-belt-skirt",
@@ -1924,7 +1935,8 @@
     }
    ],
    "desc": "Stiff leather guards laced around the forearms. An archer's first lesson is the bowstring slapping their wrist; their second is buying a pair of these.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-leather-gloves",
@@ -2015,7 +2027,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-studded-leather-collar",
@@ -2039,7 +2052,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-hardened-leather-pauldrons",
@@ -2063,7 +2077,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-studded-leather-vest",
@@ -2111,7 +2126,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-hardened-leather-bracers",
@@ -2130,7 +2146,8 @@
    "props": "Arms, Light, +1 AC",
    "pdefs": [],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-leather-gauntlets",
@@ -2154,7 +2171,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-studded-leather-leggings",
@@ -2173,7 +2191,8 @@
    "props": "Legs, Light, +1 AC",
    "pdefs": [],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-hardened-leather-boots",
@@ -2197,7 +2216,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-iron-nasal-helm",
@@ -2653,7 +2673,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-steel-bevor",
@@ -2677,7 +2698,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-steel-spaulders",
@@ -2701,7 +2723,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-steel-breastplate",
@@ -2725,7 +2748,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-steel-tassets",
@@ -2749,7 +2773,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-half-vambraces",
@@ -2773,7 +2798,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-steel-gauntlets",
@@ -2797,7 +2823,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-steel-cuisses",
@@ -2821,7 +2848,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-steel-toed-boots",
@@ -2845,7 +2873,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-iron-close-helm",
@@ -3080,7 +3109,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-gorget",
@@ -3104,7 +3134,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-pauldrons",
@@ -3128,7 +3159,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-cuirass",
@@ -3152,7 +3184,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-tassets",
@@ -3176,7 +3209,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-vambraces",
@@ -3195,7 +3229,8 @@
    "props": "Arms, Heavy, +2 AC",
    "pdefs": [],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-gauntlets",
@@ -3219,7 +3254,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-greaves",
@@ -3238,7 +3274,8 @@
    "props": "Legs, Heavy, +1 AC",
    "pdefs": [],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-splint-sabatons",
@@ -3262,7 +3299,8 @@
     }
    ],
    "desc": "",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-iron-dagger",
@@ -5232,7 +5270,8 @@
     }
    ],
    "desc": "Soft boots stitched from broodmother silk, with soles that never make a sound. In the deep, whoever is heard first dies first; these make sure it isn't you.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-whisperweave-hood",
@@ -5256,7 +5295,8 @@
     }
    ],
    "desc": "A hood of dark elf spider silk that makes no sound, can't be torn or stained, and weighs nothing at all. It doesn't hide the wearer's face so much as convince the dark they were never there.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-whisperweave-mantle",
@@ -5280,7 +5320,8 @@
     }
    ],
    "desc": "A shoulder mantle woven from silk the broodmothers spin, stronger than steel and lighter than breath. It makes no sound, never tears or stains, and weighs nothing.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "i-wool-bolt",

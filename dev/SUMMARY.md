@@ -18,6 +18,12 @@ So we're moving it to a modern setup, **one page at a time**, while the current 
 - **A Windows app that updates itself** (later). There's no more re-downloading the zip.
 - **Room to grow:** automated rules, accounts and 3D can be built on top of this.
 
+## Armor and the Revision needed badge (2026-11-21)
+- **Armor is now the sets from your spreadsheet.** No more Armor %. Pieces give AC or a benefit, and shields give +1 to +3 AC. That change is already live.
+- **Red "Revision needed" badges** show next to the rules and items that still talk about Armor % or the Armored status, and next to new armor pieces with no description.
+  When you've rewritten one, open it in Admin and untick **Revision needed**. The badges and that checkbox arrive when Maddox OKs the pull request.
+- Edit on the new site: saving one of those pages on the old site would remove its badges.
+
 ## The decisions (and who still needs to say yes)
 | Decision | In plain words | Status |
 | --- | --- | --- |
