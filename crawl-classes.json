@@ -962,7 +962,8 @@
       },
       {
        "n": "Armored",
-       "d": "While you are wearing a Helmet in addition to either being Moderately or Heavily Armored, you gain an additional +1 to your Armor Class."
+       "d": "While you are wearing a Helmet in addition to either being Moderately or Heavily Armored, you gain an additional +1 to your Armor Class.",
+       "rev": true
       },
       {
        "n": "Bulwark",
@@ -1390,7 +1391,8 @@
     {
      "n": "Unarmored Discipline",
      "d": "While your total Armor % is 30% or less, you count as Unarmored instead of Lightly Armored. While you are Unarmored, you add your Dexterity modifier to your Armor Class.",
-     "lv": 1
+     "lv": 1,
+     "rev": true
     },
     {
      "n": "Martial Arts",

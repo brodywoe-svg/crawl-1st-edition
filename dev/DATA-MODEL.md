@@ -47,7 +47,7 @@ There is no `id`. Spells are identified by name.
 ```
 {id, n, role, desc, source, cast, spells, hd, hp, saves, skills, skillPts, prof, langs,
  chart:[{lv, pool, die}],                        // Max Pool + Action Die per level
- feats:[{n, d, lv, opts?:[{n,d}], pick?, more?:[levels]}],   // opts = a choice feature like Fighting Style
+ feats:[{n, d, lv, rev?, opts?:[{n, d, rev?}], pick?, more?:[levels]}],   // opts = a choice feature like Fighting Style
  loadouts:[{n, gear:[{n, qty, iid}]}], money, moneyRoll, extra:[{k,v}], choices:[{n, cat, opts}],
  prepared, startRank, schoolStart, oppCost, majorLv, minorLv, schools:[{s, opp}],   // spellcasting
  subs:[{id, n, desc, feats, extra}]}
@@ -57,13 +57,17 @@ There is no `id`. Spells are identified by name.
 
 **Race / subrace**: `{id, n, desc, asi, prof, langs, feats:[{n,d}], extra:[{k,v}], subs:[subrace]}`
 
-**Feat**: `{id, n, cat, pre, desc, extra}`. `cat` is one of: Aggro, Control, Roleplay, Fortitude, Weapon Mastery, Spellcraft.
+**Feat**: `{id, n, cat, pre, desc, extra, badge?, rev?}`. `cat` is one of: Aggro, Control, Roleplay, Fortitude, Weapon Mastery, Spellcraft.
 
 **Item**
 ```
-{id, n, nc, cat, sub, slot, badge, rarity, magic, value, weight,
+{id, n, nc, cat, sub, slot, badge, rev?, rarity, magic, value, weight,
  actions, wacts:[{n, ap, dmg, type, d}], props, pdefs:[{n,d}], desc, extra}   // weapons also: tier, ap
 ```
+**Armor** (since 2026-11-21, from Brody's armor spreadsheet): there is no Armor % any more.
+- `props` lists the slot, the family and the AC it gives, e.g. `"Torso, Medium, +2 AC"`. Head, Torso, Arms and Legs give AC; helmets also have `Helmet` in `props`.
+- The benefit is in `pdefs`: `{n: "Benefit", d: "+1 to Stealth checks"}`, or `{n: "Helmet", d: …}` for a helmet.
+- Shields give `+1 AC` to `+3 AC` in `props`. The Creator adds up every `+N AC` on worn pieces (`armorAcN` in `src/creator.js`).
 
 **Recipe**
 ```
@@ -74,8 +78,12 @@ There is no `id`. Spells are identified by name.
 **Glossary entry**
 ```
 {n, sec, lead, fx:[…], notes:[{l,t}], aka:[{w, ref}], tip,
- tipItems?, tipClasses?, tipFeats?, tipCreator?, hideRefs?, ap?, req?}
+ tipItems?, tipClasses?, tipFeats?, tipCreator?, hideRefs?, ap?, req?, rev?}
 ```
+
+**`rev: true`** (on a class feature, a feature's option, a feat, a glossary entry or an item) means Brody has marked it to be rewritten.
+The page shows a red **Revision needed** badge next to its name (`revTag()` in `src/editkit.js`), and Admin has a checkbox to set or clear it.
+It's left out when false.
 
 ## Cross-references (easy to break)
 - **Recipes reference items by `id`**, and class/background gear references items through `iid`.

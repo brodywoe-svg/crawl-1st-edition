@@ -15,9 +15,9 @@ const lcs = x => String(x || "").toLowerCase();
 const newId = p => p + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const featLv = x => { const n = parseInt(x, 10); return n > 0 ? n : "" };
 /* a feature can be a choice: "choose `pick` of these `opts`", with one more pick at each level in `more` (e.g. Fighting Style) */
-const featOpts = x => arr(x).map(o => ({ n: str(o && o.n), d: str(o && o.d) })).filter(o => o.n);
+const featOpts = x => arr(x).map(o => ({ n: str(o && o.n), d: str(o && o.d), ...(o && o.rev === true ? { rev: true } : {}) })).filter(o => o.n);
 const levelsOf = x => [...new Set((Array.isArray(x) ? x : String(x || "").split(/[^0-9]+/)).map(v => parseInt(v, 10)).filter(v => v > 0 && v <= 30))].sort((a, b) => a - b);
-const featsOf = x => arr(x).map(f => { const o = featOpts(f && f.opts); return { n: str(f && f.n), d: str(f && f.d), ...(f && featLv(f.lv) ? { lv: featLv(f.lv) } : {}), ...(o.length ? { opts: o, pick: Math.max(1, Math.min(o.length, parseInt(f.pick, 10) || 1)), more: levelsOf(f.more) } : {}) } }).filter(f => f.n || f.d);
+const featsOf = x => arr(x).map(f => { const o = featOpts(f && f.opts); return { n: str(f && f.n), d: str(f && f.d), ...(f && featLv(f.lv) ? { lv: featLv(f.lv) } : {}), ...(f && f.rev === true ? { rev: true } : {}), ...(o.length ? { opts: o, pick: Math.max(1, Math.min(o.length, parseInt(f.pick, 10) || 1)), more: levelsOf(f.more) } : {}) } }).filter(f => f.n || f.d);
 /* how many options of a choice feature a character has by a level */
 const picksAt = (f, lv) => !f.opts || (f.lv || 1) > lv ? 0 : Math.min(f.opts.length, f.pick + f.more.filter(m => m <= lv).length);
 const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
@@ -118,7 +118,7 @@ const stripIds = ({ _id, _new, ...x }) => x;
 const cleanClasses = list => ({ v: 1, classes: list.filter(c => !c._new).map(c => ({ ...stripIds(c), subs: c.subs.filter(s => !s._new).map(stripIds).sort(byName) })).sort(byName) });
 const cleanBgs = list => ({ v: 1, backgrounds: list.filter(b => !b._new).map(stripIds).sort(byName) });
 /* feats (crawl-feats.json): name, category, prerequisite, description, extra details */
-function normFeat(p) { p = p || {}; return { id: str(p.id) || newId("feat"), n: str(p.n), cat: str(p.cat), pre: str(p.pre), desc: str(p.desc), extra: extrasOf(p.extra), ...(p.badge === true || p.badge === "on" ? { badge: true } : {}), _id: ++uid } }
+function normFeat(p) { p = p || {}; return { id: str(p.id) || newId("feat"), n: str(p.n), cat: str(p.cat), pre: str(p.pre), desc: str(p.desc), extra: extrasOf(p.extra), ...(p.badge === true || p.badge === "on" ? { badge: true } : {}), ...(p.rev === true ? { rev: true } : {}), _id: ++uid } }
 const normFeats = j => arr(j && j.feats).filter(f => f && str(f.n)).map(normFeat).sort(byName);
 const cleanFeats = list => ({ v: 1, feats: list.filter(f => !f._new).map(stripIds).sort(byName) });
 /* every class gains a feat at every Nth level (Character Creator rules: featEvery, 0 = off) */

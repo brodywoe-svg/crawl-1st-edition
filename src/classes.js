@@ -29,8 +29,8 @@ const textOf = p => plainText([p.n, p.desc, p.cat, p.pre, p.skills, p.weapons, p
 const gearHTML = g => g.length ? `<ul class="gearl">${g.map(x => `<li>${x.qty > 1 ? `<b>${x.qty}×</b> ` : ""}${x.iid ? `<a class="ilink" href="items.html#${encodeURIComponent(x.iid)}">${esc(x.n)}</a>` : esc(x.n)}</li>`).join("")}</ul>` : `<p class="muted">No gear listed.</p>`;
 const factsHTML = rows => { rows = rows.filter(r => r[1]); return rows.length ? `<dl class="gfacts">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${richInline(v)}</dd>`).join("")}</dl>` : "" };
 /* a choice feature's options, e.g. the Fighting Styles */
-const optsHTML = f => f.opts ? `<div class="fopts"><p class="fchoose">${esc(choiceLine(f))}</p>${f.opts.map(o => `<div class="fopt"><b>${esc(o.n)}</b>${o.d ? paras(o.d) : ""}</div>`).join("")}</div>` : "";
-const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, richInline, f.lv ? ` <span class="lvtag">Level ${f.lv}</span>` : "") + optsHTML(f)).join("")}</div>` : "";
+const optsHTML = f => f.opts ? `<div class="fopts"><p class="fchoose">${esc(choiceLine(f))}</p>${f.opts.map(o => `<div class="fopt"><b>${esc(o.n)}</b>${revTag(o)}${o.d ? paras(o.d) : ""}</div>`).join("")}</div>` : "";
+const featHTML = fs => fs.length ? `<div class="rfeats">${fs.map(f => featBlock(f.n, f.d, richInline, (f.lv ? ` <span class="lvtag">Level ${f.lv}</span>` : "") + revTag(f)) + optsHTML(f)).join("")}</div>` : "";
 const featId = (p, i) => `feat-${p.id}-${i}`;
 /* the general Feat feature: every class gains a feat at every Nth level (Character Creator rules) */
 const featRuleText = () => { const lv = featLevels(20); return lv.length ? `At ${ordinal(lv[0])} level, and again at ${lv.slice(1, 4).map(ordinal).join(", ")}${lv.length > 4 ? " and so on" : ""}, you gain a feat of your choice from the [link=feats.html]Feats[/link] page, as long as you meet its prerequisite.` : "" };
@@ -45,7 +45,7 @@ function chartHTML(k) {
     return `<tr><th scope="row">${lv}</th><td>${esc(r.pool || "–")}</td><td>${esc(r.die || "–")}</td><td>${cells.join(", ") || "–"}</td></tr>` }).join("");
   const ruleBox = fLv.length ? `<div class="clsf" id="${ruleId}"><h4><span class="pdn">Feat</span><span class="lvtag">Levels ${fLv.slice(0, 3).join(", ")}…</span></h4>${paras(featRuleText())}</div>` : "";
   return `<div class="clsgrid"><div class="clschart"><table><thead><tr><th>Level</th><th>Max Pool</th><th>Action Die</th><th>Features</th></tr></thead><tbody>${rows || `<tr><td colspan="4" class="muted">No levels yet.</td></tr>`}</tbody></table></div>
-<div class="clsfeats" aria-label="${esc(k.n)} features"><div class="cfh">Class features</div><div class="cfin" tabindex="0">${k.feats.map((f, i) => [f, i]).sort((a, b) => (a[0].lv || 1) - (b[0].lv || 1)).map(([f, i]) => `<div class="clsf" id="${featId(k, i)}"><h4><span class="pdn">${esc(f.n)}</span><span class="lvtag">Level ${f.lv || 1}</span></h4>${paras(f.d)}${optsHTML(f)}</div>`).join("")}${ruleBox}${k.feats.length || ruleBox ? "" : `<p class="muted">No features yet.</p>`}</div></div></div>`;
+<div class="clsfeats" aria-label="${esc(k.n)} features"><div class="cfh">Class features</div><div class="cfin" tabindex="0">${k.feats.map((f, i) => [f, i]).sort((a, b) => (a[0].lv || 1) - (b[0].lv || 1)).map(([f, i]) => `<div class="clsf" id="${featId(k, i)}"><h4><span class="pdn">${esc(f.n)}</span><span class="lvtag">Level ${f.lv || 1}</span>${revTag(f)}</h4>${paras(f.d)}${optsHTML(f)}</div>`).join("")}${ruleBox}${k.feats.length || ruleBox ? "" : `<p class="muted">No features yet.</p>`}</div></div></div>`;
 }
 function classBody(k) {
   return (k.desc ? `<div class="clead">${paras(k.desc)}</div>` : "") + chartHTML(k) +
@@ -73,7 +73,7 @@ function subHTML(s, k) {
 }
 function cardHTML(p, q) {
   if (editing.has(p._id)) return `<section class="cond" id="${esc(p.id)}"><div class="chead"><span>${p._new ? "New " + WHAT : "Editing " + esc(p.n)}</span></div><div class="cbody">${form(p, IS_CLS ? "class" : IS_FEAT ? "feat" : "bg")}</div></section>`;
-  const tag = IS_CLS && p.source ? `<span class="ctag">${esc(p.source)} magic</span>` : IS_FEAT ? (p.badge ? `<span class="ctag ptag">Playtest</span>` : "") + (p.cat ? `<span class="ctag">${esc(p.cat)}</span>` : "") : "";
+  const tag = IS_CLS && p.source ? `<span class="ctag">${esc(p.source)} magic</span>` : IS_FEAT ? revTag(p) + (p.badge ? `<span class="ctag ptag">Playtest</span>` : "") + (p.cat ? `<span class="ctag">${esc(p.cat)}</span>` : "") : "";
   const subs = !IS_CLS ? [] : q && !textOf({ ...p, subs: [] }).includes(q) ? p.subs.filter(s => editing.has(s._id) || textOf(s).includes(q)) : p.subs;
   return `<section class="cond" id="${esc(p.id)}"><h2 class="chead"><span>${esc(p.n)}</span><span class="chr">${tag}${ADMIN ? `<button type="button" class="gedit" data-act="edit" data-id="${p._id}">Edit</button>` : ""}</span></h2>
 <div class="cbody">${IS_CLS ? classBody(p) : IS_FEAT ? featBody(p) : bgBody(p)}
@@ -82,11 +82,11 @@ ${IS_CLS && (subs.length || ADMIN) ? `<div class="subs"><h3>Subclasses</h3>${sub
 
 /* ---------------------------------------------------------------- forms */
 const ITEM_LIST = () => `<datalist id="itemNames">${GEAR_ITEMS.slice().sort(byName).map(i => `<option value="${esc(i.n)}">`).join("")}</datalist>`;
-const optRow = o => `<div class="forow"><input type="text" class="fon" value="${esc(o.n)}" placeholder="Option name, e.g. Archery" aria-label="Option name" autocomplete="off"><textarea class="fod" rows="2" placeholder="What the option does" aria-label="Option description">${esc(o.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
+const optRow = o => `<div class="forow"><input type="text" class="fon" value="${esc(o.n)}" placeholder="Option name, e.g. Archery" aria-label="Option name" autocomplete="off"><textarea class="fod" rows="2" placeholder="What the option does" aria-label="Option description">${esc(o.d)}</textarea><button type="button" class="btn xdel">Remove</button>${revBox(o.rev, "option")}</div>`;
 const optEditor = f => `<details class="foptbox"${f.opts && f.opts.length ? " open" : ""}><summary>Options to choose from${f.opts && f.opts.length ? ` (${f.opts.length})` : ""} <small>Make this a choice feature, like Fighting Style</small></summary>
 <div class="foptctl"><label>Player chooses <input type="number" class="fpick" min="1" max="10" value="${f.pick || 1}" aria-label="How many options to choose"></label><label>Another choice at levels <input type="text" class="fmore" value="${esc((f.more || []).join(", "))}" placeholder="e.g. 5, 10" aria-label="Levels with another choice" autocomplete="off"></label></div>
 <div class="folist">${arr(f.opts).map(optRow).join("")}</div><button type="button" class="btn" data-act="foadd">Add an option</button></details>`;
-const featRow = f => `<div class="prow frow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><input type="number" class="pl" min="1" max="30" value="${esc(f.lv || "")}" placeholder="Lv" aria-label="Level gained" title="Level gained"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button>${optEditor(f)}</div>`;
+const featRow = f => `<div class="prow frow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><input type="number" class="pl" min="1" max="30" value="${esc(f.lv || "")}" placeholder="Lv" aria-label="Level gained" title="Level gained"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button>${revBox(f.rev, "feature")}${optEditor(f)}</div>`;
 const bgFeatRow = f => `<div class="prow"><input type="text" class="pn" value="${esc(f.n)}" placeholder="Feature name" aria-label="Feature name" autocomplete="off"><textarea class="pd" rows="2" placeholder="What the feature does" aria-label="Feature description">${esc(f.d)}</textarea><button type="button" class="btn xdel">Remove</button></div>`;
 const extraRow = x => `<div class="xrow"><input type="text" class="xk" value="${esc(x.k)}" placeholder="Label" aria-label="Detail label" autocomplete="off"><input type="text" class="xv" value="${esc(x.v)}" placeholder="Value" aria-label="Detail value" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
 const chartRowHTML = r => `<div class="chrow"><input type="number" class="cl" min="1" max="30" value="${esc(r.lv || "")}" placeholder="Lv" aria-label="Level"><input type="text" class="cp" value="${esc(r.pool)}" placeholder="Max Pool" aria-label="Max Pool" autocomplete="off"><input type="text" class="cd" value="${esc(r.die)}" placeholder="Action Die, e.g. 1d6" aria-label="Action Die" autocomplete="off"><button type="button" class="btn xdel">Remove</button></div>`;
@@ -156,6 +156,7 @@ ${fld("oppCost", "Skill points per Rank for an Opposing School spell", "", inp("
 <div class="gbtns"><button type="button" class="btn" data-act="sadd">Add a school</button><button type="button" class="btn" data-act="sfill">Add the schools from the spell list</button></div>` + extras;
   else if (kind === "feat") body = fld("n", "Feat name", "", inp("n", "e.g. Shield Master")) +
     `<label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> Playtest <small>(shows a Playtest tag on the feat)</small></label>` +
+    `<label class="chk revchk"><input type="checkbox" data-k="rev"${d.rev ? " checked" : ""}> <span class="ctag revtag">Revision needed</span> <small>(shows the badge on this feat until it's rewritten)</small></label>` +
     `<div class="fgrid">${fld("cat", "Category", "Optional, e.g. Combat, Magic, Skill, General", `<input type="text" id="${id("cat")}" data-k="cat" value="${esc(d.cat)}" placeholder="e.g. Combat" list="featCats" autocomplete="off">`)}${fld("pre", "Prerequisite", "Optional", inp("pre", "e.g. Strength 13 or higher, 4th level"))}</div>` +
     `<datalist id="featCats">${[...new Set(["General", "Combat", "Magic", "Skill", ...list.map(x => x.cat).filter(Boolean)])].map(c => `<option value="${esc(c)}">`).join("")}</datalist>` +
     fld("desc", "What the feat does", "Leave a blank line between paragraphs.", `<textarea id="${id("desc")}" data-k="desc" rows="6">${esc(d.desc)}</textarea>`) + extras;
@@ -169,8 +170,9 @@ ${fld("oppCost", "Skill points per Rank for an Opposing School spell", "", inp("
 const own = (f, sel) => [...f.querySelectorAll(sel)].filter(el => el.closest(".rform") === f);
 function readForm(f) {
   const d = {}; own(f, "[data-k]").forEach(el => { d[el.dataset.k] = el.type === "checkbox" ? el.checked : el.value });
-  d.feats = own(f, ".prow").map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value, lv: r.querySelector(".pl") ? r.querySelector(".pl").value : "",
-    ...(r.querySelector(".foptbox") ? { opts: [...r.querySelectorAll(".forow")].map(o => ({ n: o.querySelector(".fon").value, d: o.querySelector(".fod").value })), pick: r.querySelector(".fpick").value, more: r.querySelector(".fmore").value } : {}) }));
+  const revOf = r => { const c = r.querySelector(":scope > .revchk input"); return c && c.checked ? { rev: true } : {} };
+  d.feats = own(f, ".prow").map(r => ({ n: r.querySelector(".pn").value, d: r.querySelector(".pd").value, lv: r.querySelector(".pl") ? r.querySelector(".pl").value : "", ...revOf(r),
+    ...(r.querySelector(".foptbox") ? { opts: [...r.querySelectorAll(".forow")].map(o => ({ n: o.querySelector(".fon").value, d: o.querySelector(".fod").value, ...revOf(o) })), pick: r.querySelector(".fpick").value, more: r.querySelector(".fmore").value } : {}) }));
   d.extra = own(f, ".xrow").map(r => ({ k: r.querySelector(".xk").value, v: r.querySelector(".xv").value }));
   d.ptypes = {}; own(f, ".pgive .pgc").forEach(c => { const v = c.classList.contains("tiered") ? [...c.querySelectorAll(".pgb.on")].map(b => b.dataset.pt).join("") : c.classList.contains("on") ? "P" : ""; if (v) (d.ptypes[c.dataset.pk] = d.ptypes[c.dataset.pk] || {})[c.dataset.pn] = v });
   d.chart = own(f, ".chrow:not(.chh)").map(r => ({ lv: r.querySelector(".cl").value, pool: r.querySelector(".cp").value, die: r.querySelector(".cd").value }));

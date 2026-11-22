@@ -8,6 +8,8 @@ import { esc } from "./text";
 export interface GEntry {
   n: string; sec: string; lead: string; fx: string[]; notes: { l: string; t: string }[]; aka: { w: string; ref: string }[];
   tip: boolean; tipItems?: boolean; tipClasses?: boolean; tipFeats?: boolean; tipCreator?: boolean; hideRefs?: boolean; ap?: string; req?: string;
+  /** Marked to be rewritten: shows the red Revision needed badge. */
+  rev?: boolean;
 }
 /** A glossary word found in text: the entry, the word as matched, and (for "aka" words) the text it refers to. */
 export interface GHit { e: GEntry; w: string; ref: string }
@@ -27,6 +29,7 @@ export function normGlossary(j: any): GEntry[] | null {
     tip: e.tip !== false,
     ...Object.fromEntries(["tipItems", "tipClasses", "tipFeats", "tipCreator"].filter(k => typeof e[k] === "boolean").map(k => [k, e[k]])),
     ...(e.hideRefs ? { hideRefs: true } : {}),
+    ...(e.rev === true ? { rev: true } : {}),
     ...(String(e.ap || "").trim() ? { ap: String(e.ap).trim() } : {}),
     ...(String(e.req || "").trim() ? { req: String(e.req).trim() } : {}),
   }));

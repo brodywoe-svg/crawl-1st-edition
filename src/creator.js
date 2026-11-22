@@ -1023,8 +1023,9 @@ function attackRows(c) {
   c.spells.forEach(n => { const s = SPELL_LIST.find(x => x.n === n); if (s) { const rk = spellRankOf(c, s), cm = k && k.cast ? mod(c, k.cast) : null; rows.push({ n: s.n, cost: str(s.f.cost), range: str(s.f.range), dmg: /^n\/?a$/i.test(str(s.f.dmg)) ? "" : str(s.f.dmg), rank: "+" + rk, spell: true, mod: cm != null ? `DC ${8 + cm + rk}` : "", ab: cm != null ? `${AB[k.cast].slice(0, 3).toUpperCase()} ${sign(cm)}` : "" }) } });
   return rows;
 }
-const armorPctN = x => { const it = x && x.iid && itemById(x.iid), m = it && str(it.props).match(/(\d+)\s*%\s*Armou?r/i); return m ? +m[1] : 0 };
-const armorPct = x => armorPctN(x) ? armorPctN(x) + "%" : "";
+/* the AC a worn piece or shield gives, from its properties ("Torso, Light, +2 AC") */
+const armorAcN = x => { const it = x && x.iid && itemById(x.iid), m = it && str(it.props).match(/\+\s*(\d+)\s*AC\b/i); return m ? +m[1] : 0 };
+const armorAc = x => armorAcN(x) ? "+" + armorAcN(x) : "";
 /* weapon and combat actions the character can use: those on the weapons in hand, glossary actions whose Requirements is
    one of the character's features (or that a chosen feature names), and actions with no requirement, which anyone can use */
 function knownActions(c, feats) {
@@ -1060,8 +1061,8 @@ function renderSheet() {
   const wt = x => { const it = x && x.iid && itemById(x.iid); return it ? lbs(it.weight) * (x.qty || 1) : 0 };
   const totalWt = c.inv.reduce((n, x) => n + wt(x), 0);
   const pack = (() => { const m = new Map(); c.inv.filter(x => !x.slot).forEach(x => { const k = x.iid || "n:" + lcs(x.n); if (m.has(k)) m.get(k).qty = (m.get(k).qty || 1) + (x.qty || 1); else m.set(k, { ...x }) }); return [...m.values()] })();
-  /* armor %: every worn piece and shield ("Torso, Light, 7% Armor"); each full 10% gives +1 AC */
-  const worn = c.inv.filter(x => x.slot && x.slot !== "other"), armor = { pct: worn.reduce((n, x) => n + armorPctN(x), 0) }; armor.ac = Math.floor(armor.pct / 10);
+  /* armor AC: the AC from every worn piece and shield added up */
+  const worn = c.inv.filter(x => x.slot && x.slot !== "other"), armor = { ac: worn.reduce((n, x) => n + armorAcN(x), 0) };
   const left = startingWealth(c) - spentC(c);
   const coins = { g: Math.floor(Math.max(0, left) / 100), s: Math.floor(Math.max(0, left) % 100 / 10), c: Math.max(0, left) % 10 };
   const allFeats = sources(c).flatMap(x => x.feats.map(f => ({ ...f, src: x.label })));
@@ -1088,7 +1089,7 @@ ${actionsBlock(c, allFeats)}
 <div class="sright">
 <div class="sbox"><div class="stab">Action pool</div><div class="spool">${[["ap", "Action points"], ["mp", "Magic points"], ["ep", "Exhaustion points"], ["pool", "Max pool", row1 && row1.pool], ["ad", "Action die", row1 && row1.die]].map(([key, l, d]) => `<label class="scell"><span>${l}</span>${sf(c, key, d || "", "", "", l)}</label>`).join("")}</div></div>
 <div class="sbox"><div class="stab">Status</div><div class="sstatus">
-<div class="sac"><div class="sacr sach"><span>Armor class</span><span>AC</span></div>${["Natural", "Armored", "Shield"].map(x => `<label class="sacr"><span>${x}</span>${sf(c, "ac:" + x, x === "Armored" && armor.pct ? "+" + armor.ac : "", "", x === "Armored" ? "incl. shield" : "", x + " AC")}</label>`).join("")}<div class="sacr sacx"><span>Others</span>${sf(c, "ac:minus", "", "", "−", "Other AC minus")}${sf(c, "ac:plus", "", "", "+", "Other AC plus")}</div></div>
+<div class="sac"><div class="sacr sach"><span>Armor class</span><span>AC</span></div>${[["Natural", "Natural"], ["Armored", "Armor"], ["Shield", "Shield"]].map(([x, l]) => `<label class="sacr"><span>${l}</span>${sf(c, "ac:" + x, x === "Armored" && armor.ac ? "+" + armor.ac : "", "", x === "Armored" ? "incl. shield" : "", l + " AC")}</label>`).join("")}<div class="sacr sacx"><span>Others</span>${sf(c, "ac:minus", "", "", "−", "Other AC minus")}${sf(c, "ac:plus", "", "", "+", "Other AC plus")}</div></div>
 <div class="scell sduo"><label class="sduot"><span>Hit points</span>${sf(c, "hp", "", "big", "", "Current hit points")}</label><label class="sduob"><span>Max</span>${sf(c, "hpmax", hpOf(c) ?? "", "", "", "Maximum hit points")}</label></div>
 <div class="scell sduo"><label class="sduot"><span>Hit dice</span>${sf(c, "hd", k && k.hd ? k.hd : "", "big", "", "Hit dice")}</label><label class="sduob"><span>Total</span>${sf(c, "hdt", k && k.hd ? LEVEL : "", "", "", "Hit dice total")}</label></div>
 <div class="scell sdeath"><span>Death saves</span><small>Successes</small><span>${[0, 1, 2].map(i => sbox(c, "ds" + i, "Death save success " + (i + 1))).join("")}</span><small>Failures</small><span>${[0, 1, 2].map(i => sbox(c, "df" + i, "Death save failure " + (i + 1))).join("")}</span></div></div></div>
@@ -1107,10 +1108,10 @@ ${actionsBlock(c, allFeats)}
 <div class="spair"><div class="stbl"><div class="sth"><span>Expertise</span><span>TC</span></div>${EXPERTISE.map(([n, sk2, ab]) => `<label><span>${n} <small>(${ab})</small></span>${sf(c, "ex:" + n, "", "", sign(skillTotal(c, sk2, ps)), n)}</label>`).join("")}</div>
 <div class="stbl"><div class="sth"><span>Senses</span><span>ft</span></div>${SENSES.map(n => `<label><span>${n}</span>${sf(c, "se:" + n, extraFor(n), "", "", n)}</label>`).join("")}</div></div>
 <div class="stbl swealth"><div class="sth"><span>Wealth</span><span>Total</span><span>Weight</span></div>${[["Copper", "c"], ["Silver", "s"], ["Gold", "g"], ["Platinum", "p"]].map(([n, key]) => `<label><span>${n}</span>${sf(c, "coin:" + key, key === "p" ? "" : coins[key], "", "", n)}${sf(c, "coinw:" + key, "", "", "", n + " weight")}</label>`).join("")}</div></div>
-<div class="sright"><div class="sblock ssq"><div class="sbar seqh"><span>Equipment</span><span>Armor (%)</span><span>Weight</span></div>
-${SLOTS.map(([key, l]) => { const x = slotItems[key]; return `<div class="sgrid3 seq"><span class="sslot">${l}</span>${sf(c, "eq:" + key, x ? invName(x) : "", "", "", l)}${sf(c, "eqa:" + key, x ? armorPct(x) || "" : "", "", "", l + " armor percent")}${sf(c, "eqw:" + key, x ? fmtLbs(wt(x)) : "", "", "", l + " weight")}</div>` }).join("")}
-<div class="seq stot2"><span class="stotl">Totals</span><label><span>Total (%)</span>${sf(c, "eqat", armor.pct ? armor.pct + "%" : "", "", "", "Total armor percent")}</label><label><span>Total wgt.</span>${sf(c, "eqwt", fmtLbs(totalWt), "", "", "Total weight")}</label></div>
-<div class="seq stot2"><span class="stotl"></span><label><span>Total (AC)</span>${sf(c, "eqac", armor.pct ? "+" + armor.ac : "", "", "", "Total AC")}</label><label><span>Capacity</span>${sf(c, "cap", "", "", "", "Carry capacity")}</label></div></div>
+<div class="sright"><div class="sblock ssq"><div class="sbar seqh"><span>Equipment</span><span>AC</span><span>Weight</span></div>
+${SLOTS.map(([key, l]) => { const x = slotItems[key]; return `<div class="sgrid3 seq"><span class="sslot">${l}</span>${sf(c, "eq:" + key, x ? invName(x) : "", "", "", l)}${sf(c, "eqa:" + key, x ? armorAc(x) || "" : "", "", "", l + " AC")}${sf(c, "eqw:" + key, x ? fmtLbs(wt(x)) : "", "", "", l + " weight")}</div>` }).join("")}
+<div class="seq stot2"><span class="stotl">Totals</span><label><span>Total (AC)</span>${sf(c, "eqac", armor.ac ? "+" + armor.ac : "", "", "", "Total AC")}</label><label><span>Total wgt.</span>${sf(c, "eqwt", fmtLbs(totalWt), "", "", "Total weight")}</label></div>
+<div class="seq stot2"><span class="stotl"></span><span></span><label><span>Capacity</span>${sf(c, "cap", "", "", "", "Carry capacity")}</label></div></div>
 <div class="sblock ssq"><div class="sbar sgrid4"><span>Inventory & gear</span><span>Magic</span><span>Weight</span><span>Worth</span></div>
 ${Array.from({ length: Math.max(8, pack.length + 2) }, (_, i) => { const x = pack[i], it = x && x.iid && itemById(x.iid); return `<div class="sgrid4 sinv">${sf(c, "inv" + i + ":n", x ? invName(x) + ((x.qty || 1) > 1 ? ` ×${x.qty}` : "") : "", "", "", "Item " + (i + 1))}${sf(c, "inv" + i + ":m", it && it.magic ? "Yes" : "", "", "", "Magic")}${sf(c, "inv" + i + ":w", x ? fmtLbs(wt(x)) : "", "", "", "Weight")}${sf(c, "inv" + i + ":v", it ? it.value : "", "", "", "Worth")}</div>` }).join("")}</div></div></div></section>`;
   const caster = !!(k && k.source) || spells.length > 0;

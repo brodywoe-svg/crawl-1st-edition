@@ -9,6 +9,8 @@ Format: `- [ ] Task (@owner)`. The owner is `@brody`, `@maddox`, or left off if 
 If a task needs more than a line of explanation, write a doc in [planning/](planning/) and link it from the task.
 
 ## Now
+- [ ] Rewrite everything with the red **Revision needed** badge after the armor change (Monk's Unarmored Discipline, Fighter's Armored style, Axe Mastery, Cudgel Mastery, Mail-Breaker, Broken, Patient Strikes, Swift Step, Sunder, Toppling Blow, 41 armor pieces), and give the new armor pieces prices and descriptions; clear each badge in Admin when it's done (@brody)
+- [ ] Review the `rev` field and the Creator's AC change (DECISIONS.md 2026-11-21) (@maddox)
 Goal: the playtest MVP, ready for session 2: [roadmap/playtest-mvp.md](roadmap/playtest-mvp.md).
 - [ ] Answer the open questions in the planning docs (rules-data authoring, coins, XP, monsters, an Actions section), and check the events table in [planning/character-data.md](planning/character-data.md) (@brody)
 - [x] React shell: router, home, the SPA rewrite; nav, theme and sign-in reused from `ui/`: [planning/react-migration.md](planning/react-migration.md) (@maddox)

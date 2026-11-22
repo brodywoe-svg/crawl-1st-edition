@@ -23,7 +23,8 @@
    "cat": "Weapon Mastery",
    "pre": "Proficiency with Axes",
    "desc": "You've trained properly with the axe, learning how much weight to put behind a swing and exactly when to let it fly. You gain the following benefits while wielding an Axe:\n- You score a critical hit on a roll of 19 or 20.\n- You can throw any Axe, even one without the Thrown property. Its range is a number of feet equal to 5 × your Strength modifier (minimum 5 feet).\n- You learn the Sunder Weapon Action.\n\n[color=#8e171c]Sunder[/color] (Weapon Action). When you make a melee attack with an Axe, you can expend 1 additional Action Point (AP). On a hit, if the target is a Moderately Armored Humanoid, its AC is reduced by 2 until the next time it takes damage.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "feat-black-widow",
@@ -79,7 +80,8 @@
    "cat": "Weapon Mastery",
    "pre": "Proficiency with Cudgels",
    "desc": "You've trained properly with bludgeoning weapons and learned how to put the full weight of a blow behind them. You gain the following benefits while wielding a Cudgel:\n- You score a critical hit on a roll of 19 or 20.\n- Your Opportunity Attacks have Advantage.\n- You learn the Toppling Blow Weapon Action.\n\n[color=#8e171c]Toppling Blow[/color] (Weapon Action). When you make a melee attack with a Cudgel, you can expend 1 additional Action Point (AP). On a hit, the target must succeed on a Strength saving throw (DC 8 + your Strength modifier + your Cudgels Rank) or fall Prone. A Heavily Armored target has Disadvantage on this save. You can use Toppling Blow only once per turn.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "feat-death-defying",
@@ -181,7 +183,8 @@
    "cat": "Weapon Mastery",
    "pre": "Cudgel Mastery",
    "desc": "You've learned that armor is just a shell, and that the right blow in the right place cracks it open. You gain the following benefits while wielding a Cudgel:\n- Your Critical Multiplier with Cudgels is ×3.\n- When you hit a Heavily Armored Humanoid, it must succeed on a Constitution saving throw (DC 8 + your Strength modifier + your Cudgels Rank) or be Dazed until the end of its next turn.",
-   "extra": []
+   "extra": [],
+   "rev": true
   },
   {
    "id": "feat-man-eater",

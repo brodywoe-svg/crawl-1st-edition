@@ -870,6 +870,11 @@ CONDITIONS_CSS = """
 .ftnode:focus-visible{outline:3px solid #b8860b;outline-offset:2px}
 .ftdetail{margin-top:14px}
 .ctag.ptag{background:#b8860b;border-color:#b8860b;color:#fff}
+.ctag.revtag{background:#b3261e;border-color:#b3261e;color:#fff;display:inline-block;vertical-align:middle;margin-left:6px;line-height:1.4}
+.chead .ctag.revtag{margin-left:0}
+.revchk{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:6px 0;font-size:.85rem}
+.revchk .ctag.revtag{margin-left:0}
+.icell .ctag.revtag,.yname .ctag.revtag{font-size:.54rem;padding:1px 6px;letter-spacing:.08em}
 ul.tlist{margin:.2em 0 .6em;padding-left:1.3em}
 ul.tlist li{margin:.15em 0}
 @media (max-width:600px){.fprog .fstep{margin-left:calc(var(--d,0) * 10px)}#fcat,#fview{flex:1 1 45%}}

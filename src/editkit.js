@@ -55,5 +55,9 @@ $("gpick").addEventListener("change", () => { if (lastBox && lastBox.isConnected
 /* keep the sidebar clear of the save bar on small screens */
 new MutationObserver(() => document.documentElement.style.setProperty("--sbh", $("savebar").hidden ? "0px" : $("savebar").offsetHeight + "px"))
   .observe($("savebar"), { attributes: true, attributeFilter: ["hidden"] });
+/* the red "Revision needed" badge: a rule, feature or item Brody has marked to rewrite (rev: true in the content) */
+const REV_TAG = `<span class="ctag revtag" title="This needs to be rewritten">Revision needed</span>`;
+const revTag = x => x && x.rev ? REV_TAG : "";
+const revBox = (on, what) => `<label class="revchk"><input type="checkbox"${on ? " checked" : ""}> <span class="ctag revtag">Revision needed</span> <small>(shows the badge on this ${what} until it's rewritten)</small></label>`;
 const slugOf = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const saveError = (c, what) => c === "bad_key" ? "GitHub no longer accepts your access key. It may have expired; set up admin access again." : c === "no_access" ? "Your access key can't change this repo anymore." : c === "conflict" ? `The ${what} changed on GitHub while you were editing. Reload the page and make your changes again.` : "Saving failed. Check your connection and try again.";

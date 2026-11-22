@@ -69,7 +69,7 @@ function pdefsFrom(t) {
 function normItem(i) {
   const cat = catOf(str(i.cat)) ? str(i.cat) : (/weapon/i.test(i.type) ? "Weapon" : /armor|shield/i.test(i.type) ? "Armor" : /potion|food/i.test(i.type) ? "Consumable" : "Crafting Material");
   return {
-    id: str(i.id) || newId("i"), n: str(i.n), nc: HEX.test(str(i.nc)) ? str(i.nc) : "", cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, rarity: str(i.rarity), magic: !!i.magic, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
+    id: str(i.id) || newId("i"), n: str(i.n), nc: HEX.test(str(i.nc)) ? str(i.nc) : "", cat, sub: str(i.sub), slot: str(i.slot), badge: !!i.badge, ...(i.rev === true ? { rev: true } : {}), rarity: str(i.rarity), magic: !!i.magic, value: str(i.value ?? i.cost), weight: str(i.weight), actions: str(i.actions),
     ...(WTIERS.includes(str(i.tier)) && !(cat === "Weapon" && NO_WTIER.includes(str(i.sub))) ? { tier: str(i.tier) } : {}), ...(str(i.ap) ? { ap: str(i.ap) } : {}), ...(i.preset ? { preset: true } : {}),
     wacts: wactsOf(i.wacts), ...(!i.preset && str(i.from) ? { from: str(i.from) } : {}),
     props: str(i.props && !Array.isArray(i.props) ? i.props : ""), pdefs: Array.isArray(i.pdefs) ? i.pdefs.map(x => ({ n: str(x && x.n), d: str(x && x.d) })).filter(x => x.n || x.d) : pdefsFrom(str(i.feat || (Array.isArray(i.props) ? i.props.join("\n") : ""))), desc: str(i.desc), extra: extras(i.extra)
@@ -196,7 +196,7 @@ function recipeBody(r) {
 function yieldBox(r) {
   return r.makes.map(m => { const i = itemById(m.item); if (!i) return "";
     const facts = [["Category", (catOf(i.cat) || ["", i.cat])[1] + (i.sub ? " · " + i.sub : "") + (i.slot ? " · " + i.slot : "")], ["Rarity", i.rarity], ["Value", i.value], ["Weight", i.weight], ["Magic", i.magic ? "Yes" : ""]].filter(f => f[1]);
-    return `<div class="ybox"><p class="yname"><a class="ilink" href="items.html#${esc(i.id)}">${nameHTML(i)}</a>${i.badge ? PLAYTEST : ""}</p>` +
+    return `<div class="ybox"><p class="yname"><a class="ilink" href="items.html#${esc(i.id)}">${nameHTML(i)}</a>${i.badge ? PLAYTEST : ""}${revTag(i)}</p>` +
       `<dl class="yfacts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` +
       (i.props ? `<p class="rl"><b>Properties:</b> ${propsHTML(i.props, i)}</p>` : "") +
       (i.wacts.length || i.actions ? `<div class="wacts">${actionsBlock(i)}</div>` : "") +
@@ -247,7 +247,7 @@ function itemRow(i, showCat) {
   const isOpen = open.has(i.id) || editing.has(i._id);
   const tag = showCat ? `<span class="ctag2">${esc(i.sub || catOf(i.cat)[1])}</span>` : "";
   return `<tbody class="irow${isOpen ? " open" : ""}" id="${esc(i.id)}" data-id="${i._id}">
-<tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${nameHTML(i)}${i.badge ? PLAYTEST : ""}${tag}</button>${ADMIN && !editing.has(i._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(i.n)}">Edit</button>` : ""}</div></td><td class="islot">${esc(i.slot || "—")}</td><td class="itype">${typeBadge(i.tier) || "—"}</td><td>${esc(i.rarity || "—")}</td><td class="imagic"><input type="checkbox" class="magicbox" aria-label="${esc(i.n)} is magic"${i.magic ? " checked" : ""}${ADMIN && !editing.has(i._id) ? "" : " disabled"}></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
+<tr class="ihead"><td><div class="icell"><button type="button" class="itoggle" aria-expanded="${isOpen}"><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>${nameHTML(i)}${i.badge ? PLAYTEST : ""}${revTag(i)}${tag}</button>${ADMIN && !editing.has(i._id) ? `<button type="button" class="gedit iedit" aria-label="Edit ${esc(i.n)}">Edit</button>` : ""}</div></td><td class="islot">${esc(i.slot || "—")}</td><td class="itype">${typeBadge(i.tier) || "—"}</td><td>${esc(i.rarity || "—")}</td><td class="imagic"><input type="checkbox" class="magicbox" aria-label="${esc(i.n)} is magic"${i.magic ? " checked" : ""}${ADMIN && !editing.has(i._id) ? "" : " disabled"}></td><td>${esc(i.value || "—")}</td><td>${esc(i.weight || "—")}</td></tr>
 ${isOpen ? `<tr class="idet"><td colspan="7">${editing.has(i._id) ? itemForm(i) : itemDetail(i)}</td></tr>` : ""}</tbody>`;
 }
 /* Presets: their own section (admin only), which opens and closes; the choice is remembered in this browser */
@@ -336,6 +336,7 @@ ${fld(id("n"), "Name", "", inp(id("n"), "n", d.n))}
 ${nameColorPicker(d.nc || "")}
 <label class="chk"><input type="checkbox" data-k="magic"${d.magic ? " checked" : ""}> Magic item</label>
 <label class="chk"><input type="checkbox" data-k="badge"${d.badge ? " checked" : ""}> ${FLASK} Needs playtesting</label>
+<label class="chk revchk"><input type="checkbox" data-k="rev"${d.rev ? " checked" : ""}> <span class="ctag revtag">Revision needed</span> <small>(shows the badge on this item until it's rewritten)</small></label>
 <label class="chk"><input type="checkbox" data-k="preset"${d.preset ? " checked" : ""}> Preset <small>(only you see it; use it to start new items)</small></label>
 ${i._new && !d.preset ? presetPicker(i, d) : ""}
 ${!d.preset && !(i._new && !d.from) ? presetLink(d) : ""}
@@ -398,7 +399,7 @@ function readForm(f) {
   return d;
 }
 function fromDraft(d, x) {
-  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rarity: str(d.rarity), magic: !!d.magic, slot: str(d.slot), value: str(d.value), weight: str(d.weight),
+  if (KIND === "items") return { ...x, n: str(d.n).replace(/\s+/g, " "), nc: HEX.test(str(d.nc)) ? str(d.nc) : "", cat: d.cat, sub: str(d.sub), badge: !!d.badge, rev: d.rev ? true : undefined, rarity: str(d.rarity), magic: !!d.magic, slot: str(d.slot), value: str(d.value), weight: str(d.weight),
     tier: WTIERS.includes(d.tier) && !(d.cat === "Weapon" && NO_WTIER.includes(str(d.sub ?? x.sub))) ? d.tier : undefined, ap: d.cat === "Weapon" && str(d.ap) ? str(d.ap) : undefined, preset: d.preset ? true : undefined, from: !d.preset && str(d.from ?? x.from) ? str(d.from ?? x.from) : undefined, actions: str(d.actions ?? x.actions), wacts: d.wacts ? wactsOf(d.wacts) : x.wacts, props: str(d.props ?? x.props), pdefs: d.pdefs ? d.pdefs.map(p => ({ n: str(p.n), d: str(p.d) })).filter(p => p.n || p.d) : x.pdefs, desc: str(d.desc), extra: extras(d.extra) };
   const link = l => l.filter(r => str(r.name)).map(r => { const i = itemByName(r.name); return { item: i ? i.id : "?" + str(r.name).replace(/\s+/g, " "), qty: Math.max(1, Math.round(r.qty)) } });
   return {
